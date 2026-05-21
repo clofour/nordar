@@ -4,13 +4,20 @@ name: {{ inventory_hostname }}
 restapi:
     listen: {{ private_ip }}:{{ ports.patroni_rest }}
     connect_address: {{ private_ip }}:{{ ports.patroni_rest }}
+    certfile: 
+    keyfile: 
+    cafile: 
+    verify_client: required
 
 etcd3:
     hosts:
 {% for host in groups["database"] | sort %}
         - {{ hostvars[host].private_ip }}:{{ ports.etcd_client }}
 {% endfor %}
-    # protocol: https # TODO: COMPLETE HTTPS CONFIG
+    protocol: https
+    cert:
+    key: 
+    cacert: 
 
 bootstrap:
     dcs:
