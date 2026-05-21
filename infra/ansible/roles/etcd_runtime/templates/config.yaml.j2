@@ -1,6 +1,6 @@
 name: {{ inventory_hostname }}
 
-data-dir: {{ etcd_data_dir }}
+data-dir: {{ etcd_runtime_data_dir }}
 
 initial-advertise-peer-urls: http://{{ private_ip }}:{{ ports.etcd_peer }}
 listen-peer-urls: http://{{ private_ip }}:{{ ports.etcd_peer }}

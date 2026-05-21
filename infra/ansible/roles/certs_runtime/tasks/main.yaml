@@ -2,34 +2,34 @@
 
 - name: Create certificate directories
   ansible.builtin.file:
-    path: "{{ certificate_target_dir }}/{{ item.name }}"
+    path: "{{ certs_runtime_crt_target_dir }}/{{ item.name }}"
     state: directory
     owner: root
     group: "{{ item.group }}"
     mode: "{{ item.mode }}"
   loop:
-    - name: "{{ public_cert_dir }}"
+    - name: "{{ certs_runtime_public_crt_dir }}"
       group: root
       mode: "0755"
-    - name: "{{ private_key_dir }}"
+    - name: "{{ certs_runtime_private_key_dir }}"
       group: "{{ certs_runtime_group }}"
       mode: "0750"
 
 - name: Install certificates
   ansible.builtin.copy:
-    src: "{{ certificate_source_dir }}/{{ item }}.crt"
-    dest: "{{ certificate_target_dir }}/{{ public_cert_dir }}/{{ item }}.crt"
+    src: "{{ certs_runtime_crt_source_dir }}/{{ item }}.crt"
+    dest: "{{ certs_runtime_crt_target_dir }}/{{ public_crt_dir }}/{{ item }}.crt"
     owner: root
     group: root
     mode: "0644"
   loop:
-    - "{{ root_crt_name }}"
-    - "{{ ansible_crt_name }}"
-    - "{{ chain_crt_name }}"
+    - "{{ certs_runtime_root_crt_name }}"
+    - "{{ certs_runtime_ansible_crt_name }}"
+    - "{{ certs_runtime_chain_crt_name }}"
 
 - name: Create CA trust directory
   ansible.builtin.file:
-    path: "{{ system_trust_dir }}/{{ app_trust_name }}"
+    path: "{{ certs_runtime_system_trust_dir }}/{{ certs_runtime_app_trust_name }}"
     state: directory
     owner: root
     group: root
@@ -37,8 +37,8 @@
 
 - name: Install root CA into system trust store
   ansible.builtin.copy:
-    src: "{{ certificate_source_dir }}/{{ root_crt_name }}.crt"
-    dest: "{{ system_trust_dir }}/{{ app_trust_name }}/{{ root_crt_name }}.crt"
+    src: "{{ certs_runtime_crt_source_dir }}/{{ certs_runtime_root_crt_name }}.crt"
+    dest: "{{ certs_runtime_system_trust_dir }}/{{ certs_runtime_app_trust_name }}/{{ certs_runtime_root_crt_name }}.crt"
     owner: root
     group: root
     mode: "0644"
