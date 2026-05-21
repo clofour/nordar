@@ -42,13 +42,13 @@ postgresql:
     authentication:
         superuser:
             username: postgres
-            password: TBA
+            password: {{ postgresql_postgres_password }}
         replication:
             username: replication_user
-            password: TBA
+            password: {{ postgresql_replication_user_password }}
         rewind:
             username: rewind_user
-            password: TBA
+            password: {{ postgresql_rewind_user_password }}
 
     pg_hba:
         - local all all peer

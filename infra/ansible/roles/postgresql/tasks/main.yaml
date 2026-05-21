@@ -19,3 +19,9 @@
   ansible.builtin.apt:
     name: postgresql-{{ postgresql_version }}
     state: present
+
+- name: Disable PostgreSQL service
+  ansible.builtin.service:
+    name: postgresql
+    state: stopped
+    enabled: false
