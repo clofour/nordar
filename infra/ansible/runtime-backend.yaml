@@ -8,5 +8,5 @@
     - ../shared/network.yaml
   roles:
     - ufw_runtime
-    - certs_runtime
+    - pki_runtime
     - backend_runtime

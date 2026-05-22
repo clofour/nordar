@@ -8,6 +8,6 @@
     - ../shared/network.yaml
   roles:
     - ufw_runtime
-    - certs_runtime
+    - pki_runtime
     - etcd_runtime
     - patroni_runtime
