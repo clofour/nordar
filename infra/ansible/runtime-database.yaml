@@ -6,8 +6,8 @@
   vars_files:
     - ../shared/database.yaml
     - ../shared/network.yaml
-    - ./vars/database.yaml
   roles:
     - ufw_runtime
+    - certs_runtime
     - etcd_runtime
     - patroni_runtime

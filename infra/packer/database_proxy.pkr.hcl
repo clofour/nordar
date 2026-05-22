@@ -15,6 +15,9 @@ build {
     sources = ["source.digitalocean.database_proxy"]
 
     provisioner "ansible" {
+        groups = [
+            "database_proxy"
+        ]
         playbook_file = "../ansible/database-proxy.yaml"
     }
 }

@@ -55,8 +55,3 @@
 
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
-
-- name: Enable etcd service
-  ansible.builtin.service:
-    name: etcd
-    enabled: true

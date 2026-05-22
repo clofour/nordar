@@ -7,4 +7,5 @@
     - ../shared/network.yaml
   roles:
     - ufw_runtime
+    - certs_runtime
     - haproxy_runtime

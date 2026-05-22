@@ -9,5 +9,6 @@
     env:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__Default: "Server={{ hostnames.database }};Port={{ ports.haproxy_database }};Database={{ database.app_db }};User Id={{ database.app_user }};Password={{ dbproxy_runtime_password }}"
+    restart_policy: always
     state: started
   no_log: true

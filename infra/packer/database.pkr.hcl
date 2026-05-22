@@ -15,6 +15,9 @@ build {
     sources = ["source.digitalocean.database"]
 
     provisioner "ansible" {
+        groups = [
+            "database"
+        ]
         playbook_file = "../ansible/database.yaml"
     }
 }

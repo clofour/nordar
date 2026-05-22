@@ -25,7 +25,7 @@ jobs:
         run: ansible-galaxy install -r requirements.yaml
 
       - name: Run Ansible Playbook
-        run: ansible-playbook -i digitalocean.yml runtime-site.yaml
+        run: ansible-playbook -i ./inventory/digitalocean.yml runtime-site.yaml
         env:
           DIGITALOCEAN_TOKEN: ${{ secrets.DO_API_TOKEN }}
           BACKEND_VERSION: ${{ inputs.backend_version }}

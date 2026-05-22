@@ -1,0 +1,11 @@
+---
+
+service_certs:
+  - name: etcd
+    group: etcd
+  - name: patroni
+    group: postgres
+  - name: postgres
+    group: postgres
+
+postgresql_version: 18

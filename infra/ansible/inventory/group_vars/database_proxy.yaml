@@ -1,0 +1,5 @@
+---
+
+service_certs:
+  - name: haproxy
+    group: haproxy

@@ -2,16 +2,16 @@
 
 - name: Create service private key
   community.crypto.openssl_privatekey:
-    path: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_private_key_dir }}/{{ service_name }}.key"
+    path: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_private_key_dir }}/{{ service_certs.name }}.key"
     type: RSA
     size: 2048
     owner: root
-    group: "{{ certs_runtime_group }}"
+    group: "{{ service_certs.group }}"
     mode: "0640"
 
 - name: Create service CSR
   community.crypto.openssl_csr_pipe:
-    privatekey_path: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_private_key_dir }}/{{ service_name }}.key"
+    privatekey_path: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_private_key_dir }}/{{ service_certs.name }}.key"
     common_name: "{{ certs_runtime_common_name }}"
     subject_alt_name: "{{ certs_runtime_sans }}"
     key_usage:
@@ -25,7 +25,7 @@
 
 - name: Get existing certificate contents
   ansible.builtin.slurp:
-    src: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_public_crt_dir }}/{{ service_name }}.crt"
+    src: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_public_crt_dir }}/{{ service_certs.name }}.crt"
   register: service_crt_content
 
 - name: Sign service certificate with Ansible CA
@@ -43,7 +43,7 @@
 - name: Install service certificate
   ansible.builtin.copy:
     content: "{{ signed_service_crt.certificate }}"
-    dest: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_public_crt_dir }}/{{ service_name }}.crt"
+    dest: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_public_crt_dir }}/{{ service_certs.name }}.crt"
     owner: root
     group: root
     mode: "0644"
@@ -51,7 +51,7 @@
 # - name: Install service fullchain certificate
 #   ansible.builtin.copy:
 #     content: "{{ signed_service_crt.csr }}"
-#     dest: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_public_crt_dir }}/{{ service_name }}-{{ chain_crt_name }}.crt"
+#     dest: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_public_crt_dir }}/{{ service_certs.name }}-{{ chain_crt_name }}.crt"
 #     owner: root
 #     group: root
 #     mode: "0644"

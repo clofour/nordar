@@ -47,3 +47,6 @@
 - name: Generate service certificate
   ansible.builtin.import_tasks: service_cert.yaml
   when: service_cert is defined
+  loop: "{{ service_certs }}"
+  loop_control:
+    loop_var: service_cert

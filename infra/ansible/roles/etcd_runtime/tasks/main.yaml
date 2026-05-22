@@ -7,3 +7,9 @@
     owner: root
     group: etcd
     mode: "0640"
+
+- name: Enable etcd service
+  ansible.builtin.service:
+    name: etcd
+    enabled: true
+

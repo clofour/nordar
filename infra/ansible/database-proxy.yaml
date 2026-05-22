@@ -2,7 +2,7 @@
 
 - name: Deploy to database proxy
   become: true
-  hosts: default
+  hosts: database_proxy
   roles:
     - pre
     - sshd

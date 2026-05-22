@@ -15,6 +15,9 @@ build {
     sources = ["source.digitalocean.backend"]
 
     provisioner "ansible" {
+        groups = [
+            "backend"
+        ]
         playbook_file = "../ansible/backend.yaml"
     }
 }
