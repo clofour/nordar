@@ -18,7 +18,7 @@
 - name: Install certificates
   ansible.builtin.copy:
     src: "{{ certs_runtime_crt_source_dir }}/{{ item }}.crt"
-    dest: "{{ certs_runtime_crt_target_dir }}/{{ public_crt_dir }}/{{ item }}.crt"
+    dest: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_public_crt_dir }}/{{ item }}.crt"
     owner: root
     group: root
     mode: "0644"

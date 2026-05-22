@@ -2,7 +2,7 @@
 
 - name: Create service private key
   community.crypto.openssl_privatekey:
-    path: "{{ certificate_target_dir }}/{{ private_key_dir }}/{{ service_name }}.key"
+    path: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_private_key_dir }}/{{ service_name }}.key"
     type: RSA
     size: 2048
     owner: root
@@ -11,7 +11,7 @@
 
 - name: Create service CSR
   community.crypto.openssl_csr_pipe:
-    privatekey_path: "{{ certificate_target_dir }}/{{ private_key_dir }}/{{ service_name }}.key"
+    privatekey_path: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_private_key_dir }}/{{ service_name }}.key"
     common_name: "{{ certs_runtime_common_name }}"
     subject_alt_name: "{{ certs_runtime_sans }}"
     key_usage:
@@ -25,7 +25,7 @@
 
 - name: Get existing certificate contents
   ansible.builtin.slurp:
-    src: "{{ certificate_target_dir }}/{{ public_cert_dir }}/{{ service_name }}.crt"
+    src: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_public_crt_dir }}/{{ service_name }}.crt"
   register: service_crt_content
 
 - name: Sign service certificate with Ansible CA
@@ -33,8 +33,8 @@
     content: "{{ service_crt_content.content | b64decode }}"
     csr_content: "{{ csr.csr }}"
     provider: ownca
-    ownca_path: "{{ certificate_source_dir }}/{{ ansible_crt_name }}.crt"
-    ownca_privatekey_path: "{{ certificate_source_dir }}/{{ ansible_crt_name }}.key"
+    ownca_path: "{{ certs_runtime_crt_source_dir }}/{{ certs_runtime_ansible_crt_name }}.crt"
+    ownca_privatekey_path: "{{ certs_runtime_crt_source_dir }}/{{ certs_runtime_ansible_crt_name }}.key"
     ownca_not_before: "-1d"
     ownca_not_after: "+365d"
   delegate_to: localhost
@@ -43,7 +43,7 @@
 - name: Install service certificate
   ansible.builtin.copy:
     content: "{{ signed_service_crt.certificate }}"
-    dest: "{{ certificate_target_dir }}/{{ public_cert_dir }}/{{ service_name }}.crt"
+    dest: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_public_crt_dir }}/{{ service_name }}.crt"
     owner: root
     group: root
     mode: "0644"
@@ -51,7 +51,7 @@
 # - name: Install service fullchain certificate
 #   ansible.builtin.copy:
 #     content: "{{ signed_service_crt.csr }}"
-#     dest: "{{ certificate_target_dir }}/{{ public_cert_dir }}/{{ service_name }}-{{ chain_crt_name }}.crt"
+#     dest: "{{ certs_runtime_crt_target_dir }}/{{ certs_runtime_public_crt_dir }}/{{ service_name }}-{{ chain_crt_name }}.crt"
 #     owner: root
 #     group: root
 #     mode: "0644"

@@ -5,5 +5,5 @@
     src: templates/haproxy.cfg.j2
     dest: /etc/haproxy/haproxy.cfg
     owner: root
-    group: etcd
+    group: haproxy
     mode: "0640"

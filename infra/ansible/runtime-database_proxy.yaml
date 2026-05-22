@@ -6,4 +6,5 @@
   vars_files:
     - ../shared/network.yaml
   roles:
+    - ufw_runtime
     - haproxy_runtime

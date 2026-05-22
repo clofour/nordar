@@ -3,6 +3,8 @@
 - name: Deploy to database
   become: true
   hosts: default
+  vars_files:
+    - ./vars/database.yaml
   roles:
     - pre
     - sshd

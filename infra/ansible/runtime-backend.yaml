@@ -7,4 +7,5 @@
     - ../shared/database.yaml
     - ../shared/network.yaml
   roles:
+    - ufw_runtime
     - backend_runtime
