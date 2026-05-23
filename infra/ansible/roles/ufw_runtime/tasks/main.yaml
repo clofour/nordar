@@ -19,7 +19,7 @@
     port: "{{ ports.postgres }}"
     direction: out
     rule: allow
-  when: database_proxy in group_names
+  when: "'database_proxy' in group_names"
   notify: Restart ufw
 
 - name: Allow database listen port
@@ -28,7 +28,7 @@
     port: "{{ ports.postgres }}"
     direction: in
     rule: allow
-  when: database in group_names
+  when: "'database' in group_names"
   notify: Restart ufw
 
 - name: Allow etcd client port
@@ -37,7 +37,7 @@
     port: "{{ ports.etcd_client }}"
     direction: in
     rule: allow
-  when: database in group_names
+  when: "'database' in group_names"
   notify: Restart ufw
 
 - name: Allow etcd peer port
@@ -46,7 +46,7 @@
     port: "{{ ports.etcd_peer }}"
     direction: in
     rule: allow
-  when: database in group_names
+  when: "'database' in group_names"
   notify: Restart ufw
 
 - name: Enable UFW

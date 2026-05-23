@@ -6,7 +6,7 @@ pki_chain_crt_name: chain
 pki_app_name: app
 pki_public_dir_name: public
 pki_private_dir_name: private
-pki_source_dir: ~/.data
+pki_source_dir: "{{ runner_data_dir }}"
 pki_target_dir: /etc/{{ pki_app_name }}
 pki_public_dir: "{{ pki_target_dir }}/{{ pki_public_dir_name }}"
 pki_private_dir: "{{ pki_target_dir }}/{{ pki_private_dir_name }}"

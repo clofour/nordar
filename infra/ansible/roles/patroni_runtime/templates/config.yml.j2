@@ -1,4 +1,4 @@
-scope: nordar
+scope: {{ app_name }}
 name: {{ inventory_hostname }}
 
 restapi:
@@ -66,7 +66,7 @@ postgresql:
         - host all rewind_user {{ hostvars[host].private_ip}}/32 scram-sha-256
 {% endfor %}
 {% for host in groups["database_proxy"] | sort %}
-        - host nordar nordar_user {{ hostvars[host].private_ip }}/32 scram-sha-256
+        - host {{ postgresql_db_user }} {{ postgresql_app_user }} {{ hostvars[host].private_ip }}/32 scram-sha-256
 {% endfor %}
 
 tags:

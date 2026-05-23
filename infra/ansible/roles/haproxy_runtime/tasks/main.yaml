@@ -7,3 +7,9 @@
     owner: root
     group: haproxy
     mode: "0640"
+
+- name: Enable and start HAProxy service
+  ansible.builtin.service:
+    name: haproxy
+    state: started
+    enabled: true

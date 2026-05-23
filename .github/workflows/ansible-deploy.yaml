@@ -7,6 +7,22 @@ on:
         default: main
         type: string
 jobs:
+  create-migration-bundle:
+    name: Create Migration Bundle
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - name: Create migration bundle
+        run: dotnet ef migrations bundle --self-contained -r linux-x64
+
+      - name: Upload migration bundle as build artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: migration-bundle
+          path: ./efbundle
+
   validate:
     name: Ansible Deploy
     runs-on: ubuntu-24.04
@@ -17,6 +33,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Download migration bundle as build artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: migration-bundle
+          path: ~/.data/efbundle
 
       - name: Set up Ansible
         run: pip install -r requirements-ci.txt

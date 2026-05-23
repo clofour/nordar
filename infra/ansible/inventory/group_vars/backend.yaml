@@ -1,0 +1,3 @@
+---
+
+db_connection_string: "Server={{ hostnames.database }}.{{ domain }};Port={{ ports.haproxy_database }};Database={{ database.app_db }};User Id={{ database.app_user }};Password={{ dbproxy_runtime_password }}"
