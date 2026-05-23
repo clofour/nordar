@@ -5,15 +5,13 @@
     path: "{{ item.path }}"
     state: directory
     owner: root
-    group: "{{ item.group }}"
+    group: root
     mode: "{{ item.mode }}"
   loop:
     - path: "{{ pki_public_dir }}"
-      group: root
       mode: "0755"
     - path: "{{ pki_private_dir }}"
-      group: "{{ pki_group }}"
-      mode: "0750"
+      mode: "0755"
 
 - name: Install certificates
   ansible.builtin.copy:
