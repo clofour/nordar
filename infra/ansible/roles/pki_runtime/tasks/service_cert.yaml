@@ -15,12 +15,12 @@
 - name: Create service CSR
   community.crypto.openssl_csr_pipe:
     privatekey_path: "{{ pki_private_dir }}/{{ service_cert.name }}.key"
-    common_name: "{{ pki_common_name }}"
-    subject_alt_name: "{{ pki_sans }}"
+    common_name: "{{ service_cert.common_name }}"
+    subject_alt_name: "{{ service_cert.sans }}"
     key_usage:
       - digitalSignature
       - keyEncipherment
-    extended_key_usage: "{{ pki_extended_key_usage }}"
+    extended_key_usage: "{{ service_cert.extended_key_usage }}"
     basic_constraints:
       - "CA:FALSE"
     basic_constraints_critical: true

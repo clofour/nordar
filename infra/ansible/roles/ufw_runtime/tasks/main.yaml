@@ -6,7 +6,7 @@
     port: "{{ item }}"
     direction: in
     rule: allow
-  when: database_proxy in group_names
+  when: "'database_proxy' in group_names"
   loop:
     - "{{ ports.haproxy_database }}"
     - "{{ ports.haproxy_database_write }}"
@@ -22,10 +22,19 @@
   when: "'database_proxy' in group_names"
   notify: Restart ufw
 
-- name: Allow database listen port
+- name: Allow PostgreSQL listen port
   community.general.ufw:
     proto: tcp
     port: "{{ ports.postgres }}"
+    direction: in
+    rule: allow
+  when: "'database' in group_names"
+  notify: Restart ufw
+
+- name: Allow Patroni REST port
+  community.general.ufw:
+    proto: tcp
+    port: "{{ ports.patroni_rest }}"
     direction: in
     rule: allow
   when: "'database' in group_names"

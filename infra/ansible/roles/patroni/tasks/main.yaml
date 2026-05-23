@@ -2,7 +2,7 @@
 
 - name: Template init script
   ansible.builtin.template:
-    src: files/init.sql.sh.j2
+    src: templates/init.sql.sh.j2
     dest: "{{ patroni_config_dir }}/init.sql.sh"
     owner: root
     group: postgres
