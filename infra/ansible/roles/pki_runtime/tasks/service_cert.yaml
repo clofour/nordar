@@ -2,16 +2,19 @@
 
 - name: Create service private key
   community.crypto.openssl_privatekey:
-    path: "{{ pki_private_dir }}/{{ service_certs.name }}.key"
+    path: "{{ pki_private_dir }}/{{ service_cert.name }}.key"
     type: RSA
     size: 2048
+    return_content: true
     owner: root
-    group: "{{ service_certs.group }}"
+    group: "{{ service_cert.group }}"
     mode: "0640"
+  register: private_key
+  no_log: true
 
 - name: Create service CSR
   community.crypto.openssl_csr_pipe:
-    privatekey_path: "{{ pki_private_dir }}/{{ service_certs.name }}.key"
+    privatekey_path: "{{ pki_private_dir }}/{{ service_cert.name }}.key"
     common_name: "{{ pki_common_name }}"
     subject_alt_name: "{{ pki_sans }}"
     key_usage:
@@ -25,7 +28,7 @@
 
 - name: Get existing certificate contents
   ansible.builtin.slurp:
-    src: "{{ pki_public_dir }}/{{ service_certs.name }}.crt"
+    src: "{{ pki_public_dir }}/{{ service_cert.name }}.crt"
   register: service_crt_content
 
 - name: Sign service certificate with Ansible CA
@@ -39,19 +42,42 @@
     ownca_not_after: "+365d"
   delegate_to: localhost
   register: signed_service_crt
+  no_log: true
 
 - name: Install service certificate
   ansible.builtin.copy:
     content: "{{ signed_service_crt.certificate }}"
-    dest: "{{ pki_public_dir }}/{{ service_certs.name }}.crt"
+    dest: "{{ pki_public_dir }}/{{ service_cert.name }}.crt"
     owner: root
     group: root
     mode: "0644"
 
+- name: Read installed PKI
+  ansible.builtin.slurp:
+    src: "{{ item }}"
+  loop:
+    - "{{ pki_private_dir }}/{{ service_cert.name }}.key"
+    - "{{ pki_target_dir }}/{{ pki_chain_crt_name }}.crt"
+    - "{{ pki_public_dir }}/{{ service_cert.name }}.crt"
+  register: pki_material
+  no_log: true
+
+- name: Create merged service PEM
+  ansible.builtin.copy:
+    content: |
+      {{ pki_material.results[0].content | b64decode | trim }}
+      {{ pki_material.results[1].content | b64decode | trim }}
+      {{ pki_material.results[2].content | b64decode | trim }}
+    dest: "{{ pki_private_dir }}/{{ service_cert.name }}.pem"
+    owner: root
+    group: "{{ service_cert.group }}"
+    mode: "0640"
+  no_log: true
+
 # - name: Install service fullchain certificate
 #   ansible.builtin.copy:
 #     content: "{{ signed_service_crt.csr }}"
-#     dest: "{{ pki_public_dir }}/{{ service_certs.name }}-{{ chain_crt_name }}.crt"
+#     dest: "{{ pki_public_dir }}/{{ service_cert.name }}-{{ chain_crt_name }}.crt"
 #     owner: root
 #     group: root
 #     mode: "0644"
