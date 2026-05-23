@@ -11,3 +11,5 @@ service_certs:
 postgresql_version: 18
 postgresql_app_user: app_user
 postgresql_app_db: app_db
+
+patroni_config_dir: /etc/patroni

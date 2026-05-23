@@ -3,7 +3,7 @@
 - name: Configure Patroni
   ansible.builtin.template:
     src: templates/config.yml.j2
-    dest: /etc/patroni/config.yml
+    dest: "{{ patroni_config_dir }}/config.yml"
     owner: root
     group: postgres
     mode: "0640"

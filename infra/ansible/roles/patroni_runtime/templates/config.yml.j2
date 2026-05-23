@@ -37,6 +37,8 @@ bootstrap:
         - encoding: UTF8
         - data-checksums
 
+    post_bootstrap: {{ patroni_config_dir }}/init.sql.sh
+
 
 postgresql:
     listen: {{ private_ip }}:{{ ports.postgres }}

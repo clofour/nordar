@@ -16,4 +16,3 @@
   delegate_to: "{{ groups['backend'][0] }}"
   no_log: true
   changed_when: false
-
