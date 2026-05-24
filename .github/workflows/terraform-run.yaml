@@ -1,6 +1,11 @@
 name: terraform-run
 on:
   workflow_dispatch:
+    inputs:
+      command:
+        description: "command"
+        required: true
+        type: string
 jobs:
   run:
     name: Terraform Run
@@ -28,8 +33,5 @@ jobs:
       - name: Initialize Terraform project
         run: terraform init
 
-      - name: Run Terraform Destroy
-        run: terraform destroy -auto-approve
-defaults:
-  run:
-    working-directory: ./terraform
+      - name: Run Terraform command
+        run: terraform ${{ inputs.object }}
