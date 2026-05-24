@@ -6,6 +6,9 @@ export default defineConfig({
             target: 'http://localhost:5076/openapi/v1.json'
         },
         output: {
+            baseUrl: {
+                runtime: 'import.meta.env.VITE_API_ORIGIN'
+            },
             mode: 'tags-split',
             client: 'swr',
             target: 'src/api/endpoints',

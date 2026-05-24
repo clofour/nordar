@@ -48,6 +48,8 @@ jobs:
 
       - name: Build project
         run: npm run build
+        env:
+          VITE_API_ORIGIN: https://backend.${{ vars.DOMAIN }}
 
       - name: Upload assets
         run: aws s3 sync dist s3://$BUCKET --acl public-read --delete

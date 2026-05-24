@@ -39,30 +39,24 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSerilog();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy
+            .WithOrigins(builder.Configuration["Origins:Frontend"])
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     }
 );
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Default"))
-    .UseSeeding((context, _) =>
-    {
-        AppDbContext appDbContext = (AppDbContext)context;
-        if (appDbContext.AccessCodes.Find("cat") == null)
-        {
-            AccessCode newAccessCode = new AccessCode("cat", 10);
-            appDbContext.AccessCodes.Add(newAccessCode);
-
-            context.SaveChanges();
-        }
-    });
-});
-
-builder.Services.AddDataProtection();
 
 builder.Services.AddIdentityCore<User>(options =>
 {
@@ -172,12 +166,33 @@ builder.Services.AddAutoMapper(cfg =>
 builder.Services.AddScoped<GoalService>();
 builder.Services.AddScoped<EventService>();
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default"))
+    .UseSeeding((context, _) =>
+    {
+        AppDbContext appDbContext = (AppDbContext)context;
+        if (appDbContext.AccessCodes.Find("cat") == null)
+        {
+            AccessCode newAccessCode = new AccessCode("cat", 10);
+            appDbContext.AccessCodes.Add(newAccessCode);
+
+            context.SaveChanges();
+        }
+    });
+});
+
 var app = builder.Build();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
+
+if (app.Environment.IsProduction())
+{
+    app.UseExceptionHandler();
+}
 
 app.UseSerilogRequestLogging(options =>
 {
@@ -191,12 +206,7 @@ app.UseSerilogRequestLogging(options =>
     };
 });
 
-// Configure the HTTP request pipeline.
-
-if (app.Environment.IsProduction())
-{
-    app.UseExceptionHandler();
-}
+app.UseCors("Frontend");
 
 app.UseHttpsRedirection();
 

@@ -1,5 +1,8 @@
 ---
 
+frontend_origin: "{{ hostnames.frontend }}"
+backend_origin: "{{ hostnames.backend }}"
+
 postgresql_app_user: app_user
 postgresql_app_db: app_db
 postgresql_app_user_password: "{{ lookup('ansible.builtin.env', 'POSTGRESQL_APP_USER_PASSWORD') }}"

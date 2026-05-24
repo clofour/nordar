@@ -44,7 +44,7 @@ export const getGetApiEventGetUrl = () => {
 
 
 
-  return `/api/Event/Get`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/Get`
 }
 
 export const getApiEventGet = async ( options?: RequestInit): Promise<getApiEventGetResponse> => {
@@ -68,7 +68,7 @@ export const getApiEventGet = async ( options?: RequestInit): Promise<getApiEven
 
 
 
-export const getGetApiEventGetKey = () => [`/api/Event/Get`] as const;
+export const getGetApiEventGetKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/Get`] as const;
 
 export type GetApiEventGetQueryResult = NonNullable<Awaited<ReturnType<typeof getApiEventGet>>>
 
@@ -105,7 +105,7 @@ export const getPostApiEventCreateOnetimeUrl = () => {
 
 
 
-  return `/api/Event/CreateOnetime`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/CreateOnetime`
 }
 
 export const postApiEventCreateOnetime = async (onetimeEventCreate: OnetimeEventCreate, options?: RequestInit): Promise<postApiEventCreateOnetimeResponse> => {
@@ -135,7 +135,7 @@ export const getPostApiEventCreateOnetimeMutationFetcher = ( options?: RequestIn
     return postApiEventCreateOnetime(arg, options);
   }
 }
-export const getPostApiEventCreateOnetimeMutationKey = () => [`/api/Event/CreateOnetime`] as const;
+export const getPostApiEventCreateOnetimeMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/CreateOnetime`] as const;
 
 export type PostApiEventCreateOnetimeMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventCreateOnetime>>>
 
@@ -172,7 +172,7 @@ export const getPostApiEventCreateRecurringUrl = () => {
 
 
 
-  return `/api/Event/CreateRecurring`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/CreateRecurring`
 }
 
 export const postApiEventCreateRecurring = async (recurringEventCreate: RecurringEventCreate, options?: RequestInit): Promise<postApiEventCreateRecurringResponse> => {
@@ -202,7 +202,7 @@ export const getPostApiEventCreateRecurringMutationFetcher = ( options?: Request
     return postApiEventCreateRecurring(arg, options);
   }
 }
-export const getPostApiEventCreateRecurringMutationKey = () => [`/api/Event/CreateRecurring`] as const;
+export const getPostApiEventCreateRecurringMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/CreateRecurring`] as const;
 
 export type PostApiEventCreateRecurringMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventCreateRecurring>>>
 
@@ -239,7 +239,7 @@ export const getPostApiEventUpdateUrl = () => {
 
 
 
-  return `/api/Event/Update`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/Update`
 }
 
 export const postApiEventUpdate = async ( options?: RequestInit): Promise<postApiEventUpdateResponse> => {
@@ -268,7 +268,7 @@ export const getPostApiEventUpdateMutationFetcher = ( options?: RequestInit) => 
     return postApiEventUpdate(options);
   }
 }
-export const getPostApiEventUpdateMutationKey = () => [`/api/Event/Update`] as const;
+export const getPostApiEventUpdateMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/Update`] as const;
 
 export type PostApiEventUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventUpdate>>>
 
@@ -305,7 +305,7 @@ export const getPostApiEventDeleteUrl = () => {
 
 
 
-  return `/api/Event/Delete`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/Delete`
 }
 
 export const postApiEventDelete = async ( options?: RequestInit): Promise<postApiEventDeleteResponse> => {
@@ -334,7 +334,7 @@ export const getPostApiEventDeleteMutationFetcher = ( options?: RequestInit) => 
     return postApiEventDelete(options);
   }
 }
-export const getPostApiEventDeleteMutationKey = () => [`/api/Event/Delete`] as const;
+export const getPostApiEventDeleteMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/Delete`] as const;
 
 export type PostApiEventDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventDelete>>>
 

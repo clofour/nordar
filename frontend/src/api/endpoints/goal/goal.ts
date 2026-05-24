@@ -47,7 +47,7 @@ export const getGetApiGoalGetUrl = () => {
 
 
 
-  return `/api/Goal/Get`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Get`
 }
 
 export const getApiGoalGet = async ( options?: RequestInit): Promise<getApiGoalGetResponse> => {
@@ -71,7 +71,7 @@ export const getApiGoalGet = async ( options?: RequestInit): Promise<getApiGoalG
 
 
 
-export const getGetApiGoalGetKey = () => [`/api/Goal/Get`] as const;
+export const getGetApiGoalGetKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/Get`] as const;
 
 export type GetApiGoalGetQueryResult = NonNullable<Awaited<ReturnType<typeof getApiGoalGet>>>
 
@@ -108,7 +108,7 @@ export const getGetApiGoalStatsUrl = () => {
 
 
 
-  return `/api/Goal/Stats`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Stats`
 }
 
 export const getApiGoalStats = async ( options?: RequestInit): Promise<getApiGoalStatsResponse> => {
@@ -132,7 +132,7 @@ export const getApiGoalStats = async ( options?: RequestInit): Promise<getApiGoa
 
 
 
-export const getGetApiGoalStatsKey = () => [`/api/Goal/Stats`] as const;
+export const getGetApiGoalStatsKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/Stats`] as const;
 
 export type GetApiGoalStatsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiGoalStats>>>
 
@@ -169,7 +169,7 @@ export const getPostApiGoalCreateNorthStarUrl = () => {
 
 
 
-  return `/api/Goal/CreateNorthStar`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateNorthStar`
 }
 
 export const postApiGoalCreateNorthStar = async (northStarCreate: NorthStarCreate, options?: RequestInit): Promise<postApiGoalCreateNorthStarResponse> => {
@@ -199,7 +199,7 @@ export const getPostApiGoalCreateNorthStarMutationFetcher = ( options?: RequestI
     return postApiGoalCreateNorthStar(arg, options);
   }
 }
-export const getPostApiGoalCreateNorthStarMutationKey = () => [`/api/Goal/CreateNorthStar`] as const;
+export const getPostApiGoalCreateNorthStarMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateNorthStar`] as const;
 
 export type PostApiGoalCreateNorthStarMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalCreateNorthStar>>>
 
@@ -236,7 +236,7 @@ export const getPostApiGoalCreateBearingUrl = () => {
 
 
 
-  return `/api/Goal/CreateBearing`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateBearing`
 }
 
 export const postApiGoalCreateBearing = async (bearingCreate: BearingCreate, options?: RequestInit): Promise<postApiGoalCreateBearingResponse> => {
@@ -266,7 +266,7 @@ export const getPostApiGoalCreateBearingMutationFetcher = ( options?: RequestIni
     return postApiGoalCreateBearing(arg, options);
   }
 }
-export const getPostApiGoalCreateBearingMutationKey = () => [`/api/Goal/CreateBearing`] as const;
+export const getPostApiGoalCreateBearingMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateBearing`] as const;
 
 export type PostApiGoalCreateBearingMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalCreateBearing>>>
 
@@ -303,7 +303,7 @@ export const getPostApiGoalCreateMovementUrl = () => {
 
 
 
-  return `/api/Goal/CreateMovement`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateMovement`
 }
 
 export const postApiGoalCreateMovement = async (movementCreate: MovementCreate, options?: RequestInit): Promise<postApiGoalCreateMovementResponse> => {
@@ -333,7 +333,7 @@ export const getPostApiGoalCreateMovementMutationFetcher = ( options?: RequestIn
     return postApiGoalCreateMovement(arg, options);
   }
 }
-export const getPostApiGoalCreateMovementMutationKey = () => [`/api/Goal/CreateMovement`] as const;
+export const getPostApiGoalCreateMovementMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateMovement`] as const;
 
 export type PostApiGoalCreateMovementMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalCreateMovement>>>
 
@@ -377,7 +377,7 @@ export const getPostApiGoalDeleteUrl = (params?: PostApiGoalDeleteParams,) => {
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/Goal/Delete?${stringifiedParams}` : `/api/Goal/Delete`
+  return stringifiedParams.length > 0 ? `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Delete?${stringifiedParams}` : `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Delete`
 }
 
 export const postApiGoalDelete = async (params?: PostApiGoalDeleteParams, options?: RequestInit): Promise<postApiGoalDeleteResponse> => {
@@ -406,7 +406,7 @@ export const getPostApiGoalDeleteMutationFetcher = (params?: PostApiGoalDeletePa
     return postApiGoalDelete(params, options);
   }
 }
-export const getPostApiGoalDeleteMutationKey = (params?: PostApiGoalDeleteParams,) => [`/api/Goal/Delete`, ...(params ? [params]: [])] as const;
+export const getPostApiGoalDeleteMutationKey = (params?: PostApiGoalDeleteParams,) => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/Delete`, ...(params ? [params]: [])] as const;
 
 export type PostApiGoalDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalDelete>>>
 

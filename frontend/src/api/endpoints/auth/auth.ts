@@ -43,7 +43,7 @@ export const getPostApiAuthSignUpUrl = () => {
 
 
 
-  return `/api/Auth/SignUp`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Auth/SignUp`
 }
 
 export const postApiAuthSignUp = async (signupForm: SignupForm, options?: RequestInit): Promise<postApiAuthSignUpResponse> => {
@@ -73,7 +73,7 @@ export const getPostApiAuthSignUpMutationFetcher = ( options?: RequestInit) => {
     return postApiAuthSignUp(arg, options);
   }
 }
-export const getPostApiAuthSignUpMutationKey = () => [`/api/Auth/SignUp`] as const;
+export const getPostApiAuthSignUpMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Auth/SignUp`] as const;
 
 export type PostApiAuthSignUpMutationResult = NonNullable<Awaited<ReturnType<typeof postApiAuthSignUp>>>
 
@@ -110,7 +110,7 @@ export const getPostApiAuthSignInUrl = () => {
 
 
 
-  return `/api/Auth/SignIn`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Auth/SignIn`
 }
 
 export const postApiAuthSignIn = async (signinForm: SigninForm, options?: RequestInit): Promise<postApiAuthSignInResponse> => {
@@ -140,7 +140,7 @@ export const getPostApiAuthSignInMutationFetcher = ( options?: RequestInit) => {
     return postApiAuthSignIn(arg, options);
   }
 }
-export const getPostApiAuthSignInMutationKey = () => [`/api/Auth/SignIn`] as const;
+export const getPostApiAuthSignInMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Auth/SignIn`] as const;
 
 export type PostApiAuthSignInMutationResult = NonNullable<Awaited<ReturnType<typeof postApiAuthSignIn>>>
 
@@ -177,7 +177,7 @@ export const getGetApiAuthSignOutUrl = () => {
 
 
 
-  return `/api/Auth/SignOut`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Auth/SignOut`
 }
 
 export const getApiAuthSignOut = async ( options?: RequestInit): Promise<getApiAuthSignOutResponse> => {
@@ -201,7 +201,7 @@ export const getApiAuthSignOut = async ( options?: RequestInit): Promise<getApiA
 
 
 
-export const getGetApiAuthSignOutKey = () => [`/api/Auth/SignOut`] as const;
+export const getGetApiAuthSignOutKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Auth/SignOut`] as const;
 
 export type GetApiAuthSignOutQueryResult = NonNullable<Awaited<ReturnType<typeof getApiAuthSignOut>>>
 
@@ -238,7 +238,7 @@ export const getPostApiAuthIsAuthenticatedUrl = () => {
 
 
 
-  return `/api/Auth/IsAuthenticated`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Auth/IsAuthenticated`
 }
 
 export const postApiAuthIsAuthenticated = async ( options?: RequestInit): Promise<postApiAuthIsAuthenticatedResponse> => {
@@ -267,7 +267,7 @@ export const getPostApiAuthIsAuthenticatedMutationFetcher = ( options?: RequestI
     return postApiAuthIsAuthenticated(options);
   }
 }
-export const getPostApiAuthIsAuthenticatedMutationKey = () => [`/api/Auth/IsAuthenticated`] as const;
+export const getPostApiAuthIsAuthenticatedMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Auth/IsAuthenticated`] as const;
 
 export type PostApiAuthIsAuthenticatedMutationResult = NonNullable<Awaited<ReturnType<typeof postApiAuthIsAuthenticated>>>
 

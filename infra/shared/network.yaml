@@ -1,6 +1,8 @@
 ---
 
 hostnames:
+  frontend: frontend
+  backend: backend
   database: database
 
 ports:

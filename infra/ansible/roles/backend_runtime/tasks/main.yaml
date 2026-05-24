@@ -9,6 +9,7 @@
     env:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__Default: "{{ db_connection_string }}"
+      Origins__Frontend: "{{ frontend_origin }}"
     restart_policy: always
     state: started
   no_log: true

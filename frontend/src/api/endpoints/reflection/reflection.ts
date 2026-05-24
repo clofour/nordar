@@ -52,7 +52,7 @@ export const getGetApiReflectionGetUrl = (params?: GetApiReflectionGetParams,) =
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/Reflection/Get?${stringifiedParams}` : `/api/Reflection/Get`
+  return stringifiedParams.length > 0 ? `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Get?${stringifiedParams}` : `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Get`
 }
 
 export const getApiReflectionGet = async (params?: GetApiReflectionGetParams, options?: RequestInit): Promise<getApiReflectionGetResponse> => {
@@ -76,7 +76,7 @@ export const getApiReflectionGet = async (params?: GetApiReflectionGetParams, op
 
 
 
-export const getGetApiReflectionGetKey = (params?: GetApiReflectionGetParams,) => [`/api/Reflection/Get`, ...(params ? [params]: [])] as const;
+export const getGetApiReflectionGetKey = (params?: GetApiReflectionGetParams,) => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Get`, ...(params ? [params]: [])] as const;
 
 export type GetApiReflectionGetQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReflectionGet>>>
 
@@ -113,7 +113,7 @@ export const getGetApiReflectionListUrl = () => {
 
 
 
-  return `/api/Reflection/List`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/List`
 }
 
 export const getApiReflectionList = async ( options?: RequestInit): Promise<getApiReflectionListResponse> => {
@@ -137,7 +137,7 @@ export const getApiReflectionList = async ( options?: RequestInit): Promise<getA
 
 
 
-export const getGetApiReflectionListKey = () => [`/api/Reflection/List`] as const;
+export const getGetApiReflectionListKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/List`] as const;
 
 export type GetApiReflectionListQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReflectionList>>>
 
@@ -174,7 +174,7 @@ export const getPostApiReflectionCreateUrl = () => {
 
 
 
-  return `/api/Reflection/Create`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Create`
 }
 
 export const postApiReflectionCreate = async (reflectionCreate: ReflectionCreate, options?: RequestInit): Promise<postApiReflectionCreateResponse> => {
@@ -204,7 +204,7 @@ export const getPostApiReflectionCreateMutationFetcher = ( options?: RequestInit
     return postApiReflectionCreate(arg, options);
   }
 }
-export const getPostApiReflectionCreateMutationKey = () => [`/api/Reflection/Create`] as const;
+export const getPostApiReflectionCreateMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Create`] as const;
 
 export type PostApiReflectionCreateMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReflectionCreate>>>
 
@@ -241,7 +241,7 @@ export const getPostApiReflectionUpdateUrl = () => {
 
 
 
-  return `/api/Reflection/Update`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Update`
 }
 
 export const postApiReflectionUpdate = async ( options?: RequestInit): Promise<postApiReflectionUpdateResponse> => {
@@ -270,7 +270,7 @@ export const getPostApiReflectionUpdateMutationFetcher = ( options?: RequestInit
     return postApiReflectionUpdate(options);
   }
 }
-export const getPostApiReflectionUpdateMutationKey = () => [`/api/Reflection/Update`] as const;
+export const getPostApiReflectionUpdateMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Update`] as const;
 
 export type PostApiReflectionUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReflectionUpdate>>>
 
@@ -314,7 +314,7 @@ export const getPostApiReflectionDeleteUrl = (params?: PostApiReflectionDeletePa
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/Reflection/Delete?${stringifiedParams}` : `/api/Reflection/Delete`
+  return stringifiedParams.length > 0 ? `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Delete?${stringifiedParams}` : `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Delete`
 }
 
 export const postApiReflectionDelete = async (params?: PostApiReflectionDeleteParams, options?: RequestInit): Promise<postApiReflectionDeleteResponse> => {
@@ -343,7 +343,7 @@ export const getPostApiReflectionDeleteMutationFetcher = (params?: PostApiReflec
     return postApiReflectionDelete(params, options);
   }
 }
-export const getPostApiReflectionDeleteMutationKey = (params?: PostApiReflectionDeleteParams,) => [`/api/Reflection/Delete`, ...(params ? [params]: [])] as const;
+export const getPostApiReflectionDeleteMutationKey = (params?: PostApiReflectionDeleteParams,) => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Delete`, ...(params ? [params]: [])] as const;
 
 export type PostApiReflectionDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReflectionDelete>>>
 
