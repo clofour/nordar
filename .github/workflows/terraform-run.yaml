@@ -1,14 +1,9 @@
-name: terraform-deploy
+name: terraform-run
 on:
   workflow_dispatch:
-    inputs:
-      command:
-        description: "command"
-        required: true
-        type: string
 jobs:
-  deploy:
-    name: Terraform Deploy
+  run:
+    name: Terraform Run
     runs-on: ubuntu-24.04
     environment: production
     env:
@@ -33,5 +28,8 @@ jobs:
       - name: Initialize Terraform project
         run: terraform init
 
-      - name: Run Terraform command
-        run: terraform ${{ inputs.object }}
+      - name: Run Terraform Destroy
+        run: terraform destroy -auto-approve
+defaults:
+  run:
+    working-directory: ./terraform
