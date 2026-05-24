@@ -76,6 +76,7 @@ jobs:
           RUNNER_DATA_DIR: ${{ vars.RUNNER_DATA_DIR }}
           ANSIBLE_REMOTE_USER: ansible
           ANSIBLE_PRIVATE_KEY_FILE: ${{ vars.RUNNER_DATA_DIR }}/ansible
+          ANSIBLE_HOST_KEY_CHECKING: "False"
           DIGITALOCEAN_TOKEN: ${{ secrets.DO_API_TOKEN }}
           DOMAIN: ${{ vars.DOMAIN }}
           BACKEND_VERSION: ${{ inputs.backend_version }}
