@@ -47,6 +47,7 @@ jobs:
       - name: Prepare Ansible environment
         run: ./prepare.sh ${{ vars.RUNNER_DATA_DIR }}
         env:
+          ANSIBLE_SSH_PRIVATE_KEY: ${{ secrets.ANSIBLE_SSH_PRIVATE_KEY }}
           PKI_ROOT_CERTIFICATE: ${{ vars.PKI_ROOT_CERTIFICATE }}
           PKI_ANSIBLE_CERTIFICATE: ${{ vars.PKI_ANSIBLE_CERTIFICATE }}
           PKI_ANSIBLE_PRIVATE_KEY: ${{ secrets.PKI_ANSIBLE_PRIVATE_KEY }}

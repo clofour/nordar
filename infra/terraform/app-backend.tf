@@ -2,6 +2,8 @@ resource "digitalocean_loadbalancer" "backend" {
     name = "backend-lb"
     region = var.region
 
+    vpc_uuid = digitalocean_vpc.main.id
+
     healthcheck {
         protocol = "http"
         port = 80

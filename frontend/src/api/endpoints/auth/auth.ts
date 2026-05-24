@@ -21,8 +21,11 @@ import type {
   SignupForm
 } from '../../models';
 
+import { cFetch } from '../../../other/cfetch';
 
 
+
+  type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -48,7 +51,7 @@ export const getPostApiAuthSignUpUrl = () => {
 
 export const postApiAuthSignUp = async (signupForm: SignupForm, options?: RequestInit): Promise<postApiAuthSignUpResponse> => {
 
-  const res = await fetch(getPostApiAuthSignUpUrl(),
+  return cFetch<postApiAuthSignUpResponse>(getPostApiAuthSignUpUrl(),
   {
     ...options,
     method: 'POST',
@@ -56,19 +59,12 @@ export const postApiAuthSignUp = async (signupForm: SignupForm, options?: Reques
     body: JSON.stringify(
       signupForm,)
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: postApiAuthSignUpResponse['data'] = body !== null ? body : ''
-  return { data, status: res.status, headers: res.headers } as postApiAuthSignUpResponse
-}
+);}
 
 
 
 
-export const getPostApiAuthSignUpMutationFetcher = ( options?: RequestInit) => {
+export const getPostApiAuthSignUpMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
   return (_: Key, { arg }: { arg: SignupForm }) => {
     return postApiAuthSignUp(arg, options);
   }
@@ -77,14 +73,14 @@ export const getPostApiAuthSignUpMutationKey = () => [`${import.meta.env.VITE_AP
 
 export type PostApiAuthSignUpMutationResult = NonNullable<Awaited<ReturnType<typeof postApiAuthSignUp>>>
 
-export const usePostApiAuthSignUp = <TError = Promise<unknown>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiAuthSignUp>>, TError, Key, SignupForm, Awaited<ReturnType<typeof postApiAuthSignUp>>> & { swrKey?: string }, fetch?: RequestInit}
+export const usePostApiAuthSignUp = <TError = unknown>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiAuthSignUp>>, TError, Key, SignupForm, Awaited<ReturnType<typeof postApiAuthSignUp>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
 ) => {
 
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPostApiAuthSignUpMutationKey();
-  const swrFn = getPostApiAuthSignUpMutationFetcher(fetchOptions);
+  const swrFn = getPostApiAuthSignUpMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -115,7 +111,7 @@ export const getPostApiAuthSignInUrl = () => {
 
 export const postApiAuthSignIn = async (signinForm: SigninForm, options?: RequestInit): Promise<postApiAuthSignInResponse> => {
 
-  const res = await fetch(getPostApiAuthSignInUrl(),
+  return cFetch<postApiAuthSignInResponse>(getPostApiAuthSignInUrl(),
   {
     ...options,
     method: 'POST',
@@ -123,19 +119,12 @@ export const postApiAuthSignIn = async (signinForm: SigninForm, options?: Reques
     body: JSON.stringify(
       signinForm,)
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: postApiAuthSignInResponse['data'] = body !== null ? body : ''
-  return { data, status: res.status, headers: res.headers } as postApiAuthSignInResponse
-}
+);}
 
 
 
 
-export const getPostApiAuthSignInMutationFetcher = ( options?: RequestInit) => {
+export const getPostApiAuthSignInMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
   return (_: Key, { arg }: { arg: SigninForm }) => {
     return postApiAuthSignIn(arg, options);
   }
@@ -144,14 +133,14 @@ export const getPostApiAuthSignInMutationKey = () => [`${import.meta.env.VITE_AP
 
 export type PostApiAuthSignInMutationResult = NonNullable<Awaited<ReturnType<typeof postApiAuthSignIn>>>
 
-export const usePostApiAuthSignIn = <TError = Promise<unknown>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiAuthSignIn>>, TError, Key, SigninForm, Awaited<ReturnType<typeof postApiAuthSignIn>>> & { swrKey?: string }, fetch?: RequestInit}
+export const usePostApiAuthSignIn = <TError = unknown>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiAuthSignIn>>, TError, Key, SigninForm, Awaited<ReturnType<typeof postApiAuthSignIn>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
 ) => {
 
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPostApiAuthSignInMutationKey();
-  const swrFn = getPostApiAuthSignInMutationFetcher(fetchOptions);
+  const swrFn = getPostApiAuthSignInMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -182,21 +171,14 @@ export const getGetApiAuthSignOutUrl = () => {
 
 export const getApiAuthSignOut = async ( options?: RequestInit): Promise<getApiAuthSignOutResponse> => {
 
-  const res = await fetch(getGetApiAuthSignOutUrl(),
+  return cFetch<getApiAuthSignOutResponse>(getGetApiAuthSignOutUrl(),
   {
     ...options,
     method: 'GET'
 
 
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getApiAuthSignOutResponse['data'] = body ? JSON.parse(body) : undefined
-  return { data, status: res.status, headers: res.headers } as getApiAuthSignOutResponse
-}
+);}
 
 
 
@@ -205,14 +187,14 @@ export const getGetApiAuthSignOutKey = () => [`${import.meta.env.VITE_API_ORIGIN
 
 export type GetApiAuthSignOutQueryResult = NonNullable<Awaited<ReturnType<typeof getApiAuthSignOut>>>
 
-export const useGetApiAuthSignOut = <TError = Promise<unknown>>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiAuthSignOut>>, TError> & { swrKey?: Key, enabled?: boolean }, fetch?: RequestInit }
+export const useGetApiAuthSignOut = <TError = unknown>(
+   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiAuthSignOut>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof cFetch> }
 ) => {
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const isEnabled = swrOptions?.enabled !== false
   const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetApiAuthSignOutKey() : null);
-  const swrFn = () => getApiAuthSignOut(fetchOptions)
+  const swrFn = () => getApiAuthSignOut(requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
@@ -243,26 +225,19 @@ export const getPostApiAuthIsAuthenticatedUrl = () => {
 
 export const postApiAuthIsAuthenticated = async ( options?: RequestInit): Promise<postApiAuthIsAuthenticatedResponse> => {
 
-  const res = await fetch(getPostApiAuthIsAuthenticatedUrl(),
+  return cFetch<postApiAuthIsAuthenticatedResponse>(getPostApiAuthIsAuthenticatedUrl(),
   {
     ...options,
     method: 'POST'
 
 
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: postApiAuthIsAuthenticatedResponse['data'] = body ? JSON.parse(body) : undefined
-  return { data, status: res.status, headers: res.headers } as postApiAuthIsAuthenticatedResponse
-}
+);}
 
 
 
 
-export const getPostApiAuthIsAuthenticatedMutationFetcher = ( options?: RequestInit) => {
+export const getPostApiAuthIsAuthenticatedMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
   return (_: Key, __: { arg: Arguments }) => {
     return postApiAuthIsAuthenticated(options);
   }
@@ -271,14 +246,14 @@ export const getPostApiAuthIsAuthenticatedMutationKey = () => [`${import.meta.en
 
 export type PostApiAuthIsAuthenticatedMutationResult = NonNullable<Awaited<ReturnType<typeof postApiAuthIsAuthenticated>>>
 
-export const usePostApiAuthIsAuthenticated = <TError = Promise<unknown>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiAuthIsAuthenticated>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiAuthIsAuthenticated>>> & { swrKey?: string }, fetch?: RequestInit}
+export const usePostApiAuthIsAuthenticated = <TError = unknown>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiAuthIsAuthenticated>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiAuthIsAuthenticated>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
 ) => {
 
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPostApiAuthIsAuthenticatedMutationKey();
-  const swrFn = getPostApiAuthIsAuthenticatedMutationFetcher(fetchOptions);
+  const swrFn = getPostApiAuthIsAuthenticatedMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 

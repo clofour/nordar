@@ -9,6 +9,12 @@ export default defineConfig({
             baseUrl: {
                 runtime: 'import.meta.env.VITE_API_ORIGIN'
             },
+            override: {
+                mutator: {
+                    path: './src/other/cfetch.ts',
+                    name: 'cFetch'
+                }
+            },
             mode: 'tags-split',
             client: 'swr',
             target: 'src/api/endpoints',

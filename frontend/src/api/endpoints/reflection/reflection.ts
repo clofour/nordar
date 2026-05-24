@@ -23,8 +23,11 @@ import type {
   ReflectionGet
 } from '../../models';
 
+import { cFetch } from '../../../other/cfetch';
 
 
+
+  type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -57,21 +60,14 @@ export const getGetApiReflectionGetUrl = (params?: GetApiReflectionGetParams,) =
 
 export const getApiReflectionGet = async (params?: GetApiReflectionGetParams, options?: RequestInit): Promise<getApiReflectionGetResponse> => {
 
-  const res = await fetch(getGetApiReflectionGetUrl(params),
+  return cFetch<getApiReflectionGetResponse>(getGetApiReflectionGetUrl(params),
   {
     ...options,
     method: 'GET'
 
 
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getApiReflectionGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getApiReflectionGetResponse
-}
+);}
 
 
 
@@ -80,14 +76,14 @@ export const getGetApiReflectionGetKey = (params?: GetApiReflectionGetParams,) =
 
 export type GetApiReflectionGetQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReflectionGet>>>
 
-export const useGetApiReflectionGet = <TError = Promise<unknown>>(
-  params?: GetApiReflectionGetParams, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiReflectionGet>>, TError> & { swrKey?: Key, enabled?: boolean }, fetch?: RequestInit }
+export const useGetApiReflectionGet = <TError = unknown>(
+  params?: GetApiReflectionGetParams, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiReflectionGet>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof cFetch> }
 ) => {
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const isEnabled = swrOptions?.enabled !== false
   const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetApiReflectionGetKey(params) : null);
-  const swrFn = () => getApiReflectionGet(params, fetchOptions)
+  const swrFn = () => getApiReflectionGet(params, requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
@@ -118,21 +114,14 @@ export const getGetApiReflectionListUrl = () => {
 
 export const getApiReflectionList = async ( options?: RequestInit): Promise<getApiReflectionListResponse> => {
 
-  const res = await fetch(getGetApiReflectionListUrl(),
+  return cFetch<getApiReflectionListResponse>(getGetApiReflectionListUrl(),
   {
     ...options,
     method: 'GET'
 
 
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getApiReflectionListResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getApiReflectionListResponse
-}
+);}
 
 
 
@@ -141,14 +130,14 @@ export const getGetApiReflectionListKey = () => [`${import.meta.env.VITE_API_ORI
 
 export type GetApiReflectionListQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReflectionList>>>
 
-export const useGetApiReflectionList = <TError = Promise<unknown>>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiReflectionList>>, TError> & { swrKey?: Key, enabled?: boolean }, fetch?: RequestInit }
+export const useGetApiReflectionList = <TError = unknown>(
+   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiReflectionList>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof cFetch> }
 ) => {
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const isEnabled = swrOptions?.enabled !== false
   const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetApiReflectionListKey() : null);
-  const swrFn = () => getApiReflectionList(fetchOptions)
+  const swrFn = () => getApiReflectionList(requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
@@ -179,7 +168,7 @@ export const getPostApiReflectionCreateUrl = () => {
 
 export const postApiReflectionCreate = async (reflectionCreate: ReflectionCreate, options?: RequestInit): Promise<postApiReflectionCreateResponse> => {
 
-  const res = await fetch(getPostApiReflectionCreateUrl(),
+  return cFetch<postApiReflectionCreateResponse>(getPostApiReflectionCreateUrl(),
   {
     ...options,
     method: 'POST',
@@ -187,19 +176,12 @@ export const postApiReflectionCreate = async (reflectionCreate: ReflectionCreate
     body: JSON.stringify(
       reflectionCreate,)
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: postApiReflectionCreateResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as postApiReflectionCreateResponse
-}
+);}
 
 
 
 
-export const getPostApiReflectionCreateMutationFetcher = ( options?: RequestInit) => {
+export const getPostApiReflectionCreateMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
   return (_: Key, { arg }: { arg: ReflectionCreate }) => {
     return postApiReflectionCreate(arg, options);
   }
@@ -208,14 +190,14 @@ export const getPostApiReflectionCreateMutationKey = () => [`${import.meta.env.V
 
 export type PostApiReflectionCreateMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReflectionCreate>>>
 
-export const usePostApiReflectionCreate = <TError = Promise<unknown>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiReflectionCreate>>, TError, Key, ReflectionCreate, Awaited<ReturnType<typeof postApiReflectionCreate>>> & { swrKey?: string }, fetch?: RequestInit}
+export const usePostApiReflectionCreate = <TError = unknown>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiReflectionCreate>>, TError, Key, ReflectionCreate, Awaited<ReturnType<typeof postApiReflectionCreate>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
 ) => {
 
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPostApiReflectionCreateMutationKey();
-  const swrFn = getPostApiReflectionCreateMutationFetcher(fetchOptions);
+  const swrFn = getPostApiReflectionCreateMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -246,26 +228,19 @@ export const getPostApiReflectionUpdateUrl = () => {
 
 export const postApiReflectionUpdate = async ( options?: RequestInit): Promise<postApiReflectionUpdateResponse> => {
 
-  const res = await fetch(getPostApiReflectionUpdateUrl(),
+  return cFetch<postApiReflectionUpdateResponse>(getPostApiReflectionUpdateUrl(),
   {
     ...options,
     method: 'POST'
 
 
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: postApiReflectionUpdateResponse['data'] = body ? JSON.parse(body) : undefined
-  return { data, status: res.status, headers: res.headers } as postApiReflectionUpdateResponse
-}
+);}
 
 
 
 
-export const getPostApiReflectionUpdateMutationFetcher = ( options?: RequestInit) => {
+export const getPostApiReflectionUpdateMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
   return (_: Key, __: { arg: Arguments }) => {
     return postApiReflectionUpdate(options);
   }
@@ -274,14 +249,14 @@ export const getPostApiReflectionUpdateMutationKey = () => [`${import.meta.env.V
 
 export type PostApiReflectionUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReflectionUpdate>>>
 
-export const usePostApiReflectionUpdate = <TError = Promise<unknown>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiReflectionUpdate>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiReflectionUpdate>>> & { swrKey?: string }, fetch?: RequestInit}
+export const usePostApiReflectionUpdate = <TError = unknown>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiReflectionUpdate>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiReflectionUpdate>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
 ) => {
 
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPostApiReflectionUpdateMutationKey();
-  const swrFn = getPostApiReflectionUpdateMutationFetcher(fetchOptions);
+  const swrFn = getPostApiReflectionUpdateMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -319,26 +294,19 @@ export const getPostApiReflectionDeleteUrl = (params?: PostApiReflectionDeletePa
 
 export const postApiReflectionDelete = async (params?: PostApiReflectionDeleteParams, options?: RequestInit): Promise<postApiReflectionDeleteResponse> => {
 
-  const res = await fetch(getPostApiReflectionDeleteUrl(params),
+  return cFetch<postApiReflectionDeleteResponse>(getPostApiReflectionDeleteUrl(params),
   {
     ...options,
     method: 'POST'
 
 
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: postApiReflectionDeleteResponse['data'] = body ? JSON.parse(body) : undefined
-  return { data, status: res.status, headers: res.headers } as postApiReflectionDeleteResponse
-}
+);}
 
 
 
 
-export const getPostApiReflectionDeleteMutationFetcher = (params?: PostApiReflectionDeleteParams, options?: RequestInit) => {
+export const getPostApiReflectionDeleteMutationFetcher = (params?: PostApiReflectionDeleteParams, options?: SecondParameter<typeof cFetch>) => {
   return (_: Key, __: { arg: Arguments }) => {
     return postApiReflectionDelete(params, options);
   }
@@ -347,14 +315,14 @@ export const getPostApiReflectionDeleteMutationKey = (params?: PostApiReflection
 
 export type PostApiReflectionDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReflectionDelete>>>
 
-export const usePostApiReflectionDelete = <TError = Promise<unknown>>(
-  params?: PostApiReflectionDeleteParams, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiReflectionDelete>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiReflectionDelete>>> & { swrKey?: string }, fetch?: RequestInit}
+export const usePostApiReflectionDelete = <TError = unknown>(
+  params?: PostApiReflectionDeleteParams, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiReflectionDelete>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiReflectionDelete>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
 ) => {
 
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPostApiReflectionDeleteMutationKey(params);
-  const swrFn = getPostApiReflectionDeleteMutationFetcher(params, fetchOptions);
+  const swrFn = getPostApiReflectionDeleteMutationFetcher(params, requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
