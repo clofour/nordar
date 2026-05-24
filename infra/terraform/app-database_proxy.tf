@@ -15,7 +15,7 @@ resource "digitalocean_droplet" "database_proxy" {
 
     region = var.region
     image = data.digitalocean_images.database_proxy.images[0].id
-    name = "database_proxy-${count.index}"
+    name = "database-proxy-${count.index}"
     size = var.droplet_size
 
     vpc_uuid = digitalocean_vpc.main.id
