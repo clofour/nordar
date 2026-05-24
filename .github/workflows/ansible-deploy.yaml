@@ -62,7 +62,7 @@ jobs:
         run: ansible-galaxy install -r requirements.yaml
 
       - name: Prepare Ansible environment
-        run: bash ./prepare.sh ${{ vars.RUNNER_DATA_DIR }}
+        run: bash ./prepare.sh "${{ vars.RUNNER_DATA_DIR }}"
         env:
           ANSIBLE_SSH_PRIVATE_KEY: ${{ secrets.ANSIBLE_SSH_PRIVATE_KEY }}
           PKI_ROOT_CERTIFICATE: ${{ vars.PKI_ROOT_CERTIFICATE }}
