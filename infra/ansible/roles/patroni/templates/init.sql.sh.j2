@@ -4,6 +4,6 @@ set -euo pipefail
 CONNECTION_STRING="$1"
 
 psql "$CONNECTION_STRING" <<'SQL'
-CREATE ROLE {{ postgresql_app_user }} LOGIN PASSWORD '{{ dbproxy_runtime_password }}';
+CREATE ROLE {{ postgresql_app_user }} LOGIN PASSWORD '{{ postgresql_app_user_password }}';
 CREATE DATABASE {{ postgresql_app_db }} OWNER {{ postgresql_app_user }};
 SQL

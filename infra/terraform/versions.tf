@@ -1,5 +1,5 @@
 terraform {
-    required_version = "~> v1.14.7"
+    required_version = "~> 1.14.7"
 
     required_providers {
       digitalocean = {

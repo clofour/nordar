@@ -1,5 +1,7 @@
 ---
 
+postgresql_app_user: app_user
+postgresql_app_db: app_db
 postgresql_app_user_password: "{{ lookup('ansible.builtin.env', 'POSTGRESQL_APP_USER_PASSWORD') }}"
 db_connection_string: | 
-  Server={{ hostnames.database }}.{{ domain }};Port={{ ports.haproxy_database }};Database={{ database.app_db }};User Id={{ database.app_user }};Password={{ postgresql_app_user_password }}
+  Server={{ hostnames.database }}.{{ domain }};Port={{ ports.haproxy_database }};Database={{ postgresql_app_db }};User Id={{ postgresql_app_user }};Password={{ postgresql_app_user_password }}

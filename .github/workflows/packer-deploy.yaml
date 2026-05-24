@@ -25,3 +25,5 @@ jobs:
         run: packer build .
         env:
           DIGITALOCEAN_TOKEN: ${{ secrets.DO_API_TOKEN }}
+          ANSIBLE_SSH_PUBLIC_KEY: ${{ vars.ANSIBLE_SSH_PUBLIC_KEY }}
+          DEV_SSH_PUBLIC_KEY: ${{ vars.DEV_SSH_PUBLIC_KEY }}

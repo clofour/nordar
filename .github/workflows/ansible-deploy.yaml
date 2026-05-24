@@ -42,15 +42,15 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: migration-bundle
-          path: ${{ variables.RUNNER_DATA_DIR }}/efbundle
+          path: ${{ vars.RUNNER_DATA_DIR }}/efbundle
 
       - name: Prepare Ansible environment
-        run: ./prepare.sh ${{ variables.RUNNER_DATA_DIR }}
+        run: ./prepare.sh ${{ vars.RUNNER_DATA_DIR }}
         env:
-          PKI_ROOT_CERTIFICATE: ${{ variables.PKI_ROOT_CERTIFICATE }}
-          PKI_ANSIBLE_CERTIFICATE: ${{ variables.PKI_ANSIBLE_CERTIFICATE }}
+          PKI_ROOT_CERTIFICATE: ${{ vars.PKI_ROOT_CERTIFICATE }}
+          PKI_ANSIBLE_CERTIFICATE: ${{ vars.PKI_ANSIBLE_CERTIFICATE }}
           PKI_ANSIBLE_PRIVATE_KEY: ${{ secrets.PKI_ANSIBLE_PRIVATE_KEY }}
-          PKI_CHAIN_CERTIFICATE: ${{ variables.PKI_CHAIN_CERTIFICATE }}
+          PKI_CHAIN_CERTIFICATE: ${{ vars.PKI_CHAIN_CERTIFICATE }}
 
       - name: Set up collections
         run: ansible-galaxy install -r requirements.yaml
@@ -58,5 +58,13 @@ jobs:
       - name: Run Ansible Playbook
         run: ansible-playbook -i ./inventory/digitalocean.yml runtime-site.yaml
         env:
+          RUNNER_DATA_DIR: ${{ vars.RUNNER_DATA_DIR }}
+          ANSIBLE_REMOTE_USER: ansible
+          ANSIBLE_PRIVATE_KEY_FILE: ${{ vars.RUNNER_DATA_DIR }}/ansible
           DIGITALOCEAN_TOKEN: ${{ secrets.DO_API_TOKEN }}
+          DOMAIN: ${{ vars.DOMAIN }}
           BACKEND_VERSION: ${{ inputs.backend_version }}
+          POSTGRESQL_POSTGRES_PASSWORD: ${{ secrets.POSTGRESQL_POSTGRES_PASSWORD }}
+          POSTGRESQL_REPLICATION_USER_PASSWORD: ${{ secrets.POSTGRESQL_POSTGRES_PASSWORD }}
+          POSTGRESQL_REWIND_USER_PASSWORD: ${{ secrets.POSTGRESQL_POSTGRES_PASSWORD }}
+          POSTGRESQL_APP_USER_PASSWORD: ${{ secrets.POSTGRESQL_POSTGRES_PASSWORD }}
