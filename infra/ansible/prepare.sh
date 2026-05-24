@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+chmod 0700 "$1"
+chmod 0600 "$1/ansible" "$1/root.crt" "$1/ansible.crt" "$1/ansible.key" "$1/chain.crt"
+
+
 echo "$ANSIBLE_SSH_PRIVATE_KEY" > "$1/ansible"
 
 echo "$PKI_ROOT_CERTIFICATE" > "$1/root.crt"
