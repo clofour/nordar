@@ -30,6 +30,7 @@
   ansible.builtin.slurp:
     src: "{{ pki_public_dir }}/{{ service_cert.name }}.crt"
   register: service_crt_content
+  failed_when: false
 
 - name: Sign service certificate with Ansible CA
   community.crypto.x509_certificate_pipe:
@@ -56,9 +57,9 @@
   ansible.builtin.slurp:
     src: "{{ item }}"
   loop:
-    - "{{ pki_private_dir }}/{{ service_cert.name }}.key"
-    - "{{ pki_target_dir }}/{{ pki_chain_crt_name }}.crt"
     - "{{ pki_public_dir }}/{{ service_cert.name }}.crt"
+    - "{{ pki_target_dir }}/{{ pki_ansible_crt_name }}.crt"
+    - "{{ pki_private_dir }}/{{ service_cert.name }}.key"
   register: pki_material
   no_log: true
 
@@ -74,10 +75,12 @@
     mode: "0640"
   no_log: true
 
-# - name: Install service fullchain certificate
-#   ansible.builtin.copy:
-#     content: "{{ signed_service_crt.csr }}"
-#     dest: "{{ pki_public_dir }}/{{ service_cert.name }}-{{ chain_crt_name }}.crt"
-#     owner: root
-#     group: root
-#     mode: "0644"
+- name: Install service fullchain certificate
+  ansible.builtin.copy:
+    content: |
+      {{ pki_material.results[0].content | b64decode | trim }}
+      {{ pki_material.results[1].content | b64decode | trim }}
+    dest: "{{ pki_public_dir }}/{{ service_cert.name }}-{{ pki_chain_crt_name }}.crt"
+    owner: root
+    group: root
+    mode: "0644"
