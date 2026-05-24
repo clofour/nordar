@@ -17,6 +17,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
+      - name: Install EF Core CLI tool
+        run: dotnet tool install --global dotnet-ef
+
       - name: Create migration bundle
         run: dotnet ef migrations bundle --self-contained -r linux-x64
 
