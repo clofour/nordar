@@ -38,3 +38,8 @@ postgresql_app_user: app_user
 postgresql_app_db: app_db
 
 patroni_config_dir: /etc/patroni
+
+postgresql_postgres_password: "{{ lookup('ansible.builtin.env', 'POSTGRESQL_POSTGRES_PASSWORD') }}"
+postgresql_replication_user_password: "{{ lookup('ansible.builtin.env', 'POSTGRESQL_REPLICATION_USER_PASSWORD') }}"
+postgresql_rewind_user_password: "{{ lookup('ansible.builtin.env', 'POSTGRESQL_REWIND_USER_PASSWORD') }}"
+postgresql_app_user_password: "{{ lookup('ansible.builtin.env', 'POSTGRESQL_APP_USER_PASSWORD') }}"

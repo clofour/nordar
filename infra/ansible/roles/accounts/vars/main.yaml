@@ -13,11 +13,11 @@ accounts_users:
     uid: 1002
     group: ansible
     sudo: "ALL=(ALL:ALL) NOPASSWD:ALL"
-    ssh_key: "TBA"
+    ssh_key: "{{ lookup('ansible.builtin.env', 'ANSIBLE_SSH_PUBLIC_KEY') }}"
     state: present
   - name: dev
     uid: 1003
     group: dev
     sudo: "ALL=(ALL:ALL) NOPASSWD:ALL"
-    ssh_key: "TBA"
+    ssh_key: "{{ lookup('ansible.builtin.env', 'DEV_SSH_PUBLIC_KEY') }}"
     state: present
