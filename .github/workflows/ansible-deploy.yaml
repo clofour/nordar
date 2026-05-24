@@ -50,6 +50,12 @@ jobs:
           name: migration-bundle
           path: ${{ vars.RUNNER_DATA_DIR }}/efbundle
 
+      - name: Set up dependencies
+        run: pip install -r requirements.txt
+
+      - name: Set up collections
+        run: ansible-galaxy install -r requirements.yaml
+
       - name: Prepare Ansible environment
         run: bash ./prepare.sh ${{ vars.RUNNER_DATA_DIR }}
         env:
@@ -58,9 +64,6 @@ jobs:
           PKI_ANSIBLE_CERTIFICATE: ${{ vars.PKI_ANSIBLE_CERTIFICATE }}
           PKI_ANSIBLE_PRIVATE_KEY: ${{ secrets.PKI_ANSIBLE_PRIVATE_KEY }}
           PKI_CHAIN_CERTIFICATE: ${{ vars.PKI_CHAIN_CERTIFICATE }}
-
-      - name: Set up collections
-        run: ansible-galaxy install -r requirements.yaml
 
       - name: Run Ansible Playbook
         run: ansible-playbook -i ./inventory/digitalocean.yml runtime-site.yaml
