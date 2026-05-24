@@ -42,10 +42,15 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: migration-bundle
-          path: ~/.data/efbundle
+          path: ${{ variables.RUNNER_DATA_DIR }}/efbundle
 
-      - name: Set up Ansible
-        run: pip install -r requirements-ci.txt
+      - name: Prepare Ansible environment
+        run: ./prepare.sh ${{ variables.RUNNER_DATA_DIR }}
+        env:
+          PKI_ROOT_CERTIFICATE: ${{ variables.PKI_ROOT_CERTIFICATE }}
+          PKI_ANSIBLE_CERTIFICATE: ${{ variables.PKI_ANSIBLE_CERTIFICATE }}
+          PKI_ANSIBLE_PRIVATE_KEY: ${{ secrets.PKI_ANSIBLE_PRIVATE_KEY }}
+          PKI_CHAIN_CERTIFICATE: ${{ variables.PKI_CHAIN_CERTIFICATE }}
 
       - name: Set up collections
         run: ansible-galaxy install -r requirements.yaml

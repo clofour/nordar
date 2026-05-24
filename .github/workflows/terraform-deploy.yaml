@@ -10,6 +10,7 @@ jobs:
       DIGITALOCEAN_TOKEN: ${{ secrets.DO_API_TOKEN }}
       AWS_ACCESS_KEY_ID: ${{ secrets.SPACES_ACCESS_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.SPACES_SECRET_KEY }}
+      TF_VAR_domain: ${{ variables.DOMAIN }}
     defaults:
       run:
         working-directory: ./infra/terraform
