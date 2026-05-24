@@ -1,0 +1,71 @@
+name: ansible-deploy
+on:
+  workflow_dispatch:
+    inputs:
+      backend_version:
+        description: "Backend version"
+        default: main
+        type: string
+jobs:
+  create-migration-bundle:
+    name: Create Migration Bundle
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Create migration bundle
+        run: dotnet ef migrations bundle --self-contained -r linux-x64
+
+      - name: Upload migration bundle as build artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: migration-bundle
+          path: ./efbundle
+
+  validate:
+    name: Ansible Deploy
+    needs: create-migration-bundle
+    runs-on: ubuntu-24.04
+    environment: production
+    defaults:
+      run:
+        working-directory: ./infra/ansible
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Download migration bundle as build artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: migration-bundle
+          path: ${{ vars.RUNNER_DATA_DIR }}/efbundle
+
+      - name: Prepare Ansible environment
+        run: ./prepare.sh ${{ vars.RUNNER_DATA_DIR }}
+        env:
+          ANSIBLE_SSH_PRIVATE_KEY: ${{ secrets.ANSIBLE_SSH_PRIVATE_KEY }}
+          PKI_ROOT_CERTIFICATE: ${{ vars.PKI_ROOT_CERTIFICATE }}
+          PKI_ANSIBLE_CERTIFICATE: ${{ vars.PKI_ANSIBLE_CERTIFICATE }}
+          PKI_ANSIBLE_PRIVATE_KEY: ${{ secrets.PKI_ANSIBLE_PRIVATE_KEY }}
+          PKI_CHAIN_CERTIFICATE: ${{ vars.PKI_CHAIN_CERTIFICATE }}
+
+      - name: Set up collections
+        run: ansible-galaxy install -r requirements.yaml
+
+      - name: Run Ansible Playbook
+        run: ansible-playbook -i ./inventory/digitalocean.yml runtime-site.yaml
+        env:
+          RUNNER_DATA_DIR: ${{ vars.RUNNER_DATA_DIR }}
+          ANSIBLE_REMOTE_USER: ansible
+          ANSIBLE_PRIVATE_KEY_FILE: ${{ vars.RUNNER_DATA_DIR }}/ansible
+          DIGITALOCEAN_TOKEN: ${{ secrets.DO_API_TOKEN }}
+          DOMAIN: ${{ vars.DOMAIN }}
+          BACKEND_VERSION: ${{ inputs.backend_version }}
+          POSTGRESQL_POSTGRES_PASSWORD: ${{ secrets.POSTGRESQL_POSTGRES_PASSWORD }}
+          POSTGRESQL_REPLICATION_USER_PASSWORD: ${{ secrets.POSTGRESQL_POSTGRES_PASSWORD }}
+          POSTGRESQL_REWIND_USER_PASSWORD: ${{ secrets.POSTGRESQL_POSTGRES_PASSWORD }}
+          POSTGRESQL_APP_USER_PASSWORD: ${{ secrets.POSTGRESQL_POSTGRES_PASSWORD }}

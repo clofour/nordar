@@ -1,0 +1,67 @@
+---
+
+- name: Allow proxy source ports
+  community.general.ufw:
+    proto: tcp
+    port: "{{ item }}"
+    direction: in
+    rule: allow
+  when: "'database_proxy' in group_names"
+  loop:
+    - "{{ ports.haproxy_database }}"
+    - "{{ ports.haproxy_database_write }}"
+    - "{{ ports.haproxy_database_read }}"
+  notify: Restart ufw
+
+- name: Allow proxy target ports
+  community.general.ufw:
+    proto: tcp
+    port: "{{ ports.postgres }}"
+    direction: out
+    rule: allow
+  when: "'database_proxy' in group_names"
+  notify: Restart ufw
+
+- name: Allow PostgreSQL listen port
+  community.general.ufw:
+    proto: tcp
+    port: "{{ ports.postgres }}"
+    direction: in
+    rule: allow
+  when: "'database' in group_names"
+  notify: Restart ufw
+
+- name: Allow Patroni REST port
+  community.general.ufw:
+    proto: tcp
+    port: "{{ ports.patroni_rest }}"
+    direction: in
+    rule: allow
+  when: "'database' in group_names"
+  notify: Restart ufw
+
+- name: Allow etcd client port
+  community.general.ufw:
+    proto: tcp
+    port: "{{ ports.etcd_client }}"
+    direction: in
+    rule: allow
+  when: "'database' in group_names"
+  notify: Restart ufw
+
+- name: Allow etcd peer port
+  community.general.ufw:
+    proto: tcp
+    port: "{{ ports.etcd_peer }}"
+    direction: in
+    rule: allow
+  when: "'database' in group_names"
+  notify: Restart ufw
+
+- name: Enable UFW
+  community.general.ufw:
+    state: enabled
+    default: deny
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

@@ -5,3 +5,6 @@
 
 - name: Deploy to database
   import_playbook: database.yaml
+
+- name: Deploy to database proxy
+  import_playbook: database-proxy.yaml

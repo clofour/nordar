@@ -1,0 +1,15 @@
+---
+
+- name: Configure etcd
+  ansible.builtin.template:
+    src: templates/config.yaml.j2
+    dest: /etc/etcd/config.yaml
+    owner: root
+    group: etcd
+    mode: "0640"
+
+- name: Enable and start etcd service
+  ansible.builtin.service:
+    name: etcd
+    state: started
+    enabled: true

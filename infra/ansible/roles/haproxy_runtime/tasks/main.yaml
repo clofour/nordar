@@ -1,0 +1,15 @@
+---
+
+- name: Configure HAProxy
+  ansible.builtin.template:
+    src: templates/haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: haproxy
+    mode: "0640"
+
+- name: Enable and start HAProxy service
+  ansible.builtin.service:
+    name: haproxy
+    state: started
+    enabled: true

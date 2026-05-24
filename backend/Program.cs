@@ -17,7 +17,9 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string environment = "Testing";
+string environment = builder.Environment.EnvironmentName;
+
+builder.Services.AddHealthChecks();
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
@@ -37,30 +39,24 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSerilog();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy
+            .WithOrigins(builder.Configuration["Origins:Frontend"])
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     }
 );
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseNpgsql($"Host=localhost:5432;Username={environment.ToLower()};Password={(environment == "Production" ? File.ReadAllText("/run/secrets/p_db_user_password") : "testing")};Database={environment.ToLower()}")
-    .UseSeeding((context, _) =>
-    {
-        AppDbContext appDbContext = (AppDbContext)context;
-        if (appDbContext.AccessCodes.Find("cat") == null)
-        {
-            AccessCode newAccessCode = new AccessCode("cat", 10);
-            appDbContext.AccessCodes.Add(newAccessCode);
-
-            context.SaveChanges();
-        }
-    });
-});
-
-builder.Services.AddDataProtection();
 
 builder.Services.AddIdentityCore<User>(options =>
 {
@@ -170,12 +166,33 @@ builder.Services.AddAutoMapper(cfg =>
 builder.Services.AddScoped<GoalService>();
 builder.Services.AddScoped<EventService>();
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default"))
+    .UseSeeding((context, _) =>
+    {
+        AppDbContext appDbContext = (AppDbContext)context;
+        if (appDbContext.AccessCodes.Find("cat") == null)
+        {
+            AccessCode newAccessCode = new AccessCode("cat", 10);
+            appDbContext.AccessCodes.Add(newAccessCode);
+
+            context.SaveChanges();
+        }
+    });
+});
+
 var app = builder.Build();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
+
+if (app.Environment.IsProduction())
+{
+    app.UseExceptionHandler();
+}
 
 app.UseSerilogRequestLogging(options =>
 {
@@ -189,12 +206,7 @@ app.UseSerilogRequestLogging(options =>
     };
 });
 
-// Configure the HTTP request pipeline.
-
-if (app.Environment.IsProduction())
-{
-    app.UseExceptionHandler();
-}
+app.UseCors("Frontend");
 
 app.UseHttpsRedirection();
 
@@ -208,6 +220,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.MapHealthChecks("/healthz");
 
 app.MapControllerRoute(
     name: "default",

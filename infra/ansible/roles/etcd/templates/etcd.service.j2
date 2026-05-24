@@ -6,7 +6,7 @@ Wants=network-online.target
 [Service]
 User=etcd
 Group=etcd
-ExecStart=/usr/local/bin/etcd
+ExecStart=/usr/local/bin/etcd --config-file={{ etcd_config_dir }}config.yaml
 
 [Install]
 WantedBy=multi-user.target

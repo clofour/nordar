@@ -1,0 +1,3 @@
+---
+
+backend_runtime_image: "{{ backend_runtime_image_repo }}:{{ backend_runtime_image_tag }}"

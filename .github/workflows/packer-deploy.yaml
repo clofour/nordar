@@ -16,12 +16,14 @@ jobs:
       - name: Set up Packer
         uses: hashicorp/setup-packer@c3d53c525d422944e50ee27b840746d6522b08de
         with:
-          terraform_version: "1.15.3"
+          version: "1.15.3"
 
       - name: Initialize Packer project
         run: packer init .
 
-      - name: Run Packer Validate
+      - name: Run Packer Build
         run: packer build .
         env:
-          DIGITALOCEAN_API_TOKEN: ${{ secrets.DO_API_TOKEN }}
+          DIGITALOCEAN_TOKEN: ${{ secrets.DO_API_TOKEN }}
+          ANSIBLE_SSH_PUBLIC_KEY: ${{ vars.ANSIBLE_SSH_PUBLIC_KEY }}
+          DEV_SSH_PUBLIC_KEY: ${{ vars.DEV_SSH_PUBLIC_KEY }}

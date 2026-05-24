@@ -1,0 +1,53 @@
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    maxconn 1000
+
+defaults
+    log global
+    mode tcp
+    timeout client 1h
+    timeout connect 5s
+    timeout server 1h
+
+listen database
+    bind {{ private_ip }}:{{ ports.haproxy_database }}
+    mode tcp
+
+    option httpchk GET /primary
+    http-check expect status 200
+
+{% for host in groups["database"] | sort %}
+    server {{ host }} {{ hostvars[host].private_ip }}:{{ ports.postgres}} check port {{ ports.patroni_rest }} check-ssl verify required ca-file {{ pki_target_dir }}/{{ pki_root_crt_name }}.crt crt {{ pki_private_dir }}/haproxy.pem
+{% endfor %}
+
+listen database-write
+    bind {{ private_ip }}:{{ ports.haproxy_database_write }}
+    mode tcp
+
+    option httpchk GET /primary
+    http-check expect status 200
+
+{% for host in groups["database"] | sort %}
+    server {{ host }} {{ hostvars[host].private_ip }}:{{ ports.postgres}} check port {{ ports.patroni_rest }} check-ssl verify required ca-file {{ pki_target_dir }}/{{ pki_root_crt_name }}.crt crt {{ pki_private_dir }}/haproxy.pem
+{% endfor %}
+
+listen database-read
+    bind {{ private_ip }}:{{ ports.haproxy_database_read }}
+    mode tcp
+
+    option httpchk GET /replica
+    http-check expect status 200
+
+    balance roundrobin
+
+{% for host in groups["database"] | sort %}
+    server {{ host }} {{ hostvars[host].private_ip }}:{{ ports.postgres}} check port {{ ports.patroni_rest }} check-ssl verify required ca-file {{ pki_target_dir }}/{{ pki_root_crt_name }}.crt crt {{ pki_private_dir }}/haproxy.pem
+{% endfor %}
+
+listen status
+    bind {{ private_ip }}:{{ ports.haproxy_stats }}
+    mode http
+
+    stats enable
+    stats uri /

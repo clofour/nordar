@@ -1,0 +1,45 @@
+---
+
+service_certs:
+  - name: etcd
+    group: etcd
+    common_name: "etcd.{{ domain }}"
+    sans:
+      - "DNS:etcd.{{ domain }}"
+      - "DNS:{{ inventory_hostname }}.{{ domain }}"
+      - "IP:{{ private_ip }}"
+    extended_key_usage:
+      - serverAuth
+      - clientAuth
+  - name: patroni
+    group: postgres
+    common_name: "patroni.{{ domain }}"
+    sans:
+      - "DNS:patroni.{{ domain }}"
+      - "DNS:{{ inventory_hostname }}.{{ domain }}"
+      - "IP:{{ private_ip }}"
+    extended_key_usage:
+      - serverAuth
+      - clientAuth
+  - name: postgres
+    group: postgres
+    common_name: "postgres.{{ domain }}"
+    sans:
+      - "DNS:postgres.{{ domain }}"
+      - "DNS:{{ hostnames.database }}.{{ domain }}"
+      - "DNS:{{ inventory_hostname }}.{{ domain }}"
+      - "IP:{{ private_ip }}"
+    extended_key_usage:
+      - serverAuth
+      - clientAuth
+
+postgresql_version: 18
+postgresql_app_user: app_user
+postgresql_app_db: app_db
+
+patroni_config_dir: /etc/patroni
+
+postgresql_postgres_password: "{{ lookup('ansible.builtin.env', 'POSTGRESQL_POSTGRES_PASSWORD') }}"
+postgresql_replication_user_password: "{{ lookup('ansible.builtin.env', 'POSTGRESQL_REPLICATION_USER_PASSWORD') }}"
+postgresql_rewind_user_password: "{{ lookup('ansible.builtin.env', 'POSTGRESQL_REWIND_USER_PASSWORD') }}"
+postgresql_app_user_password: "{{ lookup('ansible.builtin.env', 'POSTGRESQL_APP_USER_PASSWORD') }}"

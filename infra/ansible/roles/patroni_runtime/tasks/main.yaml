@@ -1,0 +1,24 @@
+---
+
+- name: Template init script
+  ansible.builtin.template:
+    src: templates/init.sql.sh.j2
+    dest: "{{ patroni_config_dir }}/init.sql.sh"
+    owner: root
+    group: postgres
+    mode: "0750"
+
+- name: Configure Patroni
+  ansible.builtin.template:
+    src: templates/config.yml.j2
+    dest: "{{ patroni_config_dir }}/config.yml"
+    owner: root
+    group: postgres
+    mode: "0640"
+  no_log: true
+
+- name: Start Patroni
+  ansible.builtin.service:
+    name: patroni
+    enabled: true
+    state: started

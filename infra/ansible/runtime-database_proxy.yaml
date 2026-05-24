@@ -1,0 +1,11 @@
+---
+
+- name: Deploy to database proxy at runtime
+  become: true
+  hosts: database_proxy
+  vars_files:
+    - ../shared/network.yaml
+  roles:
+    - ufw_runtime
+    - pki_runtime
+    - haproxy_runtime

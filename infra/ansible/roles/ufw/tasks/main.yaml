@@ -12,6 +12,12 @@
     rule: allow
   notify: Restart ufw
 
+- name: Allow DNS
+  community.general.ufw:
+    port: 53
+    rule: allow
+  notify: Restart ufw
+
 - name: Allow HTTP
   community.general.ufw:
     port: 80
@@ -23,12 +29,6 @@
   community.general.ufw:
     port: 443
     proto: tcp
-    rule: allow
-  notify: Restart ufw
-
-- name: Allow DNS
-  community.general.ufw:
-    port: 53
     rule: allow
   notify: Restart ufw
 

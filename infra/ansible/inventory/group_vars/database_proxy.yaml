@@ -1,0 +1,14 @@
+---
+
+service_certs:
+  - name: haproxy
+    group: haproxy
+    common_name: "haproxy.{{ domain }}"
+    sans:
+      - "DNS:haproxy.{{ domain }}"
+      - "DNS:{{ hostnames.database }}.{{ domain }}"
+      - "DNS:{{ inventory_hostname }}.{{ domain }}"
+      - "IP:{{ private_ip }}"
+    extended_key_usage:
+      - serverAuth
+      - clientAuth

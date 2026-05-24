@@ -1,0 +1,4 @@
+---
+
+backend_runtime_image_repo: ghcr.io/clofour/backend
+backend_runtime_image_tag: "{{ lookup('ansible.builtin.env', 'BACKEND_VERSION', default='main') }}"

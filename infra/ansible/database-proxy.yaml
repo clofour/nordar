@@ -1,0 +1,12 @@
+---
+
+- name: Deploy to database proxy
+  become: true
+  hosts: database_proxy
+  roles:
+    - pre
+    - sshd
+    - accounts
+    - ufw
+    - fail2ban
+    - haproxy

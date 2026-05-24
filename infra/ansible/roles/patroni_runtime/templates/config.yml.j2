@@ -1,0 +1,76 @@
+scope: {{ app_name }}
+name: {{ inventory_hostname }}
+
+restapi:
+    listen: {{ private_ip }}:{{ ports.patroni_rest }}
+    connect_address: {{ private_ip }}:{{ ports.patroni_rest }}
+    certfile: {{ pki_public_dir }}/patroni-{{ pki_chain_crt_name }}.crt
+    keyfile: {{ pki_private_dir }}/patroni.key
+    cafile: {{ pki_target_dir }}/{{ pki_root_crt_name }}.crt
+    verify_client: required
+
+etcd3:
+    hosts:
+{% for host in groups["database"] | sort %}
+        - {{ hostvars[host].private_ip }}:{{ ports.etcd_client }}
+{% endfor %}
+    protocol: https
+    cert: {{ pki_public_dir }}/patroni-{{ pki_chain_crt_name }}.crt
+    key: {{ pki_private_dir }}/patroni.key
+    cacert: {{ pki_target_dir }}/{{ pki_root_crt_name }}.crt
+
+bootstrap:
+    dcs:
+        ttl: 30
+        loop_wait: 10
+        retry_timeout: 10
+        maximum_lag_on_failover: 1048576
+
+        postgresql:
+            use_pg_rewind: true
+            use_slots: true
+            parameters:
+                wal_level: replica
+                hot_standby: "on"
+
+    initdb:
+        - encoding: UTF8
+        - data-checksums
+
+    post_bootstrap: {{ patroni_config_dir }}/init.sql.sh
+
+
+postgresql:
+    listen: {{ private_ip }}:{{ ports.postgres }}
+    connect_address: {{ private_ip }}:{{ ports.postgres }}
+
+    data_dir: /var/lib/postgresql/{{ postgresql_version }}/main
+    bin_dir: /usr/lib/postgresql/{{ postgresql_version }}/bin
+    pgpass: /var/lib/postgresql/.pgpass
+
+    authentication:
+        superuser:
+            username: postgres
+            password: {{ postgresql_postgres_password }}
+        replication:
+            username: replication_user
+            password: {{ postgresql_replication_user_password }}
+        rewind:
+            username: rewind_user
+            password: {{ postgresql_rewind_user_password }}
+
+    pg_hba:
+        - local all all peer
+        - host all all 127.0.0.1/32 scram-sha-256
+        - host all all ::1/128 scram-sha-256
+{% for host in groups["database"] | sort %}
+        - host replication replication_user {{ hostvars[host].private_ip}}/32 scram-sha-256
+        - host all rewind_user {{ hostvars[host].private_ip}}/32 scram-sha-256
+{% endfor %}
+{% for host in groups["database_proxy"] | sort %}
+        - host {{ postgresql_app_db }} {{ postgresql_app_user }} {{ hostvars[host].private_ip }}/32 scram-sha-256
+{% endfor %}
+
+tags:
+    noloadbalance: false
+    nofailover: false

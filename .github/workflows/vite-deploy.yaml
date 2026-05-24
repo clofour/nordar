@@ -1,0 +1,60 @@
+name: vite-deploy
+on:
+  workflow_dispatch:
+jobs:
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-24.04
+    environment: production
+    env:
+      DIGITALOCEAN_TOKEN: ${{ secrets.DO_API_TOKEN }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.SPACES_ACCESS_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.SPACES_SECRET_KEY }}
+    defaults:
+      run:
+        working-directory: ./infra/terraform
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85
+        with:
+          terraform_version: "1.14.7"
+
+      - name: Initialize Terraform project
+        run: terraform init
+
+      - name: Run Terraform Output
+        id: output
+        run: echo "bucket=$(terraform output -raw frontend_spaces_bucket)" >> "$GITHUB_OUTPUT"
+    outputs:
+      bucket: ${{ steps.output.outputs.bucket }}
+
+  deploy:
+    name: Vite Deploy
+    needs: prepare
+    runs-on: ubuntu-24.04 # AWS CLI preinstalled (see https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md)
+    environment: production
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+        env:
+          VITE_API_ORIGIN: https://backend.${{ vars.DOMAIN }}
+
+      - name: Upload assets
+        run: aws s3 sync dist s3://$BUCKET --acl public-read --delete
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.SPACES_ACCESS_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SPACES_SECRET_KEY }}
+          AWS_ENDPOINT_URL: https://fra1.digitaloceanspaces.com
+          BUCKET: ${{ needs.prepare.outputs.bucket }}

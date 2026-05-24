@@ -11,6 +11,10 @@
     signed_by: https://www.postgresql.org/media/keys/ACCC4CF8.asc
     state: present
 
+- name: Update repositories
+  ansible.builtin.apt:
+    update_cache: true
+
 - name: Install Patroni and dependencies
   ansible.builtin.apt:
     name: patroni

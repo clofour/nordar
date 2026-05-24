@@ -22,8 +22,11 @@ import type {
   RecurringEventCreate
 } from '../../models';
 
+import { cFetch } from '../../../other/cfetch';
 
 
+
+  type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -44,42 +47,35 @@ export const getGetApiEventGetUrl = () => {
 
 
 
-  return `/api/Event/Get`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/Get`
 }
 
 export const getApiEventGet = async ( options?: RequestInit): Promise<getApiEventGetResponse> => {
 
-  const res = await fetch(getGetApiEventGetUrl(),
+  return cFetch<getApiEventGetResponse>(getGetApiEventGetUrl(),
   {
     ...options,
     method: 'GET'
 
 
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getApiEventGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getApiEventGetResponse
-}
+);}
 
 
 
 
-export const getGetApiEventGetKey = () => [`/api/Event/Get`] as const;
+export const getGetApiEventGetKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/Get`] as const;
 
 export type GetApiEventGetQueryResult = NonNullable<Awaited<ReturnType<typeof getApiEventGet>>>
 
-export const useGetApiEventGet = <TError = Promise<unknown>>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiEventGet>>, TError> & { swrKey?: Key, enabled?: boolean }, fetch?: RequestInit }
+export const useGetApiEventGet = <TError = unknown>(
+   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiEventGet>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof cFetch> }
 ) => {
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const isEnabled = swrOptions?.enabled !== false
   const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetApiEventGetKey() : null);
-  const swrFn = () => getApiEventGet(fetchOptions)
+  const swrFn = () => getApiEventGet(requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
@@ -105,12 +101,12 @@ export const getPostApiEventCreateOnetimeUrl = () => {
 
 
 
-  return `/api/Event/CreateOnetime`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/CreateOnetime`
 }
 
 export const postApiEventCreateOnetime = async (onetimeEventCreate: OnetimeEventCreate, options?: RequestInit): Promise<postApiEventCreateOnetimeResponse> => {
 
-  const res = await fetch(getPostApiEventCreateOnetimeUrl(),
+  return cFetch<postApiEventCreateOnetimeResponse>(getPostApiEventCreateOnetimeUrl(),
   {
     ...options,
     method: 'POST',
@@ -118,35 +114,28 @@ export const postApiEventCreateOnetime = async (onetimeEventCreate: OnetimeEvent
     body: JSON.stringify(
       onetimeEventCreate,)
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: postApiEventCreateOnetimeResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as postApiEventCreateOnetimeResponse
-}
+);}
 
 
 
 
-export const getPostApiEventCreateOnetimeMutationFetcher = ( options?: RequestInit) => {
+export const getPostApiEventCreateOnetimeMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
   return (_: Key, { arg }: { arg: OnetimeEventCreate }) => {
     return postApiEventCreateOnetime(arg, options);
   }
 }
-export const getPostApiEventCreateOnetimeMutationKey = () => [`/api/Event/CreateOnetime`] as const;
+export const getPostApiEventCreateOnetimeMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/CreateOnetime`] as const;
 
 export type PostApiEventCreateOnetimeMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventCreateOnetime>>>
 
-export const usePostApiEventCreateOnetime = <TError = Promise<unknown>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiEventCreateOnetime>>, TError, Key, OnetimeEventCreate, Awaited<ReturnType<typeof postApiEventCreateOnetime>>> & { swrKey?: string }, fetch?: RequestInit}
+export const usePostApiEventCreateOnetime = <TError = unknown>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiEventCreateOnetime>>, TError, Key, OnetimeEventCreate, Awaited<ReturnType<typeof postApiEventCreateOnetime>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
 ) => {
 
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPostApiEventCreateOnetimeMutationKey();
-  const swrFn = getPostApiEventCreateOnetimeMutationFetcher(fetchOptions);
+  const swrFn = getPostApiEventCreateOnetimeMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -172,12 +161,12 @@ export const getPostApiEventCreateRecurringUrl = () => {
 
 
 
-  return `/api/Event/CreateRecurring`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/CreateRecurring`
 }
 
 export const postApiEventCreateRecurring = async (recurringEventCreate: RecurringEventCreate, options?: RequestInit): Promise<postApiEventCreateRecurringResponse> => {
 
-  const res = await fetch(getPostApiEventCreateRecurringUrl(),
+  return cFetch<postApiEventCreateRecurringResponse>(getPostApiEventCreateRecurringUrl(),
   {
     ...options,
     method: 'POST',
@@ -185,35 +174,28 @@ export const postApiEventCreateRecurring = async (recurringEventCreate: Recurrin
     body: JSON.stringify(
       recurringEventCreate,)
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: postApiEventCreateRecurringResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as postApiEventCreateRecurringResponse
-}
+);}
 
 
 
 
-export const getPostApiEventCreateRecurringMutationFetcher = ( options?: RequestInit) => {
+export const getPostApiEventCreateRecurringMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
   return (_: Key, { arg }: { arg: RecurringEventCreate }) => {
     return postApiEventCreateRecurring(arg, options);
   }
 }
-export const getPostApiEventCreateRecurringMutationKey = () => [`/api/Event/CreateRecurring`] as const;
+export const getPostApiEventCreateRecurringMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/CreateRecurring`] as const;
 
 export type PostApiEventCreateRecurringMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventCreateRecurring>>>
 
-export const usePostApiEventCreateRecurring = <TError = Promise<unknown>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiEventCreateRecurring>>, TError, Key, RecurringEventCreate, Awaited<ReturnType<typeof postApiEventCreateRecurring>>> & { swrKey?: string }, fetch?: RequestInit}
+export const usePostApiEventCreateRecurring = <TError = unknown>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiEventCreateRecurring>>, TError, Key, RecurringEventCreate, Awaited<ReturnType<typeof postApiEventCreateRecurring>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
 ) => {
 
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPostApiEventCreateRecurringMutationKey();
-  const swrFn = getPostApiEventCreateRecurringMutationFetcher(fetchOptions);
+  const swrFn = getPostApiEventCreateRecurringMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -239,47 +221,40 @@ export const getPostApiEventUpdateUrl = () => {
 
 
 
-  return `/api/Event/Update`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/Update`
 }
 
 export const postApiEventUpdate = async ( options?: RequestInit): Promise<postApiEventUpdateResponse> => {
 
-  const res = await fetch(getPostApiEventUpdateUrl(),
+  return cFetch<postApiEventUpdateResponse>(getPostApiEventUpdateUrl(),
   {
     ...options,
     method: 'POST'
 
 
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: postApiEventUpdateResponse['data'] = body ? JSON.parse(body) : undefined
-  return { data, status: res.status, headers: res.headers } as postApiEventUpdateResponse
-}
+);}
 
 
 
 
-export const getPostApiEventUpdateMutationFetcher = ( options?: RequestInit) => {
+export const getPostApiEventUpdateMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
   return (_: Key, __: { arg: Arguments }) => {
     return postApiEventUpdate(options);
   }
 }
-export const getPostApiEventUpdateMutationKey = () => [`/api/Event/Update`] as const;
+export const getPostApiEventUpdateMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/Update`] as const;
 
 export type PostApiEventUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventUpdate>>>
 
-export const usePostApiEventUpdate = <TError = Promise<unknown>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiEventUpdate>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiEventUpdate>>> & { swrKey?: string }, fetch?: RequestInit}
+export const usePostApiEventUpdate = <TError = unknown>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiEventUpdate>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiEventUpdate>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
 ) => {
 
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPostApiEventUpdateMutationKey();
-  const swrFn = getPostApiEventUpdateMutationFetcher(fetchOptions);
+  const swrFn = getPostApiEventUpdateMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -305,47 +280,40 @@ export const getPostApiEventDeleteUrl = () => {
 
 
 
-  return `/api/Event/Delete`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/Delete`
 }
 
 export const postApiEventDelete = async ( options?: RequestInit): Promise<postApiEventDeleteResponse> => {
 
-  const res = await fetch(getPostApiEventDeleteUrl(),
+  return cFetch<postApiEventDeleteResponse>(getPostApiEventDeleteUrl(),
   {
     ...options,
     method: 'POST'
 
 
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: postApiEventDeleteResponse['data'] = body ? JSON.parse(body) : undefined
-  return { data, status: res.status, headers: res.headers } as postApiEventDeleteResponse
-}
+);}
 
 
 
 
-export const getPostApiEventDeleteMutationFetcher = ( options?: RequestInit) => {
+export const getPostApiEventDeleteMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
   return (_: Key, __: { arg: Arguments }) => {
     return postApiEventDelete(options);
   }
 }
-export const getPostApiEventDeleteMutationKey = () => [`/api/Event/Delete`] as const;
+export const getPostApiEventDeleteMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/Delete`] as const;
 
 export type PostApiEventDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventDelete>>>
 
-export const usePostApiEventDelete = <TError = Promise<unknown>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiEventDelete>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiEventDelete>>> & { swrKey?: string }, fetch?: RequestInit}
+export const usePostApiEventDelete = <TError = unknown>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiEventDelete>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiEventDelete>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
 ) => {
 
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPostApiEventDeleteMutationKey();
-  const swrFn = getPostApiEventDeleteMutationFetcher(fetchOptions);
+  const swrFn = getPostApiEventDeleteMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 

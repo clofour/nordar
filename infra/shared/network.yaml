@@ -1,0 +1,23 @@
+---
+
+hostnames:
+  frontend: frontend
+  backend: backend
+  database: database
+
+ports:
+  ssh: 22
+  http: 80
+  https: 443
+
+  etcd_client: 2379
+  etcd_peer: 2380
+
+  postgres: 5432
+
+  haproxy_database: 5432
+  haproxy_database_write: 5433
+  haproxy_database_read: 5434
+  haproxy_stats: 7000
+
+  patroni_rest: 8008

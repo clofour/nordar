@@ -1,0 +1,15 @@
+---
+
+- name: Run backend container
+  community.docker.docker_container:
+    name: backend
+    image: "{{ backend_runtime_image }}"
+    published_ports:
+      - 80:8080
+    env:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__Default: "{{ db_connection_string }}"
+      Origins__Frontend: "{{ frontend_origin }}"
+    restart_policy: always
+    state: started
+  no_log: true

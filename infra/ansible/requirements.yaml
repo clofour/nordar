@@ -3,5 +3,9 @@
 collections:
   - name: community.general
     version: 12.3.0
+  - name: community.crypto
+    version: 3.2.1
+  - name: community.docker
+    version: 5.2.0
   - name: digitalocean.cloud
     version: 1.9.0

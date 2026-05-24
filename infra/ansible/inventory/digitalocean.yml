@@ -21,7 +21,9 @@ attributes:
   - tags
   - vpc_uuid
 compose:
-  ansible_host: networks.v4 | selectattr("type", "eq", "public") | map(attribute="ip_address") | first
+  public_ip: networks.v4 | selectattr("type", "eq", "public") | map(attribute="ip_address") | first
+  private_ip: networks.v4 | selectattr("type", "eq", "private") | map(attribute="ip_address") | first
+  ansible_host: "{{ public_ip }}"
   class: size.description | lower
   distribution: image.distribution | lower
 keyed_groups:

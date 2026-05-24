@@ -1,0 +1,5 @@
+---
+
+app_name: app
+domain: "{{ lookup('ansible.builtin.env', 'DOMAIN') }}"
+runner_data_dir: "{{ lookup('ansible.builtin.env', 'RUNNER_DATA_DIR') }}"

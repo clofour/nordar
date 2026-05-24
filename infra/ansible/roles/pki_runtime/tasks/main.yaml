@@ -1,0 +1,50 @@
+---
+
+- name: Create certificate directories
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  loop:
+    - path: "{{ pki_public_dir }}"
+      mode: "0755"
+    - path: "{{ pki_private_dir }}"
+      mode: "0755"
+
+- name: Install certificates
+  ansible.builtin.copy:
+    src: "{{ pki_source_dir }}/{{ item }}.crt"
+    dest: "{{ pki_target_dir }}/{{ item }}.crt"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - "{{ pki_root_crt_name }}"
+    - "{{ pki_ansible_crt_name }}"
+    - "{{ pki_chain_crt_name }}"
+
+- name: Create CA trust directory
+  ansible.builtin.file:
+    path: "{{ pki_system_trust_dir }}/{{ pki_app_name }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Install root CA into system trust store
+  ansible.builtin.copy:
+    src: "{{ pki_source_dir }}/{{ pki_root_crt_name }}.crt"
+    dest: "{{ pki_app_trust_dir }}/{{ pki_root_crt_name }}.crt"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Update system trust store
+
+- name: Generate service certificate
+  ansible.builtin.include_tasks: service_cert.yaml
+  when: service_certs is defined
+  loop: "{{ service_certs }}"
+  loop_control:
+    loop_var: service_cert

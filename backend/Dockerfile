@@ -8,4 +8,5 @@ RUN dotnet publish -c Release -o /app
 FROM dhi.io/aspnetcore:10.0.7-debian13 AS run
 WORKDIR /app
 COPY --from=build /app .
+HEALTHCHECK CMD curl --fail http://localhost:8080/healthz || exit 1
 ENTRYPOINT ["dotnet", "backend.dll"]

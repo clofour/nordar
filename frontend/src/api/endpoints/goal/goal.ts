@@ -25,8 +25,11 @@ import type {
   PostApiGoalDeleteParams
 } from '../../models';
 
+import { cFetch } from '../../../other/cfetch';
 
 
+
+  type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -47,42 +50,35 @@ export const getGetApiGoalGetUrl = () => {
 
 
 
-  return `/api/Goal/Get`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Get`
 }
 
 export const getApiGoalGet = async ( options?: RequestInit): Promise<getApiGoalGetResponse> => {
 
-  const res = await fetch(getGetApiGoalGetUrl(),
+  return cFetch<getApiGoalGetResponse>(getGetApiGoalGetUrl(),
   {
     ...options,
     method: 'GET'
 
 
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getApiGoalGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getApiGoalGetResponse
-}
+);}
 
 
 
 
-export const getGetApiGoalGetKey = () => [`/api/Goal/Get`] as const;
+export const getGetApiGoalGetKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/Get`] as const;
 
 export type GetApiGoalGetQueryResult = NonNullable<Awaited<ReturnType<typeof getApiGoalGet>>>
 
-export const useGetApiGoalGet = <TError = Promise<unknown>>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiGoalGet>>, TError> & { swrKey?: Key, enabled?: boolean }, fetch?: RequestInit }
+export const useGetApiGoalGet = <TError = unknown>(
+   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiGoalGet>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof cFetch> }
 ) => {
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const isEnabled = swrOptions?.enabled !== false
   const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetApiGoalGetKey() : null);
-  const swrFn = () => getApiGoalGet(fetchOptions)
+  const swrFn = () => getApiGoalGet(requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
@@ -108,42 +104,35 @@ export const getGetApiGoalStatsUrl = () => {
 
 
 
-  return `/api/Goal/Stats`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Stats`
 }
 
 export const getApiGoalStats = async ( options?: RequestInit): Promise<getApiGoalStatsResponse> => {
 
-  const res = await fetch(getGetApiGoalStatsUrl(),
+  return cFetch<getApiGoalStatsResponse>(getGetApiGoalStatsUrl(),
   {
     ...options,
     method: 'GET'
 
 
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getApiGoalStatsResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getApiGoalStatsResponse
-}
+);}
 
 
 
 
-export const getGetApiGoalStatsKey = () => [`/api/Goal/Stats`] as const;
+export const getGetApiGoalStatsKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/Stats`] as const;
 
 export type GetApiGoalStatsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiGoalStats>>>
 
-export const useGetApiGoalStats = <TError = Promise<unknown>>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiGoalStats>>, TError> & { swrKey?: Key, enabled?: boolean }, fetch?: RequestInit }
+export const useGetApiGoalStats = <TError = unknown>(
+   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiGoalStats>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof cFetch> }
 ) => {
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const isEnabled = swrOptions?.enabled !== false
   const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetApiGoalStatsKey() : null);
-  const swrFn = () => getApiGoalStats(fetchOptions)
+  const swrFn = () => getApiGoalStats(requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
@@ -169,12 +158,12 @@ export const getPostApiGoalCreateNorthStarUrl = () => {
 
 
 
-  return `/api/Goal/CreateNorthStar`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateNorthStar`
 }
 
 export const postApiGoalCreateNorthStar = async (northStarCreate: NorthStarCreate, options?: RequestInit): Promise<postApiGoalCreateNorthStarResponse> => {
 
-  const res = await fetch(getPostApiGoalCreateNorthStarUrl(),
+  return cFetch<postApiGoalCreateNorthStarResponse>(getPostApiGoalCreateNorthStarUrl(),
   {
     ...options,
     method: 'POST',
@@ -182,35 +171,28 @@ export const postApiGoalCreateNorthStar = async (northStarCreate: NorthStarCreat
     body: JSON.stringify(
       northStarCreate,)
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: postApiGoalCreateNorthStarResponse['data'] = body ? JSON.parse(body) : undefined
-  return { data, status: res.status, headers: res.headers } as postApiGoalCreateNorthStarResponse
-}
+);}
 
 
 
 
-export const getPostApiGoalCreateNorthStarMutationFetcher = ( options?: RequestInit) => {
+export const getPostApiGoalCreateNorthStarMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
   return (_: Key, { arg }: { arg: NorthStarCreate }) => {
     return postApiGoalCreateNorthStar(arg, options);
   }
 }
-export const getPostApiGoalCreateNorthStarMutationKey = () => [`/api/Goal/CreateNorthStar`] as const;
+export const getPostApiGoalCreateNorthStarMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateNorthStar`] as const;
 
 export type PostApiGoalCreateNorthStarMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalCreateNorthStar>>>
 
-export const usePostApiGoalCreateNorthStar = <TError = Promise<unknown>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiGoalCreateNorthStar>>, TError, Key, NorthStarCreate, Awaited<ReturnType<typeof postApiGoalCreateNorthStar>>> & { swrKey?: string }, fetch?: RequestInit}
+export const usePostApiGoalCreateNorthStar = <TError = unknown>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiGoalCreateNorthStar>>, TError, Key, NorthStarCreate, Awaited<ReturnType<typeof postApiGoalCreateNorthStar>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
 ) => {
 
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPostApiGoalCreateNorthStarMutationKey();
-  const swrFn = getPostApiGoalCreateNorthStarMutationFetcher(fetchOptions);
+  const swrFn = getPostApiGoalCreateNorthStarMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -236,12 +218,12 @@ export const getPostApiGoalCreateBearingUrl = () => {
 
 
 
-  return `/api/Goal/CreateBearing`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateBearing`
 }
 
 export const postApiGoalCreateBearing = async (bearingCreate: BearingCreate, options?: RequestInit): Promise<postApiGoalCreateBearingResponse> => {
 
-  const res = await fetch(getPostApiGoalCreateBearingUrl(),
+  return cFetch<postApiGoalCreateBearingResponse>(getPostApiGoalCreateBearingUrl(),
   {
     ...options,
     method: 'POST',
@@ -249,35 +231,28 @@ export const postApiGoalCreateBearing = async (bearingCreate: BearingCreate, opt
     body: JSON.stringify(
       bearingCreate,)
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: postApiGoalCreateBearingResponse['data'] = body ? JSON.parse(body) : undefined
-  return { data, status: res.status, headers: res.headers } as postApiGoalCreateBearingResponse
-}
+);}
 
 
 
 
-export const getPostApiGoalCreateBearingMutationFetcher = ( options?: RequestInit) => {
+export const getPostApiGoalCreateBearingMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
   return (_: Key, { arg }: { arg: BearingCreate }) => {
     return postApiGoalCreateBearing(arg, options);
   }
 }
-export const getPostApiGoalCreateBearingMutationKey = () => [`/api/Goal/CreateBearing`] as const;
+export const getPostApiGoalCreateBearingMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateBearing`] as const;
 
 export type PostApiGoalCreateBearingMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalCreateBearing>>>
 
-export const usePostApiGoalCreateBearing = <TError = Promise<unknown>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiGoalCreateBearing>>, TError, Key, BearingCreate, Awaited<ReturnType<typeof postApiGoalCreateBearing>>> & { swrKey?: string }, fetch?: RequestInit}
+export const usePostApiGoalCreateBearing = <TError = unknown>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiGoalCreateBearing>>, TError, Key, BearingCreate, Awaited<ReturnType<typeof postApiGoalCreateBearing>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
 ) => {
 
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPostApiGoalCreateBearingMutationKey();
-  const swrFn = getPostApiGoalCreateBearingMutationFetcher(fetchOptions);
+  const swrFn = getPostApiGoalCreateBearingMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -303,12 +278,12 @@ export const getPostApiGoalCreateMovementUrl = () => {
 
 
 
-  return `/api/Goal/CreateMovement`
+  return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateMovement`
 }
 
 export const postApiGoalCreateMovement = async (movementCreate: MovementCreate, options?: RequestInit): Promise<postApiGoalCreateMovementResponse> => {
 
-  const res = await fetch(getPostApiGoalCreateMovementUrl(),
+  return cFetch<postApiGoalCreateMovementResponse>(getPostApiGoalCreateMovementUrl(),
   {
     ...options,
     method: 'POST',
@@ -316,35 +291,28 @@ export const postApiGoalCreateMovement = async (movementCreate: MovementCreate, 
     body: JSON.stringify(
       movementCreate,)
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: postApiGoalCreateMovementResponse['data'] = body ? JSON.parse(body) : undefined
-  return { data, status: res.status, headers: res.headers } as postApiGoalCreateMovementResponse
-}
+);}
 
 
 
 
-export const getPostApiGoalCreateMovementMutationFetcher = ( options?: RequestInit) => {
+export const getPostApiGoalCreateMovementMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
   return (_: Key, { arg }: { arg: MovementCreate }) => {
     return postApiGoalCreateMovement(arg, options);
   }
 }
-export const getPostApiGoalCreateMovementMutationKey = () => [`/api/Goal/CreateMovement`] as const;
+export const getPostApiGoalCreateMovementMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateMovement`] as const;
 
 export type PostApiGoalCreateMovementMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalCreateMovement>>>
 
-export const usePostApiGoalCreateMovement = <TError = Promise<unknown>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiGoalCreateMovement>>, TError, Key, MovementCreate, Awaited<ReturnType<typeof postApiGoalCreateMovement>>> & { swrKey?: string }, fetch?: RequestInit}
+export const usePostApiGoalCreateMovement = <TError = unknown>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiGoalCreateMovement>>, TError, Key, MovementCreate, Awaited<ReturnType<typeof postApiGoalCreateMovement>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
 ) => {
 
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPostApiGoalCreateMovementMutationKey();
-  const swrFn = getPostApiGoalCreateMovementMutationFetcher(fetchOptions);
+  const swrFn = getPostApiGoalCreateMovementMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -377,47 +345,40 @@ export const getPostApiGoalDeleteUrl = (params?: PostApiGoalDeleteParams,) => {
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/Goal/Delete?${stringifiedParams}` : `/api/Goal/Delete`
+  return stringifiedParams.length > 0 ? `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Delete?${stringifiedParams}` : `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Delete`
 }
 
 export const postApiGoalDelete = async (params?: PostApiGoalDeleteParams, options?: RequestInit): Promise<postApiGoalDeleteResponse> => {
 
-  const res = await fetch(getPostApiGoalDeleteUrl(params),
+  return cFetch<postApiGoalDeleteResponse>(getPostApiGoalDeleteUrl(params),
   {
     ...options,
     method: 'POST'
 
 
   }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: postApiGoalDeleteResponse['data'] = body ? JSON.parse(body) : undefined
-  return { data, status: res.status, headers: res.headers } as postApiGoalDeleteResponse
-}
+);}
 
 
 
 
-export const getPostApiGoalDeleteMutationFetcher = (params?: PostApiGoalDeleteParams, options?: RequestInit) => {
+export const getPostApiGoalDeleteMutationFetcher = (params?: PostApiGoalDeleteParams, options?: SecondParameter<typeof cFetch>) => {
   return (_: Key, __: { arg: Arguments }) => {
     return postApiGoalDelete(params, options);
   }
 }
-export const getPostApiGoalDeleteMutationKey = (params?: PostApiGoalDeleteParams,) => [`/api/Goal/Delete`, ...(params ? [params]: [])] as const;
+export const getPostApiGoalDeleteMutationKey = (params?: PostApiGoalDeleteParams,) => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/Delete`, ...(params ? [params]: [])] as const;
 
 export type PostApiGoalDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalDelete>>>
 
-export const usePostApiGoalDelete = <TError = Promise<unknown>>(
-  params?: PostApiGoalDeleteParams, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiGoalDelete>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiGoalDelete>>> & { swrKey?: string }, fetch?: RequestInit}
+export const usePostApiGoalDelete = <TError = unknown>(
+  params?: PostApiGoalDeleteParams, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiGoalDelete>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiGoalDelete>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
 ) => {
 
-  const {swr: swrOptions, fetch: fetchOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPostApiGoalDeleteMutationKey(params);
-  const swrFn = getPostApiGoalDeleteMutationFetcher(params, fetchOptions);
+  const swrFn = getPostApiGoalDeleteMutationFetcher(params, requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
