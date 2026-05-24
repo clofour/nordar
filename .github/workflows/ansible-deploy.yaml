@@ -17,6 +17,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
+      - name: Restore packages
+        run: dotnet restore
+
       - name: Install EF Core CLI tool
         run: dotnet tool install --global dotnet-ef
 
