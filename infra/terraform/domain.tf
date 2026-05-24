@@ -6,7 +6,7 @@ locals {
         frontend = {
             type = "CNAME",
             name = var.frontend_subdomain,
-            value = digitalocean_cdn.cdn.endpoint
+            value = "${digitalocean_cdn.cdn.endpoint}."
         },
         backend = {
             type = "A",
