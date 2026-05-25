@@ -53,7 +53,7 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: migration-bundle
-          path: ${{ vars.RUNNER_DATA_DIR }}/efbundle
+          path: ${{ vars.RUNNER_DATA_DIR }}
 
       - name: Set up dependencies
         run: pip install -r requirements.txt

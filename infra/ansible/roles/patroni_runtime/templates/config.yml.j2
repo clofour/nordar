@@ -45,6 +45,7 @@ postgresql:
     connect_address: {{ private_ip }}:{{ ports.postgres }}
 
     data_dir: /var/lib/postgresql/{{ postgresql_version }}/main
+    config_dir: /etc/postgresql/{{ postgresql_version }}/main
     bin_dir: /usr/lib/postgresql/{{ postgresql_version }}/bin
     pgpass: /var/lib/postgresql/.pgpass
 
