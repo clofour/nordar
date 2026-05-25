@@ -1,5 +1,13 @@
 ---
 
+- name: Create PostgreSQL common directory
+  ansible.builtin.file:
+    path: /etc/postgresql-common
+    state: directory
+    owner: root
+    group: root
+    mode: "0644"
+
 - name: Disable automatic PostgreSQL cluster creation
   ansible.builtin.copy:
     content: |
