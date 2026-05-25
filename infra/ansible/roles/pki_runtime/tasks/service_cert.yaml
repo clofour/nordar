@@ -35,11 +35,11 @@
 - name: Sign service certificate with Ansible CA
   community.crypto.x509_certificate_pipe:
     content: >- 
-      "{{
+      {{
         (service_crt_content.content | b64decode) 
-        if (service_crt_content is defined and service_crt_content.content is defined and not (service_crt.content.failed | default(false)))
+        if (service_crt_content is defined and service_crt_content.content is defined and not (service_crt_content.content.failed | default(false)))
         else omit
-      }}"
+      }}
     csr_content: "{{ csr.csr }}"
     provider: ownca
     ownca_path: "{{ pki_source_dir }}/{{ pki_ansible_crt_name }}.crt"
