@@ -1,5 +1,14 @@
 ---
 
+- name: Disable automatic PostgreSQL cluster creation
+  ansible.builtin.copy:
+    content: |
+      create_main_cluster: false
+    dest: /etc/postgresql-common/createcluster.conf
+    owner: root
+    group: root
+    mode: "0644"
+
 - name: Set up PGDG repository and key
   ansible.builtin.deb822_repository:
     name: postgresql

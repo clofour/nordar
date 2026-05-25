@@ -65,6 +65,7 @@ postgresql:
         - host all all 127.0.0.1/32 scram-sha-256
         - host all all ::1/128 scram-sha-256
 {% for host in groups["database"] | sort %}
+        - host postgres postgres {{ hostvars[host].private_ip}}/32 scram-sha-256
         - host replication replication_user {{ hostvars[host].private_ip}}/32 scram-sha-256
         - host all rewind_user {{ hostvars[host].private_ip}}/32 scram-sha-256
 {% endfor %}
