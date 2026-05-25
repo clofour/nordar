@@ -7,6 +7,10 @@
     owner: root
     group: etcd
     mode: "0640"
+  notify: Restart etcd
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Enable and start etcd service
   ansible.builtin.service:

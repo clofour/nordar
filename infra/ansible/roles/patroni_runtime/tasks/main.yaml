@@ -15,7 +15,11 @@
     owner: root
     group: postgres
     mode: "0640"
+  notify: Restart Patroni
   no_log: true
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Start Patroni
   ansible.builtin.service:
