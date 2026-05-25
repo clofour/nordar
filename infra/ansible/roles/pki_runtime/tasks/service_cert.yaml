@@ -37,7 +37,7 @@
     content: >- 
       {{
         (service_crt_content.content | b64decode) 
-        if (service_crt_content is defined and service_crt_content.content is defined and not (service_crt_content.content.failed | default(false)))
+        if (service_crt_content is defined and service_crt_content.content is defined and not (service_crt_content.content.failed | default(true)))
         else omit
       }}
     csr_content: "{{ csr.csr }}"
