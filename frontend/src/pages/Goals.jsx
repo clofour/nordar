@@ -15,6 +15,7 @@ import { capitalize } from "@/helpers";
 
 export default function Goals() {
   const [opened, { open, close }] = useDisclosure(false);
+  const [activeGoal, setActiveGoal] = useState("");
   const [activeForm, setActiveForm] = useState("star");
   const [activeMode, setActiveMode] = useState("create");
   const [activeParentId, setActiveParentId] = useState("");
@@ -36,6 +37,12 @@ export default function Goals() {
   )
 
   const { data: response, error, isLoading, mutate } = useGetApiGoalGet();
+
+  const flattenGoals = (goals) => {
+    return goals.flatMap((goal) => {
+      
+    })
+  }
 
   return (
     <Stack>
@@ -102,7 +109,7 @@ export default function Goals() {
         <Grid.Col span={9}>
           <Title order={3}>{`${capitalize(activeMode)} Goal`}</Title>
           <Alert variant="light" color="red" title="Error" icon={<IconExclamationCircle />} hidden={alert === ""}>{alert}</Alert>
-          {activeForm === "star" && <CreateNorthStarForm close={close} setAlert={setAlert} />}
+          {activeForm === "star" && <CreateNorthStarForm close={close} setAlert={setAlert} initialValues={mode == "edit" ? } />}
           {activeForm === "bearing" && <CreateBearingForm close={close} setAlert={setAlert} parentId={activeParentId} />}
           {activeForm === "movement" && <CreateMovementForm close={close} setAlert={setAlert} parentId={activeParentId} />}
         </Grid.Col>

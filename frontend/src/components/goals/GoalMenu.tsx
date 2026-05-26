@@ -8,7 +8,7 @@ interface GoalMenuProps {
 
 export default function GoalMenu({ id }: GoalMenuProps) {
     const deleteGoal = async () => {
-        const response = await postApiGoalDelete({ "id": id});
+        const response = await postApiGoalDelete({ "id": id });
     }
 
     return (

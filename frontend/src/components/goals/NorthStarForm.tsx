@@ -3,16 +3,19 @@ import { useForm, schemaResolver } from "@mantine/form";
 import { postApiGoalCreateNorthStar } from "@/api/endpoints/goal/goal.js";
 import { PostApiGoalCreateNorthStarBody } from "@/api/endpoints/goal/goal.zod.js";
 import { getErrorMessage } from "@/data/error";
+import type { NorthStarCreate } from "@/api/models";
 
 interface CreateNorthStarFormProps {
     flow: "create" | "edit";
     close: () => void;
     setAlert: (alert: string) => void;
+    initialValues: NorthStarCreate;
 }
 
-export default function CreateNorthStarForm({close, setAlert}: CreateNorthStarFormProps) {
+export default function CreateNorthStarForm({close, setAlert, initialValues}: CreateNorthStarFormProps) {
     const form = useForm({
         mode: "uncontrolled",
+        initialValues: initialValues,
         validate: schemaResolver(PostApiGoalCreateNorthStarBody, { sync: true })
     })
 
