@@ -1,5 +1,10 @@
 ---
 
+- name: Install dependencies
+  ansible.builtin.apt:
+    name: libicu76
+    state: present
+
 - name: Copy migrations bundle
   ansible.builtin.copy:
     src: "{{ migrations_runtime_source_dir }}"
