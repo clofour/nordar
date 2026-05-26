@@ -16,7 +16,7 @@
   delegate_to: "{{ groups['backend'][0] }}"
 
 - name: Run migrations
-  ansible.builtin.command: "{{ migrations_runtime_target_dir }} --connection={{ db_connection_string }}"
+  ansible.builtin.command: "{{ migrations_runtime_target_dir }} --connection='{{ db_connection_string }}'"
   run_once: true
   delegate_to: "{{ groups['backend'][0] }}"
   no_log: true
