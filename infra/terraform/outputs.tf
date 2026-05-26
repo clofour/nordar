@@ -8,7 +8,7 @@ output "database_proxy_nodes" {
 }
 
 output "database_nodes" {
-    value = { for k, v in digitalocean_droplet.database_nodes : k => v.ipv4_address }
+    value = { for k, v in digitalocean_droplet.database : k => v.ipv4_address }
 }
 
 output "backend_nodes" {
