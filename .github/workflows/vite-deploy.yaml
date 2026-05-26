@@ -46,9 +46,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Debug
-        run: ls -la src/api/models
-
       - name: Build project
         run: npm run build
         env:
