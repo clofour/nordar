@@ -65,7 +65,7 @@ export default function CreateMovementForm({ close, setAlert, parentId }: Create
                         description="What type of motivation will you use?"
                     >
                         <SegmentedControl
-                            data={[{ value: 0, label: "Carrot" }, { value: 1, label: "Stick" }]}
+                            data={["Carrot", "Stick"]}
                             fullWidth
                             key={form.key("motivationType")}
                             {...form.getInputProps("motivationType")}

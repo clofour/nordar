@@ -58,7 +58,7 @@ export default function CreateNorthStarForm({close, setAlert}: CreateNorthStarFo
                         description="How important is this goal to you?"
                     >
                         <SegmentedControl
-                            data={[{ value: 0, label: "None" }, { value: 1, label: "High" }]}
+                            data={["None", "High"]}
                             fullWidth
                             key={form.key("importance")}
                             {...form.getInputProps("importance")}
