@@ -3,19 +3,22 @@ import { useForm, schemaResolver } from "@mantine/form";
 import { postApiGoalCreateMovement } from "@/api/endpoints/goal/goal.js";
 import { PostApiGoalCreateMovementBody } from "@/api/endpoints/goal/goal.zod.js";
 import { getErrorMessage } from "@/data/error";
+import type { MovementCreate } from "@/api/models";
 
 interface CreateMovementFormProps {
     close: () => void;
     setAlert: (alert: string) => void;
     parentId: string;
+    initialValues?: MovementCreate;
 }
 
-export default function CreateMovementForm({ close, setAlert, parentId }: CreateMovementFormProps) {
+export default function CreateMovementForm({ close, setAlert, parentId, initialValues }: CreateMovementFormProps) {
     const formSchema = PostApiGoalCreateMovementBody.omit({
         bearingId: true
     })
     const form = useForm({
         mode: "uncontrolled",
+        initialValues: initialValues,
         validate: schemaResolver(formSchema, { sync: true })
     })
 

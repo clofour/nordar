@@ -15,13 +15,14 @@ import { capitalize } from "@/helpers";
 
 export default function Goals() {
   const [opened, { open, close }] = useDisclosure(false);
-  const [activeGoal, setActiveGoal] = useState("");
-  const [activeForm, setActiveForm] = useState("star");
+  const [activeGoalId, setActiveGoalId] = useState("");
   const [activeMode, setActiveMode] = useState("create");
+  const [activeForm, setActiveForm] = useState("northStar");
   const [activeParentId, setActiveParentId] = useState("");
   const [alert, setAlert] = useState("");
 
   const onGoalAdd = (type, parentId) => {
+    setActiveMode("create");
     setActiveForm(type);
     setActiveParentId(parentId);
     open();
@@ -38,17 +39,37 @@ export default function Goals() {
 
   const { data: response, error, isLoading, mutate } = useGetApiGoalGet();
 
-  const flattenGoals = (goals) => {
-    return goals.flatMap((goal) => {
-      
-    })
-  }
+  const goalIndex = {};
+  const goalHierarchy = ["northStar", "bearing", "movement"]
+  const indexGoals = (goals, depth) => {
+    const currentDepth = goalHierarchy[depth];
+    const nextDepth = goalHierarchy[depth + 1] + "s";
 
+    console.log(goals, depth);
+    console.log(nextDepth)
+
+    for (const goal of goals) {
+      console.log("obj", goal)
+      console.log("id", goal.id)
+      goalIndex[goal.id] = {
+        type: currentDepth,
+        goal: goal
+      };
+
+      console.log("nd", goal[nextDepth])
+      indexGoals(goal[nextDepth] ?? [], depth + 1);
+    }
+  }
+  indexGoals(response?.data ?? [], 0);
+
+
+  console.log("i", goalIndex);
+  console.log("curr", goalIndex[activeGoalId]?.goal)
   return (
     <Stack>
       <Group justify="space-between">
         <PageTitle name="Stars" description="Goals, represented as spots in the galaxy." />
-        <Button leftSection={<IconPlus size={16} />} onClick={() => onGoalAdd("star")}>New North Star</Button>
+        <Button leftSection={<IconPlus size={16} />} onClick={() => onGoalAdd("northStar")}>New North Star</Button>
       </Group>
 
       <Grid>
@@ -61,14 +82,16 @@ export default function Goals() {
                     key={star.id}
                     id={star.id}
                     name={star.name}
-                    type="star"
+                    type="northStar"
                     description={star.description}
                     left={<IconStar size={16} />}
-                    right={<Badge variant="light"
-                      color={theme.colors.priority[star.importance]}>{star.importance}</Badge>}
+                    right={<Badge variant="light" color={theme.colors.priority[star.importance]}>{star.importance}</Badge>}
+                    setActiveMode={setActiveMode}
+                    setActiveForm={setActiveForm}
+                    setActiveGoalId={setActiveGoalId}
                   />
 
-                  <Stack pl="lg" style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal["star"] }}>
+                  <Stack pl="lg" style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal["northStar"] }}>
                     {star.bearings && star.bearings.map((bearing) =>
                     (
                       <Stack gap="sm">
@@ -79,6 +102,9 @@ export default function Goals() {
                           type="bearing"
                           description={bearing.description}
                           left={<IconCompass size={14} />}
+                          setActiveMode={setActiveMode}
+                          setActiveForm={setActiveForm}
+                          setActiveGoalId={setActiveGoalId}
                         />
 
                         <Stack gap="xs" pl="lg" style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal["bearing"] }}>
@@ -91,6 +117,9 @@ export default function Goals() {
                               type="movement"
                               description={movement.description}
                               left={<IconActivity size={14} />}
+                              setActiveMode={setActiveMode}
+                              setActiveForm={setActiveForm}
+                              setActiveGoalId={setActiveGoalId}
                             />
                           ))}
 
@@ -107,11 +136,11 @@ export default function Goals() {
           </Stack>
         </Grid.Col>
         <Grid.Col span={9}>
-          <Title order={3}>{`${capitalize(activeMode)} Goal`}</Title>
+          <Title order={3}>{`${capitalize(activeMode)} ${capitalize(activeForm)}`}</Title>
           <Alert variant="light" color="red" title="Error" icon={<IconExclamationCircle />} hidden={alert === ""}>{alert}</Alert>
-          {activeForm === "star" && <CreateNorthStarForm close={close} setAlert={setAlert} initialValues={mode == "edit" ? } />}
-          {activeForm === "bearing" && <CreateBearingForm close={close} setAlert={setAlert} parentId={activeParentId} />}
-          {activeForm === "movement" && <CreateMovementForm close={close} setAlert={setAlert} parentId={activeParentId} />}
+          {activeForm === "northStar" && <CreateNorthStarForm close={close} setAlert={setAlert} initialValues={activeMode == "edit" ? goalIndex[activeGoalId].goal : null} />}
+          {activeForm === "bearing" && <CreateBearingForm close={close} setAlert={setAlert} parentId={activeParentId} initialValues={activeMode == "edit" ? goalIndex[activeGoalId].goal : null} />}
+          {activeForm === "movement" && <CreateMovementForm close={close} setAlert={setAlert} parentId={activeParentId} initialValues={activeMode == "edit" ? goalIndex[activeGoalId].goal : null} setActiveGoalId={setActiveGoalId} />}
         </Grid.Col>
       </Grid>
     </Stack>

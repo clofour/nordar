@@ -6,13 +6,16 @@ import { theme } from "@/data/theme.js";
 interface GoalCardProps {
     id: string;
     name: string;
-    type: "star" | "bearing" | "movement";
+    type: "northStar" | "bearing" | "movement";
     description: string;
     left: ReactElement;
     right?: ReactElement;
+    setActiveMode: (mode: string) => null;
+    setActiveForm: (form: string) => null;
+    setActiveGoalId: (id: string) => null;
 }
 
-export default function GoalCard({ id, name, type, description, left, right }: GoalCardProps) {
+export default function GoalCard({ id, name, type, description, left, right, setActiveGoalId, setActiveMode, setActiveForm }: GoalCardProps) {
     return (<Paper p="sm" withBorder style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal[type] }}>
         <Flex align="center" gap="sm">
             {left}
@@ -21,7 +24,7 @@ export default function GoalCard({ id, name, type, description, left, right }: G
                 <Text size="xs" c="dimmed">{description}</Text>
             </Box>
             {right}
-            <GoalMenu id={id} />
+            <GoalMenu id={id} type={type} setActiveMode={setActiveMode} setActiveForm={setActiveForm} setActiveGoalId={setActiveGoalId} />
         </Flex>
     </Paper>
     )

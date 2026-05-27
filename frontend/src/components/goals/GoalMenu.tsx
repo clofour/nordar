@@ -3,10 +3,20 @@ import { IconDots, IconPencil, IconTrash } from "@tabler/icons-react";
 import { postApiGoalDelete } from "../../api/endpoints/goal/goal.js";
 
 interface GoalMenuProps {
-    id: string
+    id: string;
+    type: string;
+    setActiveMode: (mode: string) => null;
+    setActiveForm: (form: string) => null;
+    setActiveGoalId: (id: string) => null;
 }
 
-export default function GoalMenu({ id }: GoalMenuProps) {
+export default function GoalMenu({ id, type, setActiveMode, setActiveForm, setActiveGoalId }: GoalMenuProps) {
+    const editGoal = async () => {
+        console.log(type, id);
+        setActiveMode("edit");
+        setActiveForm(type);
+        setActiveGoalId(id);
+    }
     const deleteGoal = async () => {
         const response = await postApiGoalDelete({ "id": id });
     }
@@ -19,7 +29,7 @@ export default function GoalMenu({ id }: GoalMenuProps) {
                 </ActionIcon>
             </Menu.Target>
             <Menu.Dropdown>
-                <Menu.Item leftSection={<IconPencil size={14} />}>Edit</Menu.Item>
+                <Menu.Item leftSection={<IconPencil size={14} />} onClick={editGoal}>Edit</Menu.Item>
                 <Menu.Item leftSection={<IconTrash size={14} />} color="red" onClick={deleteGoal}>Delete</Menu.Item>
             </Menu.Dropdown>
         </Menu>

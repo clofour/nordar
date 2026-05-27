@@ -9,7 +9,7 @@ interface CreateNorthStarFormProps {
     flow: "create" | "edit";
     close: () => void;
     setAlert: (alert: string) => void;
-    initialValues: NorthStarCreate;
+    initialValues?: NorthStarCreate;
 }
 
 export default function CreateNorthStarForm({close, setAlert, initialValues}: CreateNorthStarFormProps) {

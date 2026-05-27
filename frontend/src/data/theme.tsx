@@ -1,7 +1,7 @@
 export const theme = {
     colors: {
         goal: {
-            "star": "red",
+            "northStar": "red",
             "bearing": "green",
             "movement": "blue"
         },

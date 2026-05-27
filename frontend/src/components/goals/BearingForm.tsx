@@ -3,19 +3,22 @@ import { useForm, schemaResolver } from "@mantine/form";
 import { postApiGoalCreateBearing } from "@/api/endpoints/goal/goal.js";
 import { PostApiGoalCreateBearingBody } from "@/api/endpoints/goal/goal.zod.js";
 import { getErrorMessage } from "@/data/error";
+import type { BearingCreate } from "@/api/models";
 
 interface CreateBearingFormProps {
     close: () => void;
     setAlert: (alert: string) => void;
     parentId: string;
+    initialValues?: BearingCreate;
 }
 
-export default function CreateBearingForm({close, setAlert, parentId}: CreateBearingFormProps) {
+export default function CreateBearingForm({close, setAlert, parentId, initialValues}: CreateBearingFormProps) {
     const formSchema = PostApiGoalCreateBearingBody.omit({
         northStarId: true
     })
     const form = useForm({
         mode: "uncontrolled",
+        initialValues: initialValues,
         validate: schemaResolver(formSchema, { sync: true })
     })
 
