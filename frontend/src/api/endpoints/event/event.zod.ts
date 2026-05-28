@@ -84,3 +84,12 @@ export const PostApiEventCreateRecurringBody = zod.object({
 
 export const PostApiEventCreateRecurringResponse = zod.string().uuid()
 
+export const PutApiEventSetInstanceStateQueryParams = zod.object({
+  "eventId": zod.string().uuid().optional(),
+  "eventOccurence": zod.string().datetime({"offset":true}).optional()
+})
+
+export const PutApiEventSetInstanceStateBody = zod.object({
+  "eventState": zod.enum(['Complete', 'Incomplete', 'Unknown'])
+})
+

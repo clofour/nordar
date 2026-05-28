@@ -83,10 +83,21 @@ export const getPostApiEventDeleteMockHandler = (overrideResponse?: void | ((inf
       })
   }, options)
 }
+
+export const getPutApiEventSetInstanceStateMockHandler = (overrideResponse?: void | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<void> | void), options?: RequestHandlerOptions) => {
+  return http.put('*/api/Event/SetInstanceState', async (info: Parameters<Parameters<typeof http.put>[1]>[0]) => {
+  if (typeof overrideResponse === 'function') {await overrideResponse(info); }
+
+    return new HttpResponse(null,
+      { status: 200
+      })
+  }, options)
+}
 export const getEventMock = () => [
   getGetApiEventGetMockHandler(),
   getPostApiEventCreateOnetimeMockHandler(),
   getPostApiEventCreateRecurringMockHandler(),
   getPostApiEventUpdateMockHandler(),
-  getPostApiEventDeleteMockHandler()
+  getPostApiEventDeleteMockHandler(),
+  getPutApiEventSetInstanceStateMockHandler()
 ]

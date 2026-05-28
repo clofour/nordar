@@ -266,7 +266,9 @@ namespace backend.Migrations
                 name: "EventInstanceStates",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    EventId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EventOccurence = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     EventState = table.Column<int>(type: "integer", nullable: false),
                     ReflectionId = table.Column<Guid>(type: "uuid", nullable: false)
@@ -318,6 +320,11 @@ namespace backend.Migrations
                 name: "IX_Bearings_UserId",
                 table: "Bearings",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EventInstanceStates_EventId",
+                table: "EventInstanceStates",
+                column: "EventId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventInstanceStates_ReflectionId",

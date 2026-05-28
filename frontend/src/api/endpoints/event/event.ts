@@ -18,7 +18,9 @@ import type {
 
 import type {
   EventGet,
+  EventInstanceStateSet,
   OnetimeEventCreate,
+  PutApiEventSetInstanceStateParams,
   RecurringEventCreate
 } from '../../models';
 
@@ -314,6 +316,74 @@ export const usePostApiEventDelete = <TError = unknown>(
 
   const swrKey = swrOptions?.swrKey ?? getPostApiEventDeleteMutationKey();
   const swrFn = getPostApiEventDeleteMutationFetcher(requestOptions);
+
+  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
+export type putApiEventSetInstanceStateResponse200 = {
+  data: void
+  status: 200
+}
+
+export type putApiEventSetInstanceStateResponseSuccess = (putApiEventSetInstanceStateResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putApiEventSetInstanceStateResponse = (putApiEventSetInstanceStateResponseSuccess)
+
+export const getPutApiEventSetInstanceStateUrl = (params?: PutApiEventSetInstanceStateParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `${import.meta.env.VITE_API_ORIGIN}/api/Event/SetInstanceState?${stringifiedParams}` : `${import.meta.env.VITE_API_ORIGIN}/api/Event/SetInstanceState`
+}
+
+export const putApiEventSetInstanceState = async (eventInstanceStateSet: EventInstanceStateSet,
+    params?: PutApiEventSetInstanceStateParams, options?: RequestInit): Promise<putApiEventSetInstanceStateResponse> => {
+
+  return cFetch<putApiEventSetInstanceStateResponse>(getPutApiEventSetInstanceStateUrl(params),
+  {
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      eventInstanceStateSet,)
+  }
+);}
+
+
+
+
+export const getPutApiEventSetInstanceStateMutationFetcher = (params?: PutApiEventSetInstanceStateParams, options?: SecondParameter<typeof cFetch>) => {
+  return (_: Key, { arg }: { arg: EventInstanceStateSet }) => {
+    return putApiEventSetInstanceState(arg, params, options);
+  }
+}
+export const getPutApiEventSetInstanceStateMutationKey = (params?: PutApiEventSetInstanceStateParams,) => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/SetInstanceState`, ...(params ? [params]: [])] as const;
+
+export type PutApiEventSetInstanceStateMutationResult = NonNullable<Awaited<ReturnType<typeof putApiEventSetInstanceState>>>
+
+export const usePutApiEventSetInstanceState = <TError = unknown>(
+  params?: PutApiEventSetInstanceStateParams, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof putApiEventSetInstanceState>>, TError, Key, EventInstanceStateSet, Awaited<ReturnType<typeof putApiEventSetInstanceState>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
+) => {
+
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
+
+  const swrKey = swrOptions?.swrKey ?? getPutApiEventSetInstanceStateMutationKey(params);
+  const swrFn = getPutApiEventSetInstanceStateMutationFetcher(params, requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 

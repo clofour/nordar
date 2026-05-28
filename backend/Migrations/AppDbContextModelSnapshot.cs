@@ -144,8 +144,15 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.EventInstanceState", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("EventOccurence")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("EventState")
                         .HasColumnType("integer");
@@ -157,6 +164,8 @@ namespace backend.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EventId");
 
                     b.HasIndex("ReflectionId");
 
