@@ -94,5 +94,27 @@ namespace backend.Controllers
         {
             throw new NotImplementedException();
         }
+
+        [HttpPut("")]
+        public async Task<ActionResult> SetInstanceState(Guid eventId, DateTime eventOccurence, EventInstanceStateSet eventInstanceStateSet)
+        {
+            User? user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            EventInstanceState eventInstanceState = appDbContext.EventInstanceStates.FirstOrDefault(obj => 
+                obj.UserId == user.Id &&
+                obj.EventId == eventId &&
+                obj.EventOccurence == eventOccurence,
+                new EventInstanceState());
+
+            mapper.Map(eventInstanceStateSet, eventInstanceState);
+
+            await appDbContext.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }

@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using backend.Config;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Models
 {
@@ -11,10 +12,13 @@ namespace backend.Models
         Unknown
     }
 
+    [Index(nameof(EventId), IsUnique = false)]
     public class EventInstanceState()
     {
         [Key]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
+        public Guid EventId { get; set; }
+        public DateTime EventOccurence { get; set; }
         public Guid UserId { get; set; }
         [ForeignKey("UserId")]
         public User User { get; set; }
