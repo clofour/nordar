@@ -1,14 +1,13 @@
-import { Button, Group, Input, SegmentedControl, Stack, Textarea, TextInput } from "@mantine/core";
+import { Button, Group, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm, schemaResolver } from "@mantine/form";
-import type { NorthStarCreate } from "@/api/models";
+import type { ReflectionCreate } from "@/api/models";
 import { PostApiReflectionCreateBody } from "@/api/endpoints/reflection/reflection.zod";
 import { postApiReflectionCreate } from "@/api/endpoints/reflection/reflection";
 
 interface ReflectionFormProps {
     flow: "create" | "edit";
     close: () => void;
-    setAlert: (alert: string) => void;
-    initialValues?: NorthStarCreate;
+    initialValues?: ReflectionCreate;
 }
 
 export default function ReflectionForm({ close, initialValues }: ReflectionFormProps) {
