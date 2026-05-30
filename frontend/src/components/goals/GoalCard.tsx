@@ -10,9 +10,9 @@ interface GoalCardProps {
 	description: string;
 	left: ReactElement;
 	right?: ReactElement;
-	setActiveMode: (mode: string) => null;
-	setActiveForm: (form: string) => null;
-	setActiveGoalId: (id: string) => null;
+	setActiveMode: (mode: string) => void;
+	setActiveForm: (form: string) => void;
+	setActiveGoalId: (id: string) => void;
 }
 
 export default function GoalCard({ id, name, type, description, left, right, setActiveGoalId, setActiveMode, setActiveForm }: GoalCardProps) {

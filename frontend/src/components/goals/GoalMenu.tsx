@@ -5,9 +5,9 @@ import { postApiGoalDelete } from "@/api/endpoints/goal/goal.js";
 interface GoalMenuProps {
 	id: string;
 	type: string;
-	setActiveMode: (mode: string) => null;
-	setActiveForm: (form: string) => null;
-	setActiveGoalId: (id: string) => null;
+	setActiveMode: (mode: string) => void;
+	setActiveForm: (form: string) => void;
+	setActiveGoalId: (id: string) => void;
 }
 
 export default function GoalMenu({ id, type, setActiveMode, setActiveForm, setActiveGoalId }: GoalMenuProps) {

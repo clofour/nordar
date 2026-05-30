@@ -28,6 +28,9 @@ interface EventValues {
 }
 
 export default function EventForm({ close }: EventFormProps) {
+	const tomorrowDate = new Date();
+	tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+
 	const [alert, setAlert] = useState("");
 
 	const processValues = (values: EventValues) => {
@@ -37,11 +40,11 @@ export default function EventForm({ close }: EventFormProps) {
 		};
 	};
 	const form = useForm<EventValues>({
-		// TODO: Remove form descriptions, as they don"t add anything
+		// TODO: Remove form descriptions, as they don't add anything
 		mode: "controlled",
 		initialValues: {
 			name: "",
-			startDate: "", // TODO: Fix "Invalid Date" error
+			startDate: "", // TODO: Fix "Invalid Date" error (tomorrowDate.toLocaleDateString())
 			startTime: "",
 			duration: "",
 			type: EventTypes.Onetime,
