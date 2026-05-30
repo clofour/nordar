@@ -8,14 +8,10 @@ import { PostApiEventCreateOnetimeBody, PostApiEventCreateRecurringBody } from "
 import { IconExclamationCircle } from "@tabler/icons-react";
 import { useState } from "react";
 import { durationToMinutes } from "@/helpers";
+import { EventTypes } from "@/metadata/events";
 
 interface EventFormProps {
     close: () => void;
-}
-
-enum EventTypes {
-    Onetime,
-    Recurring
 }
 
 interface EventValues {

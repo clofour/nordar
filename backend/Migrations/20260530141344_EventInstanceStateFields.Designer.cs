@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend.Data;
@@ -12,9 +13,11 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260530141344_EventInstanceStateFields")]
+    partial class EventInstanceStateFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,10 +157,10 @@ namespace backend.Migrations
                     b.Property<DateTime?>("EventOccurence")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("EventState")
+                    b.Property<int>("EventState")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ReflectionId")
+                    b.Property<Guid>("ReflectionId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("UserId")
@@ -476,7 +479,9 @@ namespace backend.Migrations
                 {
                     b.HasOne("backend.Models.Reflection", "Reflection")
                         .WithMany()
-                        .HasForeignKey("ReflectionId");
+                        .HasForeignKey("ReflectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("backend.Models.User", "User")
                         .WithMany()

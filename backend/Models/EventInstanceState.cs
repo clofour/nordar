@@ -7,9 +7,9 @@ namespace backend.Models
 {
     public enum EventState
     {
-        Complete,
+        Unknown,
         Incomplete,
-        Unknown
+        Complete
     }
 
     [Index(nameof(EventId), IsUnique = false)]
@@ -18,13 +18,13 @@ namespace backend.Models
         [Key]
         public Guid Id { get; set; }
         public Guid EventId { get; set; }
-        public DateTime EventOccurence { get; set; }
+        public DateTime? EventOccurence { get; set; }
         public Guid UserId { get; set; }
         [ForeignKey("UserId")]
         public User User { get; set; }
-        public EventState EventState { get; set; }
-        public Guid ReflectionId { get; set; }
+        public EventState? EventState { get; set; }
+        public Guid? ReflectionId { get; set; }
         [ForeignKey("ReflectionId")]
-        public Reflection Reflection { get; set; }
+        public Reflection? Reflection { get; set; }
     }
 }

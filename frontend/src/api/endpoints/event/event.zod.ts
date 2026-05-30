@@ -84,12 +84,41 @@ export const PostApiEventCreateRecurringBody = zod.object({
 
 export const PostApiEventCreateRecurringResponse = zod.string().uuid()
 
-export const PutApiEventSetInstanceStateQueryParams = zod.object({
-  "eventId": zod.string().uuid().optional(),
+export const GetApiEventGetOnetimeInstanceStateOnetimeEventIdParams = zod.object({
+  "eventId": zod.string().uuid()
+})
+
+export const GetApiEventGetOnetimeInstanceStateOnetimeEventIdQueryParams = zod.object({
   "eventOccurence": zod.string().datetime({"offset":true}).optional()
 })
 
-export const PutApiEventSetInstanceStateBody = zod.object({
+export const GetApiEventGetOnetimeInstanceStateOnetimeEventIdResponse = zod.object({
+  "eventState": zod.enum(['Complete', 'Incomplete', 'Unknown'])
+})
+
+export const GetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceParams = zod.object({
+  "eventId": zod.string().uuid(),
+  "eventOccurence": zod.string().datetime({"offset":true})
+})
+
+export const GetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponse = zod.object({
+  "eventState": zod.enum(['Complete', 'Incomplete', 'Unknown'])
+})
+
+export const PutApiEventSetOnetimeInstanceStateOnetimeEventIdParams = zod.object({
+  "eventId": zod.string().uuid()
+})
+
+export const PutApiEventSetOnetimeInstanceStateOnetimeEventIdBody = zod.object({
+  "eventState": zod.enum(['Complete', 'Incomplete', 'Unknown'])
+})
+
+export const PutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceParams = zod.object({
+  "eventId": zod.string().uuid(),
+  "eventOccurence": zod.string().datetime({"offset":true})
+})
+
+export const PutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceBody = zod.object({
   "eventState": zod.enum(['Complete', 'Incomplete', 'Unknown'])
 })
 

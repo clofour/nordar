@@ -16,8 +16,12 @@ import type {
   RequestHandlerOptions
 } from 'msw';
 
+import {
+  EventState
+} from '../../models';
 import type {
-  EventGet
+  EventGet,
+  EventInstanceStateGet
 } from '../../models';
 
 
@@ -26,6 +30,10 @@ export const getGetApiEventGetResponseMock = (): EventGet[] => (Array.from({ len
 export const getPostApiEventCreateOnetimeResponseMock = (): string => (faker.word.sample())
 
 export const getPostApiEventCreateRecurringResponseMock = (): string => (faker.word.sample())
+
+export const getGetApiEventGetOnetimeInstanceStateOnetimeEventIdResponseMock = (overrideResponse: Partial<Extract<EventInstanceStateGet, object>> = {}): EventInstanceStateGet => ({eventState: faker.helpers.arrayElement(Object.values(EventState)), ...overrideResponse})
+
+export const getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponseMock = (overrideResponse: Partial<Extract<EventInstanceStateGet, object>> = {}): EventInstanceStateGet => ({eventState: faker.helpers.arrayElement(Object.values(EventState)), ...overrideResponse})
 
 
 export const getGetApiEventGetMockHandler = (overrideResponse?: EventGet[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<EventGet[]> | EventGet[]), options?: RequestHandlerOptions) => {
@@ -84,8 +92,42 @@ export const getPostApiEventDeleteMockHandler = (overrideResponse?: void | ((inf
   }, options)
 }
 
-export const getPutApiEventSetInstanceStateMockHandler = (overrideResponse?: void | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<void> | void), options?: RequestHandlerOptions) => {
-  return http.put('*/api/Event/SetInstanceState', async (info: Parameters<Parameters<typeof http.put>[1]>[0]) => {
+export const getGetApiEventGetOnetimeInstanceStateOnetimeEventIdMockHandler = (overrideResponse?: EventInstanceStateGet | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<EventInstanceStateGet> | EventInstanceStateGet), options?: RequestHandlerOptions) => {
+  return http.get('*/api/Event/GetOnetimeInstanceState/onetime/:eventId', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+
+
+    return HttpResponse.json(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getGetApiEventGetOnetimeInstanceStateOnetimeEventIdResponseMock(),
+      { status: 200
+      })
+  }, options)
+}
+
+export const getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceMockHandler = (overrideResponse?: EventInstanceStateGet | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<EventInstanceStateGet> | EventInstanceStateGet), options?: RequestHandlerOptions) => {
+  return http.get('*/api/Event/GetRecurringInstanceState/recurring/:eventId/:eventOccurence', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+
+
+    return HttpResponse.json(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponseMock(),
+      { status: 200
+      })
+  }, options)
+}
+
+export const getPutApiEventSetOnetimeInstanceStateOnetimeEventIdMockHandler = (overrideResponse?: void | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<void> | void), options?: RequestHandlerOptions) => {
+  return http.put('*/api/Event/SetOnetimeInstanceState/onetime/:eventId', async (info: Parameters<Parameters<typeof http.put>[1]>[0]) => {
+  if (typeof overrideResponse === 'function') {await overrideResponse(info); }
+
+    return new HttpResponse(null,
+      { status: 200
+      })
+  }, options)
+}
+
+export const getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceMockHandler = (overrideResponse?: void | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<void> | void), options?: RequestHandlerOptions) => {
+  return http.put('*/api/Event/SetRecurringInstanceState/recurring/:eventId/:eventOccurence', async (info: Parameters<Parameters<typeof http.put>[1]>[0]) => {
   if (typeof overrideResponse === 'function') {await overrideResponse(info); }
 
     return new HttpResponse(null,
@@ -99,5 +141,8 @@ export const getEventMock = () => [
   getPostApiEventCreateRecurringMockHandler(),
   getPostApiEventUpdateMockHandler(),
   getPostApiEventDeleteMockHandler(),
-  getPutApiEventSetInstanceStateMockHandler()
+  getGetApiEventGetOnetimeInstanceStateOnetimeEventIdMockHandler(),
+  getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceMockHandler(),
+  getPutApiEventSetOnetimeInstanceStateOnetimeEventIdMockHandler(),
+  getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceMockHandler()
 ]

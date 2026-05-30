@@ -1,8 +1,9 @@
 import Event from "@/components/dashboard/Event"
 import { useGetApiEventGet } from "@/api/endpoints/event/event";
-import { expandRecurringEvents } from "@mantine/schedule";
+import { expandRecurringEvents, type ScheduleEventData } from "@mantine/schedule";
 import { theme } from "@/data/theme";
 import { Stack } from "@mantine/core";
+import type { EventGet } from "@/api/models";
 
 export default function EventsToday() {
     const dayStart = new Date();
@@ -16,20 +17,21 @@ export default function EventsToday() {
             ...event,
             color: theme.colors.event
         }));
+        console.log("or", preprocessedEvents)
     const expandedEvents = expandRecurringEvents({
         events: preprocessedEvents,
         rangeStart: dayStart,
         rangeEnd: dayEnd
-    });
+    }) as (ScheduleEventData & EventGet)[];
 
-    console.log(expandedEvents);
+    console.log("ex", expandedEvents);
 
     const cards = expandedEvents.map((event) => (
         <Event event={event} />
     ))
 
     return (
-        <Stack>
+        <Stack gap="xs">
             {cards}
         </Stack>
     );
