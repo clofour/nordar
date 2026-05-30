@@ -21,6 +21,7 @@ export default defineConfig({
 			schemas: "src/api/models",
 			mock: true,
 			clean: true, // Shared directories
+			formatter: "biome",
 		},
 	},
 	goalappZod: {
