@@ -1,16 +1,14 @@
-import { Alert, Box, Stack, Modal, Paper, Text, Flex, Badge, Menu, ActionIcon, UnstyledButton, Group, Button, Grid, Title } from "@mantine/core";
+import { Alert, Stack, Text, Badge, UnstyledButton, Group, Button, Grid, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useForm } from "@mantine/form";
-import { IconStar, IconDots, IconPencil, IconTrash, IconPlus, IconCompass, IconActivity } from "@tabler/icons-react";
+import { IconStar, IconPlus, IconCompass, IconActivity, IconExclamationCircle } from "@tabler/icons-react";
 import PageTitle from "@/components/shared/PageTitle";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import GoalCard from "@/components/goals/GoalCard";
 import { theme } from "@/data/theme";
 import CreateNorthStarForm from "@/components/goals/NorthStarForm";
 import CreateBearingForm from "@/components/goals/BearingForm";
-import { useGetApiGoalGet } from "@/api/endpoints/goal/goal";
-import { IconExclamationCircle } from "@tabler/icons-react";
 import CreateMovementForm from "@/components/goals/MovementForm";
+import { useGetApiGoalGet } from "@/api/endpoints/goal/goal";
 import { capitalize } from "@/helpers";
 
 const GoalAddButton = ({ text, type, parentId }) => (

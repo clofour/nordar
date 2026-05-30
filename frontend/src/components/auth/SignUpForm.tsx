@@ -3,7 +3,7 @@ import { PostApiAuthSignUpBody } from "@/api/endpoints/auth/auth.zod.js";
 import { getErrorMessage } from "@/data/error";
 import { Button, Checkbox, Group, PasswordInput, Progress, Stack, TextInput } from "@mantine/core";
 import { schemaResolver, useForm } from "@mantine/form";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import zxcvbn from "zxcvbn";
 

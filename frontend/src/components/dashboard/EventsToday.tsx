@@ -7,9 +7,9 @@ import type { EventGet } from "@/api/models";
 
 export default function EventsToday() {
     const dayStart = new Date();
-    dayStart.setUTCHours(0, 0, 0, 0);
+    dayStart.setHours(0, 0, 0, 0);
     const dayEnd = new Date();
-    dayEnd.setUTCHours(23, 59, 59, 9999)
+    dayEnd.setHours(23, 59, 59, 9999)
 
     const { data: response, error, isLoading, mutate } = useGetApiEventGet();
     const events = response?.data ?? [];
