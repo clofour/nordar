@@ -4,574 +4,566 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import useSwr from 'swr';
-import type {
-  Arguments,
-  Key,
-  SWRConfiguration
-} from 'swr';
+import useSwr from "swr";
+import type { Arguments, Key, SWRConfiguration } from "swr";
 
-import useSWRMutation from 'swr/mutation';
-import type {
-  SWRMutationConfiguration
-} from 'swr/mutation';
+import useSWRMutation from "swr/mutation";
+import type { SWRMutationConfiguration } from "swr/mutation";
 
 import type {
-  EventGet,
-  EventInstanceStateGet,
-  EventInstanceStateSet,
-  GetApiEventGetOnetimeInstanceStateOnetimeEventIdParams,
-  OnetimeEventCreate,
-  RecurringEventCreate
-} from '../../models';
+	EventGet,
+	EventInstanceStateGet,
+	EventInstanceStateSet,
+	GetApiEventGetOnetimeInstanceStateOnetimeEventIdParams,
+	OnetimeEventCreate,
+	RecurringEventCreate,
+} from "../../models";
 
-import { cFetch } from '../../../other/cfetch';
+import { cFetch } from "../../../other/cfetch";
 
-
-
-  type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 export type getApiEventGetResponse200 = {
-  data: EventGet[]
-  status: 200
-}
-
-export type getApiEventGetResponseSuccess = (getApiEventGetResponse200) & {
-  headers: Headers;
+	data: EventGet[];
+	status: 200;
 };
-;
 
-export type getApiEventGetResponse = (getApiEventGetResponseSuccess)
+export type getApiEventGetResponseSuccess = getApiEventGetResponse200 & {
+	headers: Headers;
+};
+
+export type getApiEventGetResponse = getApiEventGetResponseSuccess;
 
 export const getGetApiEventGetUrl = () => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Event/Get`;
+};
 
-
-
-
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/Get`
-}
-
-export const getApiEventGet = async ( options?: RequestInit): Promise<getApiEventGetResponse> => {
-
-  return cFetch<getApiEventGetResponse>(getGetApiEventGetUrl(),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-
+export const getApiEventGet = async (options?: RequestInit): Promise<getApiEventGetResponse> => {
+	return cFetch<getApiEventGetResponse>(getGetApiEventGetUrl(), {
+		...options,
+		method: "GET",
+	});
+};
 
 export const getGetApiEventGetKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/Get`] as const;
 
-export type GetApiEventGetQueryResult = NonNullable<Awaited<ReturnType<typeof getApiEventGet>>>
+export type GetApiEventGetQueryResult = NonNullable<Awaited<ReturnType<typeof getApiEventGet>>>;
 
-export const useGetApiEventGet = <TError = unknown>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiEventGet>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof cFetch> }
-) => {
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+export const useGetApiEventGet = <TError = unknown>(options?: {
+	swr?: SWRConfiguration<Awaited<ReturnType<typeof getApiEventGet>>, TError> & { swrKey?: Key; enabled?: boolean };
+	request?: SecondParameter<typeof cFetch>;
+}) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const isEnabled = swrOptions?.enabled !== false
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetApiEventGetKey() : null);
-  const swrFn = () => getApiEventGet(requestOptions)
+	const isEnabled = swrOptions?.enabled !== false;
+	const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getGetApiEventGetKey() : null));
+	const swrFn = () => getApiEventGet(requestOptions);
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+	const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions);
 
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type postApiEventCreateOnetimeResponse200 = {
-  data: string
-  status: 200
-}
-
-export type postApiEventCreateOnetimeResponseSuccess = (postApiEventCreateOnetimeResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type postApiEventCreateOnetimeResponse200 = {
+	data: string;
+	status: 200;
+};
 
-export type postApiEventCreateOnetimeResponse = (postApiEventCreateOnetimeResponseSuccess)
+export type postApiEventCreateOnetimeResponseSuccess = postApiEventCreateOnetimeResponse200 & {
+	headers: Headers;
+};
+
+export type postApiEventCreateOnetimeResponse = postApiEventCreateOnetimeResponseSuccess;
 
 export const getPostApiEventCreateOnetimeUrl = () => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Event/CreateOnetime`;
+};
 
+export const postApiEventCreateOnetime = async (
+	onetimeEventCreate: OnetimeEventCreate,
+	options?: RequestInit,
+): Promise<postApiEventCreateOnetimeResponse> => {
+	return cFetch<postApiEventCreateOnetimeResponse>(getPostApiEventCreateOnetimeUrl(), {
+		...options,
+		method: "POST",
+		headers: { "Content-Type": "application/json", ...options?.headers },
+		body: JSON.stringify(onetimeEventCreate),
+	});
+};
 
-
-
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/CreateOnetime`
-}
-
-export const postApiEventCreateOnetime = async (onetimeEventCreate: OnetimeEventCreate, options?: RequestInit): Promise<postApiEventCreateOnetimeResponse> => {
-
-  return cFetch<postApiEventCreateOnetimeResponse>(getPostApiEventCreateOnetimeUrl(),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      onetimeEventCreate,)
-  }
-);}
-
-
-
-
-export const getPostApiEventCreateOnetimeMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
-  return (_: Key, { arg }: { arg: OnetimeEventCreate }) => {
-    return postApiEventCreateOnetime(arg, options);
-  }
-}
+export const getPostApiEventCreateOnetimeMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
+	return (_: Key, { arg }: { arg: OnetimeEventCreate }) => {
+		return postApiEventCreateOnetime(arg, options);
+	};
+};
 export const getPostApiEventCreateOnetimeMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/CreateOnetime`] as const;
 
-export type PostApiEventCreateOnetimeMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventCreateOnetime>>>
+export type PostApiEventCreateOnetimeMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventCreateOnetime>>>;
 
-export const usePostApiEventCreateOnetime = <TError = unknown>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiEventCreateOnetime>>, TError, Key, OnetimeEventCreate, Awaited<ReturnType<typeof postApiEventCreateOnetime>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
-) => {
+export const usePostApiEventCreateOnetime = <TError = unknown>(options?: {
+	swr?: SWRMutationConfiguration<
+		Awaited<ReturnType<typeof postApiEventCreateOnetime>>,
+		TError,
+		Key,
+		OnetimeEventCreate,
+		Awaited<ReturnType<typeof postApiEventCreateOnetime>>
+	> & { swrKey?: string };
+	request?: SecondParameter<typeof cFetch>;
+}) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const swrKey = swrOptions?.swrKey ?? getPostApiEventCreateOnetimeMutationKey();
+	const swrFn = getPostApiEventCreateOnetimeMutationFetcher(requestOptions);
 
-  const swrKey = swrOptions?.swrKey ?? getPostApiEventCreateOnetimeMutationKey();
-  const swrFn = getPostApiEventCreateOnetimeMutationFetcher(requestOptions);
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
-
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type postApiEventCreateRecurringResponse200 = {
-  data: string
-  status: 200
-}
-
-export type postApiEventCreateRecurringResponseSuccess = (postApiEventCreateRecurringResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type postApiEventCreateRecurringResponse200 = {
+	data: string;
+	status: 200;
+};
 
-export type postApiEventCreateRecurringResponse = (postApiEventCreateRecurringResponseSuccess)
+export type postApiEventCreateRecurringResponseSuccess = postApiEventCreateRecurringResponse200 & {
+	headers: Headers;
+};
+
+export type postApiEventCreateRecurringResponse = postApiEventCreateRecurringResponseSuccess;
 
 export const getPostApiEventCreateRecurringUrl = () => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Event/CreateRecurring`;
+};
 
+export const postApiEventCreateRecurring = async (
+	recurringEventCreate: RecurringEventCreate,
+	options?: RequestInit,
+): Promise<postApiEventCreateRecurringResponse> => {
+	return cFetch<postApiEventCreateRecurringResponse>(getPostApiEventCreateRecurringUrl(), {
+		...options,
+		method: "POST",
+		headers: { "Content-Type": "application/json", ...options?.headers },
+		body: JSON.stringify(recurringEventCreate),
+	});
+};
 
-
-
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/CreateRecurring`
-}
-
-export const postApiEventCreateRecurring = async (recurringEventCreate: RecurringEventCreate, options?: RequestInit): Promise<postApiEventCreateRecurringResponse> => {
-
-  return cFetch<postApiEventCreateRecurringResponse>(getPostApiEventCreateRecurringUrl(),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      recurringEventCreate,)
-  }
-);}
-
-
-
-
-export const getPostApiEventCreateRecurringMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
-  return (_: Key, { arg }: { arg: RecurringEventCreate }) => {
-    return postApiEventCreateRecurring(arg, options);
-  }
-}
+export const getPostApiEventCreateRecurringMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
+	return (_: Key, { arg }: { arg: RecurringEventCreate }) => {
+		return postApiEventCreateRecurring(arg, options);
+	};
+};
 export const getPostApiEventCreateRecurringMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/CreateRecurring`] as const;
 
-export type PostApiEventCreateRecurringMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventCreateRecurring>>>
+export type PostApiEventCreateRecurringMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventCreateRecurring>>>;
 
-export const usePostApiEventCreateRecurring = <TError = unknown>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiEventCreateRecurring>>, TError, Key, RecurringEventCreate, Awaited<ReturnType<typeof postApiEventCreateRecurring>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
-) => {
+export const usePostApiEventCreateRecurring = <TError = unknown>(options?: {
+	swr?: SWRMutationConfiguration<
+		Awaited<ReturnType<typeof postApiEventCreateRecurring>>,
+		TError,
+		Key,
+		RecurringEventCreate,
+		Awaited<ReturnType<typeof postApiEventCreateRecurring>>
+	> & { swrKey?: string };
+	request?: SecondParameter<typeof cFetch>;
+}) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const swrKey = swrOptions?.swrKey ?? getPostApiEventCreateRecurringMutationKey();
+	const swrFn = getPostApiEventCreateRecurringMutationFetcher(requestOptions);
 
-  const swrKey = swrOptions?.swrKey ?? getPostApiEventCreateRecurringMutationKey();
-  const swrFn = getPostApiEventCreateRecurringMutationFetcher(requestOptions);
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
-
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type postApiEventUpdateResponse200 = {
-  data: void
-  status: 200
-}
-
-export type postApiEventUpdateResponseSuccess = (postApiEventUpdateResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type postApiEventUpdateResponse200 = {
+	data: void;
+	status: 200;
+};
 
-export type postApiEventUpdateResponse = (postApiEventUpdateResponseSuccess)
+export type postApiEventUpdateResponseSuccess = postApiEventUpdateResponse200 & {
+	headers: Headers;
+};
+
+export type postApiEventUpdateResponse = postApiEventUpdateResponseSuccess;
 
 export const getPostApiEventUpdateUrl = () => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Event/Update`;
+};
 
+export const postApiEventUpdate = async (options?: RequestInit): Promise<postApiEventUpdateResponse> => {
+	return cFetch<postApiEventUpdateResponse>(getPostApiEventUpdateUrl(), {
+		...options,
+		method: "POST",
+	});
+};
 
-
-
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/Update`
-}
-
-export const postApiEventUpdate = async ( options?: RequestInit): Promise<postApiEventUpdateResponse> => {
-
-  return cFetch<postApiEventUpdateResponse>(getPostApiEventUpdateUrl(),
-  {
-    ...options,
-    method: 'POST'
-
-
-  }
-);}
-
-
-
-
-export const getPostApiEventUpdateMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
-  return (_: Key, __: { arg: Arguments }) => {
-    return postApiEventUpdate(options);
-  }
-}
+export const getPostApiEventUpdateMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
+	return (_: Key, __: { arg: Arguments }) => {
+		return postApiEventUpdate(options);
+	};
+};
 export const getPostApiEventUpdateMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/Update`] as const;
 
-export type PostApiEventUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventUpdate>>>
+export type PostApiEventUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventUpdate>>>;
 
-export const usePostApiEventUpdate = <TError = unknown>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiEventUpdate>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiEventUpdate>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
-) => {
+export const usePostApiEventUpdate = <TError = unknown>(options?: {
+	swr?: SWRMutationConfiguration<
+		Awaited<ReturnType<typeof postApiEventUpdate>>,
+		TError,
+		Key,
+		Arguments,
+		Awaited<ReturnType<typeof postApiEventUpdate>>
+	> & { swrKey?: string };
+	request?: SecondParameter<typeof cFetch>;
+}) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const swrKey = swrOptions?.swrKey ?? getPostApiEventUpdateMutationKey();
+	const swrFn = getPostApiEventUpdateMutationFetcher(requestOptions);
 
-  const swrKey = swrOptions?.swrKey ?? getPostApiEventUpdateMutationKey();
-  const swrFn = getPostApiEventUpdateMutationFetcher(requestOptions);
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
-
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type postApiEventDeleteResponse200 = {
-  data: void
-  status: 200
-}
-
-export type postApiEventDeleteResponseSuccess = (postApiEventDeleteResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type postApiEventDeleteResponse200 = {
+	data: void;
+	status: 200;
+};
 
-export type postApiEventDeleteResponse = (postApiEventDeleteResponseSuccess)
+export type postApiEventDeleteResponseSuccess = postApiEventDeleteResponse200 & {
+	headers: Headers;
+};
+
+export type postApiEventDeleteResponse = postApiEventDeleteResponseSuccess;
 
 export const getPostApiEventDeleteUrl = () => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Event/Delete`;
+};
 
+export const postApiEventDelete = async (options?: RequestInit): Promise<postApiEventDeleteResponse> => {
+	return cFetch<postApiEventDeleteResponse>(getPostApiEventDeleteUrl(), {
+		...options,
+		method: "POST",
+	});
+};
 
-
-
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/Delete`
-}
-
-export const postApiEventDelete = async ( options?: RequestInit): Promise<postApiEventDeleteResponse> => {
-
-  return cFetch<postApiEventDeleteResponse>(getPostApiEventDeleteUrl(),
-  {
-    ...options,
-    method: 'POST'
-
-
-  }
-);}
-
-
-
-
-export const getPostApiEventDeleteMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
-  return (_: Key, __: { arg: Arguments }) => {
-    return postApiEventDelete(options);
-  }
-}
+export const getPostApiEventDeleteMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
+	return (_: Key, __: { arg: Arguments }) => {
+		return postApiEventDelete(options);
+	};
+};
 export const getPostApiEventDeleteMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/Delete`] as const;
 
-export type PostApiEventDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventDelete>>>
+export type PostApiEventDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof postApiEventDelete>>>;
 
-export const usePostApiEventDelete = <TError = unknown>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiEventDelete>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiEventDelete>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
-) => {
+export const usePostApiEventDelete = <TError = unknown>(options?: {
+	swr?: SWRMutationConfiguration<
+		Awaited<ReturnType<typeof postApiEventDelete>>,
+		TError,
+		Key,
+		Arguments,
+		Awaited<ReturnType<typeof postApiEventDelete>>
+	> & { swrKey?: string };
+	request?: SecondParameter<typeof cFetch>;
+}) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const swrKey = swrOptions?.swrKey ?? getPostApiEventDeleteMutationKey();
+	const swrFn = getPostApiEventDeleteMutationFetcher(requestOptions);
 
-  const swrKey = swrOptions?.swrKey ?? getPostApiEventDeleteMutationKey();
-  const swrFn = getPostApiEventDeleteMutationFetcher(requestOptions);
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
-
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type getApiEventGetOnetimeInstanceStateOnetimeEventIdResponse200 = {
-  data: EventInstanceStateGet
-  status: 200
-}
-
-export type getApiEventGetOnetimeInstanceStateOnetimeEventIdResponseSuccess = (getApiEventGetOnetimeInstanceStateOnetimeEventIdResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type getApiEventGetOnetimeInstanceStateOnetimeEventIdResponse200 = {
+	data: EventInstanceStateGet;
+	status: 200;
+};
 
-export type getApiEventGetOnetimeInstanceStateOnetimeEventIdResponse = (getApiEventGetOnetimeInstanceStateOnetimeEventIdResponseSuccess)
+export type getApiEventGetOnetimeInstanceStateOnetimeEventIdResponseSuccess = getApiEventGetOnetimeInstanceStateOnetimeEventIdResponse200 & {
+	headers: Headers;
+};
 
-export const getGetApiEventGetOnetimeInstanceStateOnetimeEventIdUrl = (eventId: string,
-    params?: GetApiEventGetOnetimeInstanceStateOnetimeEventIdParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type getApiEventGetOnetimeInstanceStateOnetimeEventIdResponse = getApiEventGetOnetimeInstanceStateOnetimeEventIdResponseSuccess;
 
-  Object.entries(params || {}).forEach(([key, value]) => {
+export const getGetApiEventGetOnetimeInstanceStateOnetimeEventIdUrl = (
+	eventId: string,
+	params?: GetApiEventGetOnetimeInstanceStateOnetimeEventIdParams,
+) => {
+	const normalizedParams = new URLSearchParams();
 
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
+	Object.entries(params || {}).forEach(([key, value]) => {
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? "null" : value.toString());
+		}
+	});
 
-  const stringifiedParams = normalizedParams.toString();
+	const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `${import.meta.env.VITE_API_ORIGIN}/api/Event/GetOnetimeInstanceState/onetime/${eventId}?${stringifiedParams}` : `${import.meta.env.VITE_API_ORIGIN}/api/Event/GetOnetimeInstanceState/onetime/${eventId}`
-}
+	return stringifiedParams.length > 0
+		? `${import.meta.env.VITE_API_ORIGIN}/api/Event/GetOnetimeInstanceState/onetime/${eventId}?${stringifiedParams}`
+		: `${import.meta.env.VITE_API_ORIGIN}/api/Event/GetOnetimeInstanceState/onetime/${eventId}`;
+};
 
-export const getApiEventGetOnetimeInstanceStateOnetimeEventId = async (eventId: string,
-    params?: GetApiEventGetOnetimeInstanceStateOnetimeEventIdParams, options?: RequestInit): Promise<getApiEventGetOnetimeInstanceStateOnetimeEventIdResponse> => {
+export const getApiEventGetOnetimeInstanceStateOnetimeEventId = async (
+	eventId: string,
+	params?: GetApiEventGetOnetimeInstanceStateOnetimeEventIdParams,
+	options?: RequestInit,
+): Promise<getApiEventGetOnetimeInstanceStateOnetimeEventIdResponse> => {
+	return cFetch<getApiEventGetOnetimeInstanceStateOnetimeEventIdResponse>(getGetApiEventGetOnetimeInstanceStateOnetimeEventIdUrl(eventId, params), {
+		...options,
+		method: "GET",
+	});
+};
 
-  return cFetch<getApiEventGetOnetimeInstanceStateOnetimeEventIdResponse>(getGetApiEventGetOnetimeInstanceStateOnetimeEventIdUrl(eventId,params),
-  {
-    ...options,
-    method: 'GET'
+export const getGetApiEventGetOnetimeInstanceStateOnetimeEventIdKey = (
+	eventId: string,
+	params?: GetApiEventGetOnetimeInstanceStateOnetimeEventIdParams,
+) => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/GetOnetimeInstanceState/onetime/${eventId}`, ...(params ? [params] : [])] as const;
 
-
-  }
-);}
-
-
-
-
-export const getGetApiEventGetOnetimeInstanceStateOnetimeEventIdKey = (eventId: string,
-    params?: GetApiEventGetOnetimeInstanceStateOnetimeEventIdParams,) => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/GetOnetimeInstanceState/onetime/${eventId}`, ...(params ? [params]: [])] as const;
-
-export type GetApiEventGetOnetimeInstanceStateOnetimeEventIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiEventGetOnetimeInstanceStateOnetimeEventId>>>
+export type GetApiEventGetOnetimeInstanceStateOnetimeEventIdQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getApiEventGetOnetimeInstanceStateOnetimeEventId>>
+>;
 
 export const useGetApiEventGetOnetimeInstanceStateOnetimeEventId = <TError = unknown>(
-  eventId: string,
-    params?: GetApiEventGetOnetimeInstanceStateOnetimeEventIdParams, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiEventGetOnetimeInstanceStateOnetimeEventId>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof cFetch> }
+	eventId: string,
+	params?: GetApiEventGetOnetimeInstanceStateOnetimeEventIdParams,
+	options?: {
+		swr?: SWRConfiguration<Awaited<ReturnType<typeof getApiEventGetOnetimeInstanceStateOnetimeEventId>>, TError> & {
+			swrKey?: Key;
+			enabled?: boolean;
+		};
+		request?: SecondParameter<typeof cFetch>;
+	},
 ) => {
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const isEnabled = swrOptions?.enabled !== false && !!(eventId)
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetApiEventGetOnetimeInstanceStateOnetimeEventIdKey(eventId,params) : null);
-  const swrFn = () => getApiEventGetOnetimeInstanceStateOnetimeEventId(eventId,params, requestOptions)
+	const isEnabled = swrOptions?.enabled !== false && !!eventId;
+	const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getGetApiEventGetOnetimeInstanceStateOnetimeEventIdKey(eventId, params) : null));
+	const swrFn = () => getApiEventGetOnetimeInstanceStateOnetimeEventId(eventId, params, requestOptions);
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+	const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions);
 
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponse200 = {
-  data: EventInstanceStateGet
-  status: 200
-}
-
-export type getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponseSuccess = (getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponse200 = {
+	data: EventInstanceStateGet;
+	status: 200;
+};
 
-export type getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponse = (getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponseSuccess)
+export type getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponseSuccess =
+	getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponse200 & {
+		headers: Headers;
+	};
 
-export const getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceUrl = (eventId: string,
-    eventOccurence: string,) => {
+export type getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponse =
+	getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponseSuccess;
 
+export const getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceUrl = (eventId: string, eventOccurence: string) => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Event/GetRecurringInstanceState/recurring/${eventId}/${eventOccurence}`;
+};
 
+export const getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurence = async (
+	eventId: string,
+	eventOccurence: string,
+	options?: RequestInit,
+): Promise<getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponse> => {
+	return cFetch<getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponse>(
+		getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceUrl(eventId, eventOccurence),
+		{
+			...options,
+			method: "GET",
+		},
+	);
+};
 
+export const getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceKey = (eventId: string, eventOccurence: string) =>
+	[`${import.meta.env.VITE_API_ORIGIN}/api/Event/GetRecurringInstanceState/recurring/${eventId}/${eventOccurence}`] as const;
 
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/GetRecurringInstanceState/recurring/${eventId}/${eventOccurence}`
-}
-
-export const getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurence = async (eventId: string,
-    eventOccurence: string, options?: RequestInit): Promise<getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponse> => {
-
-  return cFetch<getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponse>(getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceUrl(eventId,eventOccurence),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-
-
-export const getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceKey = (eventId: string,
-    eventOccurence: string,) => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/GetRecurringInstanceState/recurring/${eventId}/${eventOccurence}`] as const;
-
-export type GetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceQueryResult = NonNullable<Awaited<ReturnType<typeof getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurence>>>
+export type GetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurence>>
+>;
 
 export const useGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurence = <TError = unknown>(
-  eventId: string,
-    eventOccurence: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurence>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof cFetch> }
+	eventId: string,
+	eventOccurence: string,
+	options?: {
+		swr?: SWRConfiguration<Awaited<ReturnType<typeof getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurence>>, TError> & {
+			swrKey?: Key;
+			enabled?: boolean;
+		};
+		request?: SecondParameter<typeof cFetch>;
+	},
 ) => {
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const isEnabled = swrOptions?.enabled !== false && !!(eventId && eventOccurence)
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceKey(eventId,eventOccurence) : null);
-  const swrFn = () => getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurence(eventId,eventOccurence, requestOptions)
+	const isEnabled = swrOptions?.enabled !== false && !!(eventId && eventOccurence);
+	const swrKey =
+		swrOptions?.swrKey ??
+		(() => (isEnabled ? getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceKey(eventId, eventOccurence) : null));
+	const swrFn = () => getApiEventGetRecurringInstanceStateRecurringEventIdEventOccurence(eventId, eventOccurence, requestOptions);
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+	const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions);
 
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type putApiEventSetOnetimeInstanceStateOnetimeEventIdResponse200 = {
-  data: void
-  status: 200
-}
-
-export type putApiEventSetOnetimeInstanceStateOnetimeEventIdResponseSuccess = (putApiEventSetOnetimeInstanceStateOnetimeEventIdResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type putApiEventSetOnetimeInstanceStateOnetimeEventIdResponse200 = {
+	data: void;
+	status: 200;
+};
 
-export type putApiEventSetOnetimeInstanceStateOnetimeEventIdResponse = (putApiEventSetOnetimeInstanceStateOnetimeEventIdResponseSuccess)
+export type putApiEventSetOnetimeInstanceStateOnetimeEventIdResponseSuccess = putApiEventSetOnetimeInstanceStateOnetimeEventIdResponse200 & {
+	headers: Headers;
+};
 
-export const getPutApiEventSetOnetimeInstanceStateOnetimeEventIdUrl = (eventId: string,) => {
+export type putApiEventSetOnetimeInstanceStateOnetimeEventIdResponse = putApiEventSetOnetimeInstanceStateOnetimeEventIdResponseSuccess;
 
+export const getPutApiEventSetOnetimeInstanceStateOnetimeEventIdUrl = (eventId: string) => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Event/SetOnetimeInstanceState/onetime/${eventId}`;
+};
 
-
-
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/SetOnetimeInstanceState/onetime/${eventId}`
-}
-
-export const putApiEventSetOnetimeInstanceStateOnetimeEventId = async (eventId: string,
-    eventInstanceStateSet: EventInstanceStateSet, options?: RequestInit): Promise<putApiEventSetOnetimeInstanceStateOnetimeEventIdResponse> => {
-
-  return cFetch<putApiEventSetOnetimeInstanceStateOnetimeEventIdResponse>(getPutApiEventSetOnetimeInstanceStateOnetimeEventIdUrl(eventId),
-  {
-    ...options,
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      eventInstanceStateSet,)
-  }
-);}
-
-
-
+export const putApiEventSetOnetimeInstanceStateOnetimeEventId = async (
+	eventId: string,
+	eventInstanceStateSet: EventInstanceStateSet,
+	options?: RequestInit,
+): Promise<putApiEventSetOnetimeInstanceStateOnetimeEventIdResponse> => {
+	return cFetch<putApiEventSetOnetimeInstanceStateOnetimeEventIdResponse>(getPutApiEventSetOnetimeInstanceStateOnetimeEventIdUrl(eventId), {
+		...options,
+		method: "PUT",
+		headers: { "Content-Type": "application/json", ...options?.headers },
+		body: JSON.stringify(eventInstanceStateSet),
+	});
+};
 
 export const getPutApiEventSetOnetimeInstanceStateOnetimeEventIdMutationFetcher = (eventId: string, options?: SecondParameter<typeof cFetch>) => {
-  return (_: Key, { arg }: { arg: EventInstanceStateSet }) => {
-    return putApiEventSetOnetimeInstanceStateOnetimeEventId(eventId, arg, options);
-  }
-}
-export const getPutApiEventSetOnetimeInstanceStateOnetimeEventIdMutationKey = (eventId: string,) => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/SetOnetimeInstanceState/onetime/${eventId}`] as const;
+	return (_: Key, { arg }: { arg: EventInstanceStateSet }) => {
+		return putApiEventSetOnetimeInstanceStateOnetimeEventId(eventId, arg, options);
+	};
+};
+export const getPutApiEventSetOnetimeInstanceStateOnetimeEventIdMutationKey = (eventId: string) =>
+	[`${import.meta.env.VITE_API_ORIGIN}/api/Event/SetOnetimeInstanceState/onetime/${eventId}`] as const;
 
-export type PutApiEventSetOnetimeInstanceStateOnetimeEventIdMutationResult = NonNullable<Awaited<ReturnType<typeof putApiEventSetOnetimeInstanceStateOnetimeEventId>>>
+export type PutApiEventSetOnetimeInstanceStateOnetimeEventIdMutationResult = NonNullable<
+	Awaited<ReturnType<typeof putApiEventSetOnetimeInstanceStateOnetimeEventId>>
+>;
 
 export const usePutApiEventSetOnetimeInstanceStateOnetimeEventId = <TError = unknown>(
-  eventId: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof putApiEventSetOnetimeInstanceStateOnetimeEventId>>, TError, Key, EventInstanceStateSet, Awaited<ReturnType<typeof putApiEventSetOnetimeInstanceStateOnetimeEventId>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
+	eventId: string,
+	options?: {
+		swr?: SWRMutationConfiguration<
+			Awaited<ReturnType<typeof putApiEventSetOnetimeInstanceStateOnetimeEventId>>,
+			TError,
+			Key,
+			EventInstanceStateSet,
+			Awaited<ReturnType<typeof putApiEventSetOnetimeInstanceStateOnetimeEventId>>
+		> & { swrKey?: string };
+		request?: SecondParameter<typeof cFetch>;
+	},
 ) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const swrKey = swrOptions?.swrKey ?? getPutApiEventSetOnetimeInstanceStateOnetimeEventIdMutationKey(eventId);
+	const swrFn = getPutApiEventSetOnetimeInstanceStateOnetimeEventIdMutationFetcher(eventId, requestOptions);
 
-  const swrKey = swrOptions?.swrKey ?? getPutApiEventSetOnetimeInstanceStateOnetimeEventIdMutationKey(eventId);
-  const swrFn = getPutApiEventSetOnetimeInstanceStateOnetimeEventIdMutationFetcher(eventId, requestOptions);
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
-
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceResponse200 = {
-  data: void
-  status: 200
-}
-
-export type putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceResponseSuccess = (putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceResponse200 = {
+	data: void;
+	status: 200;
+};
 
-export type putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceResponse = (putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceResponseSuccess)
+export type putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceResponseSuccess =
+	putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceResponse200 & {
+		headers: Headers;
+	};
 
-export const getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceUrl = (eventId: string,
-    eventOccurence: string,) => {
+export type putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceResponse =
+	putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceResponseSuccess;
 
+export const getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceUrl = (eventId: string, eventOccurence: string) => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Event/SetRecurringInstanceState/recurring/${eventId}/${eventOccurence}`;
+};
 
+export const putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurence = async (
+	eventId: string,
+	eventOccurence: string,
+	eventInstanceStateSet: EventInstanceStateSet,
+	options?: RequestInit,
+): Promise<putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceResponse> => {
+	return cFetch<putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceResponse>(
+		getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceUrl(eventId, eventOccurence),
+		{
+			...options,
+			method: "PUT",
+			headers: { "Content-Type": "application/json", ...options?.headers },
+			body: JSON.stringify(eventInstanceStateSet),
+		},
+	);
+};
 
+export const getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceMutationFetcher = (
+	eventId: string,
+	eventOccurence: string,
+	options?: SecondParameter<typeof cFetch>,
+) => {
+	return (_: Key, { arg }: { arg: EventInstanceStateSet }) => {
+		return putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurence(eventId, eventOccurence, arg, options);
+	};
+};
+export const getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceMutationKey = (eventId: string, eventOccurence: string) =>
+	[`${import.meta.env.VITE_API_ORIGIN}/api/Event/SetRecurringInstanceState/recurring/${eventId}/${eventOccurence}`] as const;
 
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Event/SetRecurringInstanceState/recurring/${eventId}/${eventOccurence}`
-}
-
-export const putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurence = async (eventId: string,
-    eventOccurence: string,
-    eventInstanceStateSet: EventInstanceStateSet, options?: RequestInit): Promise<putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceResponse> => {
-
-  return cFetch<putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceResponse>(getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceUrl(eventId,eventOccurence),
-  {
-    ...options,
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      eventInstanceStateSet,)
-  }
-);}
-
-
-
-
-export const getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceMutationFetcher = (eventId: string,
-    eventOccurence: string, options?: SecondParameter<typeof cFetch>) => {
-  return (_: Key, { arg }: { arg: EventInstanceStateSet }) => {
-    return putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurence(eventId, eventOccurence, arg, options);
-  }
-}
-export const getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceMutationKey = (eventId: string,
-    eventOccurence: string,) => [`${import.meta.env.VITE_API_ORIGIN}/api/Event/SetRecurringInstanceState/recurring/${eventId}/${eventOccurence}`] as const;
-
-export type PutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceMutationResult = NonNullable<Awaited<ReturnType<typeof putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurence>>>
+export type PutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceMutationResult = NonNullable<
+	Awaited<ReturnType<typeof putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurence>>
+>;
 
 export const usePutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurence = <TError = unknown>(
-  eventId: string,
-    eventOccurence: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurence>>, TError, Key, EventInstanceStateSet, Awaited<ReturnType<typeof putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurence>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
+	eventId: string,
+	eventOccurence: string,
+	options?: {
+		swr?: SWRMutationConfiguration<
+			Awaited<ReturnType<typeof putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurence>>,
+			TError,
+			Key,
+			EventInstanceStateSet,
+			Awaited<ReturnType<typeof putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurence>>
+		> & { swrKey?: string };
+		request?: SecondParameter<typeof cFetch>;
+	},
 ) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const swrKey = swrOptions?.swrKey ?? getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceMutationKey(eventId, eventOccurence);
+	const swrFn = getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceMutationFetcher(eventId, eventOccurence, requestOptions);
 
-  const swrKey = swrOptions?.swrKey ?? getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceMutationKey(eventId,eventOccurence);
-  const swrFn = getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceMutationFetcher(eventId,eventOccurence, requestOptions);
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
-
-  return {
-    swrKey,
-    ...query
-  }
-}
+	return {
+		swrKey,
+		...query,
+	};
+};

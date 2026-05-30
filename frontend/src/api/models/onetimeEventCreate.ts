@@ -6,13 +6,13 @@
  */
 
 export interface OnetimeEventCreate {
-  /** @nullable */
-  movementId?: string | null;
-  /** @maxLength 200 */
-  name: string;
-  startDate: string;
-  startTime: string;
-  timeZoneId: string;
-  /** @pattern ^-?(?:0|[1-9]\d*)$ */
-  duration: number | string;
+	/** @nullable */
+	movementId?: string | null;
+	/** @maxLength 200 */
+	name: string;
+	startDate: string;
+	startTime: string;
+	timeZoneId: string;
+	/** @pattern ^-?(?:0|[1-9]\d*)$ */
+	duration: number | string;
 }

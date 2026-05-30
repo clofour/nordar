@@ -5,9 +5,8 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type EventGetOnetimeEventGetType = typeof EventGetOnetimeEventGetType[keyof typeof EventGetOnetimeEventGetType];
-
+export type EventGetOnetimeEventGetType = (typeof EventGetOnetimeEventGetType)[keyof typeof EventGetOnetimeEventGetType];
 
 export const EventGetOnetimeEventGetType = {
-  onetime: 'onetime',
+	onetime: "onetime",
 } as const;

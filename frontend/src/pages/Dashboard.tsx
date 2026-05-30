@@ -4,15 +4,13 @@ import PageTitle from "@/components/shared/PageTitle";
 import { Stack, Title } from "@mantine/core";
 
 export default function Dashboard() {
-    
+	return (
+		<Stack>
+			<PageTitle name="Dashboard" description="TBD" />
+			<DailySummary />
 
-    return (
-        <Stack>
-            <PageTitle name="Dashboard" description="TBD" />
-            <DailySummary />
-
-            <Title order={3}>Today</Title>
-            <EventsToday />
-        </Stack>
-    );
+			<Title order={3}>Today</Title>
+			<EventsToday />
+		</Stack>
+	);
 }

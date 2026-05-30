@@ -4,17 +4,17 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import type { BearingGet } from './bearingGet';
-import type { GoalImportance } from './goalImportance';
+import type { BearingGet } from "./bearingGet";
+import type { GoalImportance } from "./goalImportance";
 
 export interface NorthStarGet {
-  /** @maxLength 200 */
-  description: string;
-  importance: GoalImportance;
-  /** @maxLength 5000 */
-  justification: string;
-  bearings: BearingGet[];
-  id: string;
-  /** @maxLength 200 */
-  name: string;
+	/** @maxLength 200 */
+	description: string;
+	importance: GoalImportance;
+	/** @maxLength 5000 */
+	justification: string;
+	bearings: BearingGet[];
+	id: string;
+	/** @maxLength 200 */
+	name: string;
 }

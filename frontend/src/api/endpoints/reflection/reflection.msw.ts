@@ -4,89 +4,144 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import {
-  faker
-} from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 
-import {
-  HttpResponse,
-  http
-} from 'msw';
-import type {
-  RequestHandlerOptions
-} from 'msw';
+import { HttpResponse, http } from "msw";
+import type { RequestHandlerOptions } from "msw";
 
-import type {
-  ReflectionGet
-} from '../../models';
+import type { ReflectionGet } from "../../models";
 
+export const getGetApiReflectionGetResponseMock = (overrideResponse: Partial<Extract<ReflectionGet, object>> = {}): ReflectionGet => ({
+	id: faker.string.uuid(),
+	eventId: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(), null]), undefined]),
+	date: faker.date.past().toISOString().slice(0, 19) + "Z",
+	positive: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
+		faker.string.alpha({ length: { min: 10, max: 20 } }),
+	),
+	negative: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
+		faker.string.alpha({ length: { min: 10, max: 20 } }),
+	),
+	improvement: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
+		faker.string.alpha({ length: { min: 10, max: 20 } }),
+	),
+	...overrideResponse,
+});
 
-export const getGetApiReflectionGetResponseMock = (overrideResponse: Partial<Extract<ReflectionGet, object>> = {}): ReflectionGet => ({id: faker.string.uuid(), eventId: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(), null]), undefined]), date: faker.date.past().toISOString().slice(0, 19) + 'Z', positive: Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => (faker.string.alpha({length: {min: 10, max: 20}}))), negative: Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => (faker.string.alpha({length: {min: 10, max: 20}}))), improvement: Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => (faker.string.alpha({length: {min: 10, max: 20}}))), ...overrideResponse})
+export const getGetApiReflectionListResponseMock = (): ReflectionGet[] =>
+	Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
+		id: faker.string.uuid(),
+		eventId: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(), null]), undefined]),
+		date: faker.date.past().toISOString().slice(0, 19) + "Z",
+		positive: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
+			faker.string.alpha({ length: { min: 10, max: 20 } }),
+		),
+		negative: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
+			faker.string.alpha({ length: { min: 10, max: 20 } }),
+		),
+		improvement: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
+			faker.string.alpha({ length: { min: 10, max: 20 } }),
+		),
+	}));
 
-export const getGetApiReflectionListResponseMock = (): ReflectionGet[] => (Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), eventId: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(), null]), undefined]), date: faker.date.past().toISOString().slice(0, 19) + 'Z', positive: Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => (faker.string.alpha({length: {min: 10, max: 20}}))), negative: Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => (faker.string.alpha({length: {min: 10, max: 20}}))), improvement: Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => (faker.string.alpha({length: {min: 10, max: 20}})))})))
+export const getPostApiReflectionCreateResponseMock = (): string => faker.word.sample();
 
-export const getPostApiReflectionCreateResponseMock = (): string => (faker.word.sample())
+export const getGetApiReflectionGetMockHandler = (
+	overrideResponse?: ReflectionGet | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<ReflectionGet> | ReflectionGet),
+	options?: RequestHandlerOptions,
+) => {
+	return http.get(
+		"*/api/Reflection/Get",
+		async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+			return HttpResponse.json(
+				overrideResponse !== undefined
+					? typeof overrideResponse === "function"
+						? await overrideResponse(info)
+						: overrideResponse
+					: getGetApiReflectionGetResponseMock(),
+				{ status: 200 },
+			);
+		},
+		options,
+	);
+};
 
+export const getGetApiReflectionListMockHandler = (
+	overrideResponse?: ReflectionGet[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<ReflectionGet[]> | ReflectionGet[]),
+	options?: RequestHandlerOptions,
+) => {
+	return http.get(
+		"*/api/Reflection/List",
+		async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+			return HttpResponse.json(
+				overrideResponse !== undefined
+					? typeof overrideResponse === "function"
+						? await overrideResponse(info)
+						: overrideResponse
+					: getGetApiReflectionListResponseMock(),
+				{ status: 200 },
+			);
+		},
+		options,
+	);
+};
 
-export const getGetApiReflectionGetMockHandler = (overrideResponse?: ReflectionGet | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<ReflectionGet> | ReflectionGet), options?: RequestHandlerOptions) => {
-  return http.get('*/api/Reflection/Get', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+export const getPostApiReflectionCreateMockHandler = (
+	overrideResponse?: string | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<string> | string),
+	options?: RequestHandlerOptions,
+) => {
+	return http.post(
+		"*/api/Reflection/Create",
+		async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
+			return HttpResponse.json(
+				overrideResponse !== undefined
+					? typeof overrideResponse === "function"
+						? await overrideResponse(info)
+						: overrideResponse
+					: getPostApiReflectionCreateResponseMock(),
+				{ status: 200 },
+			);
+		},
+		options,
+	);
+};
 
+export const getPostApiReflectionUpdateMockHandler = (
+	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void),
+	options?: RequestHandlerOptions,
+) => {
+	return http.post(
+		"*/api/Reflection/Update",
+		async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
+			if (typeof overrideResponse === "function") {
+				await overrideResponse(info);
+			}
 
-    return HttpResponse.json(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetApiReflectionGetResponseMock(),
-      { status: 200
-      })
-  }, options)
-}
+			return new HttpResponse(null, { status: 200 });
+		},
+		options,
+	);
+};
 
-export const getGetApiReflectionListMockHandler = (overrideResponse?: ReflectionGet[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<ReflectionGet[]> | ReflectionGet[]), options?: RequestHandlerOptions) => {
-  return http.get('*/api/Reflection/List', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+export const getPostApiReflectionDeleteMockHandler = (
+	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void),
+	options?: RequestHandlerOptions,
+) => {
+	return http.post(
+		"*/api/Reflection/Delete",
+		async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
+			if (typeof overrideResponse === "function") {
+				await overrideResponse(info);
+			}
 
-
-    return HttpResponse.json(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetApiReflectionListResponseMock(),
-      { status: 200
-      })
-  }, options)
-}
-
-export const getPostApiReflectionCreateMockHandler = (overrideResponse?: string | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<string> | string), options?: RequestHandlerOptions) => {
-  return http.post('*/api/Reflection/Create', async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
-
-
-    return HttpResponse.json(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getPostApiReflectionCreateResponseMock(),
-      { status: 200
-      })
-  }, options)
-}
-
-export const getPostApiReflectionUpdateMockHandler = (overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void), options?: RequestHandlerOptions) => {
-  return http.post('*/api/Reflection/Update', async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
-  if (typeof overrideResponse === 'function') {await overrideResponse(info); }
-
-    return new HttpResponse(null,
-      { status: 200
-      })
-  }, options)
-}
-
-export const getPostApiReflectionDeleteMockHandler = (overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void), options?: RequestHandlerOptions) => {
-  return http.post('*/api/Reflection/Delete', async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
-  if (typeof overrideResponse === 'function') {await overrideResponse(info); }
-
-    return new HttpResponse(null,
-      { status: 200
-      })
-  }, options)
-}
+			return new HttpResponse(null, { status: 200 });
+		},
+		options,
+	);
+};
 export const getReflectionMock = () => [
-  getGetApiReflectionGetMockHandler(),
-  getGetApiReflectionListMockHandler(),
-  getPostApiReflectionCreateMockHandler(),
-  getPostApiReflectionUpdateMockHandler(),
-  getPostApiReflectionDeleteMockHandler()
-]
+	getGetApiReflectionGetMockHandler(),
+	getGetApiReflectionListMockHandler(),
+	getPostApiReflectionCreateMockHandler(),
+	getPostApiReflectionUpdateMockHandler(),
+	getPostApiReflectionDeleteMockHandler(),
+];

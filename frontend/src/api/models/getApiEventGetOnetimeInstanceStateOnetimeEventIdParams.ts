@@ -6,5 +6,5 @@
  */
 
 export type GetApiEventGetOnetimeInstanceStateOnetimeEventIdParams = {
-eventOccurence?: string;
+	eventOccurence?: string;
 };

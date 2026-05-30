@@ -1,29 +1,29 @@
 {
-  "compilerOptions": {
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "target": "esnext",
-    "types": [],
+	"compilerOptions": {
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"target": "esnext",
+		"types": [],
 
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+		"sourceMap": true,
+		"declaration": true,
+		"declarationMap": true,
 
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
+		"noUncheckedIndexedAccess": true,
+		"exactOptionalPropertyTypes": true,
 
-    "strict": true,
-    "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
-    "skipLibCheck": true,
+		"strict": true,
+		"jsx": "react-jsx",
+		"verbatimModuleSyntax": true,
+		"isolatedModules": true,
+		"noUncheckedSideEffectImports": true,
+		"moduleDetection": "force",
+		"skipLibCheck": true,
 
-    "allowJs": true,
-    "checkJs": false
-  }
+		"allowJs": true,
+		"checkJs": false
+	}
 }

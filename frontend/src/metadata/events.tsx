@@ -1,4 +1,4 @@
 export enum EventTypes {
-    Onetime,
-    Recurring
+	Onetime,
+	Recurring,
 }

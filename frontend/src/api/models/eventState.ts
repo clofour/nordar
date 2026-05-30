@@ -5,11 +5,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type EventState = typeof EventState[keyof typeof EventState];
-
+export type EventState = (typeof EventState)[keyof typeof EventState];
 
 export const EventState = {
-  Complete: 'Complete',
-  Incomplete: 'Incomplete',
-  Unknown: 'Unknown',
+	Complete: "Complete",
+	Incomplete: "Incomplete",
+	Unknown: "Unknown",
 } as const;

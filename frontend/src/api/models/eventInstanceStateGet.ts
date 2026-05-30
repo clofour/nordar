@@ -4,8 +4,8 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import type { EventState } from './eventState';
+import type { EventState } from "./eventState";
 
 export interface EventInstanceStateGet {
-  eventState: EventState;
+	eventState: EventState;
 }

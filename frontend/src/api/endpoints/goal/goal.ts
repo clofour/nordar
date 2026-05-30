@@ -4,386 +4,341 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import useSwr from 'swr';
-import type {
-  Arguments,
-  Key,
-  SWRConfiguration
-} from 'swr';
+import useSwr from "swr";
+import type { Arguments, Key, SWRConfiguration } from "swr";
 
-import useSWRMutation from 'swr/mutation';
-import type {
-  SWRMutationConfiguration
-} from 'swr/mutation';
+import useSWRMutation from "swr/mutation";
+import type { SWRMutationConfiguration } from "swr/mutation";
 
-import type {
-  BearingCreate,
-  GoalStats,
-  MovementCreate,
-  NorthStarCreate,
-  NorthStarGet,
-  PostApiGoalDeleteParams
-} from '../../models';
+import type { BearingCreate, GoalStats, MovementCreate, NorthStarCreate, NorthStarGet, PostApiGoalDeleteParams } from "../../models";
 
-import { cFetch } from '../../../other/cfetch';
+import { cFetch } from "../../../other/cfetch";
 
-
-
-  type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 export type getApiGoalGetResponse200 = {
-  data: NorthStarGet[]
-  status: 200
-}
-
-export type getApiGoalGetResponseSuccess = (getApiGoalGetResponse200) & {
-  headers: Headers;
+	data: NorthStarGet[];
+	status: 200;
 };
-;
 
-export type getApiGoalGetResponse = (getApiGoalGetResponseSuccess)
+export type getApiGoalGetResponseSuccess = getApiGoalGetResponse200 & {
+	headers: Headers;
+};
+
+export type getApiGoalGetResponse = getApiGoalGetResponseSuccess;
 
 export const getGetApiGoalGetUrl = () => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Get`;
+};
 
-
-
-
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Get`
-}
-
-export const getApiGoalGet = async ( options?: RequestInit): Promise<getApiGoalGetResponse> => {
-
-  return cFetch<getApiGoalGetResponse>(getGetApiGoalGetUrl(),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-
+export const getApiGoalGet = async (options?: RequestInit): Promise<getApiGoalGetResponse> => {
+	return cFetch<getApiGoalGetResponse>(getGetApiGoalGetUrl(), {
+		...options,
+		method: "GET",
+	});
+};
 
 export const getGetApiGoalGetKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/Get`] as const;
 
-export type GetApiGoalGetQueryResult = NonNullable<Awaited<ReturnType<typeof getApiGoalGet>>>
+export type GetApiGoalGetQueryResult = NonNullable<Awaited<ReturnType<typeof getApiGoalGet>>>;
 
-export const useGetApiGoalGet = <TError = unknown>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiGoalGet>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof cFetch> }
-) => {
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+export const useGetApiGoalGet = <TError = unknown>(options?: {
+	swr?: SWRConfiguration<Awaited<ReturnType<typeof getApiGoalGet>>, TError> & { swrKey?: Key; enabled?: boolean };
+	request?: SecondParameter<typeof cFetch>;
+}) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const isEnabled = swrOptions?.enabled !== false
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetApiGoalGetKey() : null);
-  const swrFn = () => getApiGoalGet(requestOptions)
+	const isEnabled = swrOptions?.enabled !== false;
+	const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getGetApiGoalGetKey() : null));
+	const swrFn = () => getApiGoalGet(requestOptions);
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+	const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions);
 
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type getApiGoalStatsResponse200 = {
-  data: GoalStats
-  status: 200
-}
-
-export type getApiGoalStatsResponseSuccess = (getApiGoalStatsResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type getApiGoalStatsResponse200 = {
+	data: GoalStats;
+	status: 200;
+};
 
-export type getApiGoalStatsResponse = (getApiGoalStatsResponseSuccess)
+export type getApiGoalStatsResponseSuccess = getApiGoalStatsResponse200 & {
+	headers: Headers;
+};
+
+export type getApiGoalStatsResponse = getApiGoalStatsResponseSuccess;
 
 export const getGetApiGoalStatsUrl = () => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Stats`;
+};
 
-
-
-
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Stats`
-}
-
-export const getApiGoalStats = async ( options?: RequestInit): Promise<getApiGoalStatsResponse> => {
-
-  return cFetch<getApiGoalStatsResponse>(getGetApiGoalStatsUrl(),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-
+export const getApiGoalStats = async (options?: RequestInit): Promise<getApiGoalStatsResponse> => {
+	return cFetch<getApiGoalStatsResponse>(getGetApiGoalStatsUrl(), {
+		...options,
+		method: "GET",
+	});
+};
 
 export const getGetApiGoalStatsKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/Stats`] as const;
 
-export type GetApiGoalStatsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiGoalStats>>>
+export type GetApiGoalStatsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiGoalStats>>>;
 
-export const useGetApiGoalStats = <TError = unknown>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiGoalStats>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof cFetch> }
-) => {
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+export const useGetApiGoalStats = <TError = unknown>(options?: {
+	swr?: SWRConfiguration<Awaited<ReturnType<typeof getApiGoalStats>>, TError> & { swrKey?: Key; enabled?: boolean };
+	request?: SecondParameter<typeof cFetch>;
+}) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const isEnabled = swrOptions?.enabled !== false
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetApiGoalStatsKey() : null);
-  const swrFn = () => getApiGoalStats(requestOptions)
+	const isEnabled = swrOptions?.enabled !== false;
+	const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getGetApiGoalStatsKey() : null));
+	const swrFn = () => getApiGoalStats(requestOptions);
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+	const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions);
 
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type postApiGoalCreateNorthStarResponse200 = {
-  data: void
-  status: 200
-}
-
-export type postApiGoalCreateNorthStarResponseSuccess = (postApiGoalCreateNorthStarResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type postApiGoalCreateNorthStarResponse200 = {
+	data: void;
+	status: 200;
+};
 
-export type postApiGoalCreateNorthStarResponse = (postApiGoalCreateNorthStarResponseSuccess)
+export type postApiGoalCreateNorthStarResponseSuccess = postApiGoalCreateNorthStarResponse200 & {
+	headers: Headers;
+};
+
+export type postApiGoalCreateNorthStarResponse = postApiGoalCreateNorthStarResponseSuccess;
 
 export const getPostApiGoalCreateNorthStarUrl = () => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateNorthStar`;
+};
 
+export const postApiGoalCreateNorthStar = async (
+	northStarCreate: NorthStarCreate,
+	options?: RequestInit,
+): Promise<postApiGoalCreateNorthStarResponse> => {
+	return cFetch<postApiGoalCreateNorthStarResponse>(getPostApiGoalCreateNorthStarUrl(), {
+		...options,
+		method: "POST",
+		headers: { "Content-Type": "application/json", ...options?.headers },
+		body: JSON.stringify(northStarCreate),
+	});
+};
 
-
-
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateNorthStar`
-}
-
-export const postApiGoalCreateNorthStar = async (northStarCreate: NorthStarCreate, options?: RequestInit): Promise<postApiGoalCreateNorthStarResponse> => {
-
-  return cFetch<postApiGoalCreateNorthStarResponse>(getPostApiGoalCreateNorthStarUrl(),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      northStarCreate,)
-  }
-);}
-
-
-
-
-export const getPostApiGoalCreateNorthStarMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
-  return (_: Key, { arg }: { arg: NorthStarCreate }) => {
-    return postApiGoalCreateNorthStar(arg, options);
-  }
-}
+export const getPostApiGoalCreateNorthStarMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
+	return (_: Key, { arg }: { arg: NorthStarCreate }) => {
+		return postApiGoalCreateNorthStar(arg, options);
+	};
+};
 export const getPostApiGoalCreateNorthStarMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateNorthStar`] as const;
 
-export type PostApiGoalCreateNorthStarMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalCreateNorthStar>>>
+export type PostApiGoalCreateNorthStarMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalCreateNorthStar>>>;
 
-export const usePostApiGoalCreateNorthStar = <TError = unknown>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiGoalCreateNorthStar>>, TError, Key, NorthStarCreate, Awaited<ReturnType<typeof postApiGoalCreateNorthStar>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
-) => {
+export const usePostApiGoalCreateNorthStar = <TError = unknown>(options?: {
+	swr?: SWRMutationConfiguration<
+		Awaited<ReturnType<typeof postApiGoalCreateNorthStar>>,
+		TError,
+		Key,
+		NorthStarCreate,
+		Awaited<ReturnType<typeof postApiGoalCreateNorthStar>>
+	> & { swrKey?: string };
+	request?: SecondParameter<typeof cFetch>;
+}) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const swrKey = swrOptions?.swrKey ?? getPostApiGoalCreateNorthStarMutationKey();
+	const swrFn = getPostApiGoalCreateNorthStarMutationFetcher(requestOptions);
 
-  const swrKey = swrOptions?.swrKey ?? getPostApiGoalCreateNorthStarMutationKey();
-  const swrFn = getPostApiGoalCreateNorthStarMutationFetcher(requestOptions);
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
-
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type postApiGoalCreateBearingResponse200 = {
-  data: void
-  status: 200
-}
-
-export type postApiGoalCreateBearingResponseSuccess = (postApiGoalCreateBearingResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type postApiGoalCreateBearingResponse200 = {
+	data: void;
+	status: 200;
+};
 
-export type postApiGoalCreateBearingResponse = (postApiGoalCreateBearingResponseSuccess)
+export type postApiGoalCreateBearingResponseSuccess = postApiGoalCreateBearingResponse200 & {
+	headers: Headers;
+};
+
+export type postApiGoalCreateBearingResponse = postApiGoalCreateBearingResponseSuccess;
 
 export const getPostApiGoalCreateBearingUrl = () => {
-
-
-
-
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateBearing`
-}
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateBearing`;
+};
 
 export const postApiGoalCreateBearing = async (bearingCreate: BearingCreate, options?: RequestInit): Promise<postApiGoalCreateBearingResponse> => {
+	return cFetch<postApiGoalCreateBearingResponse>(getPostApiGoalCreateBearingUrl(), {
+		...options,
+		method: "POST",
+		headers: { "Content-Type": "application/json", ...options?.headers },
+		body: JSON.stringify(bearingCreate),
+	});
+};
 
-  return cFetch<postApiGoalCreateBearingResponse>(getPostApiGoalCreateBearingUrl(),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      bearingCreate,)
-  }
-);}
-
-
-
-
-export const getPostApiGoalCreateBearingMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
-  return (_: Key, { arg }: { arg: BearingCreate }) => {
-    return postApiGoalCreateBearing(arg, options);
-  }
-}
+export const getPostApiGoalCreateBearingMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
+	return (_: Key, { arg }: { arg: BearingCreate }) => {
+		return postApiGoalCreateBearing(arg, options);
+	};
+};
 export const getPostApiGoalCreateBearingMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateBearing`] as const;
 
-export type PostApiGoalCreateBearingMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalCreateBearing>>>
+export type PostApiGoalCreateBearingMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalCreateBearing>>>;
 
-export const usePostApiGoalCreateBearing = <TError = unknown>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiGoalCreateBearing>>, TError, Key, BearingCreate, Awaited<ReturnType<typeof postApiGoalCreateBearing>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
-) => {
+export const usePostApiGoalCreateBearing = <TError = unknown>(options?: {
+	swr?: SWRMutationConfiguration<
+		Awaited<ReturnType<typeof postApiGoalCreateBearing>>,
+		TError,
+		Key,
+		BearingCreate,
+		Awaited<ReturnType<typeof postApiGoalCreateBearing>>
+	> & { swrKey?: string };
+	request?: SecondParameter<typeof cFetch>;
+}) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const swrKey = swrOptions?.swrKey ?? getPostApiGoalCreateBearingMutationKey();
+	const swrFn = getPostApiGoalCreateBearingMutationFetcher(requestOptions);
 
-  const swrKey = swrOptions?.swrKey ?? getPostApiGoalCreateBearingMutationKey();
-  const swrFn = getPostApiGoalCreateBearingMutationFetcher(requestOptions);
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
-
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type postApiGoalCreateMovementResponse200 = {
-  data: void
-  status: 200
-}
-
-export type postApiGoalCreateMovementResponseSuccess = (postApiGoalCreateMovementResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type postApiGoalCreateMovementResponse200 = {
+	data: void;
+	status: 200;
+};
 
-export type postApiGoalCreateMovementResponse = (postApiGoalCreateMovementResponseSuccess)
+export type postApiGoalCreateMovementResponseSuccess = postApiGoalCreateMovementResponse200 & {
+	headers: Headers;
+};
+
+export type postApiGoalCreateMovementResponse = postApiGoalCreateMovementResponseSuccess;
 
 export const getPostApiGoalCreateMovementUrl = () => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateMovement`;
+};
 
+export const postApiGoalCreateMovement = async (
+	movementCreate: MovementCreate,
+	options?: RequestInit,
+): Promise<postApiGoalCreateMovementResponse> => {
+	return cFetch<postApiGoalCreateMovementResponse>(getPostApiGoalCreateMovementUrl(), {
+		...options,
+		method: "POST",
+		headers: { "Content-Type": "application/json", ...options?.headers },
+		body: JSON.stringify(movementCreate),
+	});
+};
 
-
-
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateMovement`
-}
-
-export const postApiGoalCreateMovement = async (movementCreate: MovementCreate, options?: RequestInit): Promise<postApiGoalCreateMovementResponse> => {
-
-  return cFetch<postApiGoalCreateMovementResponse>(getPostApiGoalCreateMovementUrl(),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      movementCreate,)
-  }
-);}
-
-
-
-
-export const getPostApiGoalCreateMovementMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
-  return (_: Key, { arg }: { arg: MovementCreate }) => {
-    return postApiGoalCreateMovement(arg, options);
-  }
-}
+export const getPostApiGoalCreateMovementMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
+	return (_: Key, { arg }: { arg: MovementCreate }) => {
+		return postApiGoalCreateMovement(arg, options);
+	};
+};
 export const getPostApiGoalCreateMovementMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateMovement`] as const;
 
-export type PostApiGoalCreateMovementMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalCreateMovement>>>
+export type PostApiGoalCreateMovementMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalCreateMovement>>>;
 
-export const usePostApiGoalCreateMovement = <TError = unknown>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiGoalCreateMovement>>, TError, Key, MovementCreate, Awaited<ReturnType<typeof postApiGoalCreateMovement>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
-) => {
+export const usePostApiGoalCreateMovement = <TError = unknown>(options?: {
+	swr?: SWRMutationConfiguration<
+		Awaited<ReturnType<typeof postApiGoalCreateMovement>>,
+		TError,
+		Key,
+		MovementCreate,
+		Awaited<ReturnType<typeof postApiGoalCreateMovement>>
+	> & { swrKey?: string };
+	request?: SecondParameter<typeof cFetch>;
+}) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const swrKey = swrOptions?.swrKey ?? getPostApiGoalCreateMovementMutationKey();
+	const swrFn = getPostApiGoalCreateMovementMutationFetcher(requestOptions);
 
-  const swrKey = swrOptions?.swrKey ?? getPostApiGoalCreateMovementMutationKey();
-  const swrFn = getPostApiGoalCreateMovementMutationFetcher(requestOptions);
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
-
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type postApiGoalDeleteResponse200 = {
-  data: void
-  status: 200
-}
-
-export type postApiGoalDeleteResponseSuccess = (postApiGoalDeleteResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type postApiGoalDeleteResponse200 = {
+	data: void;
+	status: 200;
+};
 
-export type postApiGoalDeleteResponse = (postApiGoalDeleteResponseSuccess)
+export type postApiGoalDeleteResponseSuccess = postApiGoalDeleteResponse200 & {
+	headers: Headers;
+};
 
-export const getPostApiGoalDeleteUrl = (params?: PostApiGoalDeleteParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type postApiGoalDeleteResponse = postApiGoalDeleteResponseSuccess;
 
-  Object.entries(params || {}).forEach(([key, value]) => {
+export const getPostApiGoalDeleteUrl = (params?: PostApiGoalDeleteParams) => {
+	const normalizedParams = new URLSearchParams();
 
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
+	Object.entries(params || {}).forEach(([key, value]) => {
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? "null" : value.toString());
+		}
+	});
 
-  const stringifiedParams = normalizedParams.toString();
+	const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Delete?${stringifiedParams}` : `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Delete`
-}
+	return stringifiedParams.length > 0
+		? `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Delete?${stringifiedParams}`
+		: `${import.meta.env.VITE_API_ORIGIN}/api/Goal/Delete`;
+};
 
 export const postApiGoalDelete = async (params?: PostApiGoalDeleteParams, options?: RequestInit): Promise<postApiGoalDeleteResponse> => {
-
-  return cFetch<postApiGoalDeleteResponse>(getPostApiGoalDeleteUrl(params),
-  {
-    ...options,
-    method: 'POST'
-
-
-  }
-);}
-
-
-
+	return cFetch<postApiGoalDeleteResponse>(getPostApiGoalDeleteUrl(params), {
+		...options,
+		method: "POST",
+	});
+};
 
 export const getPostApiGoalDeleteMutationFetcher = (params?: PostApiGoalDeleteParams, options?: SecondParameter<typeof cFetch>) => {
-  return (_: Key, __: { arg: Arguments }) => {
-    return postApiGoalDelete(params, options);
-  }
-}
-export const getPostApiGoalDeleteMutationKey = (params?: PostApiGoalDeleteParams,) => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/Delete`, ...(params ? [params]: [])] as const;
+	return (_: Key, __: { arg: Arguments }) => {
+		return postApiGoalDelete(params, options);
+	};
+};
+export const getPostApiGoalDeleteMutationKey = (params?: PostApiGoalDeleteParams) =>
+	[`${import.meta.env.VITE_API_ORIGIN}/api/Goal/Delete`, ...(params ? [params] : [])] as const;
 
-export type PostApiGoalDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalDelete>>>
+export type PostApiGoalDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof postApiGoalDelete>>>;
 
 export const usePostApiGoalDelete = <TError = unknown>(
-  params?: PostApiGoalDeleteParams, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiGoalDelete>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiGoalDelete>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
+	params?: PostApiGoalDeleteParams,
+	options?: {
+		swr?: SWRMutationConfiguration<
+			Awaited<ReturnType<typeof postApiGoalDelete>>,
+			TError,
+			Key,
+			Arguments,
+			Awaited<ReturnType<typeof postApiGoalDelete>>
+		> & { swrKey?: string };
+		request?: SecondParameter<typeof cFetch>;
+	},
 ) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const swrKey = swrOptions?.swrKey ?? getPostApiGoalDeleteMutationKey(params);
+	const swrFn = getPostApiGoalDeleteMutationFetcher(params, requestOptions);
 
-  const swrKey = swrOptions?.swrKey ?? getPostApiGoalDeleteMutationKey(params);
-  const swrFn = getPostApiGoalDeleteMutationFetcher(params, requestOptions);
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
-
-  return {
-    swrKey,
-    ...query
-  }
-}
+	return {
+		swrKey,
+		...query,
+	};
+};
