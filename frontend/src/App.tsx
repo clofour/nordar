@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router";
+import { Link, Outlet, useLocation } from "react-router";
 import { AppShell, Burger, Group, NavLink } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconLayoutDashboard, IconCalendar, IconSparkles, IconNotes } from "@tabler/icons-react";
@@ -33,7 +33,8 @@ export default function App() {
             <AppShell.Navbar p="md">
                 {navLinks.map((link) => (
                     <NavLink
-                        href={link.href}
+                        component={Link}
+                        to={link.href}
                         label={link.label}
                         leftSection={<link.icon size={18} />}
                         active={location.pathname.startsWith(link.href)}

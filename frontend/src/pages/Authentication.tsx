@@ -21,7 +21,6 @@ function Authentication() {
     return (
         <Container size={420} my={40}>
             <Paper withBorder shadow="sm" p={22} mt={30} radius="md">
-                <>
 
                 <Center>
                     <Logo layout={LogoLayout.Vertical} w="25%" />
@@ -49,7 +48,6 @@ function Authentication() {
 
                 </Tabs>
 
-                </>
             </Paper>
         </Container>
 

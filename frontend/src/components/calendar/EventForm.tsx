@@ -155,7 +155,7 @@ export default function EventForm({ close }: EventFormProps) {
     return (
         <>
             <Alert variant="light" color="red" title="Error" icon={<IconExclamationCircle />} hidden={alert === ""}>{alert}</Alert>
-            <form onSubmit={form.onSubmit(handleSubmit, (errors) => console.log(errors))}>
+            <form onSubmit={form.onSubmit(handleSubmit)}>
                 <Stack>
                     <TextInput
                         label="Name"

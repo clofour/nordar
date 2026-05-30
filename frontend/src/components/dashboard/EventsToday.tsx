@@ -17,14 +17,11 @@ export default function EventsToday() {
             ...event,
             color: theme.colors.event
         }));
-        console.log("or", preprocessedEvents)
     const expandedEvents = expandRecurringEvents({
         events: preprocessedEvents,
         rangeStart: dayStart,
         rangeEnd: dayEnd
     }) as (ScheduleEventData & EventGet)[];
-
-    console.log("ex", expandedEvents);
 
     const cards = expandedEvents.map((event) => (
         <Event event={event} />

@@ -26,11 +26,15 @@ export default function Reflections() {
         />
     ));
 
+    function onClick() {
+
+    }
+
     return (
         <Stack>
             <Group justify="space-between">
                 <PageTitle name="Reflections" description="TBD" />
-                <Button leftSection={<IconPlus size={16} />} onClick={() => console.log("hi!")}>New Reflection</Button>
+                <Button leftSection={<IconPlus size={16} />} onClick={onClick}>New Reflection</Button>
             </Group>
             <Stats />
             <SimpleGrid cols={3} h="100%">

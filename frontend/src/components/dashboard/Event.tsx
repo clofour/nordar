@@ -28,7 +28,7 @@ export default function Event({ event }: EventProps) {
         if (response?.data) {
             setChecked(getBoolFromState(response.data.eventState));
         }
-    }, [response?.data.eventState])
+    }, [response?.data?.eventState])
 
     const onChange = async (checkBoxEvent: React.ChangeEvent<HTMLInputElement>) => {
         const newCheckboxValue = checkBoxEvent.currentTarget.checked;

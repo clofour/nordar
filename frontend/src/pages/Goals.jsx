@@ -13,6 +13,15 @@ import { IconExclamationCircle } from "@tabler/icons-react";
 import CreateMovementForm from "@/components/goals/MovementForm";
 import { capitalize } from "@/helpers";
 
+const GoalAddButton = ({ text, type, parentId }) => (
+  <UnstyledButton w="100%" onClick={() => onGoalAdd(type, parentId)}>
+    <Group gap="md">
+      <IconPlus size={12} />
+      <Text size="xs" c="dimmed">{text}</Text>
+    </Group>
+  </UnstyledButton>
+)
+
 export default function Goals() {
   const [opened, { open, close }] = useDisclosure(false);
   const [activeGoalId, setActiveGoalId] = useState("");
@@ -28,15 +37,6 @@ export default function Goals() {
     open();
   }
 
-  const GoalAddButton = ({ text, type, parentId }) => (
-    <UnstyledButton w="100%" onClick={() => onGoalAdd(type, parentId)}>
-      <Group gap="md">
-        <IconPlus size={12} />
-        <Text size="xs" c="dimmed">{text}</Text>
-      </Group>
-    </UnstyledButton>
-  )
-
   const { data: response, error, isLoading, mutate } = useGetApiGoalGet();
 
   const goalIndex = {};
@@ -45,26 +45,17 @@ export default function Goals() {
     const currentDepth = goalHierarchy[depth];
     const nextDepth = goalHierarchy[depth + 1] + "s";
 
-    console.log(goals, depth);
-    console.log(nextDepth)
-
     for (const goal of goals) {
-      console.log("obj", goal)
-      console.log("id", goal.id)
       goalIndex[goal.id] = {
         type: currentDepth,
         goal: goal
       };
 
-      console.log("nd", goal[nextDepth])
       indexGoals(goal[nextDepth] ?? [], depth + 1);
     }
   }
   indexGoals(response?.data ?? [], 0);
 
-
-  console.log("i", goalIndex);
-  console.log("curr", goalIndex[activeGoalId]?.goal)
   return (
     <Stack>
       <Group justify="space-between">
