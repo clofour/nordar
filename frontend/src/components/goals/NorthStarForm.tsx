@@ -5,14 +5,14 @@ import { PostApiGoalCreateNorthStarBody } from "@/api/endpoints/goal/goal.zod.js
 import { getErrorMessage } from "@/data/error";
 import type { NorthStarCreate } from "@/api/models";
 
-interface CreateNorthStarFormProps {
+interface NorthStarFormProps {
 	flow: "create" | "edit";
 	close: () => void;
 	setAlert: (alert: string) => void;
 	initialValues?: NorthStarCreate;
 }
 
-export default function CreateNorthStarForm({ close, setAlert, initialValues }: CreateNorthStarFormProps) {
+export default function NorthStarForm({ close, setAlert, initialValues }: NorthStarFormProps) {
 	const form = useForm({
 		mode: "uncontrolled",
 		initialValues: initialValues,

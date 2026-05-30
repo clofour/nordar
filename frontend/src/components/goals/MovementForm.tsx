@@ -5,14 +5,14 @@ import { PostApiGoalCreateMovementBody } from "@/api/endpoints/goal/goal.zod.js"
 import { getErrorMessage } from "@/data/error";
 import type { MovementCreate } from "@/api/models";
 
-interface CreateMovementFormProps {
+interface MovementFormProps {
 	close: () => void;
 	setAlert: (alert: string) => void;
 	parentId: string;
 	initialValues?: MovementCreate;
 }
 
-export default function CreateMovementForm({ close, setAlert, parentId, initialValues }: CreateMovementFormProps) {
+export default function MovementForm({ close, setAlert, parentId, initialValues }: MovementFormProps) {
 	const formSchema = PostApiGoalCreateMovementBody.omit({
 		bearingId: true,
 	});

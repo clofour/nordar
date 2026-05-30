@@ -5,9 +5,9 @@ import PageTitle from "@/components/shared/PageTitle";
 import { useState } from "react";
 import GoalCard from "@/components/goals/GoalCard";
 import { theme } from "@/data/theme";
-import CreateNorthStarForm from "@/components/goals/NorthStarForm";
-import CreateBearingForm from "@/components/goals/BearingForm";
-import CreateMovementForm from "@/components/goals/MovementForm";
+import NorthStarForm from "@/components/goals/NorthStarForm";
+import BearingForm from "@/components/goals/BearingForm";
+import MovementForm from "@/components/goals/MovementForm";
 import { useGetApiGoalGet } from "@/api/endpoints/goal/goal";
 import { capitalize } from "@/helpers";
 
@@ -143,10 +143,10 @@ export default function Goals() {
 						{alert}
 					</Alert>
 					{activeForm === "northStar" && (
-						<CreateNorthStarForm close={close} setAlert={setAlert} initialValues={activeMode == "edit" ? goalIndex[activeGoalId].goal : null} />
+						<NorthStarForm close={close} setAlert={setAlert} initialValues={activeMode == "edit" ? goalIndex[activeGoalId].goal : null} />
 					)}
 					{activeForm === "bearing" && (
-						<CreateBearingForm
+						<BearingForm
 							close={close}
 							setAlert={setAlert}
 							parentId={activeParentId}
@@ -154,7 +154,7 @@ export default function Goals() {
 						/>
 					)}
 					{activeForm === "movement" && (
-						<CreateMovementForm
+						<MovementForm
 							close={close}
 							setAlert={setAlert}
 							parentId={activeParentId}
