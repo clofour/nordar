@@ -6,7 +6,7 @@ interface ItemProps {
 	date: string;
 }
 
-export default function Item({ name, eventId, date }: PointProps) {
+export default function Item({ name, eventId, date }: ItemProps) {
 	return (
 		<Paper>
 			<Text>{name}</Text>
