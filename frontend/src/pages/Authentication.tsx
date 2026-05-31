@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { Tabs, Alert, Paper, Container, Center } from "@mantine/core";
-import { IconLogin2, IconUserPlus, IconExclamationCircle } from "@tabler/icons-react";
+import { Tabs, Paper, Container, Center } from "@mantine/core";
+import { IconLogin2, IconUserPlus } from "@tabler/icons-react";
 import Logo, { LogoLayout } from "@/components/shared/Logo/Logo";
 import SignInForm from "@/components/auth/SignInForm";
 import SignUpForm from "@/components/auth/SignUpForm";
@@ -9,7 +9,6 @@ import SignUpForm from "@/components/auth/SignUpForm";
 function Authentication() {
 	const navigate = useNavigate();
 	const { tabValue } = useParams();
-	const [alert, setAlert] = useState("");
 	const [loading, setLoading] = useState(false);
 
 	return (
@@ -19,9 +18,6 @@ function Authentication() {
 					<Logo layout={LogoLayout.Vertical} size="xl" />
 				</Center>
 				<Tabs value={tabValue ?? null} onChange={(value) => navigate(`/auth/${value}`)}>
-					<Alert variant="light" color="red" title="Error" icon={<IconExclamationCircle />} hidden={alert === ""}>
-						{alert}
-					</Alert>
 
 					<Tabs.List grow>
 						<Tabs.Tab value="signin" leftSection={<IconLogin2 size={12} />} disabled={loading}>
@@ -33,11 +29,11 @@ function Authentication() {
 					</Tabs.List>
 
 					<Tabs.Panel value="signin" pt="sm">
-						<SignInForm setAlert={setAlert} setLoading={setLoading} loading={loading} />
+						<SignInForm setLoading={setLoading} loading={loading} />
 					</Tabs.Panel>
 
 					<Tabs.Panel value="signup" pt="sm">
-						<SignUpForm setAlert={setAlert} setLoading={setLoading} loading={loading} />
+						<SignUpForm setLoading={setLoading} loading={loading} />
 					</Tabs.Panel>
 				</Tabs>
 			</Paper>

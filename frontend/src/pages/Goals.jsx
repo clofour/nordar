@@ -29,7 +29,6 @@ export default function Goals() {
 	const [activeMode, setActiveMode] = useState("create");
 	const [activeForm, setActiveForm] = useState("northStar");
 	const [activeParentId, setActiveParentId] = useState("");
-	const [alert, setAlert] = useState("");
 
 	const onGoalAdd = (type, parentId) => {
 		setActiveMode("create");
@@ -146,12 +145,11 @@ export default function Goals() {
 						{alert}
 					</Alert>
 					{activeForm === "northStar" && (
-						<NorthStarForm close={close} setAlert={setAlert} initialValues={activeMode == "edit" ? goalIndex[activeGoalId].goal : null} />
+						<NorthStarForm close={close} initialValues={activeMode == "edit" ? goalIndex[activeGoalId].goal : null} />
 					)}
 					{activeForm === "bearing" && (
 						<BearingForm
 							close={close}
-							setAlert={setAlert}
 							parentId={activeParentId}
 							initialValues={activeMode == "edit" ? goalIndex[activeGoalId].goal : null}
 						/>
@@ -159,7 +157,6 @@ export default function Goals() {
 					{activeForm === "movement" && (
 						<MovementForm
 							close={close}
-							setAlert={setAlert}
 							parentId={activeParentId}
 							initialValues={activeMode == "edit" ? goalIndex[activeGoalId].goal : null}
 							setActiveGoalId={setActiveGoalId}

@@ -9,12 +9,16 @@ import {
 	useGetApiEventGetOnetimeInstanceStateOnetimeEventId,
 	useGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurence,
 } from "@/api/endpoints/event/event";
+import { NotificationType, useNotification } from "@/helpers";
+import { getErrorMessage } from "@/data/error";
 
 interface EventProps {
 	event: ScheduleEventData & EventGet;
 }
 
 export default function Event({ event }: EventProps) {
+	const notify = useNotification();
+
 	const [checked, setChecked] = useState(false);
 	function getBoolFromState(state: EventState) {
 		const stateBoolMap = {
@@ -59,12 +63,14 @@ export default function Event({ event }: EventProps) {
 				new Date(event.recurrenceId).toISOString(),
 				requestData,
 			);
+		} else {
+			throw Error("Incorrect schema on Event object.");
 		}
 
 		if (response && response.status === 200) {
 			setChecked(newCheckboxValue);
 		} else {
-			console.log("Error");
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
 		}
 	};
 

@@ -5,10 +5,13 @@ import { IconLayoutDashboard, IconCalendar, IconSparkles, IconNotes, IconLogout 
 import Logo, { LogoLayout } from "@/components/shared/Logo/Logo";
 import { useAuth } from "./contexts/AuthContext";
 import { postApiAuthSignOut } from "./api/endpoints/auth/auth";
+import { NotificationType, useNotification } from "./helpers";
+import { getErrorMessage } from "./data/error";
 
 export default function App() {
-	const location = useLocation();
+	const notify = useNotification();
 
+	const location = useLocation();
 	const navLinks = [
 		{ href: "/app/dashboard", label: "Home", icon: IconLayoutDashboard },
 		{ href: "/app/calendar", label: "Calendar", icon: IconCalendar },
@@ -25,7 +28,7 @@ export default function App() {
 		if (response.status == 204) {
 			setAuthenticationState(false);
 		} else {
-			console.log("Error");
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
 		}
 	}
 

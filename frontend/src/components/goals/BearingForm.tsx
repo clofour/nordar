@@ -4,15 +4,17 @@ import { postApiGoalCreateBearing } from "@/api/endpoints/goal/goal.js";
 import { PostApiGoalCreateBearingBody } from "@/api/endpoints/goal/goal.zod.js";
 import { getErrorMessage } from "@/data/error";
 import type { BearingCreate } from "@/api/models";
+import { NotificationType, useNotification } from "@/helpers";
 
 interface BearingFormProps {
 	close: () => void;
-	setAlert: (alert: string) => void;
 	parentId: string;
 	initialValues?: BearingCreate;
 }
 
-export default function BearingForm({ close, setAlert, parentId, initialValues }: BearingFormProps) {
+export default function BearingForm({ close, parentId, initialValues }: BearingFormProps) {
+	const notify = useNotification();
+
 	const formSchema = PostApiGoalCreateBearingBody.omit({
 		northStarId: true,
 	});
@@ -32,7 +34,7 @@ export default function BearingForm({ close, setAlert, parentId, initialValues }
 		if (response.status === 200) {
 			close();
 		} else {
-			setAlert(response.data ?? getErrorMessage(response.status));
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
 		}
 	};
 

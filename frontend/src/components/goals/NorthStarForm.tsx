@@ -4,15 +4,17 @@ import { postApiGoalCreateNorthStar } from "@/api/endpoints/goal/goal.js";
 import { PostApiGoalCreateNorthStarBody } from "@/api/endpoints/goal/goal.zod.js";
 import { getErrorMessage } from "@/data/error";
 import type { NorthStarCreate } from "@/api/models";
+import { NotificationType, useNotification } from "@/helpers";
 
 interface NorthStarFormProps {
 	flow: "create" | "edit";
 	close: () => void;
-	setAlert: (alert: string) => void;
 	initialValues?: NorthStarCreate;
 }
 
-export default function NorthStarForm({ close, setAlert, initialValues }: NorthStarFormProps) {
+export default function NorthStarForm({ close, initialValues }: NorthStarFormProps) {
+	const notify = useNotification();
+
 	const form = useForm({
 		mode: "uncontrolled",
 		initialValues: initialValues,
@@ -25,7 +27,7 @@ export default function NorthStarForm({ close, setAlert, initialValues }: NorthS
 		if (response.status === 200) {
 			close();
 		} else {
-			setAlert(response.data ?? getErrorMessage(response.status));
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
 		}
 	};
 

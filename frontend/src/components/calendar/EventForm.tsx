@@ -1,13 +1,11 @@
-import { Alert, Button, Checkbox, Group, Input, NumberInput, SegmentedControl, Select, Stack, TextInput } from "@mantine/core";
+import { Button, Checkbox, Group, Input, NumberInput, SegmentedControl, Select, Stack, TextInput } from "@mantine/core";
 import { useForm, schemaResolver } from "@mantine/form";
 import { DatePickerInput, TimePicker } from "@mantine/dates";
 import { getErrorMessage } from "@/data/error";
 import { postApiEventCreateOnetime, postApiEventCreateRecurring } from "@/api/endpoints/event/event";
 import { RecurrenceTypes, WeekDay } from "@/api/models";
 import { PostApiEventCreateOnetimeBody, PostApiEventCreateRecurringBody } from "@/api/endpoints/event/event.zod";
-import { IconExclamationCircle } from "@tabler/icons-react";
-import { useState } from "react";
-import { durationToMinutes } from "@/helpers";
+import { durationToMinutes, NotificationType, useNotification } from "@/helpers";
 import { EventTypes } from "@/metadata/events";
 
 interface EventFormProps {
@@ -28,10 +26,10 @@ interface EventValues {
 }
 
 export default function EventForm({ close }: EventFormProps) {
+	const notify = useNotification();
+
 	const tomorrowDate = new Date();
 	tomorrowDate.setDate(tomorrowDate.getDate() + 1);
-
-	const [alert, setAlert] = useState("");
 
 	const processValues = (values: EventValues) => {
 		return {
@@ -118,7 +116,7 @@ export default function EventForm({ close }: EventFormProps) {
 		if (response.status === 200) {
 			close();
 		} else {
-			setAlert(response.data ?? getErrorMessage(response.status));
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
 		}
 	};
 
@@ -158,9 +156,6 @@ export default function EventForm({ close }: EventFormProps) {
 
 	return (
 		<>
-			<Alert variant="light" color="red" title="Error" icon={<IconExclamationCircle />} hidden={alert === ""}>
-				{alert}
-			</Alert>
 			<form onSubmit={form.onSubmit(handleSubmit)}>
 				<Stack>
 					<TextInput

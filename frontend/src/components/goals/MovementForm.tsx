@@ -4,15 +4,17 @@ import { postApiGoalCreateMovement } from "@/api/endpoints/goal/goal.js";
 import { PostApiGoalCreateMovementBody } from "@/api/endpoints/goal/goal.zod.js";
 import { getErrorMessage } from "@/data/error";
 import type { MovementCreate } from "@/api/models";
+import { NotificationType, useNotification } from "@/helpers";
 
 interface MovementFormProps {
 	close: () => void;
-	setAlert: (alert: string) => void;
 	parentId: string;
 	initialValues?: MovementCreate;
 }
 
-export default function MovementForm({ close, setAlert, parentId, initialValues }: MovementFormProps) {
+export default function MovementForm({ close, parentId, initialValues }: MovementFormProps) {
+	const notify = useNotification();
+
 	const formSchema = PostApiGoalCreateMovementBody.omit({
 		bearingId: true,
 	});
@@ -32,7 +34,7 @@ export default function MovementForm({ close, setAlert, parentId, initialValues 
 		if (response.status === 200) {
 			close();
 		} else {
-			setAlert(response.data ?? getErrorMessage(response.status));
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
 		}
 	};
 

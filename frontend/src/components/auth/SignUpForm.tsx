@@ -1,6 +1,7 @@
 import { postApiAuthSignUp } from "@/api/endpoints/auth/auth.js";
 import { PostApiAuthSignUpBody } from "@/api/endpoints/auth/auth.zod.js";
 import { getErrorMessage } from "@/data/error";
+import { NotificationType, useNotification } from "@/helpers";
 import { Button, Checkbox, Group, PasswordInput, Progress, Stack, TextInput } from "@mantine/core";
 import { schemaResolver, useForm } from "@mantine/form";
 import { useState } from "react";
@@ -8,12 +9,13 @@ import { useNavigate } from "react-router";
 import zxcvbn from "zxcvbn";
 
 interface SignUpFormProps {
-	setAlert: (alert: string) => void;
 	setLoading: (state: boolean) => void;
 	loading: boolean;
 }
 
-export default function SignUpForm({ setAlert, setLoading, loading }: SignUpFormProps) {
+export default function SignUpForm({ setLoading, loading }: SignUpFormProps) {
+	const notify = useNotification();
+
 	const navigate = useNavigate();
 
 	const [strength, setStrength] = useState(0);
@@ -67,7 +69,7 @@ export default function SignUpForm({ setAlert, setLoading, loading }: SignUpForm
 			form.reset();
 			navigate("/auth/signin");
 		} else {
-			setAlert(response.data ?? getErrorMessage(response.status));
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
 		}
 		setLoading(false);
 	};

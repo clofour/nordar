@@ -2,17 +2,19 @@ import { postApiAuthSignIn } from "@/api/endpoints/auth/auth.js";
 import { PostApiAuthSignInBody } from "@/api/endpoints/auth/auth.zod.js";
 import { useAuth } from "@/contexts/AuthContext";
 import { getErrorMessage } from "@/data/error";
+import { NotificationType, useNotification } from "@/helpers";
 import { Button, Group, PasswordInput, Stack, TextInput } from "@mantine/core";
 import { schemaResolver, useForm } from "@mantine/form";
 import { useNavigate } from "react-router";
 
 interface SignInFormProps {
-	setAlert: (alert: string) => void;
 	setLoading: (state: boolean) => void;
 	loading: boolean;
 }
 
-export default function SignInForm({ setAlert, setLoading, loading }: SignInFormProps) {
+export default function SignInForm({ setLoading, loading }: SignInFormProps) {
+	const notify = useNotification();
+
 	const { setAuthenticationState } = useAuth();
 	
 	const formSchema = PostApiAuthSignInBody.omit({});
@@ -31,7 +33,7 @@ export default function SignInForm({ setAlert, setLoading, loading }: SignInForm
 		if (response.status === 200) {
 			setAuthenticationState(true);
 		} else {
-			setAlert(response.data ?? getErrorMessage(response.status));
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
 		}
 		setLoading(false);
 	};

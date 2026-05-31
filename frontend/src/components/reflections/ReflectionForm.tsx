@@ -5,6 +5,8 @@ import type { ReflectionCreate } from "@/api/models";
 import { PostApiReflectionCreateBody } from "@/api/endpoints/reflection/reflection.zod";
 import { postApiReflectionCreate } from "@/api/endpoints/reflection/reflection";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
+import { NotificationType, useNotification } from "@/helpers";
+import { getErrorMessage } from "@/data/error";
 
 interface ReflectionFormProps {
 	flow: "create" | "edit";
@@ -80,6 +82,8 @@ function InputGroup({ form, type, label, description }: InputGroupProps) {
 }
 
 export default function ReflectionForm({ close, initialValues }: ReflectionFormProps) {
+	const notify = useNotification();
+
 	const form = useForm({
 		mode: "uncontrolled",
 		initialValues: initialValues ?? {
@@ -96,7 +100,7 @@ export default function ReflectionForm({ close, initialValues }: ReflectionFormP
 		if (response.status === 200) {
 			close();
 		} else {
-			console.log("Error");
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
 		}
 	};
 

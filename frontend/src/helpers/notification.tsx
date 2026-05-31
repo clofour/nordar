@@ -31,7 +31,7 @@ const notificationConfigs = {
 export function useNotification() {
 	const theme = useMantineTheme();
 
-	return (message: string, type: NotificationType) => {
+	return (type: NotificationType, message="An error has occurred. Please try again later.")  => {
 		const notificationConfig = notificationConfigs[type];
 
 		const colors = defaultVariantColorsResolver({
@@ -41,7 +41,6 @@ export function useNotification() {
 		});
 		const Icon = notificationConfig["icon"]
 
-		console.log(colors);
 		notifications.show({
 			message: message,
 			position: "top-center",
