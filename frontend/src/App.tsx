@@ -22,7 +22,7 @@ export default function App() {
 				<Group h="100%" px="md">
 					<Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
 					<Group gap="sm">
-						<Logo layout={LogoLayout.Horizontal} h="100%" />
+						<Logo layout={LogoLayout.Horizontal} size="xl" />
 					</Group>
 				</Group>
 			</AppShell.Header>
