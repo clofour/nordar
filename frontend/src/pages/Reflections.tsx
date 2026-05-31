@@ -11,8 +11,7 @@ import { IconPlus } from "@tabler/icons-react";
 export default function Reflections() {
 	const [opened, { open, close }] = useDisclosure(false);
 
-	// const { data: response, error, isLoading, mutate } = useGetApiReflectionList();
-	const response = getGetApiReflectionListResponseMock();
+	const { data: response, error, isLoading, mutate } = useGetApiReflectionList();
 
 	const aspects = [
 		{ label: "Wins", value: "positive" },
@@ -20,8 +19,8 @@ export default function Reflections() {
 		{ label: "Next Steps", value: "improvement" },
 	] as const;
 
-	// const reflections = response?.data ?? [];
-	const reflections = response ?? [];
+	const reflections = response?.data ?? [];
+
 	const bars = aspects.map((aspect) => <Bar key={aspect.value} label={aspect.label} value={aspect.value} reflections={reflections} />);
 
 	return (
