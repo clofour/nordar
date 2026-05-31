@@ -4,17 +4,17 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import type { EventGetRecurringEventGetType } from './eventGetRecurringEventGetType';
-import type { RecurrenceGet } from './recurrenceGet';
+import type { EventGetRecurringEventGetType } from "./eventGetRecurringEventGetType";
+import type { RecurrenceGet } from "./recurrenceGet";
 
 export interface EventGetRecurringEventGet {
-  type: EventGetRecurringEventGetType;
-  recurrence: RecurrenceGet;
-  id: string;
-  /** @nullable */
-  movementId?: string | null;
-  /** @maxLength 200 */
-  title: string;
-  start: string;
-  end: string;
+	type: EventGetRecurringEventGetType;
+	recurrence: RecurrenceGet;
+	id: string;
+	/** @nullable */
+	movementId?: string | null;
+	/** @maxLength 200 */
+	title: string;
+	start: string;
+	end: string;
 }

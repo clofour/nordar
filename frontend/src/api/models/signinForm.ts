@@ -6,16 +6,16 @@
  */
 
 export interface SigninForm {
-  /**
-     * @minLength 3
-     * @maxLength 20
-     * @pattern ^[a-zA-Z0-9]+$
-     */
-  username: string;
-  /**
-     * @minLength 16
-     * @maxLength 64
-     * @pattern ^[a-zA-Z0-9]+$
-     */
-  password: string;
+	/**
+	 * @minLength 3
+	 * @maxLength 20
+	 * @pattern ^[a-zA-Z0-9]+$
+	 */
+	username: string;
+	/**
+	 * @minLength 16
+	 * @maxLength 64
+	 * @pattern ^[a-zA-Z0-9]+$
+	 */
+	password: string;
 }

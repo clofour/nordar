@@ -6,5 +6,5 @@
  */
 
 export type PostApiReflectionDeleteParams = {
-id?: string;
+	id?: string;
 };

@@ -5,15 +5,14 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type WeekDay = typeof WeekDay[keyof typeof WeekDay];
-
+export type WeekDay = (typeof WeekDay)[keyof typeof WeekDay];
 
 export const WeekDay = {
-  MO: 'MO',
-  TU: 'TU',
-  WE: 'WE',
-  TH: 'TH',
-  FR: 'FR',
-  SA: 'SA',
-  SU: 'SU',
+	MO: "MO",
+	TU: "TU",
+	WE: "WE",
+	TH: "TH",
+	FR: "FR",
+	SA: "SA",
+	SU: "SU",
 } as const;

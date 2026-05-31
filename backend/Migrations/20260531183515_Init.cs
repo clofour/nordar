@@ -31,6 +31,7 @@ namespace backend.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     AccessCode = table.Column<string>(type: "text", nullable: false),
+                    NextReflection = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -268,10 +269,10 @@ namespace backend.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     EventId = table.Column<Guid>(type: "uuid", nullable: false),
-                    EventOccurence = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    EventOccurence = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    EventState = table.Column<int>(type: "integer", nullable: false),
-                    ReflectionId = table.Column<Guid>(type: "uuid", nullable: false)
+                    EventState = table.Column<int>(type: "integer", nullable: true),
+                    ReflectionId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -286,8 +287,7 @@ namespace backend.Migrations
                         name: "FK_EventInstanceStates_Reflections_ReflectionId",
                         column: x => x.ReflectionId,
                         principalTable: "Reflections",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

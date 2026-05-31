@@ -6,11 +6,11 @@
  */
 
 export interface ReflectionGet {
-  id: string;
-  /** @nullable */
-  eventId?: string | null;
-  date: string;
-  positive: string[];
-  negative: string[];
-  improvement: string[];
+	id: string;
+	/** @nullable */
+	eventId?: string | null;
+	date: string;
+	positive: string[];
+	negative: string[];
+	improvement: string[];
 }

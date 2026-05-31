@@ -4,36 +4,36 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import type { RecurrenceTypes } from './recurrenceTypes';
-import type { WeekDay } from './weekDay';
+import type { RecurrenceTypes } from "./recurrenceTypes";
+import type { WeekDay } from "./weekDay";
 
 export interface RecurringEventCreate {
-  /** @pattern ^-?(?:0|[1-9]\d*)$ */
-  recurrenceAmount: number | string;
-  recurrenceType: RecurrenceTypes;
-  /** @nullable */
-  weekDays?: WeekDay[] | null;
-  /**
-     * @minimum 1
-     * @maximum 31
-     * @nullable
-     * @pattern ^-?(?:0|[1-9]\d*)$
-     */
-  monthDay?: number | string | null;
-  /**
-     * @minimum 1
-     * @maximum 12
-     * @nullable
-     * @pattern ^-?(?:0|[1-9]\d*)$
-     */
-  yearMonth?: number | string | null;
-  /** @nullable */
-  movementId?: string | null;
-  /** @maxLength 200 */
-  name: string;
-  startDate: string;
-  startTime: string;
-  timeZoneId: string;
-  /** @pattern ^-?(?:0|[1-9]\d*)$ */
-  duration: number | string;
+	/** @pattern ^-?(?:0|[1-9]\d*)$ */
+	recurrenceAmount: number | string;
+	recurrenceType: RecurrenceTypes;
+	/** @nullable */
+	weekDays?: WeekDay[] | null;
+	/**
+	 * @minimum 1
+	 * @maximum 31
+	 * @nullable
+	 * @pattern ^-?(?:0|[1-9]\d*)$
+	 */
+	monthDay?: number | string | null;
+	/**
+	 * @minimum 1
+	 * @maximum 12
+	 * @nullable
+	 * @pattern ^-?(?:0|[1-9]\d*)$
+	 */
+	yearMonth?: number | string | null;
+	/** @nullable */
+	movementId?: string | null;
+	/** @maxLength 200 */
+	name: string;
+	startDate: string;
+	startTime: string;
+	timeZoneId: string;
+	/** @pattern ^-?(?:0|[1-9]\d*)$ */
+	duration: number | string;
 }

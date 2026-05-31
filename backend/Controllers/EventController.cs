@@ -31,7 +31,7 @@ namespace backend.Controllers
             List<Event> events = await appDbContext.Events
                 .Where(e => e.UserId == user.Id)
                 .ToListAsync();
-            
+
             List<EventGet> eventsGet = new List<EventGet>();
             mapper.Map(events, eventsGet);
 
@@ -95,8 +95,9 @@ namespace backend.Controllers
             throw new NotImplementedException();
         }
 
-        [HttpPut("")]
-        public async Task<ActionResult> SetInstanceState(Guid eventId, DateTime eventOccurence, EventInstanceStateSet eventInstanceStateSet)
+        [HttpGet("onetime/{eventId}")]
+        [ProducesResponseType(typeof(EventInstanceStateGet), StatusCodes.Status200OK, "application/json")]
+        public async Task<ActionResult> GetOnetimeInstanceState([FromRoute] Guid eventId, DateTime eventOccurence)
         {
             User? user = await userManager.GetUserAsync(User);
             if (user == null)
@@ -104,11 +105,93 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            EventInstanceState eventInstanceState = appDbContext.EventInstanceStates.FirstOrDefault(obj => 
+            EventInstanceState eventInstanceState = await appDbContext.EventInstanceStates.FirstOrDefaultAsync(obj =>
+                obj.UserId == user.Id &&
+                obj.EventId == eventId)
+                ?? new EventInstanceState();
+
+            EventInstanceStateGet eventInstanceStateGet = new EventInstanceStateGet();
+            mapper.Map(eventInstanceState, eventInstanceStateGet);
+
+            return Ok(eventInstanceStateGet);
+        }
+
+        [HttpGet("recurring/{eventId}/{eventOccurence}")]
+        [ProducesResponseType(typeof(EventInstanceStateGet), StatusCodes.Status200OK, "application/json")]
+        public async Task<ActionResult> GetRecurringInstanceState([FromRoute] Guid eventId, [FromRoute] DateTime eventOccurence)
+        {
+            User? user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            EventInstanceState eventInstanceState = await appDbContext.EventInstanceStates.FirstOrDefaultAsync(obj =>
                 obj.UserId == user.Id &&
                 obj.EventId == eventId &&
-                obj.EventOccurence == eventOccurence,
-                new EventInstanceState());
+                obj.EventOccurence == eventOccurence)
+                ?? new EventInstanceState();
+
+            EventInstanceStateGet eventInstanceStateGet = new EventInstanceStateGet();
+            mapper.Map(eventInstanceState, eventInstanceStateGet);
+
+            return Ok(eventInstanceStateGet);
+        }
+
+        // [EndpointName("SetOnetimeInstanceState")]
+        [HttpPut("onetime/{eventId}")]
+        public async Task<ActionResult> SetOnetimeInstanceState([FromRoute] Guid eventId, [FromBody] EventInstanceStateSet eventInstanceStateSet)
+        {
+            User? user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            EventInstanceState? eventInstanceState = await appDbContext.EventInstanceStates.FirstOrDefaultAsync(obj =>
+                obj.UserId == user.Id &&
+                obj.EventId == eventId);
+
+            if (eventInstanceState == null)
+            {
+                eventInstanceState = new EventInstanceState();
+                eventInstanceState.UserId = user.Id;
+                eventInstanceState.EventId = eventId;
+
+                appDbContext.EventInstanceStates.Add(eventInstanceState);
+            }
+
+            mapper.Map(eventInstanceStateSet, eventInstanceState);
+            
+            await appDbContext.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        // [EndpointName("SetRecurringInstanceState")]
+        [HttpPut("recurring/{eventId}/{eventOccurence}")]
+        public async Task<ActionResult> SetRecurringInstanceState([FromRoute] Guid eventId, [FromRoute] DateTime? eventOccurence, [FromBody] EventInstanceStateSet eventInstanceStateSet)
+        {
+            User? user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            EventInstanceState? eventInstanceState = await appDbContext.EventInstanceStates.FirstOrDefaultAsync(obj =>
+                obj.UserId == user.Id &&
+                obj.EventId == eventId &&
+                obj.EventOccurence == eventOccurence);
+
+            if (eventInstanceState == null)
+            {
+                eventInstanceState = new EventInstanceState();
+                eventInstanceState.UserId = user.Id;
+                eventInstanceState.EventId = eventId;
+                eventInstanceState.EventOccurence = eventOccurence;
+
+                appDbContext.EventInstanceStates.Add(eventInstanceState);
+            }
 
             mapper.Map(eventInstanceStateSet, eventInstanceState);
 

@@ -51,6 +51,11 @@ builder.Services.AddCors(options =>
     });
 });
 
+// builder.Services.AddRouting(options =>
+// {
+//     options.LowercaseUrls = true;
+// });
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -158,6 +163,8 @@ builder.Services.AddAutoMapper(cfg =>
             });
         })
         .IncludeBase<Event, EventGet>();
+    cfg.CreateMap<EventInstanceStateSet, EventInstanceState>();
+    cfg.CreateMap<EventInstanceState, EventInstanceStateGet>();
 
     cfg.CreateMap<ReflectionCreate, Reflection>();
     cfg.CreateMap<Reflection, ReflectionGet>();

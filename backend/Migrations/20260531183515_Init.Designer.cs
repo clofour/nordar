@@ -13,7 +13,7 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260528194045_Init")]
+    [Migration("20260531183515_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -154,13 +154,13 @@ namespace backend.Migrations
                     b.Property<Guid>("EventId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("EventOccurence")
+                    b.Property<DateTime?>("EventOccurence")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("EventState")
+                    b.Property<int?>("EventState")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("ReflectionId")
+                    b.Property<Guid?>("ReflectionId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("UserId")
@@ -262,6 +262,9 @@ namespace backend.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("NextReflection")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("NormalizedEmail")
@@ -479,9 +482,7 @@ namespace backend.Migrations
                 {
                     b.HasOne("backend.Models.Reflection", "Reflection")
                         .WithMany()
-                        .HasForeignKey("ReflectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ReflectionId");
 
                     b.HasOne("backend.Models.User", "User")
                         .WithMany()
@@ -501,7 +502,7 @@ namespace backend.Migrations
                         .HasForeignKey("EventId");
 
                     b.HasOne("backend.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Reflections")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -576,6 +577,8 @@ namespace backend.Migrations
                     b.Navigation("Events");
 
                     b.Navigation("NorthStars");
+
+                    b.Navigation("Reflections");
                 });
 
             modelBuilder.Entity("backend.Models.RecurringEvent", b =>

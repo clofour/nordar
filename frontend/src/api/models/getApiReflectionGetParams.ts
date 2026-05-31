@@ -6,5 +6,5 @@
  */
 
 export type GetApiReflectionGetParams = {
-Id?: string;
+	Id?: string;
 };

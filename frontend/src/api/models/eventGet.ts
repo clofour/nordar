@@ -4,7 +4,7 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import type { EventGetOnetimeEventGet } from './eventGetOnetimeEventGet';
-import type { EventGetRecurringEventGet } from './eventGetRecurringEventGet';
+import type { EventGetOnetimeEventGet } from "./eventGetOnetimeEventGet";
+import type { EventGetRecurringEventGet } from "./eventGetRecurringEventGet";
 
 export type EventGet = EventGetOnetimeEventGet | EventGetRecurringEventGet;

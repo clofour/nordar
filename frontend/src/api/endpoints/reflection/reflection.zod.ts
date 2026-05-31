@@ -43,3 +43,5 @@ export const PostApiReflectionDeleteQueryParams = zod.object({
   "id": zod.string().uuid().optional()
 })
 
+export const PostApiReflectionPromptDataResponse = zod.string().datetime({"offset":true})
+

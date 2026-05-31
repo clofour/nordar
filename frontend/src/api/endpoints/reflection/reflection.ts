@@ -4,330 +4,404 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import useSwr from 'swr';
-import type {
-  Arguments,
-  Key,
-  SWRConfiguration
-} from 'swr';
 
-import useSWRMutation from 'swr/mutation';
-import type {
-  SWRMutationConfiguration
-} from 'swr/mutation';
+import type { Arguments, Key, SWRConfiguration } from "swr";
+import useSwr from "swr";
+import type { SWRMutationConfiguration } from "swr/mutation";
+import useSWRMutation from "swr/mutation";
+import { cFetch } from "../../../other/cfetch";
+import type { GetApiReflectionGetParams, PostApiReflectionDeleteParams, ReflectionCreate, ReflectionGet } from "../../models";
 
-import type {
-  GetApiReflectionGetParams,
-  PostApiReflectionDeleteParams,
-  ReflectionCreate,
-  ReflectionGet
-} from '../../models';
-
-import { cFetch } from '../../../other/cfetch';
-
-
-
-  type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 export type getApiReflectionGetResponse200 = {
-  data: ReflectionGet
-  status: 200
-}
-
-export type getApiReflectionGetResponseSuccess = (getApiReflectionGetResponse200) & {
-  headers: Headers;
+	data: ReflectionGet;
+	status: 200;
 };
-;
 
-export type getApiReflectionGetResponse = (getApiReflectionGetResponseSuccess)
+export type getApiReflectionGetResponseSuccess = getApiReflectionGetResponse200 & {
+	headers: Headers;
+};
 
-export const getGetApiReflectionGetUrl = (params?: GetApiReflectionGetParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type getApiReflectionGetResponse = getApiReflectionGetResponseSuccess;
 
-  Object.entries(params || {}).forEach(([key, value]) => {
+export const getGetApiReflectionGetUrl = (params?: GetApiReflectionGetParams) => {
+	const normalizedParams = new URLSearchParams();
 
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
+	Object.entries(params || {}).forEach(([key, value]) => {
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? "null" : value.toString());
+		}
+	});
 
-  const stringifiedParams = normalizedParams.toString();
+	const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Get?${stringifiedParams}` : `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Get`
-}
+	return stringifiedParams.length > 0
+		? `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Get?${stringifiedParams}`
+		: `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Get`;
+};
 
 export const getApiReflectionGet = async (params?: GetApiReflectionGetParams, options?: RequestInit): Promise<getApiReflectionGetResponse> => {
+	return cFetch<getApiReflectionGetResponse>(getGetApiReflectionGetUrl(params), {
+		...options,
+		method: "GET",
+	});
+};
 
-  return cFetch<getApiReflectionGetResponse>(getGetApiReflectionGetUrl(params),
-  {
-    ...options,
-    method: 'GET'
+export const getGetApiReflectionGetKey = (params?: GetApiReflectionGetParams) =>
+	[`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Get`, ...(params ? [params] : [])] as const;
 
-
-  }
-);}
-
-
-
-
-export const getGetApiReflectionGetKey = (params?: GetApiReflectionGetParams,) => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Get`, ...(params ? [params]: [])] as const;
-
-export type GetApiReflectionGetQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReflectionGet>>>
+export type GetApiReflectionGetQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReflectionGet>>>;
 
 export const useGetApiReflectionGet = <TError = unknown>(
-  params?: GetApiReflectionGetParams, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiReflectionGet>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof cFetch> }
+	params?: GetApiReflectionGetParams,
+	options?: {
+		swr?: SWRConfiguration<Awaited<ReturnType<typeof getApiReflectionGet>>, TError> & { swrKey?: Key; enabled?: boolean };
+		request?: SecondParameter<typeof cFetch>;
+	},
 ) => {
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const isEnabled = swrOptions?.enabled !== false
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetApiReflectionGetKey(params) : null);
-  const swrFn = () => getApiReflectionGet(params, requestOptions)
+	const isEnabled = swrOptions?.enabled !== false;
+	const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getGetApiReflectionGetKey(params) : null));
+	const swrFn = () => getApiReflectionGet(params, requestOptions);
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+	const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions);
 
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type getApiReflectionListResponse200 = {
-  data: ReflectionGet[]
-  status: 200
-}
-
-export type getApiReflectionListResponseSuccess = (getApiReflectionListResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type getApiReflectionListResponse200 = {
+	data: ReflectionGet[];
+	status: 200;
+};
 
-export type getApiReflectionListResponse = (getApiReflectionListResponseSuccess)
+export type getApiReflectionListResponseSuccess = getApiReflectionListResponse200 & {
+	headers: Headers;
+};
+
+export type getApiReflectionListResponse = getApiReflectionListResponseSuccess;
 
 export const getGetApiReflectionListUrl = () => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/List`;
+};
 
-
-
-
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/List`
-}
-
-export const getApiReflectionList = async ( options?: RequestInit): Promise<getApiReflectionListResponse> => {
-
-  return cFetch<getApiReflectionListResponse>(getGetApiReflectionListUrl(),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-
+export const getApiReflectionList = async (options?: RequestInit): Promise<getApiReflectionListResponse> => {
+	return cFetch<getApiReflectionListResponse>(getGetApiReflectionListUrl(), {
+		...options,
+		method: "GET",
+	});
+};
 
 export const getGetApiReflectionListKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/List`] as const;
 
-export type GetApiReflectionListQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReflectionList>>>
+export type GetApiReflectionListQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReflectionList>>>;
 
-export const useGetApiReflectionList = <TError = unknown>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getApiReflectionList>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof cFetch> }
-) => {
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+export const useGetApiReflectionList = <TError = unknown>(options?: {
+	swr?: SWRConfiguration<Awaited<ReturnType<typeof getApiReflectionList>>, TError> & { swrKey?: Key; enabled?: boolean };
+	request?: SecondParameter<typeof cFetch>;
+}) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const isEnabled = swrOptions?.enabled !== false
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetApiReflectionListKey() : null);
-  const swrFn = () => getApiReflectionList(requestOptions)
+	const isEnabled = swrOptions?.enabled !== false;
+	const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getGetApiReflectionListKey() : null));
+	const swrFn = () => getApiReflectionList(requestOptions);
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+	const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions);
 
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type postApiReflectionCreateResponse200 = {
-  data: string
-  status: 200
-}
-
-export type postApiReflectionCreateResponseSuccess = (postApiReflectionCreateResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type postApiReflectionCreateResponse200 = {
+	data: string;
+	status: 200;
+};
 
-export type postApiReflectionCreateResponse = (postApiReflectionCreateResponseSuccess)
+export type postApiReflectionCreateResponseSuccess = postApiReflectionCreateResponse200 & {
+	headers: Headers;
+};
+
+export type postApiReflectionCreateResponse = postApiReflectionCreateResponseSuccess;
 
 export const getPostApiReflectionCreateUrl = () => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Create`;
+};
 
+export const postApiReflectionCreate = async (
+	reflectionCreate: ReflectionCreate,
+	options?: RequestInit,
+): Promise<postApiReflectionCreateResponse> => {
+	return cFetch<postApiReflectionCreateResponse>(getPostApiReflectionCreateUrl(), {
+		...options,
+		method: "POST",
+		headers: { "Content-Type": "application/json", ...options?.headers },
+		body: JSON.stringify(reflectionCreate),
+	});
+};
 
-
-
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Create`
-}
-
-export const postApiReflectionCreate = async (reflectionCreate: ReflectionCreate, options?: RequestInit): Promise<postApiReflectionCreateResponse> => {
-
-  return cFetch<postApiReflectionCreateResponse>(getPostApiReflectionCreateUrl(),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      reflectionCreate,)
-  }
-);}
-
-
-
-
-export const getPostApiReflectionCreateMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
-  return (_: Key, { arg }: { arg: ReflectionCreate }) => {
-    return postApiReflectionCreate(arg, options);
-  }
-}
+export const getPostApiReflectionCreateMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
+	return (_: Key, { arg }: { arg: ReflectionCreate }) => {
+		return postApiReflectionCreate(arg, options);
+	};
+};
 export const getPostApiReflectionCreateMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Create`] as const;
 
-export type PostApiReflectionCreateMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReflectionCreate>>>
+export type PostApiReflectionCreateMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReflectionCreate>>>;
 
-export const usePostApiReflectionCreate = <TError = unknown>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiReflectionCreate>>, TError, Key, ReflectionCreate, Awaited<ReturnType<typeof postApiReflectionCreate>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
-) => {
+export const usePostApiReflectionCreate = <TError = unknown>(options?: {
+	swr?: SWRMutationConfiguration<
+		Awaited<ReturnType<typeof postApiReflectionCreate>>,
+		TError,
+		Key,
+		ReflectionCreate,
+		Awaited<ReturnType<typeof postApiReflectionCreate>>
+	> & { swrKey?: string };
+	request?: SecondParameter<typeof cFetch>;
+}) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const swrKey = swrOptions?.swrKey ?? getPostApiReflectionCreateMutationKey();
+	const swrFn = getPostApiReflectionCreateMutationFetcher(requestOptions);
 
-  const swrKey = swrOptions?.swrKey ?? getPostApiReflectionCreateMutationKey();
-  const swrFn = getPostApiReflectionCreateMutationFetcher(requestOptions);
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
-
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type postApiReflectionUpdateResponse200 = {
-  data: void
-  status: 200
-}
-
-export type postApiReflectionUpdateResponseSuccess = (postApiReflectionUpdateResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type postApiReflectionUpdateResponse200 = {
+	data: void;
+	status: 200;
+};
 
-export type postApiReflectionUpdateResponse = (postApiReflectionUpdateResponseSuccess)
+export type postApiReflectionUpdateResponseSuccess = postApiReflectionUpdateResponse200 & {
+	headers: Headers;
+};
+
+export type postApiReflectionUpdateResponse = postApiReflectionUpdateResponseSuccess;
 
 export const getPostApiReflectionUpdateUrl = () => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Update`;
+};
 
+export const postApiReflectionUpdate = async (options?: RequestInit): Promise<postApiReflectionUpdateResponse> => {
+	return cFetch<postApiReflectionUpdateResponse>(getPostApiReflectionUpdateUrl(), {
+		...options,
+		method: "POST",
+	});
+};
 
-
-
-  return `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Update`
-}
-
-export const postApiReflectionUpdate = async ( options?: RequestInit): Promise<postApiReflectionUpdateResponse> => {
-
-  return cFetch<postApiReflectionUpdateResponse>(getPostApiReflectionUpdateUrl(),
-  {
-    ...options,
-    method: 'POST'
-
-
-  }
-);}
-
-
-
-
-export const getPostApiReflectionUpdateMutationFetcher = ( options?: SecondParameter<typeof cFetch>) => {
-  return (_: Key, __: { arg: Arguments }) => {
-    return postApiReflectionUpdate(options);
-  }
-}
+export const getPostApiReflectionUpdateMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
+	return (_: Key, __: { arg: Arguments }) => {
+		return postApiReflectionUpdate(options);
+	};
+};
 export const getPostApiReflectionUpdateMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Update`] as const;
 
-export type PostApiReflectionUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReflectionUpdate>>>
+export type PostApiReflectionUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReflectionUpdate>>>;
 
-export const usePostApiReflectionUpdate = <TError = unknown>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiReflectionUpdate>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiReflectionUpdate>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
-) => {
+export const usePostApiReflectionUpdate = <TError = unknown>(options?: {
+	swr?: SWRMutationConfiguration<
+		Awaited<ReturnType<typeof postApiReflectionUpdate>>,
+		TError,
+		Key,
+		Arguments,
+		Awaited<ReturnType<typeof postApiReflectionUpdate>>
+	> & { swrKey?: string };
+	request?: SecondParameter<typeof cFetch>;
+}) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const swrKey = swrOptions?.swrKey ?? getPostApiReflectionUpdateMutationKey();
+	const swrFn = getPostApiReflectionUpdateMutationFetcher(requestOptions);
 
-  const swrKey = swrOptions?.swrKey ?? getPostApiReflectionUpdateMutationKey();
-  const swrFn = getPostApiReflectionUpdateMutationFetcher(requestOptions);
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
-
-  return {
-    swrKey,
-    ...query
-  }
-}
-export type postApiReflectionDeleteResponse200 = {
-  data: void
-  status: 200
-}
-
-export type postApiReflectionDeleteResponseSuccess = (postApiReflectionDeleteResponse200) & {
-  headers: Headers;
+	return {
+		swrKey,
+		...query,
+	};
 };
-;
+export type postApiReflectionDeleteResponse200 = {
+	data: void;
+	status: 200;
+};
 
-export type postApiReflectionDeleteResponse = (postApiReflectionDeleteResponseSuccess)
+export type postApiReflectionDeleteResponseSuccess = postApiReflectionDeleteResponse200 & {
+	headers: Headers;
+};
 
-export const getPostApiReflectionDeleteUrl = (params?: PostApiReflectionDeleteParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type postApiReflectionDeleteResponse = postApiReflectionDeleteResponseSuccess;
 
-  Object.entries(params || {}).forEach(([key, value]) => {
+export const getPostApiReflectionDeleteUrl = (params?: PostApiReflectionDeleteParams) => {
+	const normalizedParams = new URLSearchParams();
 
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
+	Object.entries(params || {}).forEach(([key, value]) => {
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? "null" : value.toString());
+		}
+	});
 
-  const stringifiedParams = normalizedParams.toString();
+	const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Delete?${stringifiedParams}` : `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Delete`
-}
+	return stringifiedParams.length > 0
+		? `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Delete?${stringifiedParams}`
+		: `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Delete`;
+};
 
-export const postApiReflectionDelete = async (params?: PostApiReflectionDeleteParams, options?: RequestInit): Promise<postApiReflectionDeleteResponse> => {
-
-  return cFetch<postApiReflectionDeleteResponse>(getPostApiReflectionDeleteUrl(params),
-  {
-    ...options,
-    method: 'POST'
-
-
-  }
-);}
-
-
-
+export const postApiReflectionDelete = async (
+	params?: PostApiReflectionDeleteParams,
+	options?: RequestInit,
+): Promise<postApiReflectionDeleteResponse> => {
+	return cFetch<postApiReflectionDeleteResponse>(getPostApiReflectionDeleteUrl(params), {
+		...options,
+		method: "POST",
+	});
+};
 
 export const getPostApiReflectionDeleteMutationFetcher = (params?: PostApiReflectionDeleteParams, options?: SecondParameter<typeof cFetch>) => {
-  return (_: Key, __: { arg: Arguments }) => {
-    return postApiReflectionDelete(params, options);
-  }
-}
-export const getPostApiReflectionDeleteMutationKey = (params?: PostApiReflectionDeleteParams,) => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Delete`, ...(params ? [params]: [])] as const;
+	return (_: Key, __: { arg: Arguments }) => {
+		return postApiReflectionDelete(params, options);
+	};
+};
+export const getPostApiReflectionDeleteMutationKey = (params?: PostApiReflectionDeleteParams) =>
+	[`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Delete`, ...(params ? [params] : [])] as const;
 
-export type PostApiReflectionDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReflectionDelete>>>
+export type PostApiReflectionDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReflectionDelete>>>;
 
 export const usePostApiReflectionDelete = <TError = unknown>(
-  params?: PostApiReflectionDeleteParams, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof postApiReflectionDelete>>, TError, Key, Arguments, Awaited<ReturnType<typeof postApiReflectionDelete>>> & { swrKey?: string }, request?: SecondParameter<typeof cFetch>}
+	params?: PostApiReflectionDeleteParams,
+	options?: {
+		swr?: SWRMutationConfiguration<
+			Awaited<ReturnType<typeof postApiReflectionDelete>>,
+			TError,
+			Key,
+			Arguments,
+			Awaited<ReturnType<typeof postApiReflectionDelete>>
+		> & { swrKey?: string };
+		request?: SecondParameter<typeof cFetch>;
+	},
 ) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-  const {swr: swrOptions, request: requestOptions} = options ?? {}
+	const swrKey = swrOptions?.swrKey ?? getPostApiReflectionDeleteMutationKey(params);
+	const swrFn = getPostApiReflectionDeleteMutationFetcher(params, requestOptions);
 
-  const swrKey = swrOptions?.swrKey ?? getPostApiReflectionDeleteMutationKey(params);
-  const swrFn = getPostApiReflectionDeleteMutationFetcher(params, requestOptions);
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+	return {
+		swrKey,
+		...query,
+	};
+};
+export type postApiReflectionPromptDataResponse200 = {
+	data: string;
+	status: 200;
+};
 
-  return {
-    swrKey,
-    ...query
-  }
-}
+export type postApiReflectionPromptDataResponseSuccess = postApiReflectionPromptDataResponse200 & {
+	headers: Headers;
+};
+
+export type postApiReflectionPromptDataResponse = postApiReflectionPromptDataResponseSuccess;
+
+export const getPostApiReflectionPromptDataUrl = () => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/PromptData`;
+};
+
+export const postApiReflectionPromptData = async (options?: RequestInit): Promise<postApiReflectionPromptDataResponse> => {
+	return cFetch<postApiReflectionPromptDataResponse>(getPostApiReflectionPromptDataUrl(), {
+		...options,
+		method: "POST",
+	});
+};
+
+export const getPostApiReflectionPromptDataMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
+	return (_: Key, __: { arg: Arguments }) => {
+		return postApiReflectionPromptData(options);
+	};
+};
+export const getPostApiReflectionPromptDataMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/PromptData`] as const;
+
+export type PostApiReflectionPromptDataMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReflectionPromptData>>>;
+
+export const usePostApiReflectionPromptData = <TError = unknown>(options?: {
+	swr?: SWRMutationConfiguration<
+		Awaited<ReturnType<typeof postApiReflectionPromptData>>,
+		TError,
+		Key,
+		Arguments,
+		Awaited<ReturnType<typeof postApiReflectionPromptData>>
+	> & { swrKey?: string };
+	request?: SecondParameter<typeof cFetch>;
+}) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+	const swrKey = swrOptions?.swrKey ?? getPostApiReflectionPromptDataMutationKey();
+	const swrFn = getPostApiReflectionPromptDataMutationFetcher(requestOptions);
+
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
+
+	return {
+		swrKey,
+		...query,
+	};
+};
+export type postApiReflectionPromptResponse200 = {
+	data: void;
+	status: 200;
+};
+
+export type postApiReflectionPromptResponseSuccess = postApiReflectionPromptResponse200 & {
+	headers: Headers;
+};
+
+export type postApiReflectionPromptResponse = postApiReflectionPromptResponseSuccess;
+
+export const getPostApiReflectionPromptUrl = () => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Prompt`;
+};
+
+export const postApiReflectionPrompt = async (options?: RequestInit): Promise<postApiReflectionPromptResponse> => {
+	return cFetch<postApiReflectionPromptResponse>(getPostApiReflectionPromptUrl(), {
+		...options,
+		method: "POST",
+	});
+};
+
+export const getPostApiReflectionPromptMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
+	return (_: Key, __: { arg: Arguments }) => {
+		return postApiReflectionPrompt(options);
+	};
+};
+export const getPostApiReflectionPromptMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Prompt`] as const;
+
+export type PostApiReflectionPromptMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReflectionPrompt>>>;
+
+export const usePostApiReflectionPrompt = <TError = unknown>(options?: {
+	swr?: SWRMutationConfiguration<
+		Awaited<ReturnType<typeof postApiReflectionPrompt>>,
+		TError,
+		Key,
+		Arguments,
+		Awaited<ReturnType<typeof postApiReflectionPrompt>>
+	> & { swrKey?: string };
+	request?: SecondParameter<typeof cFetch>;
+}) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+	const swrKey = swrOptions?.swrKey ?? getPostApiReflectionPromptMutationKey();
+	const swrFn = getPostApiReflectionPromptMutationFetcher(requestOptions);
+
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
+
+	return {
+		swrKey,
+		...query,
+	};
+};

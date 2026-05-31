@@ -4,26 +4,26 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import type { MovementGet } from './movementGet';
+import type { MovementGet } from "./movementGet";
 
 export interface BearingGet {
-  northStarId: string;
-  /** @maxLength 5000 */
-  description: string;
-  /** @maxLength 5000 */
-  justification: string;
-  /**
-     * @maxLength 5000
-     * @nullable
-     */
-  strengths?: string | null;
-  /**
-     * @maxLength 5000
-     * @nullable
-     */
-  weaknesses?: string | null;
-  movements: MovementGet[];
-  id: string;
-  /** @maxLength 200 */
-  name: string;
+	northStarId: string;
+	/** @maxLength 5000 */
+	description: string;
+	/** @maxLength 5000 */
+	justification: string;
+	/**
+	 * @maxLength 5000
+	 * @nullable
+	 */
+	strengths?: string | null;
+	/**
+	 * @maxLength 5000
+	 * @nullable
+	 */
+	weaknesses?: string | null;
+	movements: MovementGet[];
+	id: string;
+	/** @maxLength 200 */
+	name: string;
 }

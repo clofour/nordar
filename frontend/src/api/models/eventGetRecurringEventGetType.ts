@@ -5,9 +5,8 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type EventGetRecurringEventGetType = typeof EventGetRecurringEventGetType[keyof typeof EventGetRecurringEventGetType];
-
+export type EventGetRecurringEventGetType = (typeof EventGetRecurringEventGetType)[keyof typeof EventGetRecurringEventGetType];
 
 export const EventGetRecurringEventGetType = {
-  recurring: 'recurring',
+	recurring: "recurring",
 } as const;
