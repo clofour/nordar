@@ -5,7 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-import type { Key, SWRConfiguration } from "swr";
+import type { Arguments, Key, SWRConfiguration } from "swr";
 import useSwr from "swr";
 import type { SWRMutationConfiguration } from "swr/mutation";
 import useSWRMutation from "swr/mutation";
@@ -124,43 +124,53 @@ export const usePostApiAuthSignIn = <TError = unknown>(options?: {
 		...query,
 	};
 };
-export type getApiAuthSignOutResponse200 = {
+export type postApiAuthSignOutResponse204 = {
 	data: void;
-	status: 200;
+	status: 204;
 };
 
-export type getApiAuthSignOutResponseSuccess = getApiAuthSignOutResponse200 & {
+export type postApiAuthSignOutResponseSuccess = postApiAuthSignOutResponse204 & {
 	headers: Headers;
 };
 
-export type getApiAuthSignOutResponse = getApiAuthSignOutResponseSuccess;
+export type postApiAuthSignOutResponse = postApiAuthSignOutResponseSuccess;
 
-export const getGetApiAuthSignOutUrl = () => {
+export const getPostApiAuthSignOutUrl = () => {
 	return `${import.meta.env.VITE_API_ORIGIN}/api/Auth/SignOut`;
 };
 
-export const getApiAuthSignOut = async (options?: RequestInit): Promise<getApiAuthSignOutResponse> => {
-	return cFetch<getApiAuthSignOutResponse>(getGetApiAuthSignOutUrl(), {
+export const postApiAuthSignOut = async (options?: RequestInit): Promise<postApiAuthSignOutResponse> => {
+	return cFetch<postApiAuthSignOutResponse>(getPostApiAuthSignOutUrl(), {
 		...options,
-		method: "GET",
+		method: "POST",
 	});
 };
 
-export const getGetApiAuthSignOutKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Auth/SignOut`] as const;
+export const getPostApiAuthSignOutMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
+	return (_: Key, __: { arg: Arguments }) => {
+		return postApiAuthSignOut(options);
+	};
+};
+export const getPostApiAuthSignOutMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Auth/SignOut`] as const;
 
-export type GetApiAuthSignOutQueryResult = NonNullable<Awaited<ReturnType<typeof getApiAuthSignOut>>>;
+export type PostApiAuthSignOutMutationResult = NonNullable<Awaited<ReturnType<typeof postApiAuthSignOut>>>;
 
-export const useGetApiAuthSignOut = <TError = unknown>(options?: {
-	swr?: SWRConfiguration<Awaited<ReturnType<typeof getApiAuthSignOut>>, TError> & { swrKey?: Key; enabled?: boolean };
+export const usePostApiAuthSignOut = <TError = unknown>(options?: {
+	swr?: SWRMutationConfiguration<
+		Awaited<ReturnType<typeof postApiAuthSignOut>>,
+		TError,
+		Key,
+		Arguments,
+		Awaited<ReturnType<typeof postApiAuthSignOut>>
+	> & { swrKey?: string };
 	request?: SecondParameter<typeof cFetch>;
 }) => {
 	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-	const isEnabled = swrOptions?.enabled !== false;
-	const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getGetApiAuthSignOutKey() : null));
-	const swrFn = () => getApiAuthSignOut(requestOptions);
+	const swrKey = swrOptions?.swrKey ?? getPostApiAuthSignOutMutationKey();
+	const swrFn = getPostApiAuthSignOutMutationFetcher(requestOptions);
 
-	const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions);
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
 	return {
 		swrKey,

@@ -54,18 +54,18 @@ export const getPostApiAuthSignInMockHandler = (
 	);
 };
 
-export const getGetApiAuthSignOutMockHandler = (
-	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<void> | void),
+export const getPostApiAuthSignOutMockHandler = (
+	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void),
 	options?: RequestHandlerOptions,
 ) => {
-	return http.get(
+	return http.post(
 		"*/api/Auth/SignOut",
-		async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+		async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
 			if (typeof overrideResponse === "function") {
 				await overrideResponse(info);
 			}
 
-			return new HttpResponse(null, { status: 200 });
+			return new HttpResponse(null, { status: 204 });
 		},
 		options,
 	);
@@ -93,6 +93,6 @@ export const getGetApiAuthIsAuthenticatedMockHandler = (
 export const getAuthMock = () => [
 	getPostApiAuthSignUpMockHandler(),
 	getPostApiAuthSignInMockHandler(),
-	getGetApiAuthSignOutMockHandler(),
+	getPostApiAuthSignOutMockHandler(),
 	getGetApiAuthIsAuthenticatedMockHandler(),
 ];

@@ -108,7 +108,8 @@ namespace backend.Controllers
         }
 
         [Authorize]
-        [HttpGet]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public new async Task<ActionResult> SignOut()
         {
             Task signOutTask = signInManager.SignOutAsync();
@@ -118,7 +119,7 @@ namespace backend.Controllers
             if (signOutTask.IsCompletedSuccessfully)
             {
                 logger.LogWarning("Success: {Username}", User.Identity?.Name);
-                return Ok();
+                return NoContent();
             }
             else
             {
