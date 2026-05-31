@@ -23,7 +23,7 @@ export default function EventsToday() {
 		rangeEnd: dayEnd,
 	}) as (ScheduleEventData & EventGet)[];
 
-	const cards = expandedEvents.map((event) => <Event event={event} />);
+	const cards = expandedEvents.map((event) => <Event key={event.id} event={event} />);
 
 	return <Stack gap="xs">{cards}</Stack>;
 }

@@ -28,7 +28,7 @@ export default function DailySummary() {
 	return (
 		<SimpleGrid cols={{ base: 2, lg: 4 }}>
 			{summaryCardData.map((card) => (
-				<SummaryCard card={card} />
+				<SummaryCard key={card.name} card={card} />
 			))}
 		</SimpleGrid>
 	);

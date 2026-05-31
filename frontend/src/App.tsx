@@ -29,6 +29,7 @@ export default function App() {
 			<AppShell.Navbar p="md">
 				{navLinks.map((link) => (
 					<NavLink
+						key={link.label}
 						component={Link}
 						to={link.href}
 						label={link.label}

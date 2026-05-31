@@ -22,7 +22,7 @@ const GoalAddButton = ({ text, type, parentId }) => (
 	</UnstyledButton>
 );
 
-export default function Goals() {
+export default function Goals() { // TODO: Convert to TypeScript, break down into components and add keys
 	const [opened, { open, close }] = useDisclosure(false);
 	const [activeGoalId, setActiveGoalId] = useState("");
 	const [activeMode, setActiveMode] = useState("create");

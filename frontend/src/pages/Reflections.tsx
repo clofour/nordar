@@ -22,7 +22,7 @@ export default function Reflections() {
 
 	// const reflections = response?.data ?? [];
 	const reflections = response ?? [];
-	const bars = aspects.map((aspect) => <Bar label={aspect.label} value={aspect.value} reflections={reflections} />);
+	const bars = aspects.map((aspect) => <Bar key={aspect.value} label={aspect.label} value={aspect.value} reflections={reflections} />);
 
 	return (
 		<Stack>

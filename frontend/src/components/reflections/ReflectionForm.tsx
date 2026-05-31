@@ -98,6 +98,7 @@ export default function ReflectionForm({ close, initialValues }: ReflectionFormP
                         <Stack gap="xs" mt="4">
                             {form.getValues().positive.map((item, index) => (
                                 <RemoveButton
+                                    key={index}
                                     form={form}
                                     type="positive"
                                     index={index}
