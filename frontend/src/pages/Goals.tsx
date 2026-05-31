@@ -1,4 +1,4 @@
-import { Alert, Stack, Text, Badge, UnstyledButton, Group, Button, Grid, Title } from "@mantine/core";
+import { Stack, Text, Badge, UnstyledButton, Group, Button, Grid, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconStar, IconPlus, IconCompass, IconActivity, IconExclamationCircle } from "@tabler/icons-react";
 import PageTitle from "@/components/shared/PageTitle";
@@ -8,10 +8,28 @@ import { theme } from "@/data/theme";
 import NorthStarForm from "@/components/goals/NorthStarForm";
 import BearingForm from "@/components/goals/BearingForm";
 import MovementForm from "@/components/goals/MovementForm";
-import { useGetApiGoalGet } from "@/api/endpoints/goal/goal";
+import { useGetApiGoalGet, type getApiGoalGetResponse200 } from "@/api/endpoints/goal/goal";
 import { capitalize } from "@/helpers";
+import { GoalType, type BearingGet, type MovementGet, type NorthStarGet } from "@/api/models";
 
-const GoalAddButton = ({ text, type, parentId }) => (
+export enum Mode {
+	Create = "Create",
+	Edit = "Edit"
+}
+
+type GoalIndexEntry =
+	| { type: "northStar"; goal: NorthStarGet }
+	| { type: "bearing"; goal: BearingGet }
+	| { type: "movement"; goal: MovementGet };
+
+interface GoalAddButtonProps {
+	onGoalAdd: (type: GoalType, parentId: string) => void;
+	text: string;
+	type: GoalType;
+	parentId: string;
+}
+
+const GoalAddButton = ({ onGoalAdd, text, type, parentId }: GoalAddButtonProps) => (
 	<UnstyledButton w="100%" onClick={() => onGoalAdd(type, parentId)}>
 		<Group gap="md">
 			<IconPlus size={12} />
@@ -22,16 +40,17 @@ const GoalAddButton = ({ text, type, parentId }) => (
 	</UnstyledButton>
 );
 
+
 export default function Goals() {
 	// TODO: Convert to TypeScript, break down into components and add keys
 	const [opened, { open, close }] = useDisclosure(false);
 	const [activeGoalId, setActiveGoalId] = useState("");
-	const [activeMode, setActiveMode] = useState("create");
-	const [activeForm, setActiveForm] = useState("northStar");
-	const [activeParentId, setActiveParentId] = useState("");
+	const [activeMode, setActiveMode] = useState<Mode>(Mode.Create);
+	const [activeForm, setActiveForm] = useState<GoalType>(GoalType.NorthStar);
+	const [activeParentId, setActiveParentId] = useState<string | undefined>("");
 
-	const onGoalAdd = (type, parentId) => {
-		setActiveMode("create");
+	const onGoalAdd = (type: GoalType, parentId?: string) => {
+		setActiveMode(Mode.Create);
 		setActiveForm(type);
 		setActiveParentId(parentId);
 		open();
@@ -39,10 +58,10 @@ export default function Goals() {
 
 	const { data: response, error, isLoading, mutate } = useGetApiGoalGet();
 
-	const goalIndex = {};
+	const goalIndex: Record<string, GoalIndexEntry> = {};
 	useMemo(() => {
 		const goalHierarchy = ["northStar", "bearing", "movement"];
-		const indexGoals = (goals, depth) => {
+		const indexGoals = (goals: NorthStarGet[], depth: number) => {
 			const currentDepth = goalHierarchy[depth];
 			const nextDepth = goalHierarchy[depth + 1] + "s";
 
@@ -62,7 +81,7 @@ export default function Goals() {
 		<Stack>
 			<Group justify="space-between">
 				<PageTitle name="Stars" description="Goals, represented as spots in the galaxy." />
-				<Button leftSection={<IconPlus size={16} />} onClick={() => onGoalAdd("northStar")}>
+				<Button leftSection={<IconPlus size={16} />} onClick={() => onGoalAdd(GoalType.NorthStar)}>
 					New North Star
 				</Button>
 			</Group>
@@ -78,7 +97,7 @@ export default function Goals() {
 											key={star.id}
 											id={star.id}
 											name={star.name}
-											type="northStar"
+											type={GoalType.NorthStar}
 											description={star.description}
 											left={<IconStar size={16} />}
 											right={
@@ -91,7 +110,7 @@ export default function Goals() {
 											setActiveGoalId={setActiveGoalId}
 										/>
 
-										<Stack pl="lg" style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal["northStar"] }}>
+										<Stack pl="lg" style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal[GoalType.NorthStar] }}>
 											{star.bearings &&
 												star.bearings.map((bearing) => (
 													<Stack gap="sm">
@@ -99,7 +118,7 @@ export default function Goals() {
 															key={bearing.id}
 															id={bearing.id}
 															name={bearing.name}
-															type="bearing"
+															type={GoalType.Bearing}
 															description={bearing.description}
 															left={<IconCompass size={14} />}
 															setActiveMode={setActiveMode}
@@ -110,7 +129,7 @@ export default function Goals() {
 														<Stack
 															gap="xs"
 															pl="lg"
-															style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal["bearing"] }}
+															style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal[GoalType.Bearing] }}
 														>
 															{bearing.movements &&
 																bearing.movements.map((movement) => (
@@ -118,8 +137,7 @@ export default function Goals() {
 																		key={movement.id}
 																		id={movement.id}
 																		name={movement.name}
-																		type="movement"
-																		description={movement.description}
+																		type={GoalType.Movement}
 																		left={<IconActivity size={14} />}
 																		setActiveMode={setActiveMode}
 																		setActiveForm={setActiveForm}
@@ -127,12 +145,12 @@ export default function Goals() {
 																	/>
 																))}
 
-															<GoalAddButton text="Add Movement" type="movement" parentId={bearing.id} />
+															<GoalAddButton onGoalAdd={onGoalAdd} text="Add Movement" type={GoalType.Movement} parentId={bearing.id} />
 														</Stack>
 													</Stack>
 												))}
 
-											<GoalAddButton text="Add Bearing" type="bearing" parentId={star.id} />
+											<GoalAddButton onGoalAdd={onGoalAdd} text="Add Bearing" type={GoalType.Bearing} parentId={star.id} />
 										</Stack>
 									</Stack>
 								</Stack>
@@ -141,24 +159,21 @@ export default function Goals() {
 				</Grid.Col>
 				<Grid.Col span={9}>
 					<Title order={3}>{`${capitalize(activeMode)} ${capitalize(activeForm)}`}</Title>
-					<Alert variant="light" color="red" title="Error" icon={<IconExclamationCircle />} hidden={alert === ""}>
-						{alert}
-					</Alert>
-					{activeForm === "northStar" && (
-						<NorthStarForm close={close} initialValues={activeMode == "edit" ? goalIndex[activeGoalId].goal : null} />
+					{activeForm === GoalType.NorthStar && (
+						<NorthStarForm mode={activeMode} close={close} initialValues={activeMode == Mode.Edit ? goalIndex[activeGoalId]?.goal : undefined} />
 					)}
-					{activeForm === "bearing" && (
+					{activeForm === GoalType.Bearing && (
 						<BearingForm
 							close={close}
 							parentId={activeParentId}
-							initialValues={activeMode == "edit" ? goalIndex[activeGoalId].goal : null}
+							initialValues={activeMode == Mode.Edit ? goalIndex[activeGoalId]?.goal : undefined}
 						/>
 					)}
-					{activeForm === "movement" && (
+					{activeForm === GoalType.Movement && (
 						<MovementForm
 							close={close}
 							parentId={activeParentId}
-							initialValues={activeMode == "edit" ? goalIndex[activeGoalId].goal : null}
+							initialValues={activeMode == Mode.Edit ? goalIndex[activeGoalId]?.goal : undefined}
 							setActiveGoalId={setActiveGoalId}
 						/>
 					)}

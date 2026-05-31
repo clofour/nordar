@@ -1,9 +1,11 @@
+import { GoalType } from "@/api/models";
+
 export const theme = {
 	colors: {
 		goal: {
-			northStar: "red",
-			bearing: "green",
-			movement: "blue",
+			[GoalType.NorthStar]: "red",
+			[GoalType.Bearing]: "green",
+			[GoalType.Movement]: "blue",
 		},
 		priority: {
 			High: "red",

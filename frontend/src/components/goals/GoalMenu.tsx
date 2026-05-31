@@ -1,18 +1,20 @@
 import { Menu, ActionIcon } from "@mantine/core";
 import { IconDots, IconPencil, IconTrash } from "@tabler/icons-react";
 import { postApiGoalDelete } from "@/api/endpoints/goal/goal.js";
+import type { GoalType } from "@/api/models";
+import { Mode } from "@/pages/Goals";
 
 interface GoalMenuProps {
 	id: string;
-	type: string;
-	setActiveMode: (mode: string) => void;
-	setActiveForm: (form: string) => void;
+	type: GoalType;
+	setActiveMode: (mode: Mode) => void;
+	setActiveForm: (form: GoalType) => void;
 	setActiveGoalId: (id: string) => void;
 }
 
 export default function GoalMenu({ id, type, setActiveMode, setActiveForm, setActiveGoalId }: GoalMenuProps) {
 	const editGoal = async () => {
-		setActiveMode("edit");
+		setActiveMode(Mode.Edit);
 		setActiveForm(type);
 		setActiveGoalId(id);
 	};

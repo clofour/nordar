@@ -5,11 +5,12 @@ import { PostApiGoalCreateNorthStarBody } from "@/api/endpoints/goal/goal.zod.js
 import { getErrorMessage } from "@/data/error";
 import type { NorthStarCreate } from "@/api/models";
 import { NotificationType, useNotification } from "@/helpers";
+import type { Mode } from "@/pages/Goals";
 
 interface NorthStarFormProps {
-	flow: "create" | "edit";
+	mode: Mode;
 	close: () => void;
-	initialValues?: NorthStarCreate;
+	initialValues?: NorthStarCreate | undefined;
 }
 
 export default function NorthStarForm({ close, initialValues }: NorthStarFormProps) {

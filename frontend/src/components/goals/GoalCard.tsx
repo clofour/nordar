@@ -2,16 +2,18 @@ import { Box, Paper, Text, Flex } from "@mantine/core";
 import GoalMenu from "@/components/goals/GoalMenu";
 import type { ReactElement } from "react";
 import { theme } from "@/data/theme.js";
+import type { Mode } from "@/pages/Goals";
+import type { GoalType } from "@/api/models";
 
 interface GoalCardProps {
 	id: string;
 	name: string;
-	type: "northStar" | "bearing" | "movement";
-	description: string;
+	type: GoalType;
+	description?: string;
 	left: ReactElement;
 	right?: ReactElement;
-	setActiveMode: (mode: string) => void;
-	setActiveForm: (form: string) => void;
+	setActiveMode: (mode: Mode) => void;
+	setActiveForm: (form: GoalType) => void;
 	setActiveGoalId: (id: string) => void;
 }
 
