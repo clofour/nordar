@@ -11,18 +11,18 @@ interface AuthenticationRequirementProps {
 export default function AuthenticationRequirement({ type, children }: AuthenticationRequirementProps) {
 	const { data: response, error, isLoading, mutate } = useGetApiAuthIsAuthenticated();
 
-	if (isLoading) return (
-		<Center w="100%" h="100%">
-			<Loader />
-		</Center>
-	)
+	if (isLoading)
+		return (
+			<Center w="100%" h="100%">
+				<Loader />
+			</Center>
+		);
 
 	if (type == true && response?.status != 200) {
-
-		return (<Navigate to="/auth" />)
+		return <Navigate to="/auth" />;
 	}
 	if (type == false && response?.status == 200) {
-		return (<Navigate to="/app" />)
+		return <Navigate to="/app" />;
 	}
 
 	return children ?? <Outlet />;

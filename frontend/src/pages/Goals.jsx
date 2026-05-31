@@ -22,7 +22,8 @@ const GoalAddButton = ({ text, type, parentId }) => (
 	</UnstyledButton>
 );
 
-export default function Goals() { // TODO: Convert to TypeScript, break down into components and add keys
+export default function Goals() {
+	// TODO: Convert to TypeScript, break down into components and add keys
 	const [opened, { open, close }] = useDisclosure(false);
 	const [activeGoalId, setActiveGoalId] = useState("");
 	const [activeMode, setActiveMode] = useState("create");
@@ -56,8 +57,7 @@ export default function Goals() { // TODO: Convert to TypeScript, break down int
 			}
 		};
 		indexGoals(response?.data ?? [], 0);
-	}, [response?.data])
-
+	}, [response?.data]);
 
 	return (
 		<Stack>

@@ -29,7 +29,7 @@ const SWRConfiguration = {
 	shouldRetryOnError: true,
 	errorRetryCount: 2,
 	errorRetryInterval: 3000,
-}
+};
 
 const theme = createTheme({
 	fontFamily: "Inter",
