@@ -1,9 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { MantineProvider, createTheme } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/schedule/styles.css";
+import "@mantine/notifications/styles.css"
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import "@/index.css";
 import NotFound from "@/pages/NotFound";
@@ -16,7 +18,8 @@ import Reflections from "@/pages/Reflections";
 import { SWRConfig } from "swr";
 import { assert } from "@/helpers";
 import AuthenticationRequirement from "@/components/shared/AuthenticationRequirement";
-import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider } from "@/contexts/AuthContext";
+import LandingPage from "./pages/LandingPage";
 
 const rootElement = document.getElementById("root");
 assert(rootElement != null, "Root element cannot be null.");
@@ -41,8 +44,11 @@ createRoot(rootElement).render(
 		<SWRConfig value={SWRConfiguration}>
 			<AuthProvider>
 				<MantineProvider theme={theme}>
+					<Notifications />
 					<BrowserRouter>
 						<Routes>
+							<Route path="" element={<LandingPage />} />
+
 							<Route element={<AuthenticationRequirement type={true} />}>
 								<Route path="app" element={<App />}>
 									<Route index element={<Navigate to="dashboard" replace />} />
