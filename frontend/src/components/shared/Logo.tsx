@@ -1,4 +1,4 @@
-import { Group, Image, Stack } from "@mantine/core";
+import { Group, Stack } from "@mantine/core";
 import Icon from "./Icon";
 import LogoText from "./LogoText";
 
@@ -17,7 +17,7 @@ export default function Logo({ layout, size="md" }: LogoProps) {
 	switch (layout) {
 		case LogoLayout.Vertical:
 			return (
-				<Stack>
+				<Stack align="center">
 					<Icon size={size} />
 					<LogoText size={size} />
 				</Stack>
@@ -25,7 +25,7 @@ export default function Logo({ layout, size="md" }: LogoProps) {
 
 		case LogoLayout.Horizontal:
 			return (
-				<Group>
+				<Group justify="center">
 					<Icon size={size} />
 					<LogoText size={size} />
 				</Group>

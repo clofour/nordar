@@ -16,7 +16,7 @@ function Authentication() {
 		<Container size={420} my={40}>
 			<Paper withBorder shadow="sm" p={22} mt={30} radius="md">
 				<Center>
-					<Logo layout={LogoLayout.Vertical} w="25%" />
+					<Logo layout={LogoLayout.Vertical} size="xl" />
 				</Center>
 				<Tabs value={tabValue ?? null} onChange={(value) => navigate(`/auth/${value}`)}>
 					<Alert variant="light" color="red" title="Error" icon={<IconExclamationCircle />} hidden={alert === ""}>
