@@ -44,6 +44,8 @@ export const getGetApiReflectionListResponseMock = (): ReflectionGet[] =>
 
 export const getPostApiReflectionCreateResponseMock = (): string => faker.word.sample();
 
+export const getPostApiReflectionPromptDataResponseMock = (): string => faker.word.sample();
+
 export const getGetApiReflectionGetMockHandler = (
 	overrideResponse?: ReflectionGet | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<ReflectionGet> | ReflectionGet),
 	options?: RequestHandlerOptions,
@@ -137,10 +139,49 @@ export const getPostApiReflectionDeleteMockHandler = (
 		options,
 	);
 };
+
+export const getPostApiReflectionPromptDataMockHandler = (
+	overrideResponse?: string | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<string> | string),
+	options?: RequestHandlerOptions,
+) => {
+	return http.post(
+		"*/api/Reflection/PromptData",
+		async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
+			return HttpResponse.json(
+				overrideResponse !== undefined
+					? typeof overrideResponse === "function"
+						? await overrideResponse(info)
+						: overrideResponse
+					: getPostApiReflectionPromptDataResponseMock(),
+				{ status: 200 },
+			);
+		},
+		options,
+	);
+};
+
+export const getPostApiReflectionPromptMockHandler = (
+	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void),
+	options?: RequestHandlerOptions,
+) => {
+	return http.post(
+		"*/api/Reflection/Prompt",
+		async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
+			if (typeof overrideResponse === "function") {
+				await overrideResponse(info);
+			}
+
+			return new HttpResponse(null, { status: 200 });
+		},
+		options,
+	);
+};
 export const getReflectionMock = () => [
 	getGetApiReflectionGetMockHandler(),
 	getGetApiReflectionListMockHandler(),
 	getPostApiReflectionCreateMockHandler(),
 	getPostApiReflectionUpdateMockHandler(),
 	getPostApiReflectionDeleteMockHandler(),
+	getPostApiReflectionPromptDataMockHandler(),
+	getPostApiReflectionPromptMockHandler(),
 ];

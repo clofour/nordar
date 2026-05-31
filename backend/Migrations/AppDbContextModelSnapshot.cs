@@ -261,6 +261,9 @@ namespace backend.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime>("NextReflection")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -496,7 +499,7 @@ namespace backend.Migrations
                         .HasForeignKey("EventId");
 
                     b.HasOne("backend.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Reflections")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -571,6 +574,8 @@ namespace backend.Migrations
                     b.Navigation("Events");
 
                     b.Navigation("NorthStars");
+
+                    b.Navigation("Reflections");
                 });
 
             modelBuilder.Entity("backend.Models.RecurringEvent", b =>
