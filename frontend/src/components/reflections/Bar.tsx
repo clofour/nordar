@@ -1,7 +1,7 @@
 import type { ReflectionGet } from "@/api/models";
 import { Card, Group, Paper, ScrollArea, Stack, Text } from "@mantine/core";
 import type { ReactNode } from "react";
-import Point from "@/components/reflections/Point";
+import Item from "@/components/reflections/Item";
 
 interface BarProps {
 	label: string;
@@ -17,7 +17,7 @@ export default function Bar({ label, value, reflections }: BarProps) {
 			date: reflection.date,
 		})),
 	);
-	const items = itemData.map((data) => <Point key={data.name} name={data.name} eventId={data.eventId} date={data.date} />);
+	const items = itemData.map((data) => <Item key={data.name} name={data.name} eventId={data.eventId} date={data.date} />);
 
 	return (
 		<Card w="100%" h="100%" shadow="sm" withBorder>

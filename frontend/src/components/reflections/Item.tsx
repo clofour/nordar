@@ -1,12 +1,12 @@
 import { Paper, Stack, Text } from "@mantine/core";
 
-interface PointProps {
+interface ItemProps {
 	name: string;
 	eventId: string | null | undefined;
 	date: string;
 }
 
-export default function Point({ name, eventId, date }: PointProps) {
+export default function Item({ name, eventId, date }: PointProps) {
 	return (
 		<Paper>
 			<Text>{name}</Text>
