@@ -2,7 +2,7 @@ import { Alert, Stack, Text, Badge, UnstyledButton, Group, Button, Grid, Title }
 import { useDisclosure } from "@mantine/hooks";
 import { IconStar, IconPlus, IconCompass, IconActivity, IconExclamationCircle } from "@tabler/icons-react";
 import PageTitle from "@/components/shared/PageTitle";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import GoalCard from "@/components/goals/GoalCard";
 import { theme } from "@/data/theme";
 import NorthStarForm from "@/components/goals/NorthStarForm";
@@ -40,21 +40,24 @@ export default function Goals() { // TODO: Convert to TypeScript, break down int
 	const { data: response, error, isLoading, mutate } = useGetApiGoalGet();
 
 	const goalIndex = {};
-	const goalHierarchy = ["northStar", "bearing", "movement"];
-	const indexGoals = (goals, depth) => {
-		const currentDepth = goalHierarchy[depth];
-		const nextDepth = goalHierarchy[depth + 1] + "s";
+	useMemo(() => {
+		const goalHierarchy = ["northStar", "bearing", "movement"];
+		const indexGoals = (goals, depth) => {
+			const currentDepth = goalHierarchy[depth];
+			const nextDepth = goalHierarchy[depth + 1] + "s";
 
-		for (const goal of goals) {
-			goalIndex[goal.id] = {
-				type: currentDepth,
-				goal: goal,
-			};
+			for (const goal of goals) {
+				goalIndex[goal.id] = {
+					type: currentDepth,
+					goal: goal,
+				};
 
-			indexGoals(goal[nextDepth] ?? [], depth + 1);
-		}
-	};
-	indexGoals(response?.data ?? [], 0);
+				indexGoals(goal[nextDepth] ?? [], depth + 1);
+			}
+		};
+		indexGoals(response?.data ?? [], 0);
+	}, [data.response])
+
 
 	return (
 		<Stack>
