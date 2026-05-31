@@ -1,4 +1,4 @@
-import { useGetApiAuthIsAuthenticated } from "@/api/endpoints/auth/auth";
+import { useAuth } from "@/contexts/AuthContext";
 import { Center, Loader } from "@mantine/core";
 import type { ReactNode } from "react";
 import { Navigate, Outlet } from "react-router";
@@ -9,19 +9,19 @@ interface AuthenticationRequirementProps {
 }
 
 export default function AuthenticationRequirement({ type, children }: AuthenticationRequirementProps) {
-	const { data: response, error, isLoading, mutate } = useGetApiAuthIsAuthenticated();
-
-	if (isLoading)
+	const { authenticationState } = useAuth();
+	
+	if (authenticationState == null)
 		return (
 			<Center w="100%" h="100%">
 				<Loader />
 			</Center>
 		);
 
-	if (type == true && response?.status != 200) {
+	if (type == true && authenticationState == false) {
 		return <Navigate to="/auth" />;
 	}
-	if (type == false && response?.status == 200) {
+	if (type == false && authenticationState == true) {
 		return <Navigate to="/app" />;
 	}
 

@@ -1,5 +1,6 @@
 import { postApiAuthSignIn } from "@/api/endpoints/auth/auth.js";
 import { PostApiAuthSignInBody } from "@/api/endpoints/auth/auth.zod.js";
+import { useAuth } from "@/contexts/AuthContext";
 import { getErrorMessage } from "@/data/error";
 import { Button, Group, PasswordInput, Stack, TextInput } from "@mantine/core";
 import { schemaResolver, useForm } from "@mantine/form";
@@ -12,8 +13,8 @@ interface SignInFormProps {
 }
 
 export default function SignInForm({ setAlert, setLoading, loading }: SignInFormProps) {
-	const navigate = useNavigate();
-
+	const { setAuthenticationState } = useAuth();
+	
 	const formSchema = PostApiAuthSignInBody.omit({});
 	const form = useForm({
 		mode: "uncontrolled",
@@ -28,7 +29,7 @@ export default function SignInForm({ setAlert, setLoading, loading }: SignInForm
 		const response = await postApiAuthSignIn(requestData);
 
 		if (response.status === 200) {
-			navigate("/app/dashboard");
+			setAuthenticationState(true);
 		} else {
 			setAlert(response.data ?? getErrorMessage(response.status));
 		}

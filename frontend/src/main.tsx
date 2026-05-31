@@ -16,6 +16,7 @@ import Reflections from "@/pages/Reflections";
 import { SWRConfig } from "swr";
 import { assert } from "@/helpers";
 import AuthenticationRequirement from "@/components/shared/AuthenticationRequirement";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const rootElement = document.getElementById("root");
 assert(rootElement != null, "Root element cannot be null.");
@@ -38,28 +39,30 @@ const theme = createTheme({
 createRoot(rootElement).render(
 	<StrictMode>
 		<SWRConfig value={SWRConfiguration}>
-			<MantineProvider theme={theme}>
-				<BrowserRouter>
-					<Routes>
-						<Route element={<AuthenticationRequirement type={true} />}>
-							<Route path="app" element={<App />}>
-								<Route index element={<Navigate to="dashboard" replace />} />
-								<Route path="dashboard" element={<Dashboard />} />
-								<Route path="calendar" element={<Calendar />} />
-								<Route path="goals" element={<Goals />} />
-								<Route path="reflections" element={<Reflections />} />
+			<AuthProvider>
+				<MantineProvider theme={theme}>
+					<BrowserRouter>
+						<Routes>
+							<Route element={<AuthenticationRequirement type={true} />}>
+								<Route path="app" element={<App />}>
+									<Route index element={<Navigate to="dashboard" replace />} />
+									<Route path="dashboard" element={<Dashboard />} />
+									<Route path="calendar" element={<Calendar />} />
+									<Route path="goals" element={<Goals />} />
+									<Route path="reflections" element={<Reflections />} />
+								</Route>
 							</Route>
-						</Route>
 
-						<Route path="auth" element={<AuthenticationRequirement type={false} />}>
-							<Route index element={<Navigate to="signin" replace />} />
-							<Route path=":tabValue" element={<Authentication />} />
-						</Route>
+							<Route path="auth" element={<AuthenticationRequirement type={false} />}>
+								<Route index element={<Navigate to="signin" replace />} />
+								<Route path=":tabValue" element={<Authentication />} />
+							</Route>
 
-						<Route path="*" element={<NotFound />} />
-					</Routes>
-				</BrowserRouter>
-			</MantineProvider>
+							<Route path="*" element={<NotFound />} />
+						</Routes>
+					</BrowserRouter>
+				</MantineProvider>
+			</AuthProvider>
 		</SWRConfig>
 	</StrictMode>,
 );
