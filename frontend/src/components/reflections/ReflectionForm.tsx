@@ -13,16 +13,23 @@ interface ReflectionFormProps {
 }
 
 interface AddButtonProps {
-    form: UseFormReturnType<any>;
+    form: UseFormReturnType<ReflectionCreate>;
     type: string;
     text: string;
 }
 
 interface RemoveButtonProps {
-    form: UseFormReturnType<any>;
+    form: UseFormReturnType<ReflectionCreate>;
     type: string;
     index: number;
     field: ReactNode;
+}
+
+interface InputGroupProps {
+    form: UseFormReturnType<ReflectionCreate>;
+    type: "positive" | "negative" | "improvement";
+    label: string;
+    description: string;
 }
 
 function AddButton({ form, type, text }: AddButtonProps) {
@@ -54,6 +61,39 @@ function RemoveButton({ form, type, index, field }: RemoveButtonProps) {
         </Group>
 
     )
+}
+
+function InputGroup({form, type, label, description}: InputGroupProps) {
+    return (<Input.Wrapper
+        label={label}
+        description={description}
+        required
+    >
+        <Stack gap="xs" mt="4">
+            {form.getValues()[type].map((_, index) => (
+                <RemoveButton
+                    key={index}
+                    form={form}
+                    type={type}
+                    index={index}
+                    field={
+                        <TextInput
+                            placeholder="Be healthy"
+                            key={form.key(`${type}.${index}`)}
+                            {...form.getInputProps(`${type}.${index}`)}
+                            w="100%"
+                        />
+                    }
+                />
+
+            ))}
+            <AddButton
+                form={form}
+                type={type}
+                text={`Add ${type}`}
+            />
+        </Stack>
+    </Input.Wrapper>)
 }
 
 export default function ReflectionForm({ close, initialValues }: ReflectionFormProps) {
@@ -90,52 +130,25 @@ export default function ReflectionForm({ close, initialValues }: ReflectionFormP
                         {...form.getInputProps("name")}
                     />
 
-                    <Input.Wrapper
+                    <InputGroup
+                        form={form}
+                        type="positive"
                         label="Wins"
                         description="What went well?"
-                        required
-                    >
-                        <Stack gap="xs" mt="4">
-                            {form.getValues().positive.map((item, index) => (
-                                <RemoveButton
-                                    key={index}
-                                    form={form}
-                                    type="positive"
-                                    index={index}
-                                    field={
-                                        <TextInput
-                                            placeholder="Be healthy"
-                                            key={form.key(`positive.${index}`)}
-                                            {...form.getInputProps(`positive.${index}`)}
-                                            w="100%"
-                                        />
-                                    }
-                                />
-
-                            ))}
-                            <AddButton
-                                form={form}
-                                type="positive"
-                                text="Add positive"
-                            />
-                        </Stack>
-                    </Input.Wrapper>
-
-                    <Textarea
-                        label="Challenges"
-                        description="What went wrong?"
-                        placeholder="Be healthy"
-                        required
-                        key={form.key("negative")}
-                        {...form.getInputProps("negative")}
                     />
-                    <Textarea
-                        label="Next Steps"
+
+                    <InputGroup
+                        form={form}
+                        type="negative"
+                        label="Challenges"
                         description="What could have been even better?"
-                        placeholder="Be healthy"
-                        required
-                        key={form.key("improvement")}
-                        {...form.getInputProps("improvement")}
+                    />
+
+                    <InputGroup
+                        form={form}
+                        type="improvement"
+                        label="Next Steps"
+                        description="What will you do next time?"
                     />
 
                     <Group justify="flex-end" mt="md">
