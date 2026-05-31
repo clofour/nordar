@@ -2,7 +2,7 @@ import { Link, Outlet, useLocation } from "react-router";
 import { AppShell, Burger, Group, NavLink } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconLayoutDashboard, IconCalendar, IconSparkles, IconNotes } from "@tabler/icons-react";
-import Logo, { LogoLayout } from "./components/shared/Logo";
+import Logo, { LogoLayout } from "@/components/shared/Logo/Logo";
 
 export default function App() {
 	const location = useLocation();

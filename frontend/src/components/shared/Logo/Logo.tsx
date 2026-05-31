@@ -13,7 +13,7 @@ type LogoProps = {
 	size?: string;
 };
 
-export default function Logo({ layout, size="md" }: LogoProps) {
+export default function Logo({ layout, size = "md" }: LogoProps) {
 	switch (layout) {
 		case LogoLayout.Vertical:
 			return (
@@ -34,5 +34,4 @@ export default function Logo({ layout, size="md" }: LogoProps) {
 		case LogoLayout.Text:
 			return <LogoText size={size} />;
 	}
-
 }

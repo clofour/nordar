@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { Tabs, Alert, Paper, Container, Center } from "@mantine/core";
 import { IconLogin2, IconUserPlus, IconExclamationCircle } from "@tabler/icons-react";
-import Logo, { LogoLayout } from "@/components/shared/Logo";
+import Logo, { LogoLayout } from "@/components/shared/Logo/Logo";
 import SignInForm from "@/components/auth/SignInForm";
 import SignUpForm from "@/components/auth/SignUpForm";
 
