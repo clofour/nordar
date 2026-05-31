@@ -9,7 +9,7 @@ import { NotificationType, useNotification } from "@/helpers";
 interface BearingFormProps {
 	close: () => void;
 	parentId: string;
-	initialValues?: BearingCreate;
+	initialValues?: BearingCreate | undefined;
 }
 
 export default function BearingForm({ close, parentId, initialValues }: BearingFormProps) {

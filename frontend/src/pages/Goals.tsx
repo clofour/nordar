@@ -18,9 +18,9 @@ export enum Mode {
 }
 
 type GoalIndexEntry =
-	| { type: "northStar"; goal: NorthStarGet }
-	| { type: "bearing"; goal: BearingGet }
-	| { type: "movement"; goal: MovementGet };
+	| { type: typeof GoalType.NorthStar; goal: NorthStarGet }
+	| { type: typeof GoalType.Bearing; goal: BearingGet }
+	| { type: typeof GoalType.Movement; goal: MovementGet };
 
 interface GoalAddButtonProps {
 	onGoalAdd: (type: GoalType, parentId: string) => void;
@@ -60,21 +60,18 @@ export default function Goals() {
 
 	const goalIndex: Record<string, GoalIndexEntry> = {};
 	useMemo(() => {
-		const goalHierarchy = ["northStar", "bearing", "movement"];
-		const indexGoals = (goals: NorthStarGet[], depth: number) => {
-			const currentDepth = goalHierarchy[depth];
-			const nextDepth = goalHierarchy[depth + 1] + "s";
+		for (const northStar of response?.data ?? []) {
+			goalIndex[northStar.id] = { type: GoalType.NorthStar, goal: northStar }
 
-			for (const goal of goals) {
-				goalIndex[goal.id] = {
-					type: currentDepth,
-					goal: goal,
-				};
+			for (const bearing of northStar.bearings) {
+				goalIndex[bearing.id] = { type: GoalType.NorthStar, goal: northStar }
 
-				indexGoals(goal[nextDepth] ?? [], depth + 1);
+				for (const movement of bearing.movements) {
+					goalIndex[movement.id] = { type: GoalType.NorthStar, goal: northStar }
+				}
+
 			}
-		};
-		indexGoals(response?.data ?? [], 0);
+		}
 	}, [response?.data]);
 
 	return (
@@ -160,21 +157,20 @@ export default function Goals() {
 				<Grid.Col span={9}>
 					<Title order={3}>{`${capitalize(activeMode)} ${capitalize(activeForm)}`}</Title>
 					{activeForm === GoalType.NorthStar && (
-						<NorthStarForm mode={activeMode} close={close} initialValues={activeMode == Mode.Edit ? goalIndex[activeGoalId]?.goal : undefined} />
+						<NorthStarForm mode={activeMode} close={close} initialValues={activeMode == Mode.Edit ? goalIndex[activeGoalId]?.goal as NorthStarGet : undefined} />
 					)}
 					{activeForm === GoalType.Bearing && (
 						<BearingForm
 							close={close}
-							parentId={activeParentId}
-							initialValues={activeMode == Mode.Edit ? goalIndex[activeGoalId]?.goal : undefined}
+							parentId={activeParentId!}
+							initialValues={activeMode == Mode.Edit ? goalIndex[activeGoalId]?.goal as BearingGet : undefined}
 						/>
 					)}
 					{activeForm === GoalType.Movement && (
 						<MovementForm
 							close={close}
-							parentId={activeParentId}
-							initialValues={activeMode == Mode.Edit ? goalIndex[activeGoalId]?.goal : undefined}
-							setActiveGoalId={setActiveGoalId}
+							parentId={activeParentId!}
+							initialValues={activeMode == Mode.Edit ? goalIndex[activeGoalId]?.goal as MovementGet : undefined}
 						/>
 					)}
 				</Grid.Col>

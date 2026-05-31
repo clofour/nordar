@@ -9,7 +9,7 @@ import { NotificationType, useNotification } from "@/helpers";
 interface MovementFormProps {
 	close: () => void;
 	parentId: string;
-	initialValues?: MovementCreate;
+	initialValues?: MovementCreate | undefined;
 }
 
 export default function MovementForm({ close, parentId, initialValues }: MovementFormProps) {
