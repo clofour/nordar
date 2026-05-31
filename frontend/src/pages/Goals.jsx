@@ -56,7 +56,7 @@ export default function Goals() { // TODO: Convert to TypeScript, break down int
 			}
 		};
 		indexGoals(response?.data ?? [], 0);
-	}, [data.response])
+	}, [response?.data])
 
 
 	return (
