@@ -15,6 +15,10 @@ import Calendar from "./pages/Calendar";
 import Goals from "./pages/Goals";
 import Reflections from "./pages/Reflections";
 import { SWRConfig } from "swr";
+import { assert } from "./helpers";
+
+const rootElement = document.getElementById("root");
+assert(rootElement != null, "Root element cannot be null.");
 
 const SWRConfiguration = {
 	refreshInterval: 0,
@@ -31,7 +35,7 @@ const theme = createTheme({
 	fontFamily: "Inter",
 });
 
-createRoot(document.getElementById("root")).render(
+createRoot(rootElement).render(
 	<StrictMode>
 		<SWRConfig value={SWRConfiguration}>
 			<MantineProvider theme={theme}>

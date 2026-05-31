@@ -1,3 +1,5 @@
+declare module "*.css" {}
+
 interface ImportMetaEnv {
 	readonly VITE_API_ORIGIN: string;
 }

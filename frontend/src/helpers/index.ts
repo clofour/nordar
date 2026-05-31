@@ -1,3 +1,9 @@
+export function assert(condition: boolean, message: string): asserts condition {
+	if (!condition) {
+		throw new Error(message);
+	}
+}
+
 export function capitalize(string: string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
