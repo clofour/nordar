@@ -37,6 +37,15 @@ const SWRConfiguration = {
 
 const theme = createTheme({
 	fontFamily: "Inter",
+	components: {
+		Notification: {
+			styles: {
+				root: {
+					padding: "4px 8px"
+				}
+			}
+		}
+	}
 });
 
 createRoot(rootElement).render(
@@ -44,7 +53,7 @@ createRoot(rootElement).render(
 		<SWRConfig value={SWRConfiguration}>
 			<AuthProvider>
 				<MantineProvider theme={theme}>
-					<Notifications />
+					<Notifications containerWidth="25%" />
 					<BrowserRouter>
 						<Routes>
 							<Route path="" element={<LandingPage />} />

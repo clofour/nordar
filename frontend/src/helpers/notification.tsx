@@ -1,3 +1,4 @@
+import { defaultVariantColorsResolver, useMantineTheme } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconAlertCircle, IconCircleCheck, IconExclamationCircle, IconInfoCircle } from "@tabler/icons-react";
 
@@ -8,28 +9,48 @@ export enum NotificationType {
 	Success
 }
 
-const notificationColors = {
-	[NotificationType.Error]: "red",
-	[NotificationType.Warning]: "yellow",
-	[NotificationType.Information]: "blue",
-	[NotificationType.Success]: "green",
+const notificationConfigs = {
+	[NotificationType.Error]: {
+		color: "red",
+		icon: IconAlertCircle,
+	},
+	[NotificationType.Warning]: {
+		color: "yellow",
+		icon: IconExclamationCircle
+	},
+	[NotificationType.Information]: {
+		color: "blue",
+		icon: IconInfoCircle
+	},
+	[NotificationType.Success]: {
+		color: "green",
+		icon: IconCircleCheck
+	}
 }
 
-const notificationIcons = {
-	[NotificationType.Error]: <IconAlertCircle />,
-	[NotificationType.Warning]: <IconExclamationCircle />,
-	[NotificationType.Information]: <IconInfoCircle />,
-	[NotificationType.Success]: <IconCircleCheck />,
-}
+export function useNotification() {
+	const theme = useMantineTheme();
 
-export function notify(message: string, type: NotificationType) {
-	notifications.show({
-		message: message,
-		position: "top-center",
-        icon: notificationIcons[type],
-		style: {
-			backgroundColor: notificationColors[type]
-		}
-	});
-}
+	return (message: string, type: NotificationType) => {
+		const notificationConfig = notificationConfigs[type];
 
+		const colors = defaultVariantColorsResolver({
+			color: notificationConfig["color"],
+			variant: "light",
+			theme: theme
+		});
+		const Icon = notificationConfig["icon"]
+
+		console.log(colors);
+		notifications.show({
+			message: message,
+			position: "top-center",
+			icon: <Icon size={16} color={colors["color"]} />,
+			color: colors["background"],
+			style: {
+				backgroundColor: colors["background"],
+				border: `1px solid ${colors["color"]}`
+			}
+		});
+	}
+}

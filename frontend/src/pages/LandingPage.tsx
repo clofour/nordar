@@ -1,10 +1,12 @@
-import { NotificationType, notify } from "@/helpers";
+import { NotificationType, useNotification } from "@/helpers";
 import { Button } from "@mantine/core";
 
 export default function LandingPage() {
+    const notify = useNotification();
+
     return (
         <Button
-            onClick={() => (notify("YOUR BANK IS BEING ROBBED", NotificationType.Error))}
+            onClick={() => (notify("YOUR BANK IS BEING ROBBEDYOUR BANK IS BEING R", NotificationType.Error))}
         />
     );
 }
