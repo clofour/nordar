@@ -38,13 +38,21 @@ export default function Event({ event }: EventProps) {
 		isLoading,
 		mutate,
 	} = event.type == "recurring" && "recurringEventId" in event && "recurrenceId" in event
-		? useGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurence(event.recurringEventId, new Date(event.recurrenceId).toISOString())
-		: useGetApiEventGetOnetimeInstanceStateOnetimeEventId(event.id);
+			? useGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurence(event.recurringEventId, new Date(event.recurrenceId).toISOString())
+			: useGetApiEventGetOnetimeInstanceStateOnetimeEventId(event.id);
 	useEffect(() => {
 		if (response?.data) {
 			setChecked(getBoolFromState(response.data.eventState));
 		}
 	}, [response?.data?.eventState]);
+
+	const prompt = () => {
+		const result = Math.random();
+
+		if (result < 0.5) {
+			
+		}
+	}
 
 	const onChange = async (checkBoxEvent: React.ChangeEvent<HTMLInputElement>) => {
 		const newCheckboxValue = checkBoxEvent.currentTarget.checked;
@@ -69,6 +77,10 @@ export default function Event({ event }: EventProps) {
 
 		if (response && response.status === 200) {
 			setChecked(newCheckboxValue);
+
+			if (newCheckboxValue == true) {
+				prompt();
+			}
 		} else {
 			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
 		}
