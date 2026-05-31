@@ -128,7 +128,8 @@ namespace backend.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpGet]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK, "text/plain")]
         public ActionResult IsAuthenticated()
         {
             return Ok();

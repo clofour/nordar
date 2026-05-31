@@ -5,12 +5,10 @@
  * OpenAPI spec version: 1.0.0
  */
 import { faker } from "@faker-js/faker";
-
-import { HttpResponse, http } from "msw";
 import type { RequestHandlerOptions } from "msw";
-
-import { GoalImportance } from "../../models";
+import { HttpResponse, http } from "msw";
 import type { GoalStats, NorthStarGet } from "../../models";
+import { GoalImportance } from "../../models";
 
 export const getGetApiGoalGetResponseMock = (): NorthStarGet[] =>
 	Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({

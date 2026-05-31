@@ -4,12 +4,12 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import useSwr from "swr";
+
 import type { Arguments, Key, SWRConfiguration } from "swr";
-
-import useSWRMutation from "swr/mutation";
+import useSwr from "swr";
 import type { SWRMutationConfiguration } from "swr/mutation";
-
+import useSWRMutation from "swr/mutation";
+import { cFetch } from "../../../other/cfetch";
 import type {
 	EventGet,
 	EventInstanceStateGet,
@@ -18,8 +18,6 @@ import type {
 	OnetimeEventCreate,
 	RecurringEventCreate,
 } from "../../models";
-
-import { cFetch } from "../../../other/cfetch";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

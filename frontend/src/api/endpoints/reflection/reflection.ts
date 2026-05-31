@@ -4,15 +4,13 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import useSwr from "swr";
+
 import type { Arguments, Key, SWRConfiguration } from "swr";
-
-import useSWRMutation from "swr/mutation";
+import useSwr from "swr";
 import type { SWRMutationConfiguration } from "swr/mutation";
-
-import type { GetApiReflectionGetParams, PostApiReflectionDeleteParams, ReflectionCreate, ReflectionGet } from "../../models";
-
+import useSWRMutation from "swr/mutation";
 import { cFetch } from "../../../other/cfetch";
+import type { GetApiReflectionGetParams, PostApiReflectionDeleteParams, ReflectionCreate, ReflectionGet } from "../../models";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

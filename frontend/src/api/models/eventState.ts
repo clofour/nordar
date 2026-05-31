@@ -8,7 +8,7 @@
 export type EventState = (typeof EventState)[keyof typeof EventState];
 
 export const EventState = {
-	Complete: "Complete",
-	Incomplete: "Incomplete",
 	Unknown: "Unknown",
+	Incomplete: "Incomplete",
+	Complete: "Complete",
 } as const;

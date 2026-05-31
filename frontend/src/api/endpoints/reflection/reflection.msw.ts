@@ -5,9 +5,8 @@
  * OpenAPI spec version: 1.0.0
  */
 import { faker } from "@faker-js/faker";
-
-import { HttpResponse, http } from "msw";
 import type { RequestHandlerOptions } from "msw";
+import { HttpResponse, http } from "msw";
 
 import type { ReflectionGet } from "../../models";
 

@@ -4,15 +4,13 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
+
+import type { Key, SWRConfiguration } from "swr";
 import useSwr from "swr";
-import type { Arguments, Key, SWRConfiguration } from "swr";
-
-import useSWRMutation from "swr/mutation";
 import type { SWRMutationConfiguration } from "swr/mutation";
-
-import type { SigninForm, SignupForm } from "../../models";
-
+import useSWRMutation from "swr/mutation";
 import { cFetch } from "../../../other/cfetch";
+import type { SigninForm, SignupForm } from "../../models";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -169,53 +167,43 @@ export const useGetApiAuthSignOut = <TError = unknown>(options?: {
 		...query,
 	};
 };
-export type postApiAuthIsAuthenticatedResponse200 = {
-	data: void;
+export type getApiAuthIsAuthenticatedResponse200 = {
+	data: string;
 	status: 200;
 };
 
-export type postApiAuthIsAuthenticatedResponseSuccess = postApiAuthIsAuthenticatedResponse200 & {
+export type getApiAuthIsAuthenticatedResponseSuccess = getApiAuthIsAuthenticatedResponse200 & {
 	headers: Headers;
 };
 
-export type postApiAuthIsAuthenticatedResponse = postApiAuthIsAuthenticatedResponseSuccess;
+export type getApiAuthIsAuthenticatedResponse = getApiAuthIsAuthenticatedResponseSuccess;
 
-export const getPostApiAuthIsAuthenticatedUrl = () => {
+export const getGetApiAuthIsAuthenticatedUrl = () => {
 	return `${import.meta.env.VITE_API_ORIGIN}/api/Auth/IsAuthenticated`;
 };
 
-export const postApiAuthIsAuthenticated = async (options?: RequestInit): Promise<postApiAuthIsAuthenticatedResponse> => {
-	return cFetch<postApiAuthIsAuthenticatedResponse>(getPostApiAuthIsAuthenticatedUrl(), {
+export const getApiAuthIsAuthenticated = async (options?: RequestInit): Promise<getApiAuthIsAuthenticatedResponse> => {
+	return cFetch<getApiAuthIsAuthenticatedResponse>(getGetApiAuthIsAuthenticatedUrl(), {
 		...options,
-		method: "POST",
+		method: "GET",
 	});
 };
 
-export const getPostApiAuthIsAuthenticatedMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, __: { arg: Arguments }) => {
-		return postApiAuthIsAuthenticated(options);
-	};
-};
-export const getPostApiAuthIsAuthenticatedMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Auth/IsAuthenticated`] as const;
+export const getGetApiAuthIsAuthenticatedKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Auth/IsAuthenticated`] as const;
 
-export type PostApiAuthIsAuthenticatedMutationResult = NonNullable<Awaited<ReturnType<typeof postApiAuthIsAuthenticated>>>;
+export type GetApiAuthIsAuthenticatedQueryResult = NonNullable<Awaited<ReturnType<typeof getApiAuthIsAuthenticated>>>;
 
-export const usePostApiAuthIsAuthenticated = <TError = unknown>(options?: {
-	swr?: SWRMutationConfiguration<
-		Awaited<ReturnType<typeof postApiAuthIsAuthenticated>>,
-		TError,
-		Key,
-		Arguments,
-		Awaited<ReturnType<typeof postApiAuthIsAuthenticated>>
-	> & { swrKey?: string };
+export const useGetApiAuthIsAuthenticated = <TError = unknown>(options?: {
+	swr?: SWRConfiguration<Awaited<ReturnType<typeof getApiAuthIsAuthenticated>>, TError> & { swrKey?: Key; enabled?: boolean };
 	request?: SecondParameter<typeof cFetch>;
 }) => {
 	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-	const swrKey = swrOptions?.swrKey ?? getPostApiAuthIsAuthenticatedMutationKey();
-	const swrFn = getPostApiAuthIsAuthenticatedMutationFetcher(requestOptions);
+	const isEnabled = swrOptions?.enabled !== false;
+	const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getGetApiAuthIsAuthenticatedKey() : null));
+	const swrFn = () => getApiAuthIsAuthenticated(requestOptions);
 
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
+	const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions);
 
 	return {
 		swrKey,
