@@ -28,7 +28,7 @@ export default function App() {
 		if (response.status == 204) {
 			setAuthenticationState(false);
 		} else {
-			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
 		}
 	}
 

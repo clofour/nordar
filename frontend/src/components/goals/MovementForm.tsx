@@ -34,7 +34,7 @@ export default function MovementForm({ close, parentId, initialValues }: Movemen
 		if (response.status === 200) {
 			close();
 		} else {
-			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
 		}
 	};
 

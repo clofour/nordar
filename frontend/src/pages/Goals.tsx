@@ -14,7 +14,7 @@ import { GoalType, type BearingGet, type MovementGet, type NorthStarGet } from "
 
 export enum Mode {
 	Create = "Create",
-	Edit = "Edit"
+	Edit = "Edit",
 }
 
 type GoalIndexEntry =
@@ -40,7 +40,6 @@ const GoalAddButton = ({ onGoalAdd, text, type, parentId }: GoalAddButtonProps) 
 	</UnstyledButton>
 );
 
-
 export default function Goals() {
 	// TODO: Convert to TypeScript, break down into components and add keys
 	const [opened, { open, close }] = useDisclosure(false);
@@ -61,15 +60,14 @@ export default function Goals() {
 	const goalIndex: Record<string, GoalIndexEntry> = {};
 	useMemo(() => {
 		for (const northStar of response?.data ?? []) {
-			goalIndex[northStar.id] = { type: GoalType.NorthStar, goal: northStar }
+			goalIndex[northStar.id] = { type: GoalType.NorthStar, goal: northStar };
 
 			for (const bearing of northStar.bearings) {
-				goalIndex[bearing.id] = { type: GoalType.NorthStar, goal: northStar }
+				goalIndex[bearing.id] = { type: GoalType.NorthStar, goal: northStar };
 
 				for (const movement of bearing.movements) {
-					goalIndex[movement.id] = { type: GoalType.NorthStar, goal: northStar }
+					goalIndex[movement.id] = { type: GoalType.NorthStar, goal: northStar };
 				}
-
 			}
 		}
 	}, [response?.data]);
@@ -107,7 +105,10 @@ export default function Goals() {
 											setActiveGoalId={setActiveGoalId}
 										/>
 
-										<Stack pl="lg" style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal[GoalType.NorthStar] }}>
+										<Stack
+											pl="lg"
+											style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal[GoalType.NorthStar] }}
+										>
 											{star.bearings &&
 												star.bearings.map((bearing) => (
 													<Stack gap="sm">
@@ -157,20 +158,24 @@ export default function Goals() {
 				<Grid.Col span={9}>
 					<Title order={3}>{`${capitalize(activeMode)} ${capitalize(activeForm)}`}</Title>
 					{activeForm === GoalType.NorthStar && (
-						<NorthStarForm mode={activeMode} close={close} initialValues={activeMode == Mode.Edit ? goalIndex[activeGoalId]?.goal as NorthStarGet : undefined} />
+						<NorthStarForm
+							mode={activeMode}
+							close={close}
+							initialValues={activeMode == Mode.Edit ? (goalIndex[activeGoalId]?.goal as NorthStarGet) : undefined}
+						/>
 					)}
 					{activeForm === GoalType.Bearing && (
 						<BearingForm
 							close={close}
 							parentId={activeParentId!}
-							initialValues={activeMode == Mode.Edit ? goalIndex[activeGoalId]?.goal as BearingGet : undefined}
+							initialValues={activeMode == Mode.Edit ? (goalIndex[activeGoalId]?.goal as BearingGet) : undefined}
 						/>
 					)}
 					{activeForm === GoalType.Movement && (
 						<MovementForm
 							close={close}
 							parentId={activeParentId!}
-							initialValues={activeMode == Mode.Edit ? goalIndex[activeGoalId]?.goal as MovementGet : undefined}
+							initialValues={activeMode == Mode.Edit ? (goalIndex[activeGoalId]?.goal as MovementGet) : undefined}
 						/>
 					)}
 				</Grid.Col>

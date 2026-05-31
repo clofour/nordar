@@ -34,7 +34,7 @@ export default function BearingForm({ close, parentId, initialValues }: BearingF
 		if (response.status === 200) {
 			close();
 		} else {
-			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
 		}
 	};
 

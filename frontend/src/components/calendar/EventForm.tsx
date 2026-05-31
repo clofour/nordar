@@ -116,7 +116,7 @@ export default function EventForm({ close }: EventFormProps) {
 		if (response.status === 200) {
 			close();
 		} else {
-			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
 		}
 	};
 

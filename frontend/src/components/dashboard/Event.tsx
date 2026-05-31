@@ -70,7 +70,7 @@ export default function Event({ event }: EventProps) {
 		if (response && response.status === 200) {
 			setChecked(newCheckboxValue);
 		} else {
-			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
 		}
 	};
 

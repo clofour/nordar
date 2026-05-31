@@ -6,7 +6,7 @@ export enum NotificationType {
 	Error,
 	Warning,
 	Information,
-	Success
+	Success,
 }
 
 const notificationConfigs = {
@@ -16,30 +16,30 @@ const notificationConfigs = {
 	},
 	[NotificationType.Warning]: {
 		color: "yellow",
-		icon: IconExclamationCircle
+		icon: IconExclamationCircle,
 	},
 	[NotificationType.Information]: {
 		color: "blue",
-		icon: IconInfoCircle
+		icon: IconInfoCircle,
 	},
 	[NotificationType.Success]: {
 		color: "green",
-		icon: IconCircleCheck
-	}
-}
+		icon: IconCircleCheck,
+	},
+};
 
 export function useNotification() {
 	const theme = useMantineTheme();
 
-	return (type: NotificationType, message="An error has occurred. Please try again later.")  => {
+	return (type: NotificationType, message = "An error has occurred. Please try again later.") => {
 		const notificationConfig = notificationConfigs[type];
 
 		const colors = defaultVariantColorsResolver({
 			color: notificationConfig["color"],
 			variant: "light",
-			theme: theme
+			theme: theme,
 		});
-		const Icon = notificationConfig["icon"]
+		const Icon = notificationConfig["icon"];
 
 		notifications.show({
 			message: message,
@@ -48,8 +48,8 @@ export function useNotification() {
 			color: colors["background"],
 			style: {
 				backgroundColor: colors["background"],
-				border: `1px solid ${colors["color"]}`
-			}
+				border: `1px solid ${colors["color"]}`,
+			},
 		});
-	}
+	};
 }

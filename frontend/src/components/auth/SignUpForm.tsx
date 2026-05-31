@@ -69,7 +69,7 @@ export default function SignUpForm({ setLoading, loading }: SignUpFormProps) {
 			form.reset();
 			navigate("/auth/signin");
 		} else {
-			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
 		}
 		setLoading(false);
 	};

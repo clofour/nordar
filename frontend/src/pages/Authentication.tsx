@@ -18,7 +18,6 @@ function Authentication() {
 					<Logo layout={LogoLayout.Vertical} size="xl" />
 				</Center>
 				<Tabs value={tabValue ?? null} onChange={(value) => navigate(`/auth/${value}`)}>
-
 					<Tabs.List grow>
 						<Tabs.Tab value="signin" leftSection={<IconLogin2 size={12} />} disabled={loading}>
 							Sign In

@@ -4,7 +4,6 @@ const errorMessages: Record<number, string> = {
 	403: "Access to this resource is restricted.",
 	404: "This resource could not be found. Please review input.",
 	500: "An error has occurred. Please try again later.",
-
 };
 
 export function getErrorMessage(code: number) {

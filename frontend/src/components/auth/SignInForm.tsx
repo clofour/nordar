@@ -16,7 +16,7 @@ export default function SignInForm({ setLoading, loading }: SignInFormProps) {
 	const notify = useNotification();
 
 	const { setAuthenticationState } = useAuth();
-	
+
 	const formSchema = PostApiAuthSignInBody.omit({});
 	const form = useForm({
 		mode: "uncontrolled",
@@ -33,7 +33,7 @@ export default function SignInForm({ setLoading, loading }: SignInFormProps) {
 		if (response.status === 200) {
 			setAuthenticationState(true);
 		} else {
-			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status))
+			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
 		}
 		setLoading(false);
 	};

@@ -5,7 +5,7 @@ import { Notifications } from "@mantine/notifications";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/schedule/styles.css";
-import "@mantine/notifications/styles.css"
+import "@mantine/notifications/styles.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import "@/index.css";
 import NotFound from "@/pages/NotFound";
@@ -41,11 +41,11 @@ const theme = createTheme({
 		Notification: {
 			styles: {
 				root: {
-					padding: "4px 8px"
-				}
-			}
-		}
-	}
+					padding: "4px 8px",
+				},
+			},
+		},
+	},
 });
 
 createRoot(rootElement).render(

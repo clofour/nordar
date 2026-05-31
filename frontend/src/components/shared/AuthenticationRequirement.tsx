@@ -10,7 +10,7 @@ interface AuthenticationRequirementProps {
 
 export default function AuthenticationRequirement({ type, children }: AuthenticationRequirementProps) {
 	const { authenticationState } = useAuth();
-	
+
 	if (authenticationState == null)
 		return (
 			<Center w="100%" h="100%">
