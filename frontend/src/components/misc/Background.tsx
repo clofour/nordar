@@ -1,6 +1,16 @@
 import { Box } from "@mantine/core";
 import { useEffect, useRef } from "react";
 
+type Star = {
+    x: number;
+    y: number;
+    radius: number;
+    hue: number;
+    saturation: number;
+    lightness: number;
+    alpha: number;
+}
+
 export default function Background() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -10,23 +20,39 @@ export default function Background() {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        const height = canvas.width = window.innerWidth;
-        const width = canvas.height = window.innerHeight;
+        const width = canvas.width = window.innerWidth;
+        const height = canvas.height = window.innerHeight;
 
-        let stars = [];
-        for (let i = 0; i < 100; i++) {
+        let stars: Star[] = [];
+        const starCount = (width * height) / 1000;
+        for (let i = 0; i < starCount; i++) {
             stars.push({
                 x: Math.random() * height,
-                y: Math.random() * width
+                y: Math.random() * width,
+                radius: Math.random() * 1.5,
+                hue: 190 + Math.random() * 80,
+                saturation: 10 + Math.random() * 30,
+                lightness: Math.random(),
+                alpha: Math.random()
             })
         }
 
-        for (const star of stars) {
-            ctx.beginPath();
-            ctx.arc(star.x, star.y, 3, 0, Math.PI * 2);
-            ctx.fillStyle = "blue";
-            ctx.fill();
+        function draw() {
+            if (!canvas || !ctx) return;
+
+            ctx.clearRect(0, 0, width, height);
+
+            for (const star of stars) {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${star.hue}, ${star.saturation}, ${star.lightness}, ${star.alpha})`;
+                ctx.fill();
+            }
+
+            requestAnimationFrame(draw);
         }
+
+        draw();
     }, [])
 
     return (
