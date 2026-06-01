@@ -7,6 +7,7 @@ import { useAuth } from "./contexts/AuthContext";
 import { postApiAuthSignOut } from "./api/endpoints/auth/auth";
 import { NotificationType, useNotification } from "./helpers";
 import { getErrorMessage } from "./data/error";
+import ThemeToggle from "./components/misc/ThemeToggle";
 
 export default function App() {
 	const notify = useNotification();
@@ -41,6 +42,7 @@ export default function App() {
 						<Logo layout={LogoLayout.Horizontal} size="xl" />
 					</Group>
 					<Group>
+						<ThemeToggle />
 						<ActionIcon variant="subtle" aria-label="Log Out" onClick={logout}>
 							<IconLogout />
 						</ActionIcon>
