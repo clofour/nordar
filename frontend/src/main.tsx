@@ -20,6 +20,7 @@ import { assert } from "@/helpers";
 import AuthenticationRequirement from "@/components/shared/AuthenticationRequirement";
 import { AuthProvider } from "@/contexts/AuthContext";
 import LandingPage from "./pages/LandingPage";
+import Background from "./components/misc/Background";
 
 const rootElement = document.getElementById("root");
 assert(rootElement != null, "Root element cannot be null.");
@@ -53,6 +54,7 @@ createRoot(rootElement).render(
 		<SWRConfig value={SWRConfiguration}>
 			<AuthProvider>
 				<MantineProvider theme={theme}>
+					<Background />
 					<Notifications containerWidth="25%" />
 					<BrowserRouter>
 						<Routes>
