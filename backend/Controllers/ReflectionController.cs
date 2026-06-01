@@ -99,7 +99,7 @@ namespace backend.Controllers
             }
 
             int reflectionsDeleted = await appDbContext.Reflections
-                .Where(reflection => reflection.User == user && reflection.Id == id)
+                .Where(reflection => reflection.UserId == user.Id && reflection.Id == id)
                 .ExecuteDeleteAsync();
 
             if (reflectionsDeleted == 1)
