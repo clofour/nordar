@@ -16,7 +16,7 @@ namespace backend.Controllers
     [ApiController]
     [Route("api/[controller]/[action]")]
     [Authorize]
-    public class ReflectionController(AppDbContext appDbContext, SignInManager<User> signInManager, UserManager<User> userManager, ILogger<AuthController> logger, IMapper mapper, EventService eventService) : ControllerBase
+    public class ReflectionController(AppDbContext appDbContext, UserManager<User> userManager, ILogger<ReflectionController> logger, IMapper mapper, EventService eventService) : ControllerBase
     {
         [HttpGet]
         [ProducesResponseType(typeof(ReflectionGet), StatusCodes.Status200OK, "application/json")]
