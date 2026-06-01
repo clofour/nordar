@@ -8,10 +8,9 @@ import { postApiAuthSignOut } from "./api/endpoints/auth/auth";
 import { NotificationType, useNotification } from "./helpers";
 import { getErrorMessage } from "./data/error";
 import ThemeToggle from "./components/misc/ThemeToggle";
+import LogOutButton from "./components/auth/LogOutButton";
 
 export default function App() {
-	const notify = useNotification();
-
 	const location = useLocation();
 	const navLinks = [
 		{ href: "/app/dashboard", label: "Home", icon: IconLayoutDashboard },
@@ -21,17 +20,6 @@ export default function App() {
 	];
 
 	const [opened, { toggle }] = useDisclosure();
-
-	const { setAuthenticationState } = useAuth();
-	async function logout() {
-		const response = await postApiAuthSignOut();
-
-		if (response.status == 204) {
-			setAuthenticationState(false);
-		} else {
-			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
-		}
-	}
 
 	return (
 		<AppShell header={{ height: 60 }} navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: !opened } }} padding="md">
@@ -43,9 +31,7 @@ export default function App() {
 					</Group>
 					<Group>
 						<ThemeToggle />
-						<ActionIcon variant="subtle" aria-label="Log Out" onClick={logout}>
-							<IconLogout />
-						</ActionIcon>
+						<LogOutButton />
 					</Group>
 				</Group>
 			</AppShell.Header>
