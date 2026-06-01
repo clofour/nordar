@@ -136,8 +136,8 @@ namespace backend.Controllers
             Random random = new Random();
             int dayOffset = random.Next(1, 7);
 
-            DateTime nextReflection = new DateTime();
-            nextReflection.AddDays(dayOffset);
+            DateTime lastReflection = new DateTime();
+            DateTime nextReflection = lastReflection.AddDays(dayOffset);
 
             user.NextReflection = nextReflection;
 
