@@ -9,7 +9,7 @@ export default function EventsToday() {
 	const dayStart = new Date();
 	dayStart.setHours(0, 0, 0, 0);
 	const dayEnd = new Date();
-	dayEnd.setHours(23, 59, 59, 9999);
+	dayEnd.setHours(23, 59, 59, 999);
 
 	const { data: response, error, isLoading, mutate } = useGetApiEventGet();
 	const events = response?.data ?? [];
