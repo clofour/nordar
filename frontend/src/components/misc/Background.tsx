@@ -12,6 +12,17 @@ type Star = {
     brightness: number;
     twinkleSpeed: number;
     twinkleOffset : number;
+    unique: boolean;
+}
+
+type ShootingStar = {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    length: number;
+    lifetime: number;
+    life: number;
 }
 
 export default function Background() {
@@ -52,49 +63,95 @@ export default function Background() {
                 20 + Math.random() * 30, // Yellow
                 270 + Math.random() * 40 // Purple
             ]
+            const brightness = Math.random();
+            const unique = brightness > 0.995;
 
             stars.push({
                 x: Math.random(),
                 y: Math.random(),
-                radius: Math.random() * 1.5,
+                radius: unique ? 1 + Math.random() : Math.random() * 1.5,
                 hue: hues[Math.floor(Math.random() * hues.length)]!,
                 saturation: saturationBase + 20 + Math.random() * 40,
-                brightness: Math.random(),
+                brightness: brightness,
                 twinkleSpeed: 0.005 + Math.random() * 0.020,
-                twinkleOffset: Math.random() * (Math.PI * 2)
+                twinkleOffset: Math.random() * (Math.PI * 2),
+                unique: unique,
             })
         }
+
+        let shootingStars: ShootingStar[] = [];
 
         function draw(currentTime: number) {
             if (!canvas || !ctx) return;
 
             if (lastTime == 0) lastTime = currentTime;
+            const deltaTime = (currentTime - lastTime) / 1000;
             lastTime = currentTime;
 
             ctx.clearRect(0, 0, width, height);
 
             for (const star of stars) {
+                const x = star.x * width;
+                const y = star.y * height;
                 const twinkle = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin((currentTime / 1000) * star.twinkleSpeed * 60 + star.twinkleOffset))
                 const alpha = star.brightness * twinkle * alphaMultiplier;
                 const lightness = lightnessBase + star.brightness * lightnessRange;
 
                 ctx.beginPath();
-                ctx.arc(star.x * width, star.y * height, star.radius, 0, Math.PI * 2);
+                ctx.arc(x,y, star.radius, 0, Math.PI * 2);
                 ctx.fillStyle = `hsla(${star.hue}, ${star.saturation}%, ${lightness}%, ${alpha})`;
                 ctx.fill();
 
-                if (star.brightness > 0.85) {
+                if (star.unique) {
                     const haloRadius = star.radius * 3;
 
                     ctx.beginPath();
-                    ctx.arc(star.x, star.y, haloRadius, 0, Math.PI * 2);
+                    ctx.arc(x, y, haloRadius, 0, Math.PI * 2);
                     const gradient = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, haloRadius);
                     gradient.addColorStop(0, `hsla(${star.hue}, ${star.saturation}%, ${50}%, ${alpha * 0.3})`);
-                    gradient.addColorStop(0, `transparent`);
+                    gradient.addColorStop(1, `transparent`);
                     ctx.fillStyle = gradient;
                     ctx.fill();
                 }
             }
+
+            if (Math.random() < deltaTime / 40 && shootingStars.length < 2) {
+                shootingStars.push({
+                    x: Math.random() * 0.8 * width,
+                    y: Math.random() * 0.4 * height,
+                    vx: 220 + Math.random() * 160,
+                    vy: 90 + Math.random() * 60,
+                    length: 30 + Math.random() * 30,
+                    lifetime: 1 + Math.random(),
+                    life: 0
+                })
+            }
+
+            for (const shootingStar of shootingStars) {
+                shootingStar.x += shootingStar.vx * deltaTime;
+                shootingStar.y += shootingStar.vy * deltaTime;
+                shootingStar.life += deltaTime;
+
+                const endX = shootingStar.x;
+                const endY = shootingStar.y;
+                const startX = endX - shootingStar.length;
+                const startY = endY - shootingStar.length * (shootingStar.vy / shootingStar.vx)
+
+                ctx.beginPath();
+                ctx.moveTo(endX, endY);
+                ctx.lineTo(startX, startY);
+                const gradient = ctx.createLinearGradient(shootingStar.x, shootingStar.y, startX, startY)
+                gradient.addColorStop(0, "rgba(190, 205, 255, 0.9)");
+                gradient.addColorStop(1, "rgba(190, 205, 255, 0)");
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = 1.6;
+                ctx.globalAlpha = Math.max(0, 1 - shootingStar.life / 1.1);
+                ctx.stroke();
+
+                ctx.globalAlpha = 1;
+            }
+
+            shootingStars = shootingStars.filter(shootingStar => shootingStar.life < shootingStar.lifetime && shootingStar.x <= width + 100)
 
             requestAnimationFrame(draw);
         }
@@ -103,10 +160,12 @@ export default function Background() {
 
     return (
         <div className={classes.background}>
+            <div className={classes.dust} />
             <canvas
                 ref={canvasRef}
             />
             <div className={classes.vignette} />
+            <div className={classes.grid} />
             <div className={classes.color} />
         </div>
     );
