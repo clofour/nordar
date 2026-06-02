@@ -11,9 +11,14 @@ jobs:
   validate:
     name: Terraform Validate
     runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        mode:
+          - demo
+          - full
     defaults:
       run:
-        working-directory: ./infra/terraform
+        working-directory: ./infra/${{ matrix.mode }}/terraform
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
