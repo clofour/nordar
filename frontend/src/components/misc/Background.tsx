@@ -82,6 +82,18 @@ export default function Background() {
                 ctx.arc(star.x * width, star.y * height, star.radius, 0, Math.PI * 2);
                 ctx.fillStyle = `hsla(${star.hue}, ${star.saturation}%, ${lightness}%, ${alpha})`;
                 ctx.fill();
+
+                if (star.brightness > 0.85) {
+                    const haloRadius = star.radius * 3;
+
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, haloRadius, 0, Math.PI * 2);
+                    const gradient = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, haloRadius);
+                    gradient.addColorStop(0, `hsla(${star.hue}, ${star.saturation}%, ${50}%, ${alpha * 0.3})`);
+                    gradient.addColorStop(0, `transparent`);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                }
             }
 
             requestAnimationFrame(draw);
@@ -90,11 +102,12 @@ export default function Background() {
     }, [computedColorScheme])
 
     return (
-        <div className={classes.background!}>
+        <div className={classes.background}>
             <canvas
                 ref={canvasRef}
             />
             <div className={classes.vignette} />
+            <div className={classes.color} />
         </div>
     );
 }

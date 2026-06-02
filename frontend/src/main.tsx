@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { MantineProvider, createTheme } from "@mantine/core";
+import { AppShellNavbar, MantineProvider, createTheme } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
@@ -39,6 +39,16 @@ const SWRConfiguration = {
 const theme = createTheme({
 	fontFamily: "Inter",
 	components: {
+		AppShell: {
+			styles: {
+				header: {
+					background: "none",
+				},
+				navbar: {
+					background: "none",
+				}
+			}
+		},
 		Notification: {
 			styles: {
 				root: {
