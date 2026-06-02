@@ -1,5 +1,7 @@
-import { Box } from "@mantine/core";
+import { Box, useComputedColorScheme } from "@mantine/core";
+import { useViewportSize } from "@mantine/hooks";
 import { useEffect, useRef } from "react";
+import classes from "@/components/misc/Background.module.css";
 
 type Star = {
     x: number;
@@ -7,12 +9,14 @@ type Star = {
     radius: number;
     hue: number;
     saturation: number;
-    lightness: number;
-    alpha: number;
+    brightness: number;
+    twinkleSpeed: number;
+    twinkleOffset : number;
 }
 
 export default function Background() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const computedColorScheme = useComputedColorScheme();
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -20,46 +24,77 @@ export default function Background() {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        const width = canvas.width = window.innerWidth;
-        const height = canvas.height = window.innerHeight;
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+
+        let lastTime = 0;
+
+        const alphaMultiplier = computedColorScheme == "light" ? 0.5 : 1;
+        const saturationBase = computedColorScheme == "light" ? 20 : 0;
+        const lightnessBase = computedColorScheme == "light" ? 35 : 70;
+        const lightnessRange = computedColorScheme == "light" ? 15 : 30;
+
+        function resize() {
+            if (!canvas || !ctx) return;
+
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+
+        }
+        resize();
+        window.addEventListener("resize", resize);
 
         let stars: Star[] = [];
         const starCount = (width * height) / 1000;
         for (let i = 0; i < starCount; i++) {
+            const hues = [
+                200 + Math.random() * 60, // Blue
+                20 + Math.random() * 30, // Yellow
+                270 + Math.random() * 40 // Purple
+            ]
+
             stars.push({
-                x: Math.random() * height,
-                y: Math.random() * width,
+                x: Math.random(),
+                y: Math.random(),
                 radius: Math.random() * 1.5,
-                hue: 190 + Math.random() * 80,
-                saturation: 10 + Math.random() * 30,
-                lightness: Math.random(),
-                alpha: Math.random()
+                hue: hues[Math.floor(Math.random() * hues.length)]!,
+                saturation: saturationBase + 20 + Math.random() * 40,
+                brightness: Math.random(),
+                twinkleSpeed: 0.005 + Math.random() * 0.020,
+                twinkleOffset: Math.random() * (Math.PI * 2)
             })
         }
 
-        function draw() {
+        function draw(currentTime: number) {
             if (!canvas || !ctx) return;
+
+            if (lastTime == 0) lastTime = currentTime;
+            lastTime = currentTime;
 
             ctx.clearRect(0, 0, width, height);
 
             for (const star of stars) {
+                const twinkle = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin((currentTime / 1000) * star.twinkleSpeed * 60 + star.twinkleOffset))
+                const alpha = star.brightness * twinkle * alphaMultiplier;
+                const lightness = lightnessBase + star.brightness * lightnessRange;
+
                 ctx.beginPath();
-                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `hsla(${star.hue}, ${star.saturation}, ${star.lightness}, ${star.alpha})`;
+                ctx.arc(star.x * width, star.y * height, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${star.hue}, ${star.saturation}%, ${lightness}%, ${alpha})`;
                 ctx.fill();
             }
 
             requestAnimationFrame(draw);
         }
-
-        draw();
-    }, [])
+        requestAnimationFrame(draw);
+    }, [computedColorScheme])
 
     return (
-        <Box w="100%" h="100%" pos="fixed" top={0} left={0} style={{ zIndex: -1 }}>
+        <div className={classes.background!}>
             <canvas
                 ref={canvasRef}
             />
-        </Box>
+            <div className={classes.vignette} />
+        </div>
     );
 }
