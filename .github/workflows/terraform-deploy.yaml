@@ -1,6 +1,14 @@
 name: terraform-deploy
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "Deployment mode"
+        default: demo
+        type: choice
+        options:
+          - demo
+          - full
 jobs:
   deploy:
     name: Terraform Deploy
@@ -15,7 +23,7 @@ jobs:
       TF_VAR_domain: ${{ vars.DOMAIN }}
     defaults:
       run:
-        working-directory: ./infra/terraform
+        working-directory: ./infra/${{ inputs.mode }}/terraform
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd

@@ -12,7 +12,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.SPACES_SECRET_KEY }}
     defaults:
       run:
-        working-directory: ./infra/terraform
+        working-directory: ./infra/full/terraform
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
@@ -38,7 +38,7 @@ jobs:
     environment: production
     defaults:
       run:
-        working-directory: ./frontend
+        working-directory: ./app/frontend
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd

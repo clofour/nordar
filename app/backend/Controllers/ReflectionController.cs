@@ -16,7 +16,7 @@ namespace backend.Controllers
     [ApiController]
     [Route("api/[controller]/[action]")]
     [Authorize]
-    public class ReflectionController(AppDbContext appDbContext, SignInManager<User> signInManager, UserManager<User> userManager, ILogger<AuthController> logger, IMapper mapper, EventService eventService) : ControllerBase
+    public class ReflectionController(AppDbContext appDbContext, UserManager<User> userManager, ILogger<ReflectionController> logger, IMapper mapper, EventService eventService) : ControllerBase
     {
         [HttpGet]
         [ProducesResponseType(typeof(ReflectionGet), StatusCodes.Status200OK, "application/json")]
@@ -99,7 +99,7 @@ namespace backend.Controllers
             }
 
             int reflectionsDeleted = await appDbContext.Reflections
-                .Where(reflection => reflection.User == user && reflection.Id == id)
+                .Where(reflection => reflection.UserId == user.Id && reflection.Id == id)
                 .ExecuteDeleteAsync();
 
             if (reflectionsDeleted == 1)
@@ -136,8 +136,8 @@ namespace backend.Controllers
             Random random = new Random();
             int dayOffset = random.Next(1, 7);
 
-            DateTime nextReflection = new DateTime();
-            nextReflection.AddDays(dayOffset);
+            DateTime lastReflection = new DateTime();
+            DateTime nextReflection = lastReflection.AddDays(dayOffset);
 
             user.NextReflection = nextReflection;
 

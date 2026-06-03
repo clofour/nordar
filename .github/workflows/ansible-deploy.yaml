@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-24.04
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: ./app/backend
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
@@ -39,7 +39,7 @@ jobs:
     environment: production
     defaults:
       run:
-        working-directory: ./infra/ansible
+        working-directory: ./infra/full/ansible
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd

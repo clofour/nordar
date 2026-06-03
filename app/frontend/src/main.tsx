@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { MantineProvider, createTheme } from "@mantine/core";
+import { AppShellNavbar, MantineProvider, createTheme } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
@@ -20,6 +20,7 @@ import { assert } from "@/helpers";
 import AuthenticationRequirement from "@/components/shared/AuthenticationRequirement";
 import { AuthProvider } from "@/contexts/AuthContext";
 import LandingPage from "./pages/LandingPage";
+import Background from "./components/misc/Background";
 
 const rootElement = document.getElementById("root");
 assert(rootElement != null, "Root element cannot be null.");
@@ -38,6 +39,16 @@ const SWRConfiguration = {
 const theme = createTheme({
 	fontFamily: "Inter",
 	components: {
+		AppShell: {
+			styles: {
+				header: {
+					background: "none",
+				},
+				navbar: {
+					background: "none",
+				}
+			}
+		},
 		Notification: {
 			styles: {
 				root: {
@@ -53,6 +64,7 @@ createRoot(rootElement).render(
 		<SWRConfig value={SWRConfiguration}>
 			<AuthProvider>
 				<MantineProvider theme={theme}>
+					<Background />
 					<Notifications containerWidth="25%" />
 					<BrowserRouter>
 						<Routes>
