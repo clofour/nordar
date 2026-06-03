@@ -19,7 +19,7 @@ import { SWRConfig } from "swr";
 import { assert } from "@/helpers";
 import AuthenticationRequirement from "@/components/shared/AuthenticationRequirement";
 import { AuthProvider } from "@/contexts/AuthContext";
-import LandingPage from "./pages/LandingPage";
+import LandingPage from "./pages/Landing";
 import Background from "./components/misc/Background";
 
 const rootElement = document.getElementById("root");
