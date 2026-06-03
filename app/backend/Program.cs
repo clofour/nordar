@@ -63,6 +63,10 @@ builder.Services.AddControllers()
     }
 );
 
+builder.Services.AddProblemDetails();
+
+builder.Services.AddAuthentication().AddCookie("Identity.Application");
+builder.Services.AddAuthorization();
 builder.Services.AddIdentityCore<User>(options =>
 {
     options.Password.RequireDigit = false;
@@ -81,7 +85,6 @@ builder.Services.AddIdentityCore<User>(options =>
 })
 .AddSignInManager<SignInManager<User>>()
 .AddEntityFrameworkStores<AppDbContext>();
-
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.Name = "__Host-AuthToken";
@@ -102,10 +105,6 @@ builder.Services.ConfigureApplicationCookie(options =>
         return Task.CompletedTask;
     };
 });
-
-builder.Services.AddAuthentication().AddCookie("Identity.Application");
-
-builder.Services.AddAuthorization();
 
 builder.Services.AddRateLimiter(options =>
 {
