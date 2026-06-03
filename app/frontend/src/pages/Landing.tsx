@@ -1,11 +1,18 @@
+import ClosingCTA from "@/components/landing/ClosingCTA";
+import FAQ from "@/components/landing/FAQ";
+import FeatureGrid from "@/components/landing/FeatureGrid";
+import Hero from "@/components/landing/Hero";
 import LinkButton from "@/components/landing/LinkButton";
+import Overview from "@/components/landing/Overview";
+import Problem from "@/components/landing/Problem";
+import SocialProof from "@/components/landing/SocialProof";
 import Logo, { LogoLayout } from "@/components/shared/Logo/Logo";
 import { NotificationType, useNotification } from "@/helpers";
 import { AppShell, Button, Group } from "@mantine/core";
 
 export default function Landing() {
 	return (
-		<AppShell header={{ height: 60 }} padding="md">
+		<AppShell header={{ height: 60 }} footer={{ height: 100 }} padding="md">
 			<AppShell.Header>
 				<Group h="100%" justify="space-between" px="md">
 					<Group>
@@ -26,8 +33,17 @@ export default function Landing() {
 				</Group>
 			</AppShell.Header>
 			<AppShell.Main>
-				"hi!"
+				<Hero />
+				<Problem />
+				<Overview />
+				<SocialProof />
+				<FeatureGrid />
+				<FAQ />
+				<ClosingCTA />
 			</AppShell.Main>
+			<AppShell.Footer>
+
+			</AppShell.Footer>
 		</AppShell>
 	);
 }
