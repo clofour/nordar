@@ -4,7 +4,7 @@ type IconProps = {
 	size: string;
 };
 
-export default function Logo({ size }: IconProps) {
+export default function Icon({ size }: IconProps) {
 	const theme = useMantineTheme();
 
 	return (
