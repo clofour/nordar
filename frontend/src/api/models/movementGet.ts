@@ -4,42 +4,42 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import type { MotivationType } from './motivationType';
+import type { MotivationType } from "./motivationType";
 
 export interface MovementGet {
-  bearingId: string;
-  /**
-     * @maxLength 5000
-     * @nullable
-     */
-  difficulty?: string | null;
-  motivationType?: null | MotivationType;
-  /**
-     * @maxLength 5000
-     * @nullable
-     */
-  motivation?: string | null;
-  /**
-     * @maxLength 5000
-     * @nullable
-     */
-  triggers?: string | null;
-  /**
-     * @maxLength 5000
-     * @nullable
-     */
-  temptations?: string | null;
-  /**
-     * @maxLength 5000
-     * @nullable
-     */
-  obstacles?: string | null;
-  /**
-     * @maxLength 5000
-     * @nullable
-     */
-  killConditions?: string | null;
-  id: string;
-  /** @maxLength 200 */
-  name: string;
+	bearingId: string;
+	/**
+	 * @maxLength 5000
+	 * @nullable
+	 */
+	difficulty?: string | null;
+	motivationType?: null | MotivationType;
+	/**
+	 * @maxLength 5000
+	 * @nullable
+	 */
+	motivation?: string | null;
+	/**
+	 * @maxLength 5000
+	 * @nullable
+	 */
+	triggers?: string | null;
+	/**
+	 * @maxLength 5000
+	 * @nullable
+	 */
+	temptations?: string | null;
+	/**
+	 * @maxLength 5000
+	 * @nullable
+	 */
+	obstacles?: string | null;
+	/**
+	 * @maxLength 5000
+	 * @nullable
+	 */
+	killConditions?: string | null;
+	id: string;
+	/** @maxLength 200 */
+	name: string;
 }

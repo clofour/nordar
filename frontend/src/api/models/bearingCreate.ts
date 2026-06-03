@@ -6,21 +6,21 @@
  */
 
 export interface BearingCreate {
-  northStarId: string;
-  /** @maxLength 5000 */
-  description: string;
-  /** @maxLength 5000 */
-  justification: string;
-  /**
-     * @maxLength 5000
-     * @nullable
-     */
-  strengths?: string | null;
-  /**
-     * @maxLength 5000
-     * @nullable
-     */
-  weaknesses?: string | null;
-  /** @maxLength 200 */
-  name: string;
+	northStarId: string;
+	/** @maxLength 5000 */
+	description: string;
+	/** @maxLength 5000 */
+	justification: string;
+	/**
+	 * @maxLength 5000
+	 * @nullable
+	 */
+	strengths?: string | null;
+	/**
+	 * @maxLength 5000
+	 * @nullable
+	 */
+	weaknesses?: string | null;
+	/** @maxLength 200 */
+	name: string;
 }

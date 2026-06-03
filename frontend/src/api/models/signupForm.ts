@@ -6,25 +6,25 @@
  */
 
 export interface SignupForm {
-  /**
-     * @minLength 3
-     * @maxLength 20
-     * @pattern ^[a-zA-Z]+$
-     */
-  accessCode: string;
-  /**
-     * @minLength 3
-     * @maxLength 20
-     * @pattern ^[a-zA-Z0-9]+$
-     */
-  username: string;
-  /** @maxLength 256 */
-  email: string;
-  /**
-     * @minLength 16
-     * @maxLength 64
-     * @pattern ^[a-zA-Z0-9]+$
-     */
-  password: string;
-  termsOfService: boolean;
+	/**
+	 * @minLength 3
+	 * @maxLength 20
+	 * @pattern ^[a-zA-Z]+$
+	 */
+	accessCode: string;
+	/**
+	 * @minLength 3
+	 * @maxLength 20
+	 * @pattern ^[a-zA-Z0-9]+$
+	 */
+	username: string;
+	/** @maxLength 256 */
+	email: string;
+	/**
+	 * @minLength 16
+	 * @maxLength 64
+	 * @pattern ^[a-zA-Z0-9]+$
+	 */
+	password: string;
+	termsOfService: boolean;
 }

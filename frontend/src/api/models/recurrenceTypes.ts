@@ -5,12 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type RecurrenceTypes = typeof RecurrenceTypes[keyof typeof RecurrenceTypes];
-
+export type RecurrenceTypes = (typeof RecurrenceTypes)[keyof typeof RecurrenceTypes];
 
 export const RecurrenceTypes = {
-  DAILY: 'DAILY',
-  WEEKLY: 'WEEKLY',
-  MONTHLY: 'MONTHLY',
-  YEARLY: 'YEARLY',
+	DAILY: "DAILY",
+	WEEKLY: "WEEKLY",
+	MONTHLY: "MONTHLY",
+	YEARLY: "YEARLY",
 } as const;

@@ -110,5 +110,40 @@ namespace backend.Controllers
                 return NotFound();
             }
         }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(DateTime), StatusCodes.Status200OK, "application/json")]
+        public async Task<ActionResult> PromptData()
+        {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Forbid();
+            }
+            
+            return Ok(user.NextReflection);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Prompt()
+        {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Forbid();
+            }
+
+            Random random = new Random();
+            int dayOffset = random.Next(1, 7);
+
+            DateTime nextReflection = new DateTime();
+            nextReflection.AddDays(dayOffset);
+
+            user.NextReflection = nextReflection;
+
+            await appDbContext.SaveChangesAsync();
+            
+            return Ok();
+        }
     }
 }

@@ -6,10 +6,10 @@
  */
 
 export interface GoalStats {
-  /** @pattern ^-?(?:0|[1-9]\d*)$ */
-  northStarCount: number | string;
-  /** @pattern ^-?(?:0|[1-9]\d*)$ */
-  bearingCount: number | string;
-  /** @pattern ^-?(?:0|[1-9]\d*)$ */
-  movementCount: number | string;
+	/** @pattern ^-?(?:0|[1-9]\d*)$ */
+	northStarCount: number | string;
+	/** @pattern ^-?(?:0|[1-9]\d*)$ */
+	bearingCount: number | string;
+	/** @pattern ^-?(?:0|[1-9]\d*)$ */
+	movementCount: number | string;
 }

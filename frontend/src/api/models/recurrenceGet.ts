@@ -6,6 +6,6 @@
  */
 
 export interface RecurrenceGet {
-  rrule: string;
-  exDate: string[];
+	rrule: string;
+	exDate: string[];
 }
