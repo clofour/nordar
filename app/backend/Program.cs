@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using backend.Viewmodels;
 using backend.Services;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,6 +65,9 @@ builder.Services.AddControllers()
 );
 
 builder.Services.AddProblemDetails();
+
+builder.Services.AddDataProtection()
+    .PersistKeysToDbContext<AppDbContext>();
 
 builder.Services.AddAuthentication().AddCookie("Identity.Application");
 builder.Services.AddAuthorization();

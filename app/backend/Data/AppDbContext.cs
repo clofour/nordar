@@ -1,13 +1,15 @@
 using backend.Enums;
 using backend.Models;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Data
 {
     public class AppDbContext(DbContextOptions<AppDbContext> options)
-        : IdentityUserContext<User, Guid>(options)
+        : IdentityUserContext<User, Guid>(options), IDataProtectionKeyContext
     {
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
         public DbSet<AccessCode> AccessCodes { get; set; }
         public DbSet<NorthStar> NorthStars { get; set; }
