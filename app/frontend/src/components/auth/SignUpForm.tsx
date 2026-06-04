@@ -89,7 +89,7 @@ export default function SignUpForm({ setLoading, loading }: SignUpFormProps) {
 				<TextInput
 					withAsterisk
 					label="Username"
-					placeholder="jdoe"
+					placeholder="johndoe"
 					disabled={loading}
 					key={form.key("username")}
 					{...form.getInputProps("username")}

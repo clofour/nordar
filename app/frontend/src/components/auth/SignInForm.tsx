@@ -44,7 +44,7 @@ export default function SignInForm({ setLoading, loading }: SignInFormProps) {
 				<TextInput
 					withAsterisk
 					label="Username"
-					placeholder="jdoe"
+					placeholder="johndoe"
 					disabled={loading}
 					key={form.key("username")}
 					{...form.getInputProps("username")}
