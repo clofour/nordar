@@ -173,6 +173,7 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.CreateMap<Reflection, ReflectionGet>();
 });
 
+builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<GoalService>();
 builder.Services.AddScoped<EventService>();
 

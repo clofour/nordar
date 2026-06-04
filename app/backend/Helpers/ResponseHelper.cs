@@ -5,7 +5,7 @@ namespace backend.Helpers
 {
     public static class ServiceBoundaryHelper
     {
-        public static ActionResult ConvertToActionResult<T>(ServiceResult<T> serviceResult)
+        public static ActionResult ConvertToActionResult(ServiceResult serviceResult)
         {
             if (serviceResult.Data == null)
             {
