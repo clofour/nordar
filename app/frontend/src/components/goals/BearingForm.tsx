@@ -61,14 +61,14 @@ export default function BearingForm({ close, parentId, initialValues }: BearingF
 					<Textarea
 						label="Justification"
 						description="How does this goal help you achieve your ideal self? Include research."
-						placeholder="Be healthy"
+						placeholder="Regular physical activity improves cardiovascular health, metabolic function, mental health and musculoskeletal strength."
 						key={form.key("justification")}
 						{...form.getInputProps("justification")}
 					/>
 					<Textarea
 						label="Strengths"
 						description="What are your strengths in this area?"
-						placeholder="Be healthy"
+						placeholder="I already do a lot of walking, so I'm used to physical activity."
 						required
 						key={form.key("strengths")}
 						{...form.getInputProps("strengths")}
@@ -76,7 +76,7 @@ export default function BearingForm({ close, parentId, initialValues }: BearingF
 					<Textarea
 						label="Weaknesses"
 						description="What are your weaknesses in this area?"
-						placeholder="Be healthy"
+						placeholder="I struggle a lot with consistency. If I miss a single session or I can't do one of the exercises, I give up entirely."
 						required
 						key={form.key("weaknesses")}
 						{...form.getInputProps("weaknesses")}
