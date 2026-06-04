@@ -61,7 +61,7 @@ resource "digitalocean_app" "main" {
             env {
                 key = "ConnectionStrings__Default"
                 scope = "RUN_TIME"
-                value = "${database.DATABASE_URL}"
+                value = "$${database.DATABASE_URL}"
             }
             env {
                 key = "Origins__Frontend"
