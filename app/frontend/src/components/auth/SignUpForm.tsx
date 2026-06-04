@@ -80,7 +80,7 @@ export default function SignUpForm({ setLoading, loading }: SignUpFormProps) {
 				<TextInput
 					withAsterisk
 					label="Access Code"
-					placeholder="Your access code"
+					placeholder="XXXX-XXXX"
 					disabled={loading}
 					key={form.key("accessCode")}
 					{...form.getInputProps("accessCode")}
@@ -89,18 +89,18 @@ export default function SignUpForm({ setLoading, loading }: SignUpFormProps) {
 				<TextInput
 					withAsterisk
 					label="Username"
-					placeholder="Your username"
+					placeholder="jdoe"
 					disabled={loading}
 					key={form.key("username")}
 					{...form.getInputProps("username")}
 				/>
 
-				<TextInput withAsterisk label="Email" placeholder="Your email" disabled={loading} key={form.key("email")} {...form.getInputProps("email")} />
+				<TextInput withAsterisk label="Email" placeholder="john@example.com" disabled={loading} key={form.key("email")} {...form.getInputProps("email")} />
 
 				<PasswordInput
 					withAsterisk
 					label="Password"
-					placeholder="Your password"
+					placeholder="••••••••••••••••"
 					disabled={loading}
 					key={form.key("password")}
 					{...form.getInputProps("password")}

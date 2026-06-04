@@ -47,15 +47,15 @@ export default function NorthStarForm({ close, initialValues }: NorthStarFormPro
 					<Textarea
 						label="Description"
 						description="What does your goal consist of?"
-						placeholder="Be healthy"
+						placeholder="My goal consists of being in good physical shape, getting enough sleep, avoiding stress and eating a healthy diet."
 						required
 						key={form.key("description")}
 						{...form.getInputProps("description")}
 					/>
 					<Textarea
 						label="Justification"
-						description="Why do you want to achieve this goal? How is it linked to your values and your identity?"
-						placeholder="Be healthy"
+						description="Why do you want to achieve this goal?"
+						placeholder="I want to achieve this goal for two reasons. Firstly, my dad passed away at 42 because of a heart attack, and I don't want the same to happen to me. Secondly, being healthy makes me feel better in general."
 						key={form.key("justification")}
 						{...form.getInputProps("justification")}
 					/>

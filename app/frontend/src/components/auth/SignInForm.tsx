@@ -44,7 +44,7 @@ export default function SignInForm({ setLoading, loading }: SignInFormProps) {
 				<TextInput
 					withAsterisk
 					label="Username"
-					placeholder="Your username"
+					placeholder="jdoe"
 					disabled={loading}
 					key={form.key("username")}
 					{...form.getInputProps("username")}
@@ -53,7 +53,7 @@ export default function SignInForm({ setLoading, loading }: SignInFormProps) {
 				<PasswordInput
 					withAsterisk
 					label="Password"
-					placeholder="Your password"
+					placeholder="••••••••••••••••"
 					disabled={loading}
 					key={form.key("password")}
 					{...form.getInputProps("password")}

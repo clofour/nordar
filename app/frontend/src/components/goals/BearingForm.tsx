@@ -45,7 +45,7 @@ export default function BearingForm({ close, parentId, initialValues }: BearingF
 					<TextInput
 						label="Name"
 						description="What is your goal?"
-						placeholder="Be healthy"
+						placeholder="Be in good physical shape"
 						required
 						key={form.key("name")}
 						{...form.getInputProps("name")}
@@ -60,7 +60,7 @@ export default function BearingForm({ close, parentId, initialValues }: BearingF
 					/>
 					<Textarea
 						label="Justification"
-						description="How does this goal help you achieve your ideal self? Use research."
+						description="How does this goal help you achieve your ideal self? Include research."
 						placeholder="Be healthy"
 						key={form.key("justification")}
 						{...form.getInputProps("justification")}
