@@ -26,7 +26,7 @@ export default function Reflections() {
 	return (
 		<Stack>
 			<Group justify="space-between">
-				<PageTitle name="Reflections" description="TBD" />
+				<PageTitle name="Reflections" description="Identify what's working, what isn't, and what to do differently." />
 				<Button leftSection={<IconPlus size={16} />} onClick={() => open()}>
 					New Reflection
 				</Button>
