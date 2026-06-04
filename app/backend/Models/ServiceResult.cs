@@ -12,9 +12,9 @@ namespace backend.Models
         ServerError
     }
 
-    public class ServiceResult(Status status, string? message)
+    public class ServiceResult<T>(Status status, T? data)
     {
         public Status Status { get; set; } = status;
-        public string? Message { get; set; } = message;
+        public T? Data { get; set; } = data;
     }
 }
