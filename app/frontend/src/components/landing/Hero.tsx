@@ -1,9 +1,11 @@
-import { Button, type ButtonVariant } from "@mantine/core";
-import { IconMoon, IconSun } from "@tabler/icons-react";
-import { Link } from "react-router";
+import classes from "./Hero.module.css";
 
 export default function Hero() {
     return (
-        "Hi!"
+        <div className={classes.hero}>
+            <div className={classes.}>
+                
+            </div>
+        </div>
     );
 }
