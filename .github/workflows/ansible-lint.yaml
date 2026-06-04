@@ -23,8 +23,8 @@ jobs:
         with:
           python-version: "3.14"
 
-      - name: Set up Ansible
-        run: pip install -r requirements-ci.txt
+      - name: Set up dependencies
+        run: pip install -r requirements.txt
 
       - name: Set up collections
         run: ansible-galaxy install -r requirements.yaml
