@@ -26,7 +26,7 @@ namespace backend.Helpers
             return serviceResult.Status switch
             {
                 Status.Ok => new OkObjectResult(serviceResult.Data),
-                Status.Created => new ObjectResult(serviceResult.Data),
+                Status.Created => new ObjectResult(serviceResult.Data) { StatusCode = 201 },
                 Status.NoContent => new NoContentResult(),
                 Status.BadRequest => new BadRequestObjectResult(serviceResult.Data),
                 Status.Unauthorized => new UnauthorizedObjectResult(serviceResult.Data),
