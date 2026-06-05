@@ -1,6 +1,7 @@
 import ClosingCTA from "@/components/landing/ClosingCTA";
 import FAQ from "@/components/landing/FAQ";
 import FeatureGrid from "@/components/landing/FeatureGrid";
+import Footer from "@/components/landing/Footer";
 import Hero from "@/components/landing/Hero";
 import LinkButton from "@/components/landing/LinkButton";
 import Overview from "@/components/landing/Overview";
@@ -8,7 +9,7 @@ import Problem from "@/components/landing/Problem";
 import SocialProof from "@/components/landing/SocialProof";
 import Logo, { LogoLayout } from "@/components/shared/Logo/Logo";
 import { NotificationType, useNotification } from "@/helpers";
-import { AppShell, Button, Group } from "@mantine/core";
+import { AppShell, Button, Group, SimpleGrid } from "@mantine/core";
 
 export default function Landing() {
 	return (
@@ -42,7 +43,7 @@ export default function Landing() {
 				<ClosingCTA />
 			</AppShell.Main>
 			<AppShell.Footer>
-
+				<Footer />
 			</AppShell.Footer>
 		</AppShell>
 	);
