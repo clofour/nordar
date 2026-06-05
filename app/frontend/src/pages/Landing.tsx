@@ -18,7 +18,7 @@ export default function Landing() {
 					<Group>
 						<Logo layout={LogoLayout.Horizontal} size="xl" />
 					</Group>
-					<Group>
+					<Group gap="xs">
 						<LinkButton
 							variant="default"
 							label="Sign In"
