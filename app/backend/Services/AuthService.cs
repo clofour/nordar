@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services
 {
-    public class AuthService(AppDbContext appDbContext, SignInManager<User> signInManager, UserManager<User> userManager, ILogger logger)
+    public class AuthService(AppDbContext appDbContext, SignInManager<User> signInManager, UserManager<User> userManager, ILogger<AuthService> logger)
     {
         public async Task<ServiceResult> SignUp(SignupForm signupForm)
         {
