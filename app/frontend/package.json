@@ -5,9 +5,10 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
+		"preview": "vite preview",
 		"build": "vite build",
 		"lint": "eslint .",
-		"preview": "vite preview"
+		"format": "biome format --write"
 	},
 	"dependencies": {
 		"@mantine/core": "^9.1.1",
