@@ -3,15 +3,15 @@ import { IconMoon, IconSun } from "@tabler/icons-react";
 import { Link } from "react-router";
 
 interface LinkButtonProps {
-    label: string;
-    to: string;
-    variant: ButtonVariant;
+	label: string;
+	to: string;
+	variant: ButtonVariant;
 }
 
 export default function LinkButton({ variant, label, to }: LinkButtonProps) {
-    return (
-        <Button variant={variant} component={Link} to={to}>
-            {label}
-        </Button>
-    );
+	return (
+		<Button variant={variant} component={Link} to={to}>
+			{label}
+		</Button>
+	);
 }

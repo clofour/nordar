@@ -22,16 +22,8 @@ export default function Landing() {
 						<Logo layout={LogoLayout.Horizontal} size="xl" />
 					</Group>
 					<Group gap="xs">
-						<LinkButton
-							variant="default"
-							label="Sign In"
-							to="/auth/signin"
-						/>
-						<LinkButton
-							variant="filled"
-							label="Start free"
-							to="/auth/signup"
-						/>
+						<LinkButton variant="default" label="Sign In" to="/auth/signin" />
+						<LinkButton variant="filled" label="Start free" to="/auth/signup" />
 					</Group>
 				</Group>
 			</AppShell.Header>

@@ -95,7 +95,14 @@ export default function SignUpForm({ setLoading, loading }: SignUpFormProps) {
 					{...form.getInputProps("username")}
 				/>
 
-				<TextInput withAsterisk label="Email" placeholder="john@example.com" disabled={loading} key={form.key("email")} {...form.getInputProps("email")} />
+				<TextInput
+					withAsterisk
+					label="Email"
+					placeholder="john@example.com"
+					disabled={loading}
+					key={form.key("email")}
+					{...form.getInputProps("email")}
+				/>
 
 				<PasswordInput
 					withAsterisk

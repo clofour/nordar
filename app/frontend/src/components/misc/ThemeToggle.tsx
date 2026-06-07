@@ -2,16 +2,16 @@ import { ActionIcon, useComputedColorScheme, useMantineColorScheme } from "@mant
 import { IconMoon, IconSun } from "@tabler/icons-react";
 
 export default function ThemeToggle() {
-    const { setColorScheme } = useMantineColorScheme();
-    const computedColorScheme = useComputedColorScheme();
+	const { setColorScheme } = useMantineColorScheme();
+	const computedColorScheme = useComputedColorScheme();
 
-    function onClick() {
-        setColorScheme(computedColorScheme !== "light" ? "light" : "dark");
-    }
+	function onClick() {
+		setColorScheme(computedColorScheme !== "light" ? "light" : "dark");
+	}
 
-    return (
-        <ActionIcon variant="subtle" aria-label="Log Out" onClick={onClick}>
-            {computedColorScheme === "light" ? <IconSun /> : <IconMoon />}
-        </ActionIcon>
-    );
+	return (
+		<ActionIcon variant="subtle" aria-label="Log Out" onClick={onClick}>
+			{computedColorScheme === "light" ? <IconSun /> : <IconMoon />}
+		</ActionIcon>
+	);
 }

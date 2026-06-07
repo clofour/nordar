@@ -3,7 +3,5 @@ import { IconMoon, IconSun } from "@tabler/icons-react";
 import { Link } from "react-router";
 
 export default function Problem() {
-    return (
-        "Hi!"
-    );
+	return "Hi!";
 }

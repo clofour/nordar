@@ -22,7 +22,6 @@ export default function Icon({ size }: IconProps) {
 						<stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" id="stop3" />
 					</linearGradient>
 				)}
-
 			</defs>
 			<g stroke="none" fill="url(#star-gradient)" transform="matrix(0.53880417,0,0,0.53880417,-0.21070756,-1.4391541)">
 				<path

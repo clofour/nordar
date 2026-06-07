@@ -1,20 +1,20 @@
 .description {
-    color: gray;
-    font-size: 14px;
+	color: gray;
+	font-size: 14px;
 }
 
 .section {
-    font-size: 13px;
-    text-transform: uppercase;
+	font-size: 13px;
+	text-transform: uppercase;
 }
 
 .link {
-    color: gray;
-    font-size: 14px;
-    text-decoration: none;
-    transition: color 0.2s;
+	color: gray;
+	font-size: 14px;
+	text-decoration: none;
+	transition: color 0.2s;
 }
 
 .link:hover {
-    color: white;
+	color: white;
 }

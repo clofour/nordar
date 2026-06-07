@@ -41,8 +41,8 @@ const theme = createTheme({
 		primary: virtualColor({
 			name: "primary",
 			light: "blue",
-			dark: "orange"
-		})
+			dark: "orange",
+		}),
 	},
 	primaryColor: "primary",
 	autoContrast: true,
@@ -55,8 +55,8 @@ const theme = createTheme({
 				},
 				navbar: {
 					background: "none",
-				}
-			}
+				},
+			},
 		},
 		Notification: {
 			styles: {
@@ -67,8 +67,8 @@ const theme = createTheme({
 		},
 	},
 	other: {
-		testing: "y"
-	}
+		testing: "y",
+	},
 });
 
 createRoot(rootElement).render(
