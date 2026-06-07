@@ -1,0 +1,9 @@
+.gradient {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(1200px 800px at 78% -5%, rgba(72, 52, 150, 0.45), transparent 60%),
+        radial-gradient(1000px 700px at 12% 12%, rgba(28, 50, 130, 0.38), transparent 55%),
+        radial-gradient(900px 900px at 50% 110%, rgba(40, 90, 120, 0.22), transparent 60%),
+        linear-gradient(180deg, #05050f 0%, #04040c 100%);
+}

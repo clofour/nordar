@@ -1,7 +1,11 @@
-import { Box, useComputedColorScheme } from "@mantine/core";
-import { useViewportSize } from "@mantine/hooks";
-import { useEffect, useRef } from "react";
+import { useComputedColorScheme } from "@mantine/core";
+import { useEffect, useRef, type ReactElement } from "react";
 import classes from "@/components/misc/Background.module.css";
+
+interface BackgroundProps {
+    starDensity: number;
+    background?: ReactElement;
+}
 
 type Star = {
     x: number;
@@ -25,7 +29,7 @@ type ShootingStar = {
     life: number;
 }
 
-export default function Background() {
+export default function Background({ starDensity=0.001, background }: BackgroundProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const computedColorScheme = useComputedColorScheme();
 
@@ -56,7 +60,7 @@ export default function Background() {
         window.addEventListener("resize", resize);
 
         let stars: Star[] = [];
-        const starCount = (width * height) / 1000;
+        const starCount = (width * height) * starDensity;
         for (let i = 0; i < starCount; i++) {
             const hues = [
                 200 + Math.random() * 60, // Blue
@@ -166,7 +170,9 @@ export default function Background() {
             />
             <div className={classes.vignette} />
             <div className={classes.grid} />
-            <div className={classes.color} />
+            {background ? background : (
+                <div className={classes.color} />
+            )}
         </div>
     );
 }

@@ -1,7 +1,7 @@
 import { Grid, SimpleGrid, Stack, Text } from "@mantine/core";
-import { IconMoon, IconSun } from "@tabler/icons-react";
 import { Link } from "react-router";
 import Logo, { LogoLayout } from "../shared/Logo/Logo";
+import classes from "./Footer.module.css";
 
 export default function Footer() {
     const sections = [
@@ -30,21 +30,25 @@ export default function Footer() {
     ]
 
     return (
-        <Grid>
+        <Grid gap="xl">
             <Grid.Col span={3}>
-                <Logo layout={LogoLayout.Horizontal} />
-                <Text>Placeholder</Text>
+                <Stack gap="sm">
+                    <Logo layout={LogoLayout.Horizontal} />
+                    <Text className={classes.description!}>Lorem ipsum dolor sit amet consectetur adipiscing elit quisque faucibus ex sapien vitae pellentesque sem.</Text>
+                </Stack>
             </Grid.Col>
             <Grid.Col span={9}>
                 <SimpleGrid cols={sections.length}>
                     {sections.map((section) => {
                         return (
-                            <Stack>
-                                <Text>{section.name}</Text>
+                            <Stack gap="sm">
+                                <Text className={classes.section!}>{section.name}</Text>
 
-                                {section.links.map((link) => (
-                                    <Link to={link.to}>{link.label}</Link>
-                                ))}
+                                <Stack gap="xs">
+                                    {section.links.map((link) => (
+                                        <Link to={link.to} className={classes.link}>{link.label}</Link>
+                                    ))}
+                                </Stack>
                             </Stack>
                         );
                     })}

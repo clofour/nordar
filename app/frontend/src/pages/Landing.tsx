@@ -2,14 +2,16 @@ import ClosingCTA from "@/components/landing/ClosingCTA";
 import FAQ from "@/components/landing/FAQ";
 import FeatureGrid from "@/components/landing/FeatureGrid";
 import Footer from "@/components/landing/Footer";
+import Gradient from "@/components/landing/Gradient";
 import Hero from "@/components/landing/Hero";
 import LinkButton from "@/components/landing/LinkButton";
 import Overview from "@/components/landing/Overview";
 import Problem from "@/components/landing/Problem";
 import SocialProof from "@/components/landing/SocialProof";
+import Background from "@/components/misc/Background";
 import Logo, { LogoLayout } from "@/components/shared/Logo/Logo";
 import { NotificationType, useNotification } from "@/helpers";
-import { AppShell, Button, Group, SimpleGrid } from "@mantine/core";
+import { AppShell, Button, Group, SimpleGrid, Stack } from "@mantine/core";
 
 export default function Landing() {
 	return (
@@ -27,24 +29,25 @@ export default function Landing() {
 						/>
 						<LinkButton
 							variant="filled"
-							label="Sign Up"
+							label="Start free"
 							to="/auth/signup"
 						/>
 					</Group>
 				</Group>
 			</AppShell.Header>
 			<AppShell.Main>
-				<Hero />
-				<Problem />
-				<Overview />
-				<SocialProof />
-				<FeatureGrid />
-				<FAQ />
-				<ClosingCTA />
+				<Background starDensity={0.00025} background={<Gradient />} />
+				<Stack p="175px 20px 0px 20px" gap="xl">
+					<Hero />
+					<Problem />
+					<Overview />
+					<SocialProof />
+					<FeatureGrid />
+					<FAQ />
+					<ClosingCTA />
+					<Footer />
+				</Stack>
 			</AppShell.Main>
-			<AppShell.Footer>
-				<Footer />
-			</AppShell.Footer>
 		</AppShell>
 	);
 }

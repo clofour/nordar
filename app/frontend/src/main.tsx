@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { AppShellNavbar, MantineProvider, createTheme } from "@mantine/core";
+import { AppShellNavbar, MantineProvider, createTheme, virtualColor } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
@@ -37,6 +37,15 @@ const SWRConfiguration = {
 };
 
 const theme = createTheme({
+	colors: {
+		primary: virtualColor({
+			name: "primary",
+			light: "blue",
+			dark: "orange"
+		})
+	},
+	primaryColor: "primary",
+	autoContrast: true,
 	fontFamily: "Inter",
 	components: {
 		AppShell: {
@@ -57,6 +66,9 @@ const theme = createTheme({
 			},
 		},
 	},
+	other: {
+		testing: "y"
+	}
 });
 
 createRoot(rootElement).render(
@@ -64,7 +76,6 @@ createRoot(rootElement).render(
 		<SWRConfig value={SWRConfiguration}>
 			<AuthProvider>
 				<MantineProvider theme={theme}>
-					<Background />
 					<Notifications containerWidth="25%" />
 					<BrowserRouter>
 						<Routes>
