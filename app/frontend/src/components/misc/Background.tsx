@@ -110,7 +110,7 @@ export default function Background({ starDensity = 0.001, background }: Backgrou
 
 					ctx.beginPath();
 					ctx.arc(x, y, haloRadius, 0, Math.PI * 2);
-					const gradient = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, haloRadius);
+					const gradient = ctx.createRadialGradient(x, y, 0, star.x, star.y, haloRadius);
 					gradient.addColorStop(0, `hsla(${star.hue}, ${star.saturation}%, ${50}%, ${alpha * 0.3})`);
 					gradient.addColorStop(1, `transparent`);
 					ctx.fillStyle = gradient;
