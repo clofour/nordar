@@ -29,7 +29,7 @@ export default function Landing() {
 			</AppShell.Header>
 			<AppShell.Main>
 				<Background starDensity={0.00025} background={<Gradient />} />
-				<Stack p="100px 20px 0px 20px" gap="xl">
+				<Stack p="100px 20px 0px 20px" gap="100">
 					<Hero />
 					<Problem />
 					<SocialProof />

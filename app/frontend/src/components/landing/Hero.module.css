@@ -6,13 +6,6 @@
 	text-align: center;
 }
 
-.eyebrow {
-	color: var(--landing-color-secondary);
-	font-size: 13px;
-	letter-spacing: 0.2em;
-	text-transform: uppercase;
-}
-
 .title {
 	color: var(--landing-color-primary);
 	font-size: clamp(52px, 8.4vw, 112px);
