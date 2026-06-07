@@ -32,8 +32,8 @@ export default function Landing() {
 				<Stack p="100px 20px 0px 20px" gap="xl">
 					<Hero />
 					<Problem />
-					<Overview />
 					<SocialProof />
+					<Overview />
 					<FeatureGrid />
 					<FAQ />
 					<ClosingCTA />
