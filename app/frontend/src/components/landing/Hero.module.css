@@ -7,21 +7,28 @@
 }
 
 .eyebrow {
-	color: gray;
+	color: var(--landing-color-secondary);
 	font-size: 13px;
-
+	letter-spacing: 0.2em;
 	text-transform: uppercase;
 }
 
 .title {
+	color: var(--landing-color-primary);
 	font-size: clamp(52px, 8.4vw, 112px);
-	font-family: Space Grotesk;
+	font-family: var(--landing-font-primary);
 	line-height: 1;
 	margin: 0 auto 26px;
 }
 
+.highlight {
+	color: transparent;
+	background: linear-gradient(120deg, #ffe6b0, #ffd27a);
+	background-clip: text;
+}
+
 .description {
-	color: gray;
+	color: var(--landing-color-secondary);
 	font-size: 18px;
 	max-width: 600px;
 	margin: 0 auto 40px;

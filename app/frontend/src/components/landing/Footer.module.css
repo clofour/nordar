@@ -1,15 +1,17 @@
 .description {
-	color: gray;
+	color: var(--landing-color-tertiary);
+	font-family: var(--landing-font-secondary);
 	font-size: 14px;
 }
 
 .section {
+	color: var(--landing-color-secondary);
 	font-size: 13px;
 	text-transform: uppercase;
 }
 
 .link {
-	color: gray;
+	color: var(--landing-color-tertiary);
 	font-size: 14px;
 	text-decoration: none;
 	transition: color 0.2s;

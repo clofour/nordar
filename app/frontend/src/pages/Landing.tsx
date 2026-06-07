@@ -1,3 +1,4 @@
+import "./Landing.css";
 import ClosingCTA from "@/components/landing/ClosingCTA";
 import FAQ from "@/components/landing/FAQ";
 import FeatureGrid from "@/components/landing/FeatureGrid";
@@ -10,8 +11,7 @@ import Problem from "@/components/landing/Problem";
 import SocialProof from "@/components/landing/SocialProof";
 import Background from "@/components/misc/Background";
 import Logo, { LogoLayout } from "@/components/shared/Logo/Logo";
-import { NotificationType, useNotification } from "@/helpers";
-import { AppShell, Button, Group, SimpleGrid, Stack } from "@mantine/core";
+import { AppShell, Group, Stack } from "@mantine/core";
 
 export default function Landing() {
 	return (
@@ -29,7 +29,7 @@ export default function Landing() {
 			</AppShell.Header>
 			<AppShell.Main>
 				<Background starDensity={0.00025} background={<Gradient />} />
-				<Stack p="175px 20px 0px 20px" gap="xl">
+				<Stack p="100px 20px 0px 20px" gap="xl">
 					<Hero />
 					<Problem />
 					<Overview />

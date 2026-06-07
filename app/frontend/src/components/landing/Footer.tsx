@@ -31,33 +31,33 @@ export default function Footer() {
 
 	return (
 		<Grid gap="xl">
-			<Grid.Col span={3}>
+			<Grid.Col span={{ base: 6, sm: 4 }}>
 				<Stack gap="sm">
-					<Logo layout={LogoLayout.Horizontal} />
+					<Logo layout={LogoLayout.Horizontal} size="30px" />
 					<Text className={classes.description!}>
 						Lorem ipsum dolor sit amet consectetur adipiscing elit quisque faucibus ex sapien vitae pellentesque sem.
 					</Text>
 				</Stack>
 			</Grid.Col>
-			<Grid.Col span={9}>
-				<SimpleGrid cols={sections.length}>
-					{sections.map((section) => {
-						return (
-							<Stack gap="sm">
-								<Text className={classes.section!}>{section.name}</Text>
 
-								<Stack gap="xs">
-									{section.links.map((link) => (
-										<Link to={link.to} className={classes.link}>
-											{link.label}
-										</Link>
-									))}
-								</Stack>
+			{sections.map((section) => {
+				return (
+					<Grid.Col key={section.name} span={{ base: 6, sm: "auto" }}>
+						<Stack gap="sm">
+							<Text className={classes.section!}>{section.name}</Text>
+
+							<Stack gap="xs">
+								{section.links.map((link) => (
+									<Link to={link.to} className={classes.link}>
+										{link.label}
+									</Link>
+								))}
 							</Stack>
-						);
-					})}
-				</SimpleGrid>
-			</Grid.Col>
+						</Stack>
+					</Grid.Col>
+				);
+			})}
+
 		</Grid>
 	);
 }

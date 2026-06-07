@@ -8,8 +8,10 @@ export default function Icon({ size }: IconProps) {
 	const theme = useMantineTheme();
 	const computedColorScheme = useComputedColorScheme();
 
+	const sizeValue = size in theme.spacing ? theme.spacing[size] : size;
+
 	return (
-		<svg viewBox="0 0 53.455975 51.002312" version="1.1" width={theme.spacing[size]} height={theme.spacing[size]}>
+		<svg viewBox="0 0 53.455975 51.002312" version="1.1" width={sizeValue} height={sizeValue}>
 			<defs id="defs3">
 				{computedColorScheme == "light" ? (
 					<linearGradient gradientTransform="rotate(25)" id="star-gradient" x1="0" y1="0" x2="1" y2="0">

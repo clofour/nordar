@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { AppShellNavbar, MantineProvider, createTheme, virtualColor } from "@mantine/core";
+import { AppShellNavbar, MantineProvider, createTheme, virtualColor, type CSSVariablesResolver } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
@@ -71,11 +71,23 @@ const theme = createTheme({
 	},
 });
 
+const resolver: CSSVariablesResolver = (theme) => ({
+	variables: {
+		
+	},
+	light: {
+
+	},
+	dark: {
+
+	}
+});
+
 createRoot(rootElement).render(
 	<StrictMode>
 		<SWRConfig value={SWRConfiguration}>
 			<AuthProvider>
-				<MantineProvider theme={theme}>
+				<MantineProvider theme={theme} cssVariablesResolver={resolver}>
 					<Notifications containerWidth="25%" />
 					<BrowserRouter>
 						<Routes>
