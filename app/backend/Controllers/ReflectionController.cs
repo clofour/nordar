@@ -19,6 +19,7 @@ namespace backend.Controllers
     public class ReflectionController(AppDbContext appDbContext, ReflectionService reflectionService, UserManager<User> userManager, ILogger<ReflectionController> logger, IMapper mapper, EventService eventService) : ControllerBase
     {
         [HttpGet]
+        [EndpointName("GetReflection")]
         [ProducesResponseType(typeof(ReflectionGet), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> Get(Guid Id)
         {
@@ -33,6 +34,7 @@ namespace backend.Controllers
         }
 
         [HttpGet]
+        [EndpointName("ListReflections")]
         [ProducesResponseType(typeof(List<ReflectionGet>), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> List()
         {
@@ -47,6 +49,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
+        [EndpointName("CreateReflection")]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> Create([FromBody] ReflectionCreate reflectionCreate)
         {
@@ -61,12 +64,14 @@ namespace backend.Controllers
         }
 
         [HttpPost]
+        [EndpointName("UpdateReflection")]
         public async Task<ActionResult> Update()
         {
             throw new NotImplementedException();
         }
 
         [HttpPost]
+        [EndpointName("DeleteReflection")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var user = await userManager.GetUserAsync(User);
@@ -80,6 +85,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
+        [EndpointName("ReflectionPromptData")]
         [ProducesResponseType(typeof(DateTime), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> PromptData()
         {
@@ -94,6 +100,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
+        [EndpointName("ReflectionPrompt")]
         public async Task<ActionResult> Prompt()
         {
             var user = await userManager.GetUserAsync(User);

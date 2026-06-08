@@ -20,6 +20,7 @@ namespace backend.Controllers
     public class GoalController(AppDbContext appDbContext, UserManager<User> userManager, ILogger<GoalController> logger, IMapper mapper, GoalService goalService) : ControllerBase
     {
         [HttpGet]
+        [EndpointName("ListGoals")]
         [ProducesResponseType(typeof(List<NorthStarGet>), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> List()
         {
@@ -34,6 +35,7 @@ namespace backend.Controllers
         }
 
         [HttpGet]
+        [EndpointName("GoalStats")]
         [ProducesResponseType(typeof(GoalStats), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> Stats()
         {
@@ -48,6 +50,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
+        [EndpointName("CreateNorthStar")]
         public async Task<ActionResult> CreateNorthStar([FromBody] NorthStarCreate northStarCreate)
         {
             var user = await userManager.GetUserAsync(User);
@@ -61,6 +64,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
+        [EndpointName("CreateBearing")]
         public async Task<ActionResult> CreateBearing([FromBody] BearingCreate bearingCreate)
         {
             var user = await userManager.GetUserAsync(User);
@@ -74,6 +78,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
+        [EndpointName("CreateMovement")]
         public async Task<ActionResult> CreateMovement([FromBody] MovementCreate movementCreate)
         {
             var user = await userManager.GetUserAsync(User);
@@ -87,6 +92,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
+        [EndpointName("DeleteGoal")]
         public async Task<ActionResult> Delete(Guid id, GoalType goalType)
         {
             var user = await userManager.GetUserAsync(User);

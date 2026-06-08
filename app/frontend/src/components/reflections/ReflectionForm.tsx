@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 import { Box, Button, Group, Input, Stack, Text, Textarea, TextInput, UnstyledButton } from "@mantine/core";
 import { useForm, schemaResolver, type UseFormReturnType } from "@mantine/form";
 import type { ReflectionCreate } from "@/api/models";
-import { PostApiReflectionCreateBody } from "@/api/endpoints/reflection/reflection.zod";
-import { postApiReflectionCreate } from "@/api/endpoints/reflection/reflection";
+import { CreateReflectionBody } from "@/api/endpoints/reflection/reflection.zod";
+import { createReflection } from "@/api/endpoints/reflection/reflection";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { NotificationType, useNotification } from "@/helpers";
 import { getErrorMessage } from "@/data/error";
@@ -91,11 +91,11 @@ export default function ReflectionForm({ close, initialValues }: ReflectionFormP
 			negative: [],
 			improvement: [],
 		},
-		validate: schemaResolver(PostApiReflectionCreateBody, { sync: true }),
+		validate: schemaResolver(CreateReflectionBody, { sync: true }),
 	});
 
 	const handleSubmit = async (values: typeof form.values) => {
-		const response = await postApiReflectionCreate(values);
+		const response = await createReflection(values);
 
 		if (response.status === 200) {
 			close();

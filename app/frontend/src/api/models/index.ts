@@ -7,6 +7,8 @@
 
 export * from "./bearingCreate";
 export * from "./bearingGet";
+export * from "./deleteGoalParams";
+export * from "./deleteReflectionParams";
 export * from "./eventGet";
 export * from "./eventGetOnetimeEventGet";
 export * from "./eventGetOnetimeEventGetType";
@@ -15,8 +17,7 @@ export * from "./eventGetRecurringEventGetType";
 export * from "./eventInstanceStateGet";
 export * from "./eventInstanceStateSet";
 export * from "./eventState";
-export * from "./getApiEventGetOnetimeInstanceStateOnetimeEventIdParams";
-export * from "./getApiReflectionGetParams";
+export * from "./getReflectionParams";
 export * from "./goalImportance";
 export * from "./goalStats";
 export * from "./goalType";
@@ -26,8 +27,6 @@ export * from "./movementGet";
 export * from "./northStarCreate";
 export * from "./northStarGet";
 export * from "./onetimeEventCreate";
-export * from "./postApiGoalDeleteParams";
-export * from "./postApiReflectionDeleteParams";
 export * from "./recurrenceGet";
 export * from "./recurrenceTypes";
 export * from "./recurringEventCreate";

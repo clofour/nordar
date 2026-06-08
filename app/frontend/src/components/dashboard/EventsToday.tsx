@@ -1,5 +1,5 @@
 import Event from "@/components/dashboard/Event";
-import { useGetApiEventGet } from "@/api/endpoints/event/event";
+import { useListEvents } from "@/api/endpoints/event/event";
 import { expandRecurringEvents, type ScheduleEventData } from "@mantine/schedule";
 import { theme } from "@/data/theme";
 import { Stack } from "@mantine/core";
@@ -11,7 +11,7 @@ export default function EventsToday() {
 	const dayEnd = new Date();
 	dayEnd.setHours(23, 59, 59, 999);
 
-	const { data: response, error, isLoading, mutate } = useGetApiEventGet();
+	const { data: response, error, isLoading, mutate } = useListEvents();
 	const events = response?.data ?? [];
 	const preprocessedEvents = events.map((event) => ({
 		...event,

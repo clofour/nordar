@@ -1,7 +1,7 @@
 import { Button, Group, Input, SegmentedControl, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm, schemaResolver } from "@mantine/form";
-import { postApiGoalCreateMovement } from "@/api/endpoints/goal/goal.js";
-import { PostApiGoalCreateMovementBody } from "@/api/endpoints/goal/goal.zod.js";
+import { createMovement } from "@/api/endpoints/goal/goal.js";
+import { CreateMovementBody } from "@/api/endpoints/goal/goal.zod.js";
 import { getErrorMessage } from "@/data/error";
 import type { MovementCreate } from "@/api/models";
 import { NotificationType, useNotification } from "@/helpers";
@@ -15,7 +15,7 @@ interface MovementFormProps {
 export default function MovementForm({ close, parentId, initialValues }: MovementFormProps) {
 	const notify = useNotification();
 
-	const formSchema = PostApiGoalCreateMovementBody.omit({
+	const formSchema = CreateMovementBody.omit({
 		bearingId: true,
 	});
 	const form = useForm({
@@ -29,7 +29,7 @@ export default function MovementForm({ close, parentId, initialValues }: Movemen
 			...values,
 			bearingId: parentId,
 		};
-		const response = await postApiGoalCreateMovement(requestData);
+		const response = await createMovement(requestData);
 
 		if (response.status === 200) {
 			close();

@@ -1,7 +1,7 @@
 import { Button, Group, Input, SegmentedControl, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm, schemaResolver } from "@mantine/form";
-import { postApiGoalCreateNorthStar } from "@/api/endpoints/goal/goal.js";
-import { PostApiGoalCreateNorthStarBody } from "@/api/endpoints/goal/goal.zod.js";
+import { createNorthStar } from "@/api/endpoints/goal/goal.js";
+import { CreateNorthStarBody } from "@/api/endpoints/goal/goal.zod.js";
 import { getErrorMessage } from "@/data/error";
 import type { NorthStarCreate } from "@/api/models";
 import { NotificationType, useNotification } from "@/helpers";
@@ -19,11 +19,11 @@ export default function NorthStarForm({ close, initialValues }: NorthStarFormPro
 	const form = useForm({
 		mode: "uncontrolled",
 		initialValues: initialValues,
-		validate: schemaResolver(PostApiGoalCreateNorthStarBody, { sync: true }),
+		validate: schemaResolver(CreateNorthStarBody, { sync: true }),
 	});
 
 	const handleSubmit = async (values: typeof form.values) => {
-		const response = await postApiGoalCreateNorthStar(values);
+		const response = await createNorthStar(values);
 
 		if (response.status === 200) {
 			close();

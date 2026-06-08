@@ -10,7 +10,7 @@ import { HttpResponse, http } from "msw";
 import type { GoalStats, NorthStarGet } from "../../models";
 import { GoalImportance } from "../../models";
 
-export const getGetApiGoalGetResponseMock = (): NorthStarGet[] =>
+export const getListGoalsResponseMock = (): NorthStarGet[] =>
 	Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
 		description: faker.string.alpha({ length: { min: 10, max: 200 } }),
 		importance: faker.helpers.arrayElement(Object.values(GoalImportance)),
@@ -58,26 +58,26 @@ export const getGetApiGoalGetResponseMock = (): NorthStarGet[] =>
 		name: faker.string.alpha({ length: { min: 10, max: 200 } }),
 	}));
 
-export const getGetApiGoalStatsResponseMock = (overrideResponse: Partial<Extract<GoalStats, object>> = {}): GoalStats => ({
+export const getGoalStatsResponseMock = (overrideResponse: Partial<Extract<GoalStats, object>> = {}): GoalStats => ({
 	northStarCount: faker.helpers.arrayElement([faker.number.int(), faker.helpers.fromRegExp("^-?(?:0|[1-9]\\d*)$")]),
 	bearingCount: faker.helpers.arrayElement([faker.number.int(), faker.helpers.fromRegExp("^-?(?:0|[1-9]\\d*)$")]),
 	movementCount: faker.helpers.arrayElement([faker.number.int(), faker.helpers.fromRegExp("^-?(?:0|[1-9]\\d*)$")]),
 	...overrideResponse,
 });
 
-export const getGetApiGoalGetMockHandler = (
+export const getListGoalsMockHandler = (
 	overrideResponse?: NorthStarGet[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<NorthStarGet[]> | NorthStarGet[]),
 	options?: RequestHandlerOptions,
 ) => {
 	return http.get(
-		"*/api/Goal/Get",
+		"*/api/Goal/List",
 		async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
 			return HttpResponse.json(
 				overrideResponse !== undefined
 					? typeof overrideResponse === "function"
 						? await overrideResponse(info)
 						: overrideResponse
-					: getGetApiGoalGetResponseMock(),
+					: getListGoalsResponseMock(),
 				{ status: 200 },
 			);
 		},
@@ -85,7 +85,7 @@ export const getGetApiGoalGetMockHandler = (
 	);
 };
 
-export const getGetApiGoalStatsMockHandler = (
+export const getGoalStatsMockHandler = (
 	overrideResponse?: GoalStats | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GoalStats> | GoalStats),
 	options?: RequestHandlerOptions,
 ) => {
@@ -97,7 +97,7 @@ export const getGetApiGoalStatsMockHandler = (
 					? typeof overrideResponse === "function"
 						? await overrideResponse(info)
 						: overrideResponse
-					: getGetApiGoalStatsResponseMock(),
+					: getGoalStatsResponseMock(),
 				{ status: 200 },
 			);
 		},
@@ -105,7 +105,7 @@ export const getGetApiGoalStatsMockHandler = (
 	);
 };
 
-export const getPostApiGoalCreateNorthStarMockHandler = (
+export const getCreateNorthStarMockHandler = (
 	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void),
 	options?: RequestHandlerOptions,
 ) => {
@@ -122,7 +122,7 @@ export const getPostApiGoalCreateNorthStarMockHandler = (
 	);
 };
 
-export const getPostApiGoalCreateBearingMockHandler = (
+export const getCreateBearingMockHandler = (
 	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void),
 	options?: RequestHandlerOptions,
 ) => {
@@ -139,7 +139,7 @@ export const getPostApiGoalCreateBearingMockHandler = (
 	);
 };
 
-export const getPostApiGoalCreateMovementMockHandler = (
+export const getCreateMovementMockHandler = (
 	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void),
 	options?: RequestHandlerOptions,
 ) => {
@@ -156,7 +156,7 @@ export const getPostApiGoalCreateMovementMockHandler = (
 	);
 };
 
-export const getPostApiGoalDeleteMockHandler = (
+export const getDeleteGoalMockHandler = (
 	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void),
 	options?: RequestHandlerOptions,
 ) => {
@@ -173,10 +173,10 @@ export const getPostApiGoalDeleteMockHandler = (
 	);
 };
 export const getGoalMock = () => [
-	getGetApiGoalGetMockHandler(),
-	getGetApiGoalStatsMockHandler(),
-	getPostApiGoalCreateNorthStarMockHandler(),
-	getPostApiGoalCreateBearingMockHandler(),
-	getPostApiGoalCreateMovementMockHandler(),
-	getPostApiGoalDeleteMockHandler(),
+	getListGoalsMockHandler(),
+	getGoalStatsMockHandler(),
+	getCreateNorthStarMockHandler(),
+	getCreateBearingMockHandler(),
+	getCreateMovementMockHandler(),
+	getDeleteGoalMockHandler(),
 ];

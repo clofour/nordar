@@ -1,7 +1,7 @@
 import { Button, Group, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm, schemaResolver } from "@mantine/form";
-import { postApiGoalCreateBearing } from "@/api/endpoints/goal/goal.js";
-import { PostApiGoalCreateBearingBody } from "@/api/endpoints/goal/goal.zod.js";
+import { createBearing } from "@/api/endpoints/goal/goal.js";
+import { CreateBearingBody } from "@/api/endpoints/goal/goal.zod.js";
 import { getErrorMessage } from "@/data/error";
 import type { BearingCreate } from "@/api/models";
 import { NotificationType, useNotification } from "@/helpers";
@@ -15,7 +15,7 @@ interface BearingFormProps {
 export default function BearingForm({ close, parentId, initialValues }: BearingFormProps) {
 	const notify = useNotification();
 
-	const formSchema = PostApiGoalCreateBearingBody.omit({
+	const formSchema = CreateBearingBody.omit({
 		northStarId: true,
 	});
 	const form = useForm({
@@ -29,7 +29,7 @@ export default function BearingForm({ close, parentId, initialValues }: BearingF
 			...values,
 			northStarId: parentId,
 		};
-		const response = await postApiGoalCreateBearing(requestData);
+		const response = await createBearing(requestData);
 
 		if (response.status === 200) {
 			close();

@@ -4,126 +4,117 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import * as zod from "zod";
+import * as zod from 'zod';
 
-export const getApiEventGetResponseOneTitleMax = 200;
 
-export const getApiEventGetResponseTwoTitleMax = 200;
+export const listEventsResponseOneTitleMax = 200;
 
-export const GetApiEventGetResponseItem = zod.union([
-	zod.object({
-		type: zod.enum(["onetime"]),
-		id: zod.string().uuid(),
-		movementId: zod.string().uuid().nullish(),
-		title: zod.string().max(getApiEventGetResponseOneTitleMax),
-		start: zod.string().datetime({ offset: true }),
-		end: zod.string().datetime({ offset: true }),
-	}),
-	zod.object({
-		type: zod.enum(["recurring"]),
-		recurrence: zod.object({
-			rrule: zod.string(),
-			exDate: zod.array(zod.string()),
-		}),
-		id: zod.string().uuid(),
-		movementId: zod.string().uuid().nullish(),
-		title: zod.string().max(getApiEventGetResponseTwoTitleMax),
-		start: zod.string().datetime({ offset: true }),
-		end: zod.string().datetime({ offset: true }),
-	}),
-]);
-export const GetApiEventGetResponse = zod.array(GetApiEventGetResponseItem);
+export const listEventsResponseTwoTitleMax = 200;
 
-export const postApiEventCreateOnetimeBodyNameMax = 200;
 
-export const postApiEventCreateOnetimeBodyDurationRegExpTwo = new RegExp("^-?(?:0|[1-9]\\d\*)$");
 
-export const PostApiEventCreateOnetimeBody = zod.object({
-	movementId: zod.string().uuid().nullish(),
-	name: zod.string().max(postApiEventCreateOnetimeBodyNameMax),
-	startDate: zod.string().date(),
-	startTime: zod.string().time({}),
-	timeZoneId: zod.string(),
-	duration: zod.union([zod.number(), zod.string().regex(postApiEventCreateOnetimeBodyDurationRegExpTwo)]),
-});
+export const ListEventsResponseItem = zod.union([zod.object({
+  "type": zod.enum(['onetime']),
+  "id": zod.string().uuid(),
+  "movementId": zod.string().uuid().nullish(),
+  "title": zod.string().max(listEventsResponseOneTitleMax),
+  "start": zod.string().datetime({"offset":true}),
+  "end": zod.string().datetime({"offset":true})
+}),zod.object({
+  "type": zod.enum(['recurring']),
+  "recurrence": zod.object({
+  "rrule": zod.string(),
+  "exDate": zod.array(zod.string())
+}),
+  "id": zod.string().uuid(),
+  "movementId": zod.string().uuid().nullish(),
+  "title": zod.string().max(listEventsResponseTwoTitleMax),
+  "start": zod.string().datetime({"offset":true}),
+  "end": zod.string().datetime({"offset":true})
+})])
+export const ListEventsResponse = zod.array(ListEventsResponseItem)
 
-export const PostApiEventCreateOnetimeResponse = zod.string().uuid();
+export const createOnetimeBodyNameMax = 200;
 
-export const postApiEventCreateRecurringBodyRecurrenceAmountRegExpTwo = new RegExp("^-?(?:0|[1-9]\\d\*)$");
-export const postApiEventCreateRecurringBodyMonthDayMaxOne = 31;
+export const createOnetimeBodyDurationRegExpTwo = new RegExp('^-?(?:0|[1-9]\\d\*)$');
 
-export const postApiEventCreateRecurringBodyMonthDayMaxTwo = 31;
 
-export const postApiEventCreateRecurringBodyMonthDayRegExpTwo = new RegExp("^-?(?:0|[1-9]\\d\*)$");
-export const postApiEventCreateRecurringBodyYearMonthMaxOne = 12;
+export const CreateOnetimeBody = zod.object({
+  "movementId": zod.string().uuid().nullish(),
+  "name": zod.string().max(createOnetimeBodyNameMax),
+  "startDate": zod.string().date(),
+  "startTime": zod.string().time({}),
+  "timeZoneId": zod.string(),
+  "duration": zod.union([zod.number(),zod.string().regex(createOnetimeBodyDurationRegExpTwo)])
+})
 
-export const postApiEventCreateRecurringBodyYearMonthMaxTwo = 12;
+export const CreateOnetimeResponse = zod.string().uuid()
 
-export const postApiEventCreateRecurringBodyYearMonthRegExpTwo = new RegExp("^-?(?:0|[1-9]\\d\*)$");
-export const postApiEventCreateRecurringBodyNameMax = 200;
+export const createRecurringBodyRecurrenceAmountRegExpTwo = new RegExp('^-?(?:0|[1-9]\\d\*)$');
+export const createRecurringBodyMonthDayMaxOne = 31;
 
-export const postApiEventCreateRecurringBodyDurationRegExpTwo = new RegExp("^-?(?:0|[1-9]\\d\*)$");
+export const createRecurringBodyMonthDayMaxTwo = 31;
 
-export const PostApiEventCreateRecurringBody = zod.object({
-	recurrenceAmount: zod.union([zod.number(), zod.string().regex(postApiEventCreateRecurringBodyRecurrenceAmountRegExpTwo)]),
-	recurrenceType: zod.enum(["DAILY", "WEEKLY", "MONTHLY", "YEARLY"]),
-	weekDays: zod.array(zod.enum(["MO", "TU", "WE", "TH", "FR", "SA", "SU"])).nullish(),
-	monthDay: zod
-		.union([
-			zod.number().min(1).max(postApiEventCreateRecurringBodyMonthDayMaxOne),
-			zod.string().min(1).max(postApiEventCreateRecurringBodyMonthDayMaxTwo).regex(postApiEventCreateRecurringBodyMonthDayRegExpTwo),
-		])
-		.nullish(),
-	yearMonth: zod
-		.union([
-			zod.number().min(1).max(postApiEventCreateRecurringBodyYearMonthMaxOne),
-			zod.string().min(1).max(postApiEventCreateRecurringBodyYearMonthMaxTwo).regex(postApiEventCreateRecurringBodyYearMonthRegExpTwo),
-		])
-		.nullish(),
-	movementId: zod.string().uuid().nullish(),
-	name: zod.string().max(postApiEventCreateRecurringBodyNameMax),
-	startDate: zod.string().date(),
-	startTime: zod.string().time({}),
-	timeZoneId: zod.string(),
-	duration: zod.union([zod.number(), zod.string().regex(postApiEventCreateRecurringBodyDurationRegExpTwo)]),
-});
 
-export const PostApiEventCreateRecurringResponse = zod.string().uuid();
+export const createRecurringBodyMonthDayRegExpTwo = new RegExp('^-?(?:0|[1-9]\\d\*)$');
+export const createRecurringBodyYearMonthMaxOne = 12;
 
-export const GetApiEventGetOnetimeInstanceStateOnetimeEventIdParams = zod.object({
-	eventId: zod.string().uuid(),
-});
+export const createRecurringBodyYearMonthMaxTwo = 12;
 
-export const GetApiEventGetOnetimeInstanceStateOnetimeEventIdQueryParams = zod.object({
-	eventOccurence: zod.string().datetime({ offset: true }).optional(),
-});
 
-export const GetApiEventGetOnetimeInstanceStateOnetimeEventIdResponse = zod.object({
-	eventState: zod.enum(["Unknown", "Incomplete", "Complete"]),
-});
+export const createRecurringBodyYearMonthRegExpTwo = new RegExp('^-?(?:0|[1-9]\\d\*)$');
+export const createRecurringBodyNameMax = 200;
 
-export const GetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceParams = zod.object({
-	eventId: zod.string().uuid(),
-	eventOccurence: zod.string().datetime({ offset: true }),
-});
+export const createRecurringBodyDurationRegExpTwo = new RegExp('^-?(?:0|[1-9]\\d\*)$');
 
-export const GetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponse = zod.object({
-	eventState: zod.enum(["Unknown", "Incomplete", "Complete"]),
-});
 
-export const PutApiEventSetOnetimeInstanceStateOnetimeEventIdParams = zod.object({
-	eventId: zod.string().uuid(),
-});
+export const CreateRecurringBody = zod.object({
+  "recurrenceAmount": zod.union([zod.number(),zod.string().regex(createRecurringBodyRecurrenceAmountRegExpTwo)]),
+  "recurrenceType": zod.enum(['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY']),
+  "weekDays": zod.array(zod.enum(['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'])).nullish(),
+  "monthDay": zod.union([zod.number().min(1).max(createRecurringBodyMonthDayMaxOne),zod.string().min(1).max(createRecurringBodyMonthDayMaxTwo).regex(createRecurringBodyMonthDayRegExpTwo)]).nullish(),
+  "yearMonth": zod.union([zod.number().min(1).max(createRecurringBodyYearMonthMaxOne),zod.string().min(1).max(createRecurringBodyYearMonthMaxTwo).regex(createRecurringBodyYearMonthRegExpTwo)]).nullish(),
+  "movementId": zod.string().uuid().nullish(),
+  "name": zod.string().max(createRecurringBodyNameMax),
+  "startDate": zod.string().date(),
+  "startTime": zod.string().time({}),
+  "timeZoneId": zod.string(),
+  "duration": zod.union([zod.number(),zod.string().regex(createRecurringBodyDurationRegExpTwo)])
+})
 
-export const PutApiEventSetOnetimeInstanceStateOnetimeEventIdBody = zod.object({
-	eventState: zod.enum(["Unknown", "Incomplete", "Complete"]),
-});
+export const CreateRecurringResponse = zod.string().uuid()
 
-export const PutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceParams = zod.object({
-	eventId: zod.string().uuid(),
-	eventOccurence: zod.string().datetime({ offset: true }),
-});
+export const GetOnetimeInstanceStateParams = zod.object({
+  "eventId": zod.string().uuid()
+})
 
-export const PutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceBody = zod.object({
-	eventState: zod.enum(["Unknown", "Incomplete", "Complete"]),
-});
+export const GetOnetimeInstanceStateResponse = zod.object({
+  "eventState": zod.enum(['Unknown', 'Incomplete', 'Complete'])
+})
+
+export const GetRecurringInstanceStateParams = zod.object({
+  "eventId": zod.string().uuid(),
+  "eventOccurence": zod.string().datetime({"offset":true})
+})
+
+export const GetRecurringInstanceStateResponse = zod.object({
+  "eventState": zod.enum(['Unknown', 'Incomplete', 'Complete'])
+})
+
+export const SetOnetimeInstanceStateParams = zod.object({
+  "eventId": zod.string().uuid()
+})
+
+export const SetOnetimeInstanceStateBody = zod.object({
+  "eventState": zod.enum(['Unknown', 'Incomplete', 'Complete'])
+})
+
+export const SetRecurringInstanceStateParams = zod.object({
+  "eventId": zod.string().uuid(),
+  "eventOccurence": zod.string().datetime({"offset":true})
+})
+
+export const SetRecurringInstanceStateBody = zod.object({
+  "eventState": zod.enum(['Unknown', 'Incomplete', 'Complete'])
+})
+

@@ -1,4 +1,4 @@
-import { postApiAuthSignOut } from "@/api/endpoints/auth/auth";
+import { signOut } from "@/api/endpoints/auth/auth";
 import { useAuth } from "@/contexts/AuthContext";
 import { getErrorMessage } from "@/data/error";
 import { NotificationType, useNotification } from "@/helpers";
@@ -10,7 +10,7 @@ export default function LogOutButton() {
 
 	const { setAuthenticationState } = useAuth();
 	async function logout() {
-		const response = await postApiAuthSignOut();
+		const response = await signOut();
 
 		if (response.status == 204) {
 			setAuthenticationState(false);

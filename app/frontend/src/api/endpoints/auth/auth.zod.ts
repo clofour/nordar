@@ -4,45 +4,50 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import * as zod from "zod";
+import * as zod from 'zod';
 
-export const postApiAuthSignUpBodyAccessCodeMin = 3;
-export const postApiAuthSignUpBodyAccessCodeMax = 20;
 
-export const postApiAuthSignUpBodyAccessCodeRegExp = new RegExp("^[a-zA-Z]+$");
-export const postApiAuthSignUpBodyUsernameMin = 3;
-export const postApiAuthSignUpBodyUsernameMax = 20;
+export const signUpBodyAccessCodeMin = 3;
+export const signUpBodyAccessCodeMax = 20;
 
-export const postApiAuthSignUpBodyUsernameRegExp = new RegExp("^[a-zA-Z0-9]+$");
-export const postApiAuthSignUpBodyEmailMax = 256;
 
-export const postApiAuthSignUpBodyPasswordMin = 16;
-export const postApiAuthSignUpBodyPasswordMax = 64;
+export const signUpBodyAccessCodeRegExp = new RegExp('^[a-zA-Z]+$');
+export const signUpBodyUsernameMin = 3;
+export const signUpBodyUsernameMax = 20;
 
-export const postApiAuthSignUpBodyPasswordRegExp = new RegExp("^[a-zA-Z0-9]+$");
 
-export const PostApiAuthSignUpBody = zod.object({
-	accessCode: zod
-		.string()
-		.min(postApiAuthSignUpBodyAccessCodeMin)
-		.max(postApiAuthSignUpBodyAccessCodeMax)
-		.regex(postApiAuthSignUpBodyAccessCodeRegExp),
-	username: zod.string().min(postApiAuthSignUpBodyUsernameMin).max(postApiAuthSignUpBodyUsernameMax).regex(postApiAuthSignUpBodyUsernameRegExp),
-	email: zod.string().max(postApiAuthSignUpBodyEmailMax),
-	password: zod.string().min(postApiAuthSignUpBodyPasswordMin).max(postApiAuthSignUpBodyPasswordMax).regex(postApiAuthSignUpBodyPasswordRegExp),
-	termsOfService: zod.boolean(),
-});
+export const signUpBodyUsernameRegExp = new RegExp('^[a-zA-Z0-9]+$');
+export const signUpBodyEmailMax = 256;
 
-export const postApiAuthSignInBodyUsernameMin = 3;
-export const postApiAuthSignInBodyUsernameMax = 20;
+export const signUpBodyPasswordMin = 16;
+export const signUpBodyPasswordMax = 64;
 
-export const postApiAuthSignInBodyUsernameRegExp = new RegExp("^[a-zA-Z0-9]+$");
-export const postApiAuthSignInBodyPasswordMin = 16;
-export const postApiAuthSignInBodyPasswordMax = 64;
 
-export const postApiAuthSignInBodyPasswordRegExp = new RegExp("^[a-zA-Z0-9]+$");
+export const signUpBodyPasswordRegExp = new RegExp('^[a-zA-Z0-9]+$');
 
-export const PostApiAuthSignInBody = zod.object({
-	username: zod.string().min(postApiAuthSignInBodyUsernameMin).max(postApiAuthSignInBodyUsernameMax).regex(postApiAuthSignInBodyUsernameRegExp),
-	password: zod.string().min(postApiAuthSignInBodyPasswordMin).max(postApiAuthSignInBodyPasswordMax).regex(postApiAuthSignInBodyPasswordRegExp),
-});
+
+export const SignUpBody = zod.object({
+  "accessCode": zod.string().min(signUpBodyAccessCodeMin).max(signUpBodyAccessCodeMax).regex(signUpBodyAccessCodeRegExp),
+  "username": zod.string().min(signUpBodyUsernameMin).max(signUpBodyUsernameMax).regex(signUpBodyUsernameRegExp),
+  "email": zod.string().max(signUpBodyEmailMax),
+  "password": zod.string().min(signUpBodyPasswordMin).max(signUpBodyPasswordMax).regex(signUpBodyPasswordRegExp),
+  "termsOfService": zod.boolean()
+})
+
+export const signInBodyUsernameMin = 3;
+export const signInBodyUsernameMax = 20;
+
+
+export const signInBodyUsernameRegExp = new RegExp('^[a-zA-Z0-9]+$');
+export const signInBodyPasswordMin = 16;
+export const signInBodyPasswordMax = 64;
+
+
+export const signInBodyPasswordRegExp = new RegExp('^[a-zA-Z0-9]+$');
+
+
+export const SignInBody = zod.object({
+  "username": zod.string().min(signInBodyUsernameMin).max(signInBodyUsernameMax).regex(signInBodyUsernameRegExp),
+  "password": zod.string().min(signInBodyPasswordMin).max(signInBodyPasswordMax).regex(signInBodyPasswordRegExp)
+})
+

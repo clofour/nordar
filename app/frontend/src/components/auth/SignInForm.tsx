@@ -1,5 +1,5 @@
-import { postApiAuthSignIn } from "@/api/endpoints/auth/auth.js";
-import { PostApiAuthSignInBody } from "@/api/endpoints/auth/auth.zod.js";
+import { signIn } from "@/api/endpoints/auth/auth.js";
+import { SignInBody } from "@/api/endpoints/auth/auth.zod.js";
 import { useAuth } from "@/contexts/AuthContext";
 import { getErrorMessage } from "@/data/error";
 import { NotificationType, useNotification } from "@/helpers";
@@ -17,7 +17,7 @@ export default function SignInForm({ setLoading, loading }: SignInFormProps) {
 
 	const { setAuthenticationState } = useAuth();
 
-	const formSchema = PostApiAuthSignInBody.omit({});
+	const formSchema = SignInBody.omit({});
 	const form = useForm({
 		mode: "uncontrolled",
 		validate: schemaResolver(formSchema, { sync: true }),
@@ -28,7 +28,7 @@ export default function SignInForm({ setLoading, loading }: SignInFormProps) {
 		const requestData = {
 			...values,
 		};
-		const response = await postApiAuthSignIn(requestData);
+		const response = await signIn(requestData);
 
 		if (response.status === 200) {
 			setAuthenticationState(true);

@@ -19,6 +19,7 @@ namespace backend.Controllers
     public class EventController(AppDbContext appDbContext, SignInManager<User> signInManager, UserManager<User> userManager, ILogger<AuthController> logger, IMapper mapper, EventService eventService) : ControllerBase
     {
         [HttpGet]
+        [EndpointName("ListEvents")]
         [ProducesResponseType(typeof(List<EventGet>), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> List()
         {
@@ -33,6 +34,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
+        [EndpointName("CreateOnetime")]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> CreateOnetime([FromBody] OnetimeEventCreate onetimeEventCreate)
         {
@@ -47,6 +49,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
+        [EndpointName("CreateRecurring")]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> CreateRecurring([FromBody] RecurringEventCreate recurringEventCreate)
         {
@@ -61,18 +64,21 @@ namespace backend.Controllers
         }
 
         [HttpPost]
+        [EndpointName("UpdateEvent")]
         public async Task<ActionResult> Update()
         {
             throw new NotImplementedException();
         }
 
         [HttpPost]
+        [EndpointName("DeleteEvent")]
         public async Task<ActionResult> Delete()
         {
             throw new NotImplementedException();
         }
 
         [HttpGet("onetime/{eventId}")]
+        [EndpointName("GetOnetimeInstanceState")]
         [ProducesResponseType(typeof(EventInstanceStateGet), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> GetOnetimeInstanceState([FromRoute] Guid eventId)
         {
@@ -87,6 +93,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("recurring/{eventId}/{eventOccurence}")]
+        [EndpointName("GetRecurringInstanceState")]
         [ProducesResponseType(typeof(EventInstanceStateGet), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> GetRecurringInstanceState([FromRoute] Guid eventId, [FromRoute] DateTime eventOccurence)
         {
@@ -102,6 +109,7 @@ namespace backend.Controllers
 
         // [EndpointName("SetOnetimeInstanceState")]
         [HttpPut("onetime/{eventId}")]
+        [EndpointName("SetOnetimeInstanceState")]
         public async Task<ActionResult> SetOnetimeInstanceState([FromRoute] Guid eventId, [FromBody] EventInstanceStateSet eventInstanceStateSet)
         {
             User? user = await userManager.GetUserAsync(User);
@@ -116,6 +124,7 @@ namespace backend.Controllers
 
         // [EndpointName("SetRecurringInstanceState")]
         [HttpPut("recurring/{eventId}/{eventOccurence}")]
+        [EndpointName("SetRecurringInstanceState")]
         public async Task<ActionResult> SetRecurringInstanceState([FromRoute] Guid eventId, [FromRoute] DateTime? eventOccurence, [FromBody] EventInstanceStateSet eventInstanceStateSet)
         {
             User? user = await userManager.GetUserAsync(User);

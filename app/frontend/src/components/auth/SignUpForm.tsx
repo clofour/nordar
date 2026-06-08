@@ -1,5 +1,5 @@
-import { postApiAuthSignUp } from "@/api/endpoints/auth/auth.js";
-import { PostApiAuthSignUpBody } from "@/api/endpoints/auth/auth.zod.js";
+import { signUp } from "@/api/endpoints/auth/auth.js";
+import { SignUpBody } from "@/api/endpoints/auth/auth.zod.js";
 import { getErrorMessage } from "@/data/error";
 import { NotificationType, useNotification } from "@/helpers";
 import { Button, Checkbox, Group, PasswordInput, Progress, Stack, TextInput } from "@mantine/core";
@@ -42,7 +42,7 @@ export default function SignUpForm({ setLoading, loading }: SignUpFormProps) {
 		setPasswordColor(getStrengthColor(newStrength));
 	}
 
-	const formSchema = PostApiAuthSignUpBody.omit({});
+	const formSchema = SignUpBody.omit({});
 	const form = useForm({
 		mode: "uncontrolled",
 		initialValues: {
@@ -63,7 +63,7 @@ export default function SignUpForm({ setLoading, loading }: SignUpFormProps) {
 		const requestData = {
 			...values,
 		};
-		const response = await postApiAuthSignUp(requestData);
+		const response = await signUp(requestData);
 
 		if (response.status === 200) {
 			form.reset();

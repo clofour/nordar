@@ -18,6 +18,7 @@ namespace backend.Controllers
     {
 
         [HttpPost]
+        [EndpointName("SignUp")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK, "text/plain")]
         public async Task<ActionResult> SignUp([FromBody] SignupForm signupForm)
         {
@@ -32,6 +33,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
+        [EndpointName("SignIn")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK, "text/plain")]
         public async Task<ActionResult> SignIn([FromBody] SigninForm signinForm)
         {
@@ -41,6 +43,7 @@ namespace backend.Controllers
 
         [Authorize]
         [HttpPost]
+        [EndpointName("SignOut")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public new async Task<ActionResult> SignOut()
         {
@@ -50,6 +53,7 @@ namespace backend.Controllers
 
         [Authorize]
         [HttpGet]
+        [EndpointName("IsAuthenticated")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK, "text/plain")]
         public ActionResult IsAuthenticated()
         {

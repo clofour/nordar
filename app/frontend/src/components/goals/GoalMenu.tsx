@@ -1,6 +1,6 @@
 import { Menu, ActionIcon } from "@mantine/core";
 import { IconDots, IconPencil, IconTrash } from "@tabler/icons-react";
-import { postApiGoalDelete } from "@/api/endpoints/goal/goal.js";
+import { deleteGoal } from "@/api/endpoints/goal/goal.js";
 import type { GoalType } from "@/api/models";
 import { Mode } from "@/pages/Goals";
 
@@ -13,13 +13,13 @@ interface GoalMenuProps {
 }
 
 export default function GoalMenu({ id, type, setActiveMode, setActiveForm, setActiveGoalId }: GoalMenuProps) {
-	const editGoal = async () => {
+	const onEditGoalClick = async () => {
 		setActiveMode(Mode.Edit);
 		setActiveForm(type);
 		setActiveGoalId(id);
 	};
-	const deleteGoal = async () => {
-		const response = await postApiGoalDelete({ id: id });
+	const onDeleteGoalClick = async () => {
+		const response = await deleteGoal({ id: id });
 	};
 
 	return (
@@ -30,10 +30,10 @@ export default function GoalMenu({ id, type, setActiveMode, setActiveForm, setAc
 				</ActionIcon>
 			</Menu.Target>
 			<Menu.Dropdown>
-				<Menu.Item leftSection={<IconPencil size={14} />} onClick={editGoal}>
+				<Menu.Item leftSection={<IconPencil size={14} />} onClick={onEditGoalClick}>
 					Edit
 				</Menu.Item>
-				<Menu.Item leftSection={<IconTrash size={14} />} color="red" onClick={deleteGoal}>
+				<Menu.Item leftSection={<IconTrash size={14} />} color="red" onClick={onDeleteGoalClick}>
 					Delete
 				</Menu.Item>
 			</Menu.Dropdown>

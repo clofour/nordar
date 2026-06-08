@@ -2,9 +2,9 @@ import { Button, Checkbox, Group, Input, NumberInput, SegmentedControl, Select, 
 import { useForm, schemaResolver } from "@mantine/form";
 import { DatePickerInput, TimePicker } from "@mantine/dates";
 import { getErrorMessage } from "@/data/error";
-import { postApiEventCreateOnetime, postApiEventCreateRecurring } from "@/api/endpoints/event/event";
+import { createOnetime, createRecurring } from "@/api/endpoints/event/event";
 import { RecurrenceTypes, WeekDay } from "@/api/models";
-import { PostApiEventCreateOnetimeBody, PostApiEventCreateRecurringBody } from "@/api/endpoints/event/event.zod";
+import { CreateOnetimeBody, CreateRecurringBody } from "@/api/endpoints/event/event.zod";
 import { durationToMinutes, NotificationType, useNotification } from "@/helpers";
 import { EventTypes } from "@/metadata/events";
 
@@ -59,10 +59,10 @@ export default function EventForm({ close }: EventFormProps) {
 
 			switch (processedValues.type) {
 				case EventTypes.Onetime:
-					formSchema = PostApiEventCreateOnetimeBody;
+					formSchema = CreateOnetimeBody;
 					break;
 				case EventTypes.Recurring:
-					formSchema = PostApiEventCreateRecurringBody;
+					formSchema = CreateRecurringBody;
 					break;
 				default:
 					throw new RangeError("Type is not valid.");
@@ -93,7 +93,7 @@ export default function EventForm({ close }: EventFormProps) {
 				requestData = {
 					...baseRequestData,
 				};
-				response = await postApiEventCreateOnetime(requestData);
+				response = await createOnetime(requestData);
 				break;
 
 			case EventTypes.Recurring:
@@ -106,7 +106,7 @@ export default function EventForm({ close }: EventFormProps) {
 					yearMonth: values.yearMonth,
 				};
 
-				response = await postApiEventCreateRecurring(requestData);
+				response = await createRecurring(requestData);
 				break;
 
 			default:

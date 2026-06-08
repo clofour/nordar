@@ -8,13 +8,13 @@ import { faker } from "@faker-js/faker";
 import type { RequestHandlerOptions } from "msw";
 import { HttpResponse, http } from "msw";
 
-export const getPostApiAuthSignUpResponseMock = (): string => faker.word.sample();
+export const getSignUpResponseMock = (): string => faker.word.sample();
 
-export const getPostApiAuthSignInResponseMock = (): string => faker.word.sample();
+export const getSignInResponseMock = (): string => faker.word.sample();
 
-export const getGetApiAuthIsAuthenticatedResponseMock = (): string => faker.word.sample();
+export const getIsAuthenticatedResponseMock = (): string => faker.word.sample();
 
-export const getPostApiAuthSignUpMockHandler = (
+export const getSignUpMockHandler = (
 	overrideResponse?: string | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<string> | string),
 	options?: RequestHandlerOptions,
 ) => {
@@ -26,7 +26,7 @@ export const getPostApiAuthSignUpMockHandler = (
 					? typeof overrideResponse === "function"
 						? await overrideResponse(info)
 						: overrideResponse
-					: getPostApiAuthSignUpResponseMock();
+					: getSignUpResponseMock();
 			const textBody = typeof resolvedBody === "string" ? resolvedBody : JSON.stringify(resolvedBody ?? null);
 			return HttpResponse.text(textBody, { status: 200 });
 		},
@@ -34,7 +34,7 @@ export const getPostApiAuthSignUpMockHandler = (
 	);
 };
 
-export const getPostApiAuthSignInMockHandler = (
+export const getSignInMockHandler = (
 	overrideResponse?: string | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<string> | string),
 	options?: RequestHandlerOptions,
 ) => {
@@ -46,7 +46,7 @@ export const getPostApiAuthSignInMockHandler = (
 					? typeof overrideResponse === "function"
 						? await overrideResponse(info)
 						: overrideResponse
-					: getPostApiAuthSignInResponseMock();
+					: getSignInResponseMock();
 			const textBody = typeof resolvedBody === "string" ? resolvedBody : JSON.stringify(resolvedBody ?? null);
 			return HttpResponse.text(textBody, { status: 200 });
 		},
@@ -54,7 +54,7 @@ export const getPostApiAuthSignInMockHandler = (
 	);
 };
 
-export const getPostApiAuthSignOutMockHandler = (
+export const getSignOutMockHandler = (
 	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void),
 	options?: RequestHandlerOptions,
 ) => {
@@ -71,7 +71,7 @@ export const getPostApiAuthSignOutMockHandler = (
 	);
 };
 
-export const getGetApiAuthIsAuthenticatedMockHandler = (
+export const getIsAuthenticatedMockHandler = (
 	overrideResponse?: string | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<string> | string),
 	options?: RequestHandlerOptions,
 ) => {
@@ -83,16 +83,11 @@ export const getGetApiAuthIsAuthenticatedMockHandler = (
 					? typeof overrideResponse === "function"
 						? await overrideResponse(info)
 						: overrideResponse
-					: getGetApiAuthIsAuthenticatedResponseMock();
+					: getIsAuthenticatedResponseMock();
 			const textBody = typeof resolvedBody === "string" ? resolvedBody : JSON.stringify(resolvedBody ?? null);
 			return HttpResponse.text(textBody, { status: 200 });
 		},
 		options,
 	);
 };
-export const getAuthMock = () => [
-	getPostApiAuthSignUpMockHandler(),
-	getPostApiAuthSignInMockHandler(),
-	getPostApiAuthSignOutMockHandler(),
-	getGetApiAuthIsAuthenticatedMockHandler(),
-];
+export const getAuthMock = () => [getSignUpMockHandler(), getSignInMockHandler(), getSignOutMockHandler(), getIsAuthenticatedMockHandler()];
