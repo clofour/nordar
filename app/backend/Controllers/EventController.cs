@@ -103,7 +103,7 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            ServiceResult serviceResult = await eventService.GetOnetimeInstanceState(user.Id, eventId);
+            ServiceResult serviceResult = await eventService.GetRecurringInstanceState(user.Id, eventId, eventOccurence);
             return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
@@ -125,7 +125,7 @@ namespace backend.Controllers
         // [EndpointName("SetRecurringInstanceState")]
         [HttpPut("recurring/{eventId}/{eventOccurence}")]
         [EndpointName("SetRecurringInstanceState")]
-        public async Task<ActionResult> SetRecurringInstanceState([FromRoute] Guid eventId, [FromRoute] DateTime? eventOccurence, [FromBody] EventInstanceStateSet eventInstanceStateSet)
+        public async Task<ActionResult> SetRecurringInstanceState([FromRoute] Guid eventId, [FromRoute] DateTime eventOccurence, [FromBody] EventInstanceStateSet eventInstanceStateSet)
         {
             User? user = await userManager.GetUserAsync(User);
             if (user == null)
@@ -133,7 +133,7 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            ServiceResult serviceResult = await eventService.SetOnetimeInstanceState(user.Id, eventId, eventInstanceStateSet);
+            ServiceResult serviceResult = await eventService.SetRecurringInstanceState(user.Id, eventId, eventOccurence, eventInstanceStateSet);
             return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
     }
