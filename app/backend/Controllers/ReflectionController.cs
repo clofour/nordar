@@ -16,7 +16,7 @@ namespace backend.Controllers
     [ApiController]
     [Route("api/[controller]/[action]")]
     [Authorize]
-    public class ReflectionController(AppDbContext appDbContext, UserManager<User> userManager, ILogger<ReflectionController> logger, IMapper mapper, EventService eventService) : ControllerBase
+    public class ReflectionController(AppDbContext appDbContext, ReflectionService reflectionService, UserManager<User> userManager, ILogger<ReflectionController> logger, IMapper mapper, EventService eventService) : ControllerBase
     {
         [HttpGet]
         [ProducesResponseType(typeof(ReflectionGet), StatusCodes.Status200OK, "application/json")]
@@ -28,19 +28,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            Reflection? reflection = await appDbContext.Reflections
-                .AsNoTracking()
-                .FirstOrDefaultAsync(reflection => reflection.UserId == user.Id && reflection.Id == Id);
-
-            if (reflection == null)
-            {
-                return NotFound();
-            }
-
-            ReflectionGet reflectionGet = new ReflectionGet();
-            mapper.Map(reflection, reflectionGet);
-
-            return Ok(reflectionGet);
+            ServiceResult serviceResult = await reflectionService.Get(user.Id, Id);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpGet]
@@ -53,14 +42,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            List<Reflection> events = await appDbContext.Reflections
-                .Where(e => e.UserId == user.Id)
-                .ToListAsync();
-            
-            List<ReflectionGet> reflectionsGet = new List<ReflectionGet>();
-            mapper.Map(events, reflectionsGet);
-
-            return Ok(reflectionsGet);
+            ServiceResult serviceResult = await reflectionService.List(user.Id);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPost]
@@ -73,14 +56,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            Reflection reflection = new Reflection();
-            mapper.Map(reflectionCreate, reflection);
-            reflection.User = user;
-
-            appDbContext.Reflections.Add(reflection);
-            await appDbContext.SaveChangesAsync();
-
-            return Ok();
+            ServiceResult serviceResult = await reflectionService.Create(user.Id, reflectionCreate);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPost]
@@ -98,17 +75,8 @@ namespace backend.Controllers
                 return Forbid();
             }
 
-            int reflectionsDeleted = await appDbContext.Reflections
-                .Where(reflection => reflection.UserId == user.Id && reflection.Id == id)
-                .ExecuteDeleteAsync();
-
-            if (reflectionsDeleted == 1)
-            {
-                return Ok();
-            }
-            else {
-                return NotFound();
-            }
+            ServiceResult serviceResult = await reflectionService.Delete(user.Id, id);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPost]
@@ -121,7 +89,8 @@ namespace backend.Controllers
                 return Forbid();
             }
             
-            return Ok(user.NextReflection);
+            ServiceResult serviceResult = await reflectionService.PromptData(user);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPost]
@@ -133,17 +102,8 @@ namespace backend.Controllers
                 return Forbid();
             }
 
-            Random random = new Random();
-            int dayOffset = random.Next(1, 7);
-
-            DateTime lastReflection = new DateTime();
-            DateTime nextReflection = lastReflection.AddDays(dayOffset);
-
-            user.NextReflection = nextReflection;
-
-            await appDbContext.SaveChangesAsync();
-            
-            return Ok();
+            ServiceResult serviceResult = await reflectionService.Prompt(user);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
     }
 }

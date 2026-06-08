@@ -20,7 +20,7 @@ namespace backend.Controllers
     {
         [HttpGet]
         [ProducesResponseType(typeof(List<EventGet>), StatusCodes.Status200OK, "application/json")]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult> List()
         {
             User? user = await userManager.GetUserAsync(User);
             if (user == null)
@@ -28,14 +28,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            List<Event> events = await appDbContext.Events
-                .Where(e => e.UserId == user.Id)
-                .ToListAsync();
-
-            List<EventGet> eventsGet = new List<EventGet>();
-            mapper.Map(events, eventsGet);
-
-            return Ok(eventsGet);
+            ServiceResult serviceResult = await eventService.List(user.Id);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPost]
@@ -48,16 +42,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            OnetimeEvent onetimeEvent = new OnetimeEvent();
-            mapper.Map(onetimeEventCreate, onetimeEvent);
-            onetimeEvent.Start = eventService.ConstructStart(onetimeEventCreate.StartDate, onetimeEventCreate.StartTime, onetimeEventCreate.TimeZoneId);
-            onetimeEvent.End = eventService.ConstructEnd(onetimeEvent.Start, onetimeEventCreate.Duration);
-            onetimeEvent.User = user;
-
-            appDbContext.Events.Add(onetimeEvent);
-            await appDbContext.SaveChangesAsync();
-
-            return Ok();
+            ServiceResult serviceResult = await eventService.CreateOnetime(user.Id, onetimeEventCreate);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPost]
@@ -70,17 +56,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            RecurringEvent recurringEvent = new RecurringEvent();
-            mapper.Map(recurringEventCreate, recurringEvent);
-            recurringEvent.RRULE = eventService.ConstructRRULE(recurringEventCreate);
-            recurringEvent.Start = eventService.ConstructStart(recurringEventCreate.StartDate, recurringEventCreate.StartTime, recurringEventCreate.TimeZoneId);
-            recurringEvent.End = eventService.ConstructEnd(recurringEvent.Start, recurringEventCreate.Duration);
-            recurringEvent.User = user;
-
-            appDbContext.Events.Add(recurringEvent);
-            await appDbContext.SaveChangesAsync();
-
-            return Ok();
+            ServiceResult serviceResult = await eventService.CreateRecurring(user.Id, recurringEventCreate);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPost]
@@ -97,7 +74,7 @@ namespace backend.Controllers
 
         [HttpGet("onetime/{eventId}")]
         [ProducesResponseType(typeof(EventInstanceStateGet), StatusCodes.Status200OK, "application/json")]
-        public async Task<ActionResult> GetOnetimeInstanceState([FromRoute] Guid eventId, DateTime eventOccurence)
+        public async Task<ActionResult> GetOnetimeInstanceState([FromRoute] Guid eventId)
         {
             User? user = await userManager.GetUserAsync(User);
             if (user == null)
@@ -105,15 +82,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            EventInstanceState eventInstanceState = await appDbContext.EventInstanceStates.FirstOrDefaultAsync(obj =>
-                obj.UserId == user.Id &&
-                obj.EventId == eventId)
-                ?? new EventInstanceState();
-
-            EventInstanceStateGet eventInstanceStateGet = new EventInstanceStateGet();
-            mapper.Map(eventInstanceState, eventInstanceStateGet);
-
-            return Ok(eventInstanceStateGet);
+            ServiceResult serviceResult = await eventService.GetOnetimeInstanceState(user.Id, eventId);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpGet("recurring/{eventId}/{eventOccurence}")]
@@ -126,16 +96,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            EventInstanceState eventInstanceState = await appDbContext.EventInstanceStates.FirstOrDefaultAsync(obj =>
-                obj.UserId == user.Id &&
-                obj.EventId == eventId &&
-                obj.EventOccurence == eventOccurence)
-                ?? new EventInstanceState();
-
-            EventInstanceStateGet eventInstanceStateGet = new EventInstanceStateGet();
-            mapper.Map(eventInstanceState, eventInstanceStateGet);
-
-            return Ok(eventInstanceStateGet);
+            ServiceResult serviceResult = await eventService.GetOnetimeInstanceState(user.Id, eventId);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         // [EndpointName("SetOnetimeInstanceState")]
@@ -148,24 +110,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            EventInstanceState? eventInstanceState = await appDbContext.EventInstanceStates.FirstOrDefaultAsync(obj =>
-                obj.UserId == user.Id &&
-                obj.EventId == eventId);
-
-            if (eventInstanceState == null)
-            {
-                eventInstanceState = new EventInstanceState();
-                eventInstanceState.UserId = user.Id;
-                eventInstanceState.EventId = eventId;
-
-                appDbContext.EventInstanceStates.Add(eventInstanceState);
-            }
-
-            mapper.Map(eventInstanceStateSet, eventInstanceState);
-            
-            await appDbContext.SaveChangesAsync();
-
-            return Ok();
+            ServiceResult serviceResult = await eventService.SetOnetimeInstanceState(user.Id, eventId, eventInstanceStateSet);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         // [EndpointName("SetRecurringInstanceState")]
@@ -178,26 +124,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            EventInstanceState? eventInstanceState = await appDbContext.EventInstanceStates.FirstOrDefaultAsync(obj =>
-                obj.UserId == user.Id &&
-                obj.EventId == eventId &&
-                obj.EventOccurence == eventOccurence);
-
-            if (eventInstanceState == null)
-            {
-                eventInstanceState = new EventInstanceState();
-                eventInstanceState.UserId = user.Id;
-                eventInstanceState.EventId = eventId;
-                eventInstanceState.EventOccurence = eventOccurence;
-
-                appDbContext.EventInstanceStates.Add(eventInstanceState);
-            }
-
-            mapper.Map(eventInstanceStateSet, eventInstanceState);
-
-            await appDbContext.SaveChangesAsync();
-
-            return Ok();
+            ServiceResult serviceResult = await eventService.SetOnetimeInstanceState(user.Id, eventId, eventInstanceStateSet);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
     }
 }
