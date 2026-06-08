@@ -57,8 +57,9 @@ export default function Goals() {
 
 	const { data: response, error, isLoading, mutate } = useListGoals();
 
-	const goalIndex: Record<string, GoalIndexEntry> = {};
-	useMemo(() => {
+	const goalIndex = useMemo(() => {
+		const index: Record<string, GoalIndexEntry> = {};
+
 		for (const northStar of response?.data ?? []) {
 			goalIndex[northStar.id] = { type: GoalType.NorthStar, goal: northStar };
 
@@ -70,6 +71,8 @@ export default function Goals() {
 				}
 			}
 		}
+
+		return index;
 	}, [response?.data]);
 
 	return (
