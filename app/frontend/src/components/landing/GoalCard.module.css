@@ -1,0 +1,13 @@
+.card {
+    display: flex;
+    width: 100%;
+    padding: 16px;
+    align-items: center;
+    background: linear-gradient(180deg, rgba(40, 32, 18, 0.6), rgba(14, 15, 38, 0.7));
+    border-radius: 16px;
+}
+
+.title {
+    font-family: var(--landing-font-primary);
+    font-size: 20px;
+}
