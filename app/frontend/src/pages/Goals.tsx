@@ -8,7 +8,7 @@ import { theme } from "@/data/theme";
 import NorthStarForm from "@/components/goals/NorthStarForm";
 import BearingForm from "@/components/goals/BearingForm";
 import MovementForm from "@/components/goals/MovementForm";
-import { useGetApiGoalGet, type getApiGoalGetResponse200 } from "@/api/endpoints/goal/goal";
+import { useListGoals } from "@/api/endpoints/goal/goal";
 import { capitalize } from "@/helpers";
 import { GoalType, type BearingGet, type MovementGet, type NorthStarGet } from "@/api/models";
 
@@ -55,7 +55,7 @@ export default function Goals() {
 		open();
 	};
 
-	const { data: response, error, isLoading, mutate } = useGetApiGoalGet();
+	const { data: response, error, isLoading, mutate } = useListGoals();
 
 	const goalIndex: Record<string, GoalIndexEntry> = {};
 	useMemo(() => {
