@@ -13,8 +13,8 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260604165219_DataProtectionKeys")]
-    partial class DataProtectionKeys
+    [Migration("20260609192021_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -173,7 +173,7 @@ namespace backend.Migrations
                     b.Property<Guid>("EventId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("EventOccurence")
+                    b.Property<DateTime?>("EventOccurrence")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("EventState")
@@ -231,14 +231,17 @@ namespace backend.Migrations
 
                     b.PrimitiveCollection<List<string>>("Improvement")
                         .IsRequired()
+                        .HasMaxLength(20)
                         .HasColumnType("text[]");
 
                     b.PrimitiveCollection<List<string>>("Negative")
                         .IsRequired()
+                        .HasMaxLength(20)
                         .HasColumnType("text[]");
 
                     b.PrimitiveCollection<List<string>>("Positive")
                         .IsRequired()
+                        .HasMaxLength(20)
                         .HasColumnType("text[]");
 
                     b.Property<Guid>("UserId")

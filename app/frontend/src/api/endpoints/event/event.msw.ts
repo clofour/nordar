@@ -173,7 +173,7 @@ export const getGetRecurringInstanceStateMockHandler = (
 	options?: RequestHandlerOptions,
 ) => {
 	return http.get(
-		"*/api/Event/GetRecurringInstanceState/recurring/:eventId/:eventOccurence",
+		"*/api/Event/GetRecurringInstanceState/recurring/:eventId/:eventOccurrence",
 		async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
 			return HttpResponse.json(
 				overrideResponse !== undefined
@@ -210,7 +210,7 @@ export const getSetRecurringInstanceStateMockHandler = (
 	options?: RequestHandlerOptions,
 ) => {
 	return http.put(
-		"*/api/Event/SetRecurringInstanceState/recurring/:eventId/:eventOccurence",
+		"*/api/Event/SetRecurringInstanceState/recurring/:eventId/:eventOccurrence",
 		async (info: Parameters<Parameters<typeof http.put>[1]>[0]) => {
 			if (typeof overrideResponse === "function") {
 				await overrideResponse(info);

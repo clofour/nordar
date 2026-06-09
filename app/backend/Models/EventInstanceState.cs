@@ -18,7 +18,7 @@ namespace backend.Models
         [Key]
         public Guid Id { get; set; }
         public Guid EventId { get; set; }
-        public DateTime? EventOccurence { get; set; }
+        public DateTime? EventOccurrence { get; set; }
         public Guid UserId { get; set; }
         [ForeignKey("UserId")]
         public User User { get; set; }

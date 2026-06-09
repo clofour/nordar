@@ -170,7 +170,7 @@ namespace backend.Migrations
                     b.Property<Guid>("EventId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("EventOccurence")
+                    b.Property<DateTime?>("EventOccurrence")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("EventState")
@@ -228,14 +228,17 @@ namespace backend.Migrations
 
                     b.PrimitiveCollection<List<string>>("Improvement")
                         .IsRequired()
+                        .HasMaxLength(20)
                         .HasColumnType("text[]");
 
                     b.PrimitiveCollection<List<string>>("Negative")
                         .IsRequired()
+                        .HasMaxLength(20)
                         .HasColumnType("text[]");
 
                     b.PrimitiveCollection<List<string>>("Positive")
                         .IsRequired()
+                        .HasMaxLength(20)
                         .HasColumnType("text[]");
 
                     b.Property<Guid>("UserId")

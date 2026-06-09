@@ -8,7 +8,10 @@
 export interface ReflectionCreate {
 	/** @nullable */
 	eventId?: string | null;
+	/** @maxItems 20 */
 	positive: string[];
+	/** @maxItems 20 */
 	negative: string[];
+	/** @maxItems 20 */
 	improvement: string[];
 }

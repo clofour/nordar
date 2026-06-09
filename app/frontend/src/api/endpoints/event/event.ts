@@ -323,29 +323,29 @@ export type getRecurringInstanceStateResponseSuccess = getRecurringInstanceState
 
 export type getRecurringInstanceStateResponse = getRecurringInstanceStateResponseSuccess;
 
-export const getGetRecurringInstanceStateUrl = (eventId: string, eventOccurence: string) => {
-	return `${import.meta.env.VITE_API_ORIGIN}/api/Event/GetRecurringInstanceState/recurring/${eventId}/${eventOccurence}`;
+export const getGetRecurringInstanceStateUrl = (eventId: string, eventOccurrence: string) => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Event/GetRecurringInstanceState/recurring/${eventId}/${eventOccurrence}`;
 };
 
 export const getRecurringInstanceState = async (
 	eventId: string,
-	eventOccurence: string,
+	eventOccurrence: string,
 	options?: RequestInit,
 ): Promise<getRecurringInstanceStateResponse> => {
-	return cFetch<getRecurringInstanceStateResponse>(getGetRecurringInstanceStateUrl(eventId, eventOccurence), {
+	return cFetch<getRecurringInstanceStateResponse>(getGetRecurringInstanceStateUrl(eventId, eventOccurrence), {
 		...options,
 		method: "GET",
 	});
 };
 
-export const getGetRecurringInstanceStateKey = (eventId: string, eventOccurence: string) =>
-	[`${import.meta.env.VITE_API_ORIGIN}/api/Event/GetRecurringInstanceState/recurring/${eventId}/${eventOccurence}`] as const;
+export const getGetRecurringInstanceStateKey = (eventId: string, eventOccurrence: string) =>
+	[`${import.meta.env.VITE_API_ORIGIN}/api/Event/GetRecurringInstanceState/recurring/${eventId}/${eventOccurrence}`] as const;
 
 export type GetRecurringInstanceStateQueryResult = NonNullable<Awaited<ReturnType<typeof getRecurringInstanceState>>>;
 
 export const useGetRecurringInstanceState = <TError = unknown>(
 	eventId: string,
-	eventOccurence: string,
+	eventOccurrence: string,
 	options?: {
 		swr?: SWRConfiguration<Awaited<ReturnType<typeof getRecurringInstanceState>>, TError> & { swrKey?: Key; enabled?: boolean };
 		request?: SecondParameter<typeof cFetch>;
@@ -353,9 +353,9 @@ export const useGetRecurringInstanceState = <TError = unknown>(
 ) => {
 	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-	const isEnabled = swrOptions?.enabled !== false && !!(eventId && eventOccurence);
-	const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getGetRecurringInstanceStateKey(eventId, eventOccurence) : null));
-	const swrFn = () => getRecurringInstanceState(eventId, eventOccurence, requestOptions);
+	const isEnabled = swrOptions?.enabled !== false && !!(eventId && eventOccurrence);
+	const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getGetRecurringInstanceStateKey(eventId, eventOccurrence) : null));
+	const swrFn = () => getRecurringInstanceState(eventId, eventOccurrence, requestOptions);
 
 	const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions);
 
@@ -438,17 +438,17 @@ export type setRecurringInstanceStateResponseSuccess = setRecurringInstanceState
 
 export type setRecurringInstanceStateResponse = setRecurringInstanceStateResponseSuccess;
 
-export const getSetRecurringInstanceStateUrl = (eventId: string, eventOccurence: string) => {
-	return `${import.meta.env.VITE_API_ORIGIN}/api/Event/SetRecurringInstanceState/recurring/${eventId}/${eventOccurence}`;
+export const getSetRecurringInstanceStateUrl = (eventId: string, eventOccurrence: string) => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Event/SetRecurringInstanceState/recurring/${eventId}/${eventOccurrence}`;
 };
 
 export const setRecurringInstanceState = async (
 	eventId: string,
-	eventOccurence: string,
+	eventOccurrence: string,
 	eventInstanceStateSet: EventInstanceStateSet,
 	options?: RequestInit,
 ): Promise<setRecurringInstanceStateResponse> => {
-	return cFetch<setRecurringInstanceStateResponse>(getSetRecurringInstanceStateUrl(eventId, eventOccurence), {
+	return cFetch<setRecurringInstanceStateResponse>(getSetRecurringInstanceStateUrl(eventId, eventOccurrence), {
 		...options,
 		method: "PUT",
 		headers: { "Content-Type": "application/json", ...options?.headers },
@@ -456,19 +456,19 @@ export const setRecurringInstanceState = async (
 	});
 };
 
-export const getSetRecurringInstanceStateMutationFetcher = (eventId: string, eventOccurence: string, options?: SecondParameter<typeof cFetch>) => {
+export const getSetRecurringInstanceStateMutationFetcher = (eventId: string, eventOccurrence: string, options?: SecondParameter<typeof cFetch>) => {
 	return (_: Key, { arg }: { arg: EventInstanceStateSet }) => {
-		return setRecurringInstanceState(eventId, eventOccurence, arg, options);
+		return setRecurringInstanceState(eventId, eventOccurrence, arg, options);
 	};
 };
-export const getSetRecurringInstanceStateMutationKey = (eventId: string, eventOccurence: string) =>
-	[`${import.meta.env.VITE_API_ORIGIN}/api/Event/SetRecurringInstanceState/recurring/${eventId}/${eventOccurence}`] as const;
+export const getSetRecurringInstanceStateMutationKey = (eventId: string, eventOccurrence: string) =>
+	[`${import.meta.env.VITE_API_ORIGIN}/api/Event/SetRecurringInstanceState/recurring/${eventId}/${eventOccurrence}`] as const;
 
 export type SetRecurringInstanceStateMutationResult = NonNullable<Awaited<ReturnType<typeof setRecurringInstanceState>>>;
 
 export const useSetRecurringInstanceState = <TError = unknown>(
 	eventId: string,
-	eventOccurence: string,
+	eventOccurrence: string,
 	options?: {
 		swr?: SWRMutationConfiguration<
 			Awaited<ReturnType<typeof setRecurringInstanceState>>,
@@ -482,8 +482,8 @@ export const useSetRecurringInstanceState = <TError = unknown>(
 ) => {
 	const { swr: swrOptions, request: requestOptions } = options ?? {};
 
-	const swrKey = swrOptions?.swrKey ?? getSetRecurringInstanceStateMutationKey(eventId, eventOccurence);
-	const swrFn = getSetRecurringInstanceStateMutationFetcher(eventId, eventOccurence, requestOptions);
+	const swrKey = swrOptions?.swrKey ?? getSetRecurringInstanceStateMutationKey(eventId, eventOccurrence);
+	const swrFn = getSetRecurringInstanceStateMutationFetcher(eventId, eventOccurrence, requestOptions);
 
 	const query = useSWRMutation(swrKey, swrFn, swrOptions);
 

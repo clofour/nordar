@@ -94,7 +94,7 @@ export const GetOnetimeInstanceStateResponse = zod.object({
 
 export const GetRecurringInstanceStateParams = zod.object({
   "eventId": zod.string().uuid(),
-  "eventOccurence": zod.string().datetime({"offset":true})
+  "eventOccurrence": zod.string().datetime({"offset":true})
 })
 
 export const GetRecurringInstanceStateResponse = zod.object({
@@ -111,7 +111,7 @@ export const SetOnetimeInstanceStateBody = zod.object({
 
 export const SetRecurringInstanceStateParams = zod.object({
   "eventId": zod.string().uuid(),
-  "eventOccurence": zod.string().datetime({"offset":true})
+  "eventOccurrence": zod.string().datetime({"offset":true})
 })
 
 export const SetRecurringInstanceStateBody = zod.object({

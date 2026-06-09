@@ -30,11 +30,19 @@ export const ListReflectionsResponseItem = zod.object({
 })
 export const ListReflectionsResponse = zod.array(ListReflectionsResponseItem)
 
+export const createReflectionBodyPositiveMax = 20;
+
+export const createReflectionBodyNegativeMax = 20;
+
+export const createReflectionBodyImprovementMax = 20;
+
+
+
 export const CreateReflectionBody = zod.object({
   "eventId": zod.string().uuid().nullish(),
-  "positive": zod.array(zod.string()),
-  "negative": zod.array(zod.string()),
-  "improvement": zod.array(zod.string())
+  "positive": zod.array(zod.string()).max(createReflectionBodyPositiveMax),
+  "negative": zod.array(zod.string()).max(createReflectionBodyNegativeMax),
+  "improvement": zod.array(zod.string()).max(createReflectionBodyImprovementMax)
 })
 
 export const CreateReflectionResponse = zod.string().uuid()

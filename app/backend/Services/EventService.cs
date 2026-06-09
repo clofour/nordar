@@ -69,7 +69,7 @@ namespace backend.Services
             EventInstanceState eventInstanceState = await appDbContext.EventInstanceStates.FirstOrDefaultAsync(obj =>
                 obj.UserId == userId &&
                 obj.EventId == eventId &&
-                obj.EventOccurence == eventOcurrence)
+                obj.EventOccurrence == eventOcurrence)
                 ?? new EventInstanceState();
 
             EventInstanceStateGet eventInstanceStateGet = new EventInstanceStateGet();
@@ -100,19 +100,19 @@ namespace backend.Services
             return new ServiceResult(Status.Ok);
         }
 
-        public async Task<ServiceResult> SetRecurringInstanceState(Guid userId, Guid eventId, DateTime eventOccurence, EventInstanceStateSet eventInstanceStateSet)
+        public async Task<ServiceResult> SetRecurringInstanceState(Guid userId, Guid eventId, DateTime EventOccurrence, EventInstanceStateSet eventInstanceStateSet)
         {
             EventInstanceState? eventInstanceState = await appDbContext.EventInstanceStates.FirstOrDefaultAsync(obj =>
                 obj.UserId == userId &&
                 obj.EventId == eventId &&
-                obj.EventOccurence == eventOccurence);
+                obj.EventOccurrence == EventOccurrence);
 
             if (eventInstanceState == null)
             {
                 eventInstanceState = new EventInstanceState();
                 eventInstanceState.UserId = userId;
                 eventInstanceState.EventId = eventId;
-                eventInstanceState.EventOccurence = eventOccurence;
+                eventInstanceState.EventOccurrence = EventOccurrence;
 
                 appDbContext.EventInstanceStates.Add(eventInstanceState);
             }

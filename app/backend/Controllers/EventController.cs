@@ -92,10 +92,10 @@ namespace backend.Controllers
             return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
-        [HttpGet("recurring/{eventId}/{eventOccurence}")]
+        [HttpGet("recurring/{eventId}/{eventOccurrence}")]
         [EndpointName("GetRecurringInstanceState")]
         [ProducesResponseType(typeof(EventInstanceStateGet), StatusCodes.Status200OK, "application/json")]
-        public async Task<ActionResult> GetRecurringInstanceState([FromRoute] Guid eventId, [FromRoute] DateTime eventOccurence)
+        public async Task<ActionResult> GetRecurringInstanceState([FromRoute] Guid eventId, [FromRoute] DateTime eventOccurrence)
         {
             User? user = await userManager.GetUserAsync(User);
             if (user == null)
@@ -103,7 +103,7 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            ServiceResult serviceResult = await eventService.GetRecurringInstanceState(user.Id, eventId, eventOccurence);
+            ServiceResult serviceResult = await eventService.GetRecurringInstanceState(user.Id, eventId, eventOccurrence);
             return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
@@ -123,9 +123,9 @@ namespace backend.Controllers
         }
 
         // [EndpointName("SetRecurringInstanceState")]
-        [HttpPut("recurring/{eventId}/{eventOccurence}")]
+        [HttpPut("recurring/{eventId}/{eventOccurrence}")]
         [EndpointName("SetRecurringInstanceState")]
-        public async Task<ActionResult> SetRecurringInstanceState([FromRoute] Guid eventId, [FromRoute] DateTime eventOccurence, [FromBody] EventInstanceStateSet eventInstanceStateSet)
+        public async Task<ActionResult> SetRecurringInstanceState([FromRoute] Guid eventId, [FromRoute] DateTime eventOccurrence, [FromBody] EventInstanceStateSet eventInstanceStateSet)
         {
             User? user = await userManager.GetUserAsync(User);
             if (user == null)
@@ -133,7 +133,7 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            ServiceResult serviceResult = await eventService.SetRecurringInstanceState(user.Id, eventId, eventOccurence, eventInstanceStateSet);
+            ServiceResult serviceResult = await eventService.SetRecurringInstanceState(user.Id, eventId, eventOccurrence, eventInstanceStateSet);
             return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
     }

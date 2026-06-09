@@ -53,6 +53,20 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DataProtectionKeys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    FriendlyName = table.Column<string>(type: "text", nullable: true),
+                    Xml = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DataProtectionKeys", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -243,9 +257,9 @@ namespace backend.Migrations
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     EventId = table.Column<Guid>(type: "uuid", nullable: true),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Positive = table.Column<List<string>>(type: "text[]", nullable: false),
-                    Negative = table.Column<List<string>>(type: "text[]", nullable: false),
-                    Improvement = table.Column<List<string>>(type: "text[]", nullable: false)
+                    Positive = table.Column<List<string>>(type: "text[]", maxLength: 20, nullable: false),
+                    Negative = table.Column<List<string>>(type: "text[]", maxLength: 20, nullable: false),
+                    Improvement = table.Column<List<string>>(type: "text[]", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -269,7 +283,7 @@ namespace backend.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     EventId = table.Column<Guid>(type: "uuid", nullable: false),
-                    EventOccurence = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    EventOccurrence = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     EventState = table.Column<int>(type: "integer", nullable: true),
                     ReflectionId = table.Column<Guid>(type: "uuid", nullable: true)
@@ -391,6 +405,9 @@ namespace backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "DataProtectionKeys");
 
             migrationBuilder.DropTable(
                 name: "EventInstanceStates");
