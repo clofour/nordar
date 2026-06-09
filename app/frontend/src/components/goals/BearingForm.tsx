@@ -1,21 +1,31 @@
 import { Button, Group, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm, schemaResolver } from "@mantine/form";
-import { createBearing } from "@/api/endpoints/goal/goal.js";
-import { CreateBearingBody } from "@/api/endpoints/goal/goal.zod.js";
+import { createBearing, updateBearing } from "@/api/endpoints/goal/goal.js";
+import { CreateBearingBody, UpdateBearingBody } from "@/api/endpoints/goal/goal.zod.js";
 import { getErrorMessage } from "@/data/error";
 import type { BearingCreate } from "@/api/models";
 import { NotificationType, useNotification } from "@/helpers";
+import { Mode } from "@/pages/Goals";
 
-interface BearingFormProps {
-	close: () => void;
-	parentId: string;
-	initialValues?: BearingCreate | undefined;
-}
+type BearingFormProps =
+	| {
+		mode: Mode.Create;
+		id: never;
+		parentId: never;
+		initialValues: never;
+	}
+	| {
+		mode: Mode.Edit;
+		id: string;
+		parentId: string;
+		initialValues: BearingCreate
+	}
 
-export default function BearingForm({ close, parentId, initialValues }: BearingFormProps) {
+export default function BearingForm({ mode, id, parentId, initialValues }: BearingFormProps) {
 	const notify = useNotification();
 
-	const formSchema = CreateBearingBody.omit({
+	const schema = mode == Mode.Create ? CreateBearingBody : UpdateBearingBody;
+	const formSchema = schema.omit({
 		northStarId: true,
 	});
 	const form = useForm({
@@ -26,10 +36,16 @@ export default function BearingForm({ close, parentId, initialValues }: BearingF
 
 	const handleSubmit = async (values: typeof form.values) => {
 		const requestData = {
-			...values,
-			northStarId: parentId,
-		};
-		const response = await createBearing(requestData);
+				...values,
+				northStarId: parentId,
+			};
+
+		let response;
+		if (mode == Mode.Create) {
+			response = await createBearing(requestData)
+		} else {
+			response = await updateBearing(id, requestData)
+		}
 
 		if (response.status === 200) {
 			close();

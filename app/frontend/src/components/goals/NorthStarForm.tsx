@@ -1,29 +1,37 @@
 import { Button, Group, Input, SegmentedControl, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm, schemaResolver } from "@mantine/form";
-import { createNorthStar } from "@/api/endpoints/goal/goal.js";
-import { CreateNorthStarBody } from "@/api/endpoints/goal/goal.zod.js";
+import { createNorthStar, updateNorthStar } from "@/api/endpoints/goal/goal.js";
+import { CreateNorthStarBody, UpdateNorthStarBody } from "@/api/endpoints/goal/goal.zod.js";
 import { getErrorMessage } from "@/data/error";
 import type { NorthStarCreate } from "@/api/models";
 import { NotificationType, useNotification } from "@/helpers";
-import type { Mode } from "@/pages/Goals";
+import { Mode } from "@/pages/Goals";
 
-interface NorthStarFormProps {
-	mode: Mode;
-	close: () => void;
-	initialValues?: NorthStarCreate | undefined;
-}
+type NorthStarFormProps =
+	| {
+		mode: Mode.Create;
+		id: never;
+		initialValues: never;
+	}
+	| {
+		mode: Mode.Edit;
+		id: string;
+		initialValues: NorthStarCreate
+	}
 
-export default function NorthStarForm({ close, initialValues }: NorthStarFormProps) {
+export default function NorthStarForm({ mode, id, initialValues }: NorthStarFormProps) {
 	const notify = useNotification();
+
+	const schema = mode == Mode.Create ? CreateNorthStarBody : UpdateNorthStarBody;
 
 	const form = useForm({
 		mode: "uncontrolled",
 		initialValues: initialValues,
-		validate: schemaResolver(CreateNorthStarBody, { sync: true }),
+		validate: schemaResolver(schema, { sync: true }),
 	});
 
 	const handleSubmit = async (values: typeof form.values) => {
-		const response = await createNorthStar(values);
+		const response = mode == Mode.Create ? await createNorthStar(values) : await updateNorthStar(id, values);
 
 		if (response.status === 200) {
 			close();

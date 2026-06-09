@@ -170,6 +170,7 @@ export default function Goals() {
 					{activeForm === GoalType.Bearing && (
 						<BearingForm
 							close={close}
+							mode={activeMode}
 							parentId={activeParentId!}
 							initialValues={activeMode == Mode.Edit ? (goalIndex[activeGoalId]?.goal as BearingGet) : undefined}
 						/>
@@ -177,6 +178,7 @@ export default function Goals() {
 					{activeForm === GoalType.Movement && (
 						<MovementForm
 							close={close}
+							mode={activeMode}
 							parentId={activeParentId!}
 							initialValues={activeMode == Mode.Edit ? (goalIndex[activeGoalId]?.goal as MovementGet) : undefined}
 						/>

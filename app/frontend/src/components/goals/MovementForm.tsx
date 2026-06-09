@@ -1,21 +1,31 @@
 import { Button, Group, Input, SegmentedControl, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm, schemaResolver } from "@mantine/form";
-import { createMovement } from "@/api/endpoints/goal/goal.js";
-import { CreateMovementBody } from "@/api/endpoints/goal/goal.zod.js";
+import { createMovement, updateMovement } from "@/api/endpoints/goal/goal.js";
+import { CreateMovementBody, UpdateMovementBody } from "@/api/endpoints/goal/goal.zod.js";
 import { getErrorMessage } from "@/data/error";
 import type { MovementCreate } from "@/api/models";
 import { NotificationType, useNotification } from "@/helpers";
+import { Mode } from "@/pages/Goals";
 
-interface MovementFormProps {
-	close: () => void;
-	parentId: string;
-	initialValues?: MovementCreate | undefined;
-}
+type MovementFormProps =
+	| {
+		mode: Mode.Create;
+		id: never;
+		parentId: never;
+		initialValues: never;
+	}
+	| {
+		mode: Mode.Edit;
+		id: string;
+		parentId: string;
+		initialValues: MovementCreate
+	}
 
-export default function MovementForm({ close, parentId, initialValues }: MovementFormProps) {
+export default function MovementForm({ mode, id, parentId, initialValues }: MovementFormProps) {
 	const notify = useNotification();
 
-	const formSchema = CreateMovementBody.omit({
+	const schema = mode == Mode.Create ? CreateMovementBody : UpdateMovementBody;
+	const formSchema = schema.omit({
 		bearingId: true,
 	});
 	const form = useForm({
@@ -29,7 +39,14 @@ export default function MovementForm({ close, parentId, initialValues }: Movemen
 			...values,
 			bearingId: parentId,
 		};
-		const response = await createMovement(requestData);
+
+		let response;
+		if (mode == Mode.Create) { 
+			response = await createMovement(requestData);
+		}
+		else {
+			response = await updateMovement(id, requestData);
+		}
 
 		if (response.status === 200) {
 			close();
