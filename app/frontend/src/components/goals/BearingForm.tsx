@@ -1,7 +1,7 @@
 import { Button, Group, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm, schemaResolver } from "@mantine/form";
-import { createBearing, updateBearing } from "@/api/endpoints/goal/goal.js";
-import { CreateBearingBody, UpdateBearingBody } from "@/api/endpoints/goal/goal.zod.js";
+import { createBearing, updateBearing } from "@/api/endpoints/goal/goal";
+import { CreateBearingBody, UpdateBearingBody } from "@/api/endpoints/goal/goal.zod";
 import { getErrorMessage } from "@/data/error";
 import type { BearingCreate } from "@/api/models";
 import { NotificationType, useNotification } from "@/helpers";

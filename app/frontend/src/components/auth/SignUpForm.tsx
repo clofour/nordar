@@ -1,5 +1,5 @@
-import { signUp } from "@/api/endpoints/auth/auth.js";
-import { SignUpBody } from "@/api/endpoints/auth/auth.zod.js";
+import { signUp } from "@/api/endpoints/auth/auth";
+import { SignUpBody } from "@/api/endpoints/auth/auth.zod";
 import { getErrorMessage } from "@/data/error";
 import { NotificationType, useNotification } from "@/helpers";
 import { Button, Checkbox, Group, PasswordInput, Progress, Stack, TextInput } from "@mantine/core";

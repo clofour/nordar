@@ -1,7 +1,7 @@
 import { Button, Group, Input, SegmentedControl, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm, schemaResolver } from "@mantine/form";
-import { createNorthStar, updateNorthStar } from "@/api/endpoints/goal/goal.js";
-import { CreateNorthStarBody, UpdateNorthStarBody } from "@/api/endpoints/goal/goal.zod.js";
+import { createNorthStar, updateNorthStar } from "@/api/endpoints/goal/goal";
+import { CreateNorthStarBody, UpdateNorthStarBody } from "@/api/endpoints/goal/goal.zod";
 import { getErrorMessage } from "@/data/error";
 import type { NorthStarCreate } from "@/api/models";
 import { NotificationType, useNotification } from "@/helpers";

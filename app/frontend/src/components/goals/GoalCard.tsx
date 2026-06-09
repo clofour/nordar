@@ -1,7 +1,7 @@
 import { Box, Paper, Text, Flex } from "@mantine/core";
 import GoalMenu from "@/components/goals/GoalMenu";
 import type { ReactElement } from "react";
-import { theme } from "@/data/theme.js";
+import { theme } from "@/data/theme";
 import type { Mode } from "@/pages/Goals";
 import type { GoalType } from "@/api/models";
 

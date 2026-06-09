@@ -1,6 +1,6 @@
 import { Menu, ActionIcon } from "@mantine/core";
 import { IconDots, IconPencil, IconTrash } from "@tabler/icons-react";
-import { deleteGoal } from "@/api/endpoints/goal/goal.js";
+import { deleteGoal } from "@/api/endpoints/goal/goal";
 import type { GoalType } from "@/api/models";
 import { Mode } from "@/pages/Goals";
 

@@ -1,5 +1,5 @@
-import { signIn } from "@/api/endpoints/auth/auth.js";
-import { SignInBody } from "@/api/endpoints/auth/auth.zod.js";
+import { signIn } from "@/api/endpoints/auth/auth";
+import { SignInBody } from "@/api/endpoints/auth/auth.zod";
 import { useAuth } from "@/contexts/AuthContext";
 import { getErrorMessage } from "@/data/error";
 import { NotificationType, useNotification } from "@/helpers";

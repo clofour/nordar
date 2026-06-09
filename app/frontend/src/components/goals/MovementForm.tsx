@@ -1,7 +1,7 @@
 import { Button, Group, Input, SegmentedControl, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm, schemaResolver } from "@mantine/form";
-import { createMovement, updateMovement } from "@/api/endpoints/goal/goal.js";
-import { CreateMovementBody, UpdateMovementBody } from "@/api/endpoints/goal/goal.zod.js";
+import { createMovement, updateMovement } from "@/api/endpoints/goal/goal";
+import { CreateMovementBody, UpdateMovementBody } from "@/api/endpoints/goal/goal.zod";
 import { getErrorMessage } from "@/data/error";
 import type { MovementCreate } from "@/api/models";
 import { NotificationType, useNotification } from "@/helpers";
