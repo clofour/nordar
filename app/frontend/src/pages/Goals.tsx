@@ -61,13 +61,13 @@ export default function Goals() {
 		const index: Record<string, GoalIndexEntry> = {};
 
 		for (const northStar of response?.data ?? []) {
-			goalIndex[northStar.id] = { type: GoalType.NorthStar, goal: northStar };
+			index[northStar.id] = { type: GoalType.NorthStar, goal: northStar };
 
 			for (const bearing of northStar.bearings) {
-				goalIndex[bearing.id] = { type: GoalType.Bearing, goal: bearing };
+				index[bearing.id] = { type: GoalType.Bearing, goal: bearing };
 
 				for (const movement of bearing.movements) {
-					goalIndex[movement.id] = { type: GoalType.Movement, goal: movement };
+					index[movement.id] = { type: GoalType.Movement, goal: movement };
 				}
 			}
 		}
