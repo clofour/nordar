@@ -8,12 +8,11 @@ interface GoalMenuProps {
 	id: string;
 	type: GoalType;
 	setActiveMode: (mode: Mode) => void;
-	activeForm: GoalType;
 	setActiveForm: (form: GoalType) => void;
 	setActiveGoalId: (id: string) => void;
 }
 
-export default function GoalMenu({ id, type, setActiveMode, activeForm, setActiveForm, setActiveGoalId }: GoalMenuProps) {
+export default function GoalMenu({ id, type, setActiveMode, setActiveForm, setActiveGoalId }: GoalMenuProps) {
 	const onEditGoalClick = async () => {
 		setActiveMode(Mode.Edit);
 		setActiveForm(type);
@@ -22,7 +21,7 @@ export default function GoalMenu({ id, type, setActiveMode, activeForm, setActiv
 	const onDeleteGoalClick = async () => {
 		const response = await deleteGoal({ 
 			id: id,
-			goalType: activeForm,
+			goalType: type,
 		});
 	};
 

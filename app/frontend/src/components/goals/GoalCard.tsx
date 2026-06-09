@@ -13,12 +13,11 @@ interface GoalCardProps {
 	left: ReactElement;
 	right?: ReactElement;
 	setActiveMode: (mode: Mode) => void;
-	activeForm: GoalType;
 	setActiveForm: (form: GoalType) => void;
 	setActiveGoalId: (id: string) => void;
 }
 
-export default function GoalCard({ id, name, type, description, left, right, setActiveGoalId, activeForm, setActiveForm, setActiveMode }: GoalCardProps) {
+export default function GoalCard({ id, name, type, description, left, right, setActiveGoalId, setActiveForm, setActiveMode }: GoalCardProps) {
 	return (
 		<Paper p="sm" withBorder style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal[type] }}>
 			<Flex align="center" gap="sm">
@@ -30,7 +29,7 @@ export default function GoalCard({ id, name, type, description, left, right, set
 					</Text>
 				</Box>
 				{right}
-				<GoalMenu id={id} type={type} setActiveMode={setActiveMode} activeForm={activeForm} setActiveForm={setActiveForm} setActiveGoalId={setActiveGoalId} />
+				<GoalMenu id={id} type={type} setActiveMode={setActiveMode} setActiveForm={setActiveForm} setActiveGoalId={setActiveGoalId} />
 			</Flex>
 		</Paper>
 	);

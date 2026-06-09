@@ -104,7 +104,6 @@ export default function Goals() {
 												</Badge>
 											}
 											setActiveMode={setActiveMode}
-											activeForm={activeForm}
 											setActiveForm={setActiveForm}
 											setActiveGoalId={setActiveGoalId}
 										/>
@@ -124,7 +123,6 @@ export default function Goals() {
 															description={bearing.description}
 															left={<IconCompass size={14} />}
 															setActiveMode={setActiveMode}
-															activeForm={activeForm}
 															setActiveForm={setActiveForm}
 															setActiveGoalId={setActiveGoalId}
 														/>
@@ -143,7 +141,6 @@ export default function Goals() {
 																		type={GoalType.Movement}
 																		left={<IconActivity size={14} />}
 																		setActiveMode={setActiveMode}
-																		activeForm={activeForm}
 																		setActiveForm={setActiveForm}
 																		setActiveGoalId={setActiveGoalId}
 																	/>
