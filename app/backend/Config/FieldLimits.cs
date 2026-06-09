@@ -4,5 +4,7 @@ namespace backend.Config
     {
         public const int ShortText = 200;
         public const int LongText = 5000;
+
+        public const int InputList = 20;
     }
 }
