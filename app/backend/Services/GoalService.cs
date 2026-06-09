@@ -109,7 +109,7 @@ namespace backend.Services
         public async Task<T?> FindParent<T>(User user, Guid id) where T: Goal
         {
             T? parent = await ResolveGoalDbSet<T>().FindAsync(id);
-            if (parent == null || parent.User != user)
+            if (parent == null || parent.UserId != user.Id)
             {
                 return null;
             }
