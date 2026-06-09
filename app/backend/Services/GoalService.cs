@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services
 {
-    public class GoalService(AppDbContext appDbContext, IMapper mapper)
+    public class GoalService(AppDbContext appDbContext, IMapper mapper, ILogger<GoalService> logger)
     {
         public async Task<ServiceResult> List(User user)
         {

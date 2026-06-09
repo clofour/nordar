@@ -14,7 +14,7 @@ namespace backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class AuthController(AppDbContext appDbContext, SignInManager<User> signInManager, UserManager<User> userManager, ILogger<AuthController> logger, AuthService authService) : ControllerBase
+    public class AuthController(ILogger<AuthController> logger, AuthService authService) : ControllerBase
     {
 
         [HttpPost]

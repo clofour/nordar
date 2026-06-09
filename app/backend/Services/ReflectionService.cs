@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services
 {
-    public class ReflectionService(AppDbContext appDbContext, IMapper mapper, ILogger<AuthService> logger)
+    public class ReflectionService(AppDbContext appDbContext, IMapper mapper, ILogger<ReflectionService> logger)
     {
         public async Task<ServiceResult> Get(Guid userId, Guid id)
         {

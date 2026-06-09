@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services
 {
-    public class EventService(AppDbContext appDbContext, IMapper mapper)
+    public class EventService(AppDbContext appDbContext, IMapper mapper, ILogger<EventService> logger)
     {
         public async Task<ServiceResult> List(Guid userId)
         {

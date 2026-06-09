@@ -17,7 +17,7 @@ namespace backend.Controllers
     [ApiController]
     [Route("api/[controller]/[action]")]
     [Authorize]
-    public class GoalController(AppDbContext appDbContext, UserManager<User> userManager, ILogger<GoalController> logger, IMapper mapper, GoalService goalService) : ControllerBase
+    public class GoalController(UserManager<User> userManager, GoalService goalService) : ControllerBase
     {
         [HttpGet]
         [EndpointName("ListGoals")]

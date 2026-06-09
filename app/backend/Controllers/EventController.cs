@@ -16,7 +16,7 @@ namespace backend.Controllers
     [ApiController]
     [Route("api/[controller]/[action]")]
     [Authorize]
-    public class EventController(AppDbContext appDbContext, SignInManager<User> signInManager, UserManager<User> userManager, ILogger<AuthController> logger, IMapper mapper, EventService eventService) : ControllerBase
+    public class EventController(UserManager<User> userManager, EventService eventService) : ControllerBase
     {
         [HttpGet]
         [EndpointName("ListEvents")]

@@ -16,7 +16,7 @@ namespace backend.Controllers
     [ApiController]
     [Route("api/[controller]/[action]")]
     [Authorize]
-    public class ReflectionController(AppDbContext appDbContext, ReflectionService reflectionService, UserManager<User> userManager, ILogger<ReflectionController> logger, IMapper mapper, EventService eventService) : ControllerBase
+    public class ReflectionController(ReflectionService reflectionService, UserManager<User> userManager) : ControllerBase
     {
         [HttpGet]
         [EndpointName("GetReflection")]
