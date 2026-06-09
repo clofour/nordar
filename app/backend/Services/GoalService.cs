@@ -91,6 +91,22 @@ namespace backend.Services
             return new ServiceResult(Status.Ok);
         }
 
+        public async Task<ServiceResult> UpdateGoal<TEntity, TDTO>(Guid userId, Guid id, TDTO DTO) where TEntity: Goal where TDTO: GoalCreate
+        {
+            DbSet<TEntity> dbSet = ResolveGoalDbSet<TEntity>();
+            TEntity? entity = await dbSet.FirstOrDefaultAsync((goal) => goal.UserId == userId && goal.Id == id);
+            if (entity == null)
+            {
+                return new ServiceResult(Status.NotFound);
+            }
+
+            mapper.Map(DTO, entity);
+
+            await appDbContext.SaveChangesAsync();
+
+            return new ServiceResult(Status.Ok);
+        }
+
         public async Task<ServiceResult> Delete(Guid userId, Guid goalId, GoalType goalType)
         {
             int goalsDeleted = await ResolveGoalDbSet(goalType)

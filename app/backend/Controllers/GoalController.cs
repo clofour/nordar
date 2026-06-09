@@ -91,6 +91,48 @@ namespace backend.Controllers
             return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
+        [HttpPatch("{id}")]
+        [EndpointName("UpdateNorthStar")]
+        public async Task<ActionResult> UpdateNorthStar([FromRoute] Guid id, [FromBody] NorthStarCreate northStarCreate)
+        {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Forbid();
+            }
+
+            ServiceResult serviceResult = await goalService.UpdateGoal<NorthStar, NorthStarCreate>(user.Id, id, northStarCreate);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
+        }
+
+        [HttpPatch("{id}")]
+        [EndpointName("UpdateBearing")]
+        public async Task<ActionResult> UpdateBearing([FromRoute] Guid id, [FromBody] BearingCreate bearingCreate)
+        {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Forbid();
+            }
+
+            ServiceResult serviceResult = await goalService.UpdateGoal<Bearing, BearingCreate>(user.Id, id, bearingCreate);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
+        }
+
+        [HttpPatch("{id}")]
+        [EndpointName("UpdateMovement")]
+        public async Task<ActionResult> UpdateMovement([FromRoute] Guid id, [FromBody] MovementCreate movementCreate)
+        {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Forbid();
+            }
+
+            ServiceResult serviceResult = await goalService.UpdateGoal<Movement, MovementCreate>(user.Id, id, movementCreate);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
+        }
+
         [HttpPost]
         [EndpointName("DeleteGoal")]
         public async Task<ActionResult> Delete(Guid id, GoalType goalType)
