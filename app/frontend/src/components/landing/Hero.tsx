@@ -7,7 +7,11 @@ export default function Hero() {
 	return (
 		<Module>
 			<Eyebrow text="A goal-setting app" />
-			<h1 className={classes.title}>Aim for your<br/><span className={classes.highlight}>North Star</span>.</h1>
+			<h1 className={classes.title}>
+				Aim for your
+				<br />
+				<span className={classes.highlight}>North Star</span>.
+			</h1>
 			<p className={classes.description}>Nordar turns your biggest ambitions into plans you can actually follow.</p>
 
 			<div className={classes.heroCTA}>

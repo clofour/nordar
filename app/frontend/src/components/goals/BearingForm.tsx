@@ -9,17 +9,17 @@ import { Mode } from "@/pages/Goals";
 
 type BearingFormProps =
 	| {
-		mode: Mode.Create;
-		id: never;
-		parentId: never;
-		initialValues: never;
-	}
+			mode: Mode.Create;
+			id: never;
+			parentId: never;
+			initialValues: never;
+	  }
 	| {
-		mode: Mode.Edit;
-		id: string;
-		parentId: string;
-		initialValues: BearingCreate
-	}
+			mode: Mode.Edit;
+			id: string;
+			parentId: string;
+			initialValues: BearingCreate;
+	  };
 
 export default function BearingForm({ mode, id, parentId, initialValues }: BearingFormProps) {
 	const notify = useNotification();
@@ -36,15 +36,15 @@ export default function BearingForm({ mode, id, parentId, initialValues }: Beari
 
 	const handleSubmit = async (values: typeof form.values) => {
 		const requestData = {
-				...values,
-				northStarId: parentId,
-			};
+			...values,
+			northStarId: parentId,
+		};
 
 		let response;
 		if (mode == Mode.Create) {
-			response = await createBearing(requestData)
+			response = await createBearing(requestData);
 		} else {
-			response = await updateBearing(id, requestData)
+			response = await updateBearing(id, requestData);
 		}
 
 		if (response.status === 200) {

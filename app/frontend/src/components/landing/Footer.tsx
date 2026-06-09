@@ -57,7 +57,6 @@ export default function Footer() {
 					</Grid.Col>
 				);
 			})}
-
 		</Grid>
 	);
 }

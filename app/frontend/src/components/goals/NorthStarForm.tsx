@@ -9,15 +9,15 @@ import { Mode } from "@/pages/Goals";
 
 type NorthStarFormProps =
 	| {
-		mode: Mode.Create;
-		id: never;
-		initialValues: never;
-	}
+			mode: Mode.Create;
+			id: never;
+			initialValues: never;
+	  }
 	| {
-		mode: Mode.Edit;
-		id: string;
-		initialValues: NorthStarCreate
-	}
+			mode: Mode.Edit;
+			id: string;
+			initialValues: NorthStarCreate;
+	  };
 
 export default function NorthStarForm({ mode, id, initialValues }: NorthStarFormProps) {
 	const notify = useNotification();

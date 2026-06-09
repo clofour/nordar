@@ -19,7 +19,7 @@ export default function GoalMenu({ id, type, setActiveMode, setActiveForm, setAc
 		setActiveGoalId(id);
 	};
 	const onDeleteGoalClick = async () => {
-		const response = await deleteGoal({ 
+		const response = await deleteGoal({
 			id: id,
 			goalType: type,
 		});

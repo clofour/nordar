@@ -72,15 +72,9 @@ const theme = createTheme({
 });
 
 const resolver: CSSVariablesResolver = (theme) => ({
-	variables: {
-		
-	},
-	light: {
-
-	},
-	dark: {
-
-	}
+	variables: {},
+	light: {},
+	dark: {},
 });
 
 createRoot(rootElement).render(

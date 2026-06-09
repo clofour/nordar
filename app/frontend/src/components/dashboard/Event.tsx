@@ -65,11 +65,7 @@ export default function Event({ event }: EventProps) {
 		if (event.type == "onetime") {
 			response = await setOnetimeInstanceState(event.id, requestData);
 		} else if (event.type == "recurring" && "recurringEventId" in event && "recurrenceId" in event) {
-			response = await setRecurringInstanceState(
-				event.recurringEventId,
-				new Date(event.recurrenceId).toISOString(),
-				requestData,
-			);
+			response = await setRecurringInstanceState(event.recurringEventId, new Date(event.recurrenceId).toISOString(), requestData);
 		} else {
 			throw Error("Incorrect schema on Event object.");
 		}

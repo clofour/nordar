@@ -1,10 +1,10 @@
 .card {
-    display: flex;
-    width: 100%;
-    padding: 16px;
-    align-items: center;
-    background: linear-gradient(180deg, rgba(20, 22, 52, 0.92), rgba(9, 10, 28, 0.96));
-    border: var(--card-border);
-    border-radius: 16px;
-    box-shadow: var(--card-shadow);
+	display: flex;
+	width: 100%;
+	padding: 16px;
+	align-items: center;
+	background: linear-gradient(180deg, rgba(20, 22, 52, 0.92), rgba(9, 10, 28, 0.96));
+	border: var(--card-border);
+	border-radius: 16px;
+	box-shadow: var(--card-shadow);
 }

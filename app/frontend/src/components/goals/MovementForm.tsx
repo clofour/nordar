@@ -9,17 +9,17 @@ import { Mode } from "@/pages/Goals";
 
 type MovementFormProps =
 	| {
-		mode: Mode.Create;
-		id: never;
-		parentId: never;
-		initialValues: never;
-	}
+			mode: Mode.Create;
+			id: never;
+			parentId: never;
+			initialValues: never;
+	  }
 	| {
-		mode: Mode.Edit;
-		id: string;
-		parentId: string;
-		initialValues: MovementCreate
-	}
+			mode: Mode.Edit;
+			id: string;
+			parentId: string;
+			initialValues: MovementCreate;
+	  };
 
 export default function MovementForm({ mode, id, parentId, initialValues }: MovementFormProps) {
 	const notify = useNotification();
@@ -41,10 +41,9 @@ export default function MovementForm({ mode, id, parentId, initialValues }: Move
 		};
 
 		let response;
-		if (mode == Mode.Create) { 
+		if (mode == Mode.Create) {
 			response = await createMovement(requestData);
-		}
-		else {
+		} else {
 			response = await updateMovement(id, requestData);
 		}
 
