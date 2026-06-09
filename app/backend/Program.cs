@@ -176,6 +176,7 @@ builder.Services.AddAutoMapper(cfg =>
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<GoalService>();
 builder.Services.AddScoped<EventService>();
+builder.Services.AddScoped<ReflectionService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
