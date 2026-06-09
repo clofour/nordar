@@ -144,6 +144,82 @@ export const CreateMovementBody = zod.object({
   "name": zod.string().max(createMovementBodyNameMax)
 })
 
+export const UpdateNorthStarParams = zod.object({
+  "id": zod.string().uuid()
+})
+
+export const updateNorthStarBodyDescriptionMax = 200;
+
+export const updateNorthStarBodyJustificationMax = 5000;
+
+export const updateNorthStarBodyNameMax = 200;
+
+
+
+export const UpdateNorthStarBody = zod.object({
+  "description": zod.string().max(updateNorthStarBodyDescriptionMax),
+  "importance": zod.enum(['None', 'High']),
+  "justification": zod.string().max(updateNorthStarBodyJustificationMax),
+  "name": zod.string().max(updateNorthStarBodyNameMax)
+})
+
+export const UpdateBearingParams = zod.object({
+  "id": zod.string().uuid()
+})
+
+export const updateBearingBodyDescriptionMax = 5000;
+
+export const updateBearingBodyJustificationMax = 5000;
+
+export const updateBearingBodyStrengthsMax = 5000;
+
+export const updateBearingBodyWeaknessesMax = 5000;
+
+export const updateBearingBodyNameMax = 200;
+
+
+
+export const UpdateBearingBody = zod.object({
+  "northStarId": zod.string().uuid(),
+  "description": zod.string().max(updateBearingBodyDescriptionMax),
+  "justification": zod.string().max(updateBearingBodyJustificationMax),
+  "strengths": zod.string().max(updateBearingBodyStrengthsMax).nullish(),
+  "weaknesses": zod.string().max(updateBearingBodyWeaknessesMax).nullish(),
+  "name": zod.string().max(updateBearingBodyNameMax)
+})
+
+export const UpdateMovementParams = zod.object({
+  "id": zod.string().uuid()
+})
+
+export const updateMovementBodyDifficultyMax = 5000;
+
+export const updateMovementBodyMotivationMax = 5000;
+
+export const updateMovementBodyTriggersMax = 5000;
+
+export const updateMovementBodyTemptationsMax = 5000;
+
+export const updateMovementBodyObstaclesMax = 5000;
+
+export const updateMovementBodyKillConditionsMax = 5000;
+
+export const updateMovementBodyNameMax = 200;
+
+
+
+export const UpdateMovementBody = zod.object({
+  "bearingId": zod.string().uuid(),
+  "difficulty": zod.string().max(updateMovementBodyDifficultyMax).nullish(),
+  "motivationType": zod.union([zod.null(),zod.union([zod.literal('Carrot'),zod.literal('Stick'),zod.literal(null)])]).optional(),
+  "motivation": zod.string().max(updateMovementBodyMotivationMax).nullish(),
+  "triggers": zod.string().max(updateMovementBodyTriggersMax).nullish(),
+  "temptations": zod.string().max(updateMovementBodyTemptationsMax).nullish(),
+  "obstacles": zod.string().max(updateMovementBodyObstaclesMax).nullish(),
+  "killConditions": zod.string().max(updateMovementBodyKillConditionsMax).nullish(),
+  "name": zod.string().max(updateMovementBodyNameMax)
+})
+
 export const DeleteGoalQueryParams = zod.object({
   "id": zod.string().uuid().optional(),
   "goalType": zod.enum(['NorthStar', 'Bearing', 'Movement']).optional()

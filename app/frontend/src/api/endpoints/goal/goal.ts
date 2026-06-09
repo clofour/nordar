@@ -261,6 +261,180 @@ export const useCreateMovement = <TError = unknown>(options?: {
 		...query,
 	};
 };
+export type updateNorthStarResponse200 = {
+	data: void;
+	status: 200;
+};
+
+export type updateNorthStarResponseSuccess = updateNorthStarResponse200 & {
+	headers: Headers;
+};
+
+export type updateNorthStarResponse = updateNorthStarResponseSuccess;
+
+export const getUpdateNorthStarUrl = (id: string) => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/UpdateNorthStar/${id}`;
+};
+
+export const updateNorthStar = async (id: string, northStarCreate: NorthStarCreate, options?: RequestInit): Promise<updateNorthStarResponse> => {
+	return cFetch<updateNorthStarResponse>(getUpdateNorthStarUrl(id), {
+		...options,
+		method: "PATCH",
+		headers: { "Content-Type": "application/json", ...options?.headers },
+		body: JSON.stringify(northStarCreate),
+	});
+};
+
+export const getUpdateNorthStarMutationFetcher = (id: string, options?: SecondParameter<typeof cFetch>) => {
+	return (_: Key, { arg }: { arg: NorthStarCreate }) => {
+		return updateNorthStar(id, arg, options);
+	};
+};
+export const getUpdateNorthStarMutationKey = (id: string) => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/UpdateNorthStar/${id}`] as const;
+
+export type UpdateNorthStarMutationResult = NonNullable<Awaited<ReturnType<typeof updateNorthStar>>>;
+
+export const useUpdateNorthStar = <TError = unknown>(
+	id: string,
+	options?: {
+		swr?: SWRMutationConfiguration<
+			Awaited<ReturnType<typeof updateNorthStar>>,
+			TError,
+			Key,
+			NorthStarCreate,
+			Awaited<ReturnType<typeof updateNorthStar>>
+		> & { swrKey?: string };
+		request?: SecondParameter<typeof cFetch>;
+	},
+) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+	const swrKey = swrOptions?.swrKey ?? getUpdateNorthStarMutationKey(id);
+	const swrFn = getUpdateNorthStarMutationFetcher(id, requestOptions);
+
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
+
+	return {
+		swrKey,
+		...query,
+	};
+};
+export type updateBearingResponse200 = {
+	data: void;
+	status: 200;
+};
+
+export type updateBearingResponseSuccess = updateBearingResponse200 & {
+	headers: Headers;
+};
+
+export type updateBearingResponse = updateBearingResponseSuccess;
+
+export const getUpdateBearingUrl = (id: string) => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/UpdateBearing/${id}`;
+};
+
+export const updateBearing = async (id: string, bearingCreate: BearingCreate, options?: RequestInit): Promise<updateBearingResponse> => {
+	return cFetch<updateBearingResponse>(getUpdateBearingUrl(id), {
+		...options,
+		method: "PATCH",
+		headers: { "Content-Type": "application/json", ...options?.headers },
+		body: JSON.stringify(bearingCreate),
+	});
+};
+
+export const getUpdateBearingMutationFetcher = (id: string, options?: SecondParameter<typeof cFetch>) => {
+	return (_: Key, { arg }: { arg: BearingCreate }) => {
+		return updateBearing(id, arg, options);
+	};
+};
+export const getUpdateBearingMutationKey = (id: string) => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/UpdateBearing/${id}`] as const;
+
+export type UpdateBearingMutationResult = NonNullable<Awaited<ReturnType<typeof updateBearing>>>;
+
+export const useUpdateBearing = <TError = unknown>(
+	id: string,
+	options?: {
+		swr?: SWRMutationConfiguration<
+			Awaited<ReturnType<typeof updateBearing>>,
+			TError,
+			Key,
+			BearingCreate,
+			Awaited<ReturnType<typeof updateBearing>>
+		> & { swrKey?: string };
+		request?: SecondParameter<typeof cFetch>;
+	},
+) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+	const swrKey = swrOptions?.swrKey ?? getUpdateBearingMutationKey(id);
+	const swrFn = getUpdateBearingMutationFetcher(id, requestOptions);
+
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
+
+	return {
+		swrKey,
+		...query,
+	};
+};
+export type updateMovementResponse200 = {
+	data: void;
+	status: 200;
+};
+
+export type updateMovementResponseSuccess = updateMovementResponse200 & {
+	headers: Headers;
+};
+
+export type updateMovementResponse = updateMovementResponseSuccess;
+
+export const getUpdateMovementUrl = (id: string) => {
+	return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/UpdateMovement/${id}`;
+};
+
+export const updateMovement = async (id: string, movementCreate: MovementCreate, options?: RequestInit): Promise<updateMovementResponse> => {
+	return cFetch<updateMovementResponse>(getUpdateMovementUrl(id), {
+		...options,
+		method: "PATCH",
+		headers: { "Content-Type": "application/json", ...options?.headers },
+		body: JSON.stringify(movementCreate),
+	});
+};
+
+export const getUpdateMovementMutationFetcher = (id: string, options?: SecondParameter<typeof cFetch>) => {
+	return (_: Key, { arg }: { arg: MovementCreate }) => {
+		return updateMovement(id, arg, options);
+	};
+};
+export const getUpdateMovementMutationKey = (id: string) => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/UpdateMovement/${id}`] as const;
+
+export type UpdateMovementMutationResult = NonNullable<Awaited<ReturnType<typeof updateMovement>>>;
+
+export const useUpdateMovement = <TError = unknown>(
+	id: string,
+	options?: {
+		swr?: SWRMutationConfiguration<
+			Awaited<ReturnType<typeof updateMovement>>,
+			TError,
+			Key,
+			MovementCreate,
+			Awaited<ReturnType<typeof updateMovement>>
+		> & { swrKey?: string };
+		request?: SecondParameter<typeof cFetch>;
+	},
+) => {
+	const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+	const swrKey = swrOptions?.swrKey ?? getUpdateMovementMutationKey(id);
+	const swrFn = getUpdateMovementMutationFetcher(id, requestOptions);
+
+	const query = useSWRMutation(swrKey, swrFn, swrOptions);
+
+	return {
+		swrKey,
+		...query,
+	};
+};
 export type deleteGoalResponse200 = {
 	data: void;
 	status: 200;

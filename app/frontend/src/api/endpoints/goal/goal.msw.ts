@@ -156,6 +156,57 @@ export const getCreateMovementMockHandler = (
 	);
 };
 
+export const getUpdateNorthStarMockHandler = (
+	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<void> | void),
+	options?: RequestHandlerOptions,
+) => {
+	return http.patch(
+		"*/api/Goal/UpdateNorthStar/:id",
+		async (info: Parameters<Parameters<typeof http.patch>[1]>[0]) => {
+			if (typeof overrideResponse === "function") {
+				await overrideResponse(info);
+			}
+
+			return new HttpResponse(null, { status: 200 });
+		},
+		options,
+	);
+};
+
+export const getUpdateBearingMockHandler = (
+	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<void> | void),
+	options?: RequestHandlerOptions,
+) => {
+	return http.patch(
+		"*/api/Goal/UpdateBearing/:id",
+		async (info: Parameters<Parameters<typeof http.patch>[1]>[0]) => {
+			if (typeof overrideResponse === "function") {
+				await overrideResponse(info);
+			}
+
+			return new HttpResponse(null, { status: 200 });
+		},
+		options,
+	);
+};
+
+export const getUpdateMovementMockHandler = (
+	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<void> | void),
+	options?: RequestHandlerOptions,
+) => {
+	return http.patch(
+		"*/api/Goal/UpdateMovement/:id",
+		async (info: Parameters<Parameters<typeof http.patch>[1]>[0]) => {
+			if (typeof overrideResponse === "function") {
+				await overrideResponse(info);
+			}
+
+			return new HttpResponse(null, { status: 200 });
+		},
+		options,
+	);
+};
+
 export const getDeleteGoalMockHandler = (
 	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void),
 	options?: RequestHandlerOptions,
@@ -178,5 +229,8 @@ export const getGoalMock = () => [
 	getCreateNorthStarMockHandler(),
 	getCreateBearingMockHandler(),
 	getCreateMovementMockHandler(),
+	getUpdateNorthStarMockHandler(),
+	getUpdateBearingMockHandler(),
+	getUpdateMovementMockHandler(),
 	getDeleteGoalMockHandler(),
 ];
