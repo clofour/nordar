@@ -139,12 +139,15 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 builder.Services.AddAutoMapper(cfg =>
 {
-    cfg.CreateMap<NorthStarCreate, NorthStar>();
-    cfg.CreateMap<BearingCreate, Bearing>();
-    cfg.CreateMap<MovementCreate, Movement>();
     cfg.CreateMap<NorthStar, NorthStarGet>();
     cfg.CreateMap<Bearing, BearingGet>();
     cfg.CreateMap<Movement, MovementGet>();
+    cfg.CreateMap<NorthStarCreate, NorthStar>();
+    cfg.CreateMap<BearingCreate, Bearing>();
+    cfg.CreateMap<MovementCreate, Movement>();
+    cfg.CreateMap<NorthStarUpdate, NorthStar>();
+    cfg.CreateMap<BearingUpdate, Bearing>();
+    cfg.CreateMap<MovementUpdate, Movement>();
 
     cfg.CreateMap<OnetimeEventCreate, OnetimeEvent>();
     cfg.CreateMap<RecurringEventCreate, RecurringEvent>();
