@@ -10,14 +10,14 @@ import { Mode } from "@/pages/Goals";
 type BearingFormProps =
 	| {
 			mode: Mode.Create;
-			id: never;
-			parentId: never;
-			initialValues: never;
+			id?: never;
+			parentId: string;
+			initialValues?: never;
 	  }
 	| {
 			mode: Mode.Edit;
 			id: string;
-			parentId: string;
+			parentId?: never;
 			initialValues: BearingCreate;
 	  };
 

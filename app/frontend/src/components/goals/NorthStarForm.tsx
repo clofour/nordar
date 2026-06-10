@@ -10,8 +10,8 @@ import { Mode } from "@/pages/Goals";
 type NorthStarFormProps =
 	| {
 			mode: Mode.Create;
-			id: never;
-			initialValues: never;
+			id?: never;
+			initialValues?: never;
 	  }
 	| {
 			mode: Mode.Edit;

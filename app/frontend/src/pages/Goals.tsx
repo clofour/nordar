@@ -1,6 +1,6 @@
 import { Stack, Text, Badge, UnstyledButton, Group, Button, Grid, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconStar, IconPlus, IconCompass, IconActivity, IconExclamationCircle } from "@tabler/icons-react";
+import { IconStar, IconPlus, IconCompass, IconActivity } from "@tabler/icons-react";
 import PageTitle from "@/components/shared/PageTitle";
 import { useMemo, useState } from "react";
 import GoalCard from "@/components/goals/GoalCard";
@@ -17,20 +17,26 @@ export enum Mode {
 	Edit = "Edit",
 }
 
+export type EditorState =
+	| { mode: Mode.Create; type: typeof GoalType.NorthStar, id?: never }
+	| { mode: Mode.Create; type: typeof GoalType.Bearing, id?: never; parentId: string }
+	| { mode: Mode.Create; type: typeof GoalType.Movement, id?: never; parentId: string }
+	| { mode: Mode.Edit; type: typeof GoalType.NorthStar, id: string }
+	| { mode: Mode.Edit; type: typeof GoalType.Bearing, id: string }
+	| { mode: Mode.Edit; type: typeof GoalType.Movement, id: string }
+
 type GoalIndexEntry =
 	| { type: typeof GoalType.NorthStar; goal: NorthStarGet }
 	| { type: typeof GoalType.Bearing; goal: BearingGet }
 	| { type: typeof GoalType.Movement; goal: MovementGet };
 
 interface GoalAddButtonProps {
-	onGoalAdd: (type: GoalType, parentId: string) => void;
+	onGoalAdd: () => void;
 	text: string;
-	type: GoalType;
-	parentId: string;
 }
 
-const GoalAddButton = ({ onGoalAdd, text, type, parentId }: GoalAddButtonProps) => (
-	<UnstyledButton w="100%" onClick={() => onGoalAdd(type, parentId)}>
+const GoalAddButton = ({ onGoalAdd, text }: GoalAddButtonProps) => (
+	<UnstyledButton w="100%" onClick={onGoalAdd}>
 		<Group gap="md">
 			<IconPlus size={12} />
 			<Text size="xs" c="dimmed">
@@ -42,18 +48,10 @@ const GoalAddButton = ({ onGoalAdd, text, type, parentId }: GoalAddButtonProps) 
 
 export default function Goals() {
 	// TODO: Convert to TypeScript, break down into components and add keys
-	const [opened, { open, close }] = useDisclosure(false);
-	const [activeGoalId, setActiveGoalId] = useState("");
-	const [activeMode, setActiveMode] = useState<Mode>(Mode.Create);
-	const [activeForm, setActiveForm] = useState<GoalType>(GoalType.NorthStar);
-	const [activeParentId, setActiveParentId] = useState<string | undefined>("");
-
-	const onGoalAdd = (type: GoalType, parentId?: string) => {
-		setActiveMode(Mode.Create);
-		setActiveForm(type);
-		setActiveParentId(parentId);
-		open();
-	};
+	const [editorState, setEditorState] = useState<EditorState>({
+		mode: Mode.Create,
+		type: GoalType.NorthStar
+	});
 
 	const { data: response, error, isLoading, mutate } = useListGoals();
 
@@ -75,11 +73,42 @@ export default function Goals() {
 		return index;
 	}, [response?.data]);
 
+	const renderForm = (editorState: EditorState) => {
+		console.log(goalIndex);
+
+		if (editorState.mode == Mode.Create) {
+			switch (editorState.type) {
+				case GoalType.NorthStar:
+					return <NorthStarForm mode={Mode.Create} />
+				case GoalType.Bearing:
+					return <BearingForm mode={Mode.Create} parentId={editorState.parentId} />
+				case GoalType.Movement:
+					return <MovementForm mode={Mode.Create} parentId={editorState.parentId} />
+			}
+		}
+
+		if (editorState.mode == Mode.Edit) {
+			const entry = goalIndex[editorState.id];
+			switch (editorState.type) {
+				case GoalType.NorthStar:
+					if (entry?.type != editorState.type) return null;
+					return <NorthStarForm mode={Mode.Edit} id={editorState.id} initialValues={entry.goal} />
+				case GoalType.Bearing:
+					if (entry?.type != editorState.type) return null;
+					return <BearingForm mode={Mode.Edit} id={editorState.id} initialValues={entry.goal} />
+				case GoalType.Movement:
+					if (entry?.type != editorState.type) return null;
+					return <MovementForm mode={Mode.Edit} id={editorState.id} initialValues={entry.goal} />
+			}
+		}
+	}
+
 	return (
 		<Stack>
 			<Group justify="space-between">
 				<PageTitle name="Stars" description="Goals, represented as spots in the galaxy." />
-				<Button leftSection={<IconPlus size={16} />} onClick={() => onGoalAdd(GoalType.NorthStar)}>
+				<GoalAddButton onGoalAdd={() => setEditorState({mode: Mode.Create, type: GoalType.NorthStar})} text="Add North Star" />
+				<Button leftSection={<IconPlus size={16} />} onClick={() => setEditorState({mode: Mode.Create, type: GoalType.NorthStar})}>
 					New North Star
 				</Button>
 			</Group>
@@ -103,9 +132,7 @@ export default function Goals() {
 													{star.importance}
 												</Badge>
 											}
-											setActiveMode={setActiveMode}
-											setActiveForm={setActiveForm}
-											setActiveGoalId={setActiveGoalId}
+											setEditorState={setEditorState}
 										/>
 
 										<Stack
@@ -122,9 +149,7 @@ export default function Goals() {
 															type={GoalType.Bearing}
 															description={bearing.description}
 															left={<IconCompass size={14} />}
-															setActiveMode={setActiveMode}
-															setActiveForm={setActiveForm}
-															setActiveGoalId={setActiveGoalId}
+															setEditorState={setEditorState}
 														/>
 
 														<Stack
@@ -140,18 +165,16 @@ export default function Goals() {
 																		name={movement.name}
 																		type={GoalType.Movement}
 																		left={<IconActivity size={14} />}
-																		setActiveMode={setActiveMode}
-																		setActiveForm={setActiveForm}
-																		setActiveGoalId={setActiveGoalId}
+																		setEditorState={setEditorState}
 																	/>
 																))}
 
-															<GoalAddButton onGoalAdd={onGoalAdd} text="Add Movement" type={GoalType.Movement} parentId={bearing.id} />
+															<GoalAddButton onGoalAdd={() => setEditorState({mode: Mode.Create, type: GoalType.Movement, parentId: bearing.id})} text="Add Movement" />
 														</Stack>
 													</Stack>
 												))}
 
-											<GoalAddButton onGoalAdd={onGoalAdd} text="Add Bearing" type={GoalType.Bearing} parentId={star.id} />
+											<GoalAddButton onGoalAdd={() => setEditorState({mode: Mode.Create, type: GoalType.Bearing, parentId: star.id})} text="Add Bearing" />
 										</Stack>
 									</Stack>
 								</Stack>
@@ -159,30 +182,8 @@ export default function Goals() {
 					</Stack>
 				</Grid.Col>
 				<Grid.Col span={9}>
-					<Title order={3}>{`${capitalize(activeMode)} ${capitalize(activeForm)}`}</Title>
-					{activeForm === GoalType.NorthStar && (
-						<NorthStarForm
-							mode={activeMode}
-							close={close}
-							initialValues={activeMode == Mode.Edit ? (goalIndex[activeGoalId]?.goal as NorthStarGet) : undefined}
-						/>
-					)}
-					{activeForm === GoalType.Bearing && (
-						<BearingForm
-							close={close}
-							mode={activeMode}
-							parentId={activeParentId!}
-							initialValues={activeMode == Mode.Edit ? (goalIndex[activeGoalId]?.goal as BearingGet) : undefined}
-						/>
-					)}
-					{activeForm === GoalType.Movement && (
-						<MovementForm
-							close={close}
-							mode={activeMode}
-							parentId={activeParentId!}
-							initialValues={activeMode == Mode.Edit ? (goalIndex[activeGoalId]?.goal as MovementGet) : undefined}
-						/>
-					)}
+					<Title order={3}>{`${capitalize(editorState.mode)} ${capitalize(editorState.type)}`}</Title>
+					{renderForm(editorState)}
 				</Grid.Col>
 			</Grid>
 		</Stack>

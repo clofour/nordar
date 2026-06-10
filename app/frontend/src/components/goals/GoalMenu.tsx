@@ -2,21 +2,21 @@ import { Menu, ActionIcon } from "@mantine/core";
 import { IconDots, IconPencil, IconTrash } from "@tabler/icons-react";
 import { deleteGoal } from "@/api/endpoints/goal/goal";
 import type { GoalType } from "@/api/models";
-import { Mode } from "@/pages/Goals";
+import { Mode, type EditorState } from "@/pages/Goals";
 
 interface GoalMenuProps {
 	id: string;
 	type: GoalType;
-	setActiveMode: (mode: Mode) => void;
-	setActiveForm: (form: GoalType) => void;
-	setActiveGoalId: (id: string) => void;
+	setEditorState: (editorState: EditorState) => void;
 }
 
-export default function GoalMenu({ id, type, setActiveMode, setActiveForm, setActiveGoalId }: GoalMenuProps) {
+export default function GoalMenu({ id, type, setEditorState }: GoalMenuProps) {
 	const onEditGoalClick = async () => {
-		setActiveMode(Mode.Edit);
-		setActiveForm(type);
-		setActiveGoalId(id);
+		setEditorState({
+			mode: Mode.Edit,
+			type: type,
+			id: id
+		});
 	};
 	const onDeleteGoalClick = async () => {
 		const response = await deleteGoal({
