@@ -93,7 +93,7 @@ namespace backend.Controllers
 
         [HttpPatch("{id}")]
         [EndpointName("UpdateNorthStar")]
-        public async Task<ActionResult> UpdateNorthStar([FromRoute] Guid id, [FromBody] NorthStarCreate northStarCreate)
+        public async Task<ActionResult> UpdateNorthStar([FromRoute] Guid id, [FromBody] NorthStarUpdate northStarUpdate)
         {
             var user = await userManager.GetUserAsync(User);
             if (user == null)
@@ -101,13 +101,13 @@ namespace backend.Controllers
                 return Forbid();
             }
 
-            ServiceResult serviceResult = await goalService.UpdateGoal<NorthStar, NorthStarCreate>(user.Id, id, northStarCreate);
+            ServiceResult serviceResult = await goalService.UpdateGoal<NorthStar, NorthStarUpdate>(user.Id, id, northStarUpdate);
             return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPatch("{id}")]
         [EndpointName("UpdateBearing")]
-        public async Task<ActionResult> UpdateBearing([FromRoute] Guid id, [FromBody] BearingCreate bearingCreate)
+        public async Task<ActionResult> UpdateBearing([FromRoute] Guid id, [FromBody] BearingUpdate bearingUpdate)
         {
             var user = await userManager.GetUserAsync(User);
             if (user == null)
@@ -115,13 +115,13 @@ namespace backend.Controllers
                 return Forbid();
             }
 
-            ServiceResult serviceResult = await goalService.UpdateGoal<Bearing, BearingCreate>(user.Id, id, bearingCreate);
+            ServiceResult serviceResult = await goalService.UpdateGoal<Bearing, BearingUpdate>(user.Id, id, bearingUpdate);
             return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPatch("{id}")]
         [EndpointName("UpdateMovement")]
-        public async Task<ActionResult> UpdateMovement([FromRoute] Guid id, [FromBody] MovementCreate movementCreate)
+        public async Task<ActionResult> UpdateMovement([FromRoute] Guid id, [FromBody] MovementUpdate movementUpdate)
         {
             var user = await userManager.GetUserAsync(User);
             if (user == null)
@@ -129,7 +129,7 @@ namespace backend.Controllers
                 return Forbid();
             }
 
-            ServiceResult serviceResult = await goalService.UpdateGoal<Movement, MovementCreate>(user.Id, id, movementCreate);
+            ServiceResult serviceResult = await goalService.UpdateGoal<Movement, MovementUpdate>(user.Id, id, movementUpdate);
             return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 

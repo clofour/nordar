@@ -91,7 +91,7 @@ namespace backend.Services
             return new ServiceResult(Status.Ok);
         }
 
-        public async Task<ServiceResult> UpdateGoal<TEntity, TDTO>(Guid userId, Guid id, TDTO DTO) where TEntity: Goal where TDTO: GoalCreate
+        public async Task<ServiceResult> UpdateGoal<TEntity, TDTO>(Guid userId, Guid id, TDTO DTO) where TEntity: Goal where TDTO: GoalUpdate
         {
             DbSet<TEntity> dbSet = ResolveGoalDbSet<TEntity>();
             TEntity? entity = await dbSet.FirstOrDefaultAsync((goal) => goal.UserId == userId && goal.Id == id);
