@@ -79,11 +79,11 @@ export default function Goals() {
 		if (editorState.mode == Mode.Create) {
 			switch (editorState.type) {
 				case GoalType.NorthStar:
-					return <NorthStarForm mode={Mode.Create} />
+					return <NorthStarForm key={editorState.id} mode={Mode.Create} />
 				case GoalType.Bearing:
-					return <BearingForm mode={Mode.Create} parentId={editorState.parentId} />
+					return <BearingForm key={editorState.id} mode={Mode.Create} parentId={editorState.parentId} />
 				case GoalType.Movement:
-					return <MovementForm mode={Mode.Create} parentId={editorState.parentId} />
+					return <MovementForm key={editorState.id} mode={Mode.Create} parentId={editorState.parentId} />
 			}
 		}
 
@@ -92,13 +92,13 @@ export default function Goals() {
 			switch (editorState.type) {
 				case GoalType.NorthStar:
 					if (entry?.type != editorState.type) return null;
-					return <NorthStarForm mode={Mode.Edit} id={editorState.id} initialValues={entry.goal} />
+					return <NorthStarForm key={editorState.id} mode={Mode.Edit} id={editorState.id} initialValues={entry.goal} />
 				case GoalType.Bearing:
 					if (entry?.type != editorState.type) return null;
-					return <BearingForm mode={Mode.Edit} id={editorState.id} initialValues={entry.goal} />
+					return <BearingForm key={editorState.id} mode={Mode.Edit} id={editorState.id} initialValues={entry.goal} />
 				case GoalType.Movement:
 					if (entry?.type != editorState.type) return null;
-					return <MovementForm mode={Mode.Edit} id={editorState.id} initialValues={entry.goal} />
+					return <MovementForm key={editorState.id} mode={Mode.Edit} id={editorState.id} initialValues={entry.goal} />
 			}
 		}
 	}
