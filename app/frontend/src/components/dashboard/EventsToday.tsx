@@ -4,6 +4,9 @@ import { expandRecurringEvents, type ScheduleEventData } from "@mantine/schedule
 import { theme } from "@/data/theme";
 import { Stack } from "@mantine/core";
 import type { EventGet } from "@/api/models";
+import EmptyState from "../shared/EmptyState";
+import { IconCalendarEvent } from "@tabler/icons-react";
+import DataStateWrapper from "../shared/DataStateWrapper";
 
 export default function EventsToday() {
 	const dayStart = new Date();
@@ -25,5 +28,16 @@ export default function EventsToday() {
 
 	const cards = expandedEvents.map((event) => <Event key={event.id} event={event} />);
 
-	return <Stack gap="xs">{cards}</Stack>;
+	return (
+		<DataStateWrapper isLoading={isLoading} isEmpty={cards.length == 0} emptyProps={{
+			Icon: IconCalendarEvent,
+			text: "No events yet",
+			description: "All your events will be shown here. Create your first event.",
+			cta: "Add event"
+		}}>
+			<Stack gap="xs">
+				{cards}
+			</Stack>
+		</DataStateWrapper>
+	);
 }

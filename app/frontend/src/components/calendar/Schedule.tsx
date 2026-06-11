@@ -1,6 +1,8 @@
 import { Schedule } from "@mantine/schedule";
 import { useListEvents } from "@/api/endpoints/event/event";
 import { theme } from "@/data/theme";
+import DataStateWrapper from "../shared/DataStateWrapper";
+import { IconCalendarEvent } from "@tabler/icons-react";
 
 export default function Calendar() {
 	const { data: response, error, isLoading, mutate } = useListEvents();
@@ -11,8 +13,13 @@ export default function Calendar() {
 	}));
 
 	return (
-		<>
+		<DataStateWrapper isLoading={isLoading} isEmpty={events?.length == 0} emptyProps={{
+			Icon: IconCalendarEvent,
+			text: "No events yet",
+			description: "All your events will be shown here. Create your first event.",
+			cta: "Add event"
+		}}>
 			<Schedule events={events ?? []} layout="responsive" />
-		</>
+		</DataStateWrapper>
 	);
 }
