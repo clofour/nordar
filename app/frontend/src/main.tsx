@@ -38,7 +38,7 @@ const SWRConfiguration = {
 
 const frostedGlass = {
 	"background": "color-mix(in srgb, 25% var(--mantine-color-body), 75% transparent)",
-	"backdrop-filter": "blur(16px)"
+	"backdropFilter": "blur(16px)"
 };
 
 const theme = createTheme({
