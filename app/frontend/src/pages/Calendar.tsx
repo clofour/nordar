@@ -1,5 +1,5 @@
 import EventForm from "@/components/calendar/EventForm";
-import Schedule from "@/components/calendar/Schedule";
+import Plan from "@/components/calendar/Plan";
 import PageTitle from "@/components/shared/PageTitle";
 import { capitalize } from "@/helpers";
 import { Button, Group, Modal } from "@mantine/core";
@@ -24,7 +24,7 @@ export default function Calendar() {
 				<EventForm close={close} />
 			</Modal>
 
-			<Schedule />
+			<Plan createEvent={open} />
 		</>
 	);
 }

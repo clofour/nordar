@@ -4,7 +4,11 @@ import { theme } from "@/data/theme";
 import DataStateWrapper from "../shared/DataStateWrapper";
 import { IconCalendarEvent } from "@tabler/icons-react";
 
-export default function Calendar() {
+interface PlanProps {
+	createEvent: () => void;
+}
+
+export default function Plan({ createEvent }: PlanProps) {
 	const { data: response, error, isLoading, mutate } = useListEvents();
 
 	const events = response?.data.map((event) => ({
@@ -17,7 +21,8 @@ export default function Calendar() {
 			Icon: IconCalendarEvent,
 			text: "No events yet",
 			description: "All your events will be shown here. Create your first event.",
-			cta: "Add event"
+			cta: "Add event",
+			onCtaClick: createEvent
 		}}>
 			<Schedule events={events ?? []} layout="responsive" />
 		</DataStateWrapper>

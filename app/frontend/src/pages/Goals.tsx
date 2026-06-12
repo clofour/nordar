@@ -11,6 +11,7 @@ import MovementForm from "@/components/goals/MovementForm";
 import { useListGoals } from "@/api/endpoints/goal/goal";
 import { capitalize } from "@/helpers";
 import { GoalType, type BearingGet, type MovementGet, type NorthStarGet } from "@/api/models";
+import DataStateWrapper from "@/components/shared/DataStateWrapper";
 
 export enum Mode {
 	Create = "Create",
@@ -54,11 +55,12 @@ export default function Goals() {
 	});
 
 	const { data: response, error, isLoading, mutate } = useListGoals();
+	const goals = response?.data ?? [];
 
 	const goalIndex = useMemo(() => {
 		const index: Record<string, GoalIndexEntry> = {};
 
-		for (const northStar of response?.data ?? []) {
+		for (const northStar of goals) {
 			index[northStar.id] = { type: GoalType.NorthStar, goal: northStar };
 
 			for (const bearing of northStar.bearings) {
@@ -74,8 +76,6 @@ export default function Goals() {
 	}, [response?.data]);
 
 	const renderForm = (editorState: EditorState) => {
-		console.log(goalIndex);
-
 		if (editorState.mode == Mode.Create) {
 			switch (editorState.type) {
 				case GoalType.NorthStar:
@@ -107,85 +107,87 @@ export default function Goals() {
 		<Stack>
 			<Group justify="space-between">
 				<PageTitle name="Stars" description="Goals, represented as spots in the galaxy." />
-				<GoalAddButton onGoalAdd={() => setEditorState({mode: Mode.Create, type: GoalType.NorthStar})} text="Add North Star" />
-				<Button leftSection={<IconPlus size={16} />} onClick={() => setEditorState({mode: Mode.Create, type: GoalType.NorthStar})}>
+				<GoalAddButton onGoalAdd={() => setEditorState({ mode: Mode.Create, type: GoalType.NorthStar })} text="Add North Star" />
+				<Button leftSection={<IconPlus size={16} />} onClick={() => setEditorState({ mode: Mode.Create, type: GoalType.NorthStar })}>
 					New North Star
 				</Button>
 			</Group>
 
-			<Grid>
-				<Grid.Col span={3}>
-					<Stack gap="sm">
-						{response &&
-							response.data.map((star) => (
-								<Stack>
+			<DataStateWrapper isLoading={isLoading} isEmpty={false}>
+				<Grid>
+					<Grid.Col span={3}>
+						<Stack gap="sm">
+							{response &&
+								response.data.map((star) => (
 									<Stack>
-										<GoalCard
-											key={star.id}
-											id={star.id}
-											name={star.name}
-											type={GoalType.NorthStar}
-											description={star.description}
-											left={<IconStar size={16} />}
-											right={
-												<Badge variant="light" color={theme.colors.priority[star.importance]}>
-													{star.importance}
-												</Badge>
-											}
-											setEditorState={setEditorState}
-										/>
+										<Stack>
+											<GoalCard
+												key={star.id}
+												id={star.id}
+												name={star.name}
+												type={GoalType.NorthStar}
+												description={star.description}
+												left={<IconStar size={16} />}
+												right={
+													<Badge variant="light" color={theme.colors.priority[star.importance]}>
+														{star.importance}
+													</Badge>
+												}
+												setEditorState={setEditorState}
+											/>
 
-										<Stack
-											pl="lg"
-											style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal[GoalType.NorthStar] }}
-										>
-											{star.bearings &&
-												star.bearings.map((bearing) => (
-													<Stack gap="sm">
-														<GoalCard
-															key={bearing.id}
-															id={bearing.id}
-															name={bearing.name}
-															type={GoalType.Bearing}
-															description={bearing.description}
-															left={<IconCompass size={14} />}
-															setEditorState={setEditorState}
-														/>
+											<Stack
+												pl="lg"
+												style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal[GoalType.NorthStar] }}
+											>
+												{star.bearings &&
+													star.bearings.map((bearing) => (
+														<Stack gap="sm">
+															<GoalCard
+																key={bearing.id}
+																id={bearing.id}
+																name={bearing.name}
+																type={GoalType.Bearing}
+																description={bearing.description}
+																left={<IconCompass size={14} />}
+																setEditorState={setEditorState}
+															/>
 
-														<Stack
-															gap="xs"
-															pl="lg"
-															style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal[GoalType.Bearing] }}
-														>
-															{bearing.movements &&
-																bearing.movements.map((movement) => (
-																	<GoalCard
-																		key={movement.id}
-																		id={movement.id}
-																		name={movement.name}
-																		type={GoalType.Movement}
-																		left={<IconActivity size={14} />}
-																		setEditorState={setEditorState}
-																	/>
-																))}
+															<Stack
+																gap="xs"
+																pl="lg"
+																style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal[GoalType.Bearing] }}
+															>
+																{bearing.movements &&
+																	bearing.movements.map((movement) => (
+																		<GoalCard
+																			key={movement.id}
+																			id={movement.id}
+																			name={movement.name}
+																			type={GoalType.Movement}
+																			left={<IconActivity size={14} />}
+																			setEditorState={setEditorState}
+																		/>
+																	))}
 
-															<GoalAddButton onGoalAdd={() => setEditorState({mode: Mode.Create, type: GoalType.Movement, parentId: bearing.id})} text="Add Movement" />
+																<GoalAddButton onGoalAdd={() => setEditorState({ mode: Mode.Create, type: GoalType.Movement, parentId: bearing.id })} text="Add Movement" />
+															</Stack>
 														</Stack>
-													</Stack>
-												))}
+													))}
 
-											<GoalAddButton onGoalAdd={() => setEditorState({mode: Mode.Create, type: GoalType.Bearing, parentId: star.id})} text="Add Bearing" />
+												<GoalAddButton onGoalAdd={() => setEditorState({ mode: Mode.Create, type: GoalType.Bearing, parentId: star.id })} text="Add Bearing" />
+											</Stack>
 										</Stack>
 									</Stack>
-								</Stack>
-							))}
-					</Stack>
-				</Grid.Col>
-				<Grid.Col span={9}>
-					<Title order={3}>{`${capitalize(editorState.mode)} ${capitalize(editorState.type)}`}</Title>
-					{renderForm(editorState)}
-				</Grid.Col>
-			</Grid>
+								))}
+						</Stack>
+					</Grid.Col>
+					<Grid.Col span={9}>
+						<Title order={3}>{`${capitalize(editorState.mode)} ${capitalize(editorState.type)}`}</Title>
+						{renderForm(editorState)}
+					</Grid.Col>
+				</Grid>
+			</DataStateWrapper>
 		</Stack>
 	);
 }

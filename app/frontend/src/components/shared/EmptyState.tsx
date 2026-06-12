@@ -6,9 +6,10 @@ export interface EmptyStateProps {
     text: string;
     description: string;
     cta: string;
+    onCtaClick?: () => void;
 }
 
-export default function EmptyState({ Icon, text, description, cta }: EmptyStateProps) {
+export default function EmptyState({ Icon, text, description, cta, onCtaClick }: EmptyStateProps) {
     return (
         <Paper withBorder>
             <Stack justify="center" align="center" p="lg" gap="lg">
@@ -19,7 +20,7 @@ export default function EmptyState({ Icon, text, description, cta }: EmptyStateP
                     <Text c="dimmed">{description}</Text>
                 </Stack>
 
-                <Button>{cta}</Button>
+                <Button onClick={onCtaClick}>{cta}</Button>
             </Stack>
         </Paper>
     );
