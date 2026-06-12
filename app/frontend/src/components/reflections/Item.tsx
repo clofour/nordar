@@ -2,11 +2,11 @@ import { Box, Paper, Stack, Text } from "@mantine/core";
 
 interface ItemProps {
 	name?: string;
-	eventId: string | null | undefined;
+	eventName: string | undefined;
 	date: string;
 }
 
-export default function Item({ name, eventId, date }: ItemProps) {
+export default function Item({ name, eventName, date }: ItemProps) {
 	const formattedDate = new Date(date).toLocaleDateString("en-GB");
 
 	return (
@@ -14,8 +14,8 @@ export default function Item({ name, eventId, date }: ItemProps) {
 			<Text>{name}</Text>
 			
 			<Text size="sm" c="dimmed">
-				{eventId != null && `${eventId} · ${formattedDate}`}
-				{eventId == null && `${formattedDate}`}
+				{eventName != null && `${eventName} · ${formattedDate}`}
+				{eventName == null && `${formattedDate}`}
 			</Text>
 		</Box>
 	);

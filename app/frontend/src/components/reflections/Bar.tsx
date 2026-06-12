@@ -14,7 +14,7 @@ export default function Bar({ label, value, Icon, reflections }: BarProps) {
 	const itemData = reflections.flatMap((reflection) =>
 		reflection[value].map((point) => ({
 			name: point,
-			eventId: reflection.eventId,
+			eventName: reflection.event?.name,
 			date: reflection.date,
 		})),
 	);
@@ -32,7 +32,7 @@ export default function Bar({ label, value, Icon, reflections }: BarProps) {
 			</Card.Section>
 			{itemData.map((data) =>
 				<Card.Section p="xs" withBorder>
-					<Item key={data.name} name={data.name} eventId={data.eventId} date={data.date} />
+					<Item key={data.name} name={data.name} eventName={data.eventName} date={data.date} />
 				</Card.Section>
 			)}
 		</Card>
