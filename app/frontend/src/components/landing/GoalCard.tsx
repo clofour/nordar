@@ -21,13 +21,13 @@ export default function GoalCard({ type, text }: GoalCardProps) {
 			Icon: IconCompass,
 			color: "#ffffff",
 			border: "rgba(134, 164, 255, 0.55)",
-			shadow: "0 0 40px -10px rgba(255, 210, 122, 0.4)",
+			shadow: "0 0 34px -10px rgba(134, 164, 255, 0.55)",
 		},
 		[GoalType.Movement]: {
 			Icon: IconActivity,
 			color: "#ffffff",
 			border: "rgba(95, 230, 195, 0.22)",
-			shadow: "0 0 40px -10px rgba(255, 210, 122, 0.4)",
+			shadow: "none",
 		},
 	};
 

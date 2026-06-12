@@ -3,3 +3,7 @@
     font-family: var(--landing-font-primary);
     text-transform: uppercase;
 }
+
+.description {
+    color: var(--landing-color-tertiary);
+}

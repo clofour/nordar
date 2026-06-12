@@ -1,4 +1,4 @@
-import { Stack, Text } from "@mantine/core";
+import { Stack } from "@mantine/core";
 import classes from "./GoalExplanation.module.css";
 import { GoalType } from "@/api/models";
 import { text } from "@/data/text";
@@ -21,7 +21,7 @@ export function GoalExplanation({ type }: GoalExplanationProps) {
 			<div className={classes.type} style={{
 				"--explanation-color": theme.colors.goal[type],
 			} as CSSProperties}>{text[type]}</div>
-			<Text c="dimmed">{descriptions[type]}</Text>
+			<div className={classes.description}>{descriptions[type]}</div>
 		</Stack>
 	);
 }

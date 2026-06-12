@@ -51,28 +51,28 @@ export default function Overview() {
 			</p>
 
 			<SimpleGrid w="100%" cols={3} spacing="lg">
-				<div>
+				<Stack>
 					<GoalExplanation type={GoalType.NorthStar} />
-					<Stack h="200px" align="center" justify="center">
+					<Stack flex="1 1 0" align="center" justify="center">
 						<GoalCard type={GoalType.NorthStar} text={goals.name} />
 					</Stack>
-				</div>
-				<div>
+				</Stack>
+				<Stack>
 					<GoalExplanation type={GoalType.Bearing} />
-					<Stack h="200px" align="center" justify="center">
+					<Stack flex="1 1 0" align="center" justify="center">
 						{goals.bearings.map((bearing) => (
 							<GoalCard type={GoalType.Bearing} text={bearing.name} />
 						))}
 					</Stack>
-				</div>
-				<div>
+				</Stack>
+				<Stack>
 					<GoalExplanation type={GoalType.Movement} />
-					<Stack h="200px" align="center" justify="center">
+					<Stack flex="1 1 0" align="center" justify="center">
 						{goals.bearings.map((northStar) => (
 							<GoalCard type={GoalType.Movement} text={northStar.name} />
 						))}
 					</Stack>
-				</div>
+				</Stack>
 			</SimpleGrid>
 		</Module>
 	);
