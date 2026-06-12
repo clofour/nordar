@@ -37,24 +37,13 @@ const SWRConfiguration = {
 };
 
 const frostedGlass = {
-	"background": "color-mix(in srgb, 25% var(--mantine-color-body), 75% transparent)",
-	"backdropFilter": "blur(16px)"
+	background: "color-mix(in srgb, 25% var(--mantine-color-body), 75% transparent)",
+	backdropFilter: "blur(16px)",
 };
 
 const theme = createTheme({
 	colors: {
-		nordar: [
-			"#eff2ff",
-			"#dde1f1",
-			"#b9c1e0",
-			"#929fcf",
-			"#7281c0",
-			"#5d6fb8",
-			"#5266b5",
-			"#4355a0",
-			"#374889",
-			"#2e4180"
-		]
+		nordar: ["#eff2ff", "#dde1f1", "#b9c1e0", "#929fcf", "#7281c0", "#5d6fb8", "#5266b5", "#4355a0", "#374889", "#2e4180"],
 	},
 	primaryColor: "nordar",
 	autoContrast: true,
@@ -63,10 +52,10 @@ const theme = createTheme({
 		AppShell: {
 			styles: {
 				header: {
-					...frostedGlass
+					...frostedGlass,
 				},
 				navbar: {
-					...frostedGlass
+					...frostedGlass,
 				},
 			},
 		},

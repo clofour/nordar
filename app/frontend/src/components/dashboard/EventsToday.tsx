@@ -29,15 +29,17 @@ export default function EventsToday() {
 	const cards = expandedEvents.map((event) => <Event key={event.id} event={event} />);
 
 	return (
-		<DataStateWrapper isLoading={isLoading} isEmpty={cards.length == 0} emptyProps={{
-			Icon: IconCalendarEvent,
-			text: "No events yet",
-			description: "All your events will be shown here. Create your first event.",
-			cta: "Add event"
-		}}>
-			<Stack gap="xs">
-				{cards}
-			</Stack>
+		<DataStateWrapper
+			isLoading={isLoading}
+			isEmpty={cards.length == 0}
+			emptyProps={{
+				Icon: IconCalendarEvent,
+				text: "No events yet",
+				description: "All your events will be shown here. Create your first event.",
+				cta: "Add event",
+			}}
+		>
+			<Stack gap="xs">{cards}</Stack>
 		</DataStateWrapper>
 	);
 }

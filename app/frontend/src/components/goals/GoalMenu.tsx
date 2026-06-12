@@ -15,7 +15,7 @@ export default function GoalMenu({ id, type, setEditorState }: GoalMenuProps) {
 		setEditorState({
 			mode: Mode.Edit,
 			type: type,
-			id: id
+			id: id,
 		});
 	};
 	const onDeleteGoalClick = async () => {

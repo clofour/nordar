@@ -33,20 +33,22 @@ export default function Reflections() {
 				<ReflectionForm flow="create" close={close} />
 			</Modal>
 
-			<DataStateWrapper isLoading={isLoading} isEmpty={reflections.length == 0} emptyProps={{
-				Icon: IconNotes,
-				text: "No reflections yet",
-				description: "All your reflections will be shown here. Create your first reflection.",
-				cta: "Add reflection",
-				onCtaClick: open
-			}}>
+			<DataStateWrapper
+				isLoading={isLoading}
+				isEmpty={reflections.length == 0}
+				emptyProps={{
+					Icon: IconNotes,
+					text: "No reflections yet",
+					description: "All your reflections will be shown here. Create your first reflection.",
+					cta: "Add reflection",
+					onCtaClick: open,
+				}}
+			>
 				<Stats />
 				<SimpleGrid cols={3} h="100%">
-					{
-						aspects.map((aspect) =>
-							<Bar key={aspect.value} reflections={reflections} {...aspect} />
-						)
-					}
+					{aspects.map((aspect) => (
+						<Bar key={aspect.value} reflections={reflections} {...aspect} />
+					))}
 				</SimpleGrid>
 			</DataStateWrapper>
 		</Stack>

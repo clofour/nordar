@@ -30,11 +30,11 @@ export default function Bar({ label, value, Icon, reflections }: BarProps) {
 					<Text>{itemData.length}</Text>
 				</Group>
 			</Card.Section>
-			{itemData.map((data) =>
+			{itemData.map((data) => (
 				<Card.Section p="xs" withBorder>
 					<Item key={data.name} name={data.name} eventName={data.eventName} date={data.date} />
 				</Card.Section>
-			)}
+			))}
 		</Card>
 	);
 }

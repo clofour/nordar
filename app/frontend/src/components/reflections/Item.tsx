@@ -12,7 +12,7 @@ export default function Item({ name, eventName, date }: ItemProps) {
 	return (
 		<Box>
 			<Text>{name}</Text>
-			
+
 			<Text size="sm" c="dimmed">
 				{eventName != null && `${eventName} · ${formattedDate}`}
 				{eventName == null && `${formattedDate}`}

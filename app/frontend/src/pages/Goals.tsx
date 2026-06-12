@@ -19,12 +19,12 @@ export enum Mode {
 }
 
 export type EditorState =
-	| { mode: Mode.Create; type: typeof GoalType.NorthStar, id?: never }
-	| { mode: Mode.Create; type: typeof GoalType.Bearing, id?: never; parentId: string }
-	| { mode: Mode.Create; type: typeof GoalType.Movement, id?: never; parentId: string }
-	| { mode: Mode.Edit; type: typeof GoalType.NorthStar, id: string }
-	| { mode: Mode.Edit; type: typeof GoalType.Bearing, id: string }
-	| { mode: Mode.Edit; type: typeof GoalType.Movement, id: string }
+	| { mode: Mode.Create; type: typeof GoalType.NorthStar; id?: never }
+	| { mode: Mode.Create; type: typeof GoalType.Bearing; id?: never; parentId: string }
+	| { mode: Mode.Create; type: typeof GoalType.Movement; id?: never; parentId: string }
+	| { mode: Mode.Edit; type: typeof GoalType.NorthStar; id: string }
+	| { mode: Mode.Edit; type: typeof GoalType.Bearing; id: string }
+	| { mode: Mode.Edit; type: typeof GoalType.Movement; id: string };
 
 type GoalIndexEntry =
 	| { type: typeof GoalType.NorthStar; goal: NorthStarGet }
@@ -51,7 +51,7 @@ export default function Goals() {
 	// TODO: Convert to TypeScript, break down into components and add keys
 	const [editorState, setEditorState] = useState<EditorState>({
 		mode: Mode.Create,
-		type: GoalType.NorthStar
+		type: GoalType.NorthStar,
 	});
 
 	const { data: response, error, isLoading, mutate } = useListGoals();
@@ -79,11 +79,11 @@ export default function Goals() {
 		if (editorState.mode == Mode.Create) {
 			switch (editorState.type) {
 				case GoalType.NorthStar:
-					return <NorthStarForm key={editorState.id} mode={Mode.Create} />
+					return <NorthStarForm key={editorState.id} mode={Mode.Create} />;
 				case GoalType.Bearing:
-					return <BearingForm key={editorState.id} mode={Mode.Create} parentId={editorState.parentId} />
+					return <BearingForm key={editorState.id} mode={Mode.Create} parentId={editorState.parentId} />;
 				case GoalType.Movement:
-					return <MovementForm key={editorState.id} mode={Mode.Create} parentId={editorState.parentId} />
+					return <MovementForm key={editorState.id} mode={Mode.Create} parentId={editorState.parentId} />;
 			}
 		}
 
@@ -92,16 +92,16 @@ export default function Goals() {
 			switch (editorState.type) {
 				case GoalType.NorthStar:
 					if (entry?.type != editorState.type) return null;
-					return <NorthStarForm key={editorState.id} mode={Mode.Edit} id={editorState.id} initialValues={entry.goal} />
+					return <NorthStarForm key={editorState.id} mode={Mode.Edit} id={editorState.id} initialValues={entry.goal} />;
 				case GoalType.Bearing:
 					if (entry?.type != editorState.type) return null;
-					return <BearingForm key={editorState.id} mode={Mode.Edit} id={editorState.id} initialValues={entry.goal} />
+					return <BearingForm key={editorState.id} mode={Mode.Edit} id={editorState.id} initialValues={entry.goal} />;
 				case GoalType.Movement:
 					if (entry?.type != editorState.type) return null;
-					return <MovementForm key={editorState.id} mode={Mode.Edit} id={editorState.id} initialValues={entry.goal} />
+					return <MovementForm key={editorState.id} mode={Mode.Edit} id={editorState.id} initialValues={entry.goal} />;
 			}
 		}
-	}
+	};
 
 	return (
 		<Stack>
@@ -169,12 +169,18 @@ export default function Goals() {
 																		/>
 																	))}
 
-																<GoalAddButton onGoalAdd={() => setEditorState({ mode: Mode.Create, type: GoalType.Movement, parentId: bearing.id })} text="Add Movement" />
+																<GoalAddButton
+																	onGoalAdd={() => setEditorState({ mode: Mode.Create, type: GoalType.Movement, parentId: bearing.id })}
+																	text="Add Movement"
+																/>
 															</Stack>
 														</Stack>
 													))}
 
-												<GoalAddButton onGoalAdd={() => setEditorState({ mode: Mode.Create, type: GoalType.Bearing, parentId: star.id })} text="Add Bearing" />
+												<GoalAddButton
+													onGoalAdd={() => setEditorState({ mode: Mode.Create, type: GoalType.Bearing, parentId: star.id })}
+													text="Add Bearing"
+												/>
 											</Stack>
 										</Stack>
 										<GoalAddButton onGoalAdd={() => setEditorState({ mode: Mode.Create, type: GoalType.NorthStar })} text="Add North Star" />

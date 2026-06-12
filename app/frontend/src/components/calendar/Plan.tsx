@@ -18,13 +18,17 @@ export default function Plan({ createEvent }: PlanProps) {
 	}));
 
 	return (
-		<DataStateWrapper isLoading={isLoading} isEmpty={events?.length == 0} emptyProps={{
-			Icon: IconCalendarEvent,
-			text: "No events yet",
-			description: "All your events will be shown here. Create your first event.",
-			cta: "Add event",
-			onCtaClick: createEvent
-		}}>
+		<DataStateWrapper
+			isLoading={isLoading}
+			isEmpty={events?.length == 0}
+			emptyProps={{
+				Icon: IconCalendarEvent,
+				text: "No events yet",
+				description: "All your events will be shown here. Create your first event.",
+				cta: "Add event",
+				onCtaClick: createEvent,
+			}}
+		>
 			<Paper p="md" withBorder>
 				<Schedule events={events ?? []} layout="responsive" />
 			</Paper>
