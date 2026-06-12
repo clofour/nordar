@@ -20,9 +20,9 @@ export default function GoalCard({ id, name, type, description, left, right, set
 		<Paper p="sm" withBorder style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal[type] }}>
 			<Flex align="center" gap="sm">
 				{left}
-				<Box flex={1}>
-					<Text>{name}</Text>
-					<Text size="xs" c="dimmed">
+				<Box flex="1 1 0" miw="0">
+					<Text truncate="end">{name}</Text>
+					<Text size="xs" c="dimmed" truncate="end">
 						{description}
 					</Text>
 				</Box>

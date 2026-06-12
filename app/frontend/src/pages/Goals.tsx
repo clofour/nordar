@@ -1,4 +1,4 @@
-import { Stack, Text, Badge, UnstyledButton, Group, Button, Grid, Title } from "@mantine/core";
+import { Stack, Text, Badge, UnstyledButton, Group, Button, Grid, Title, Card, Paper } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconStar, IconPlus, IconCompass, IconActivity } from "@tabler/icons-react";
 import PageTitle from "@/components/shared/PageTitle";
@@ -107,7 +107,6 @@ export default function Goals() {
 		<Stack>
 			<Group justify="space-between">
 				<PageTitle name="Stars" description="Goals, represented as spots in the galaxy." />
-				<GoalAddButton onGoalAdd={() => setEditorState({ mode: Mode.Create, type: GoalType.NorthStar })} text="Add North Star" />
 				<Button leftSection={<IconPlus size={16} />} onClick={() => setEditorState({ mode: Mode.Create, type: GoalType.NorthStar })}>
 					New North Star
 				</Button>
@@ -178,13 +177,16 @@ export default function Goals() {
 												<GoalAddButton onGoalAdd={() => setEditorState({ mode: Mode.Create, type: GoalType.Bearing, parentId: star.id })} text="Add Bearing" />
 											</Stack>
 										</Stack>
+										<GoalAddButton onGoalAdd={() => setEditorState({ mode: Mode.Create, type: GoalType.NorthStar })} text="Add North Star" />
 									</Stack>
 								))}
 						</Stack>
 					</Grid.Col>
 					<Grid.Col span={9}>
-						<Title order={3}>{`${capitalize(editorState.mode)} ${capitalize(editorState.type)}`}</Title>
-						{renderForm(editorState)}
+						<Paper p="md" withBorder>
+							<Title order={3}>{`${capitalize(editorState.mode)} ${capitalize(editorState.type)}`}</Title>
+							{renderForm(editorState)}
+						</Paper>
 					</Grid.Col>
 				</Grid>
 			</DataStateWrapper>
