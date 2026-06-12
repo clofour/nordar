@@ -12,6 +12,7 @@ import { useListGoals } from "@/api/endpoints/goal/goal";
 import { capitalize } from "@/helpers";
 import { GoalType, type BearingGet, type MovementGet, type NorthStarGet } from "@/api/models";
 import DataStateWrapper from "@/components/shared/DataStateWrapper";
+import { text } from "@/data/text";
 
 export enum Mode {
 	Create = "Create",
@@ -190,7 +191,7 @@ export default function Goals() {
 					</Grid.Col>
 					<Grid.Col span={9}>
 						<Paper p="md" withBorder>
-							<Title order={3}>{`${capitalize(editorState.mode)} ${capitalize(editorState.type)}`}</Title>
+							<Title order={3}>{`${capitalize(editorState.mode)} ${text[editorState.type]}`}</Title>
 							{renderForm(editorState)}
 						</Paper>
 					</Grid.Col>
