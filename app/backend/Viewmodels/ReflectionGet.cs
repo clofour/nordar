@@ -7,7 +7,7 @@ namespace backend.Viewmodels
         [Required]
         public Guid Id { get; set; }
 
-        public Guid? EventId { get; set; }
+        public EventSummary? Event { get; set; }
 
         [Required]
         public DateTime Date { get; set; }

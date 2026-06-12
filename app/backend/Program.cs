@@ -171,6 +171,7 @@ builder.Services.AddAutoMapper(cfg =>
         .IncludeBase<Event, EventGet>();
     cfg.CreateMap<EventInstanceStateSet, EventInstanceState>();
     cfg.CreateMap<EventInstanceState, EventInstanceStateGet>();
+    cfg.CreateMap<Event, EventSummary>();
 
     cfg.CreateMap<ReflectionCreate, Reflection>();
     cfg.CreateMap<Reflection, ReflectionGet>();

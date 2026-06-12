@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Security.Claims;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using backend.Data;
 using backend.Enums;
 using backend.Models;
@@ -31,12 +32,10 @@ namespace backend.Services
 
         public async Task<ServiceResult> List(Guid userId)
         {
-            List<Reflection> events = await appDbContext.Reflections
+            List<ReflectionGet> reflectionsGet = await appDbContext.Reflections
                 .Where(e => e.UserId == userId)
+                .ProjectTo<ReflectionGet>(mapper.ConfigurationProvider)
                 .ToListAsync();
-            
-            List<ReflectionGet> reflectionsGet = new List<ReflectionGet>();
-            mapper.Map(events, reflectionsGet);
 
             return new ServiceResult(Status.Ok, reflectionsGet);
         }
