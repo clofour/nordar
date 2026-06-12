@@ -36,25 +36,37 @@ const SWRConfiguration = {
 	errorRetryInterval: 3000,
 };
 
+const frostedGlass = {
+	"background": "color-mix(in srgb, 25% var(--mantine-color-body), 75% transparent)",
+	"backdrop-filter": "blur(16px)"
+};
+
 const theme = createTheme({
 	colors: {
-		primary: virtualColor({
-			name: "primary",
-			light: "blue",
-			dark: "orange",
-		}),
+		nordar: [
+			"#eff2ff",
+			"#dde1f1",
+			"#b9c1e0",
+			"#929fcf",
+			"#7281c0",
+			"#5d6fb8",
+			"#5266b5",
+			"#4355a0",
+			"#374889",
+			"#2e4180"
+		]
 	},
-	primaryColor: "primary",
+	primaryColor: "nordar",
 	autoContrast: true,
 	fontFamily: "Inter",
 	components: {
 		AppShell: {
 			styles: {
 				header: {
-					background: "none",
+					...frostedGlass
 				},
 				navbar: {
-					background: "none",
+					...frostedGlass
 				},
 			},
 		},
