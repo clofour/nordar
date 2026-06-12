@@ -59,6 +59,13 @@ const theme = createTheme({
 				},
 			},
 		},
+		Card: {
+			styles: {
+				root: {
+					"background-color": "var(--mantine-color-body)"
+				}
+			}
+		},
 		Notification: {
 			styles: {
 				root: {

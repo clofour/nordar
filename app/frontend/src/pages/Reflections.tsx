@@ -44,7 +44,6 @@ export default function Reflections() {
 					onCtaClick: open,
 				}}
 			>
-				<Stats />
 				<SimpleGrid cols={3} h="100%">
 					{aspects.map((aspect) => (
 						<Bar key={aspect.value} reflections={reflections} {...aspect} />
