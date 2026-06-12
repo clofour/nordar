@@ -9,7 +9,7 @@ interface StatsProps {
 
 export default function Stats() {
 	return (
-		<Paper shadow="sm" withBorder p="md">
+		<Paper withBorder p="md">
 			Hi!
 		</Paper>
 	);

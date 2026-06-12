@@ -20,7 +20,7 @@ export default function Bar({ label, value, Icon, reflections }: BarProps) {
 	);
 
 	return (
-		<Card w="100%" h="100%" shadow="sm" withBorder>
+		<Card w="100%" h="100%" withBorder>
 			<Card.Section p="sm" withBorder>
 				<Group justify="space-between">
 					<Group>
