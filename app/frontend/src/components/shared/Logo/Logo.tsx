@@ -18,7 +18,7 @@ export default function Logo({ layout, size = "md" }: LogoProps) {
 	switch (layout) {
 		case LogoLayout.Vertical:
 			return (
-				<Stack>
+				<Stack align="center">
 					<Icon size={size} />
 					<LogoText size={size} />
 				</Stack>
