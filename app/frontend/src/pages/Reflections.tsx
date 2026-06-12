@@ -6,22 +6,19 @@ import DataStateWrapper from "@/components/shared/DataStateWrapper";
 import PageTitle from "@/components/shared/PageTitle";
 import { Button, Group, Modal, SimpleGrid, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconNotes, IconPlus } from "@tabler/icons-react";
+import { IconArrowNarrowRight, IconMinus, IconNotes, IconPlus } from "@tabler/icons-react";
 
 export default function Reflections() {
 	const [opened, { open, close }] = useDisclosure(false);
 
 	const { data: response, error, isLoading, mutate } = useListReflections();
-
-	const aspects = [
-		{ label: "Wins", value: "positive" },
-		{ label: "Challenges", value: "negative" },
-		{ label: "Next Steps", value: "improvement" },
-	] as const;
-
 	const reflections = response?.data ?? [];
 
-	const bars = aspects.map((aspect) => <Bar key={aspect.value} label={aspect.label} value={aspect.value} reflections={reflections} />);
+	const aspects = [
+		{ label: "Wins", value: "positive", Icon: IconPlus },
+		{ label: "Challenges", value: "negative", Icon: IconMinus },
+		{ label: "Next Steps", value: "improvement", Icon: IconArrowNarrowRight },
+	] as const;
 
 	return (
 		<Stack>
@@ -45,7 +42,11 @@ export default function Reflections() {
 			}}>
 				<Stats />
 				<SimpleGrid cols={3} h="100%">
-					{bars}
+					{
+						aspects.map((aspect) =>
+							<Bar key={aspect.value} reflections={reflections} {...aspect} />
+						)
+					}
 				</SimpleGrid>
 			</DataStateWrapper>
 		</Stack>

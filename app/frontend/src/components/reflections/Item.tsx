@@ -1,18 +1,22 @@
-import { Paper, Stack, Text } from "@mantine/core";
+import { Box, Paper, Stack, Text } from "@mantine/core";
 
 interface ItemProps {
-	name: string;
+	name?: string;
 	eventId: string | null | undefined;
 	date: string;
 }
 
 export default function Item({ name, eventId, date }: ItemProps) {
+	const formattedDate = new Date(date).toLocaleDateString("en-GB");
+
 	return (
-		<Paper>
+		<Box>
 			<Text>{name}</Text>
-			<Text>
-				{eventId} x {date}
+			
+			<Text size="sm" c="dimmed">
+				{eventId != null && `${eventId} · ${formattedDate}`}
+				{eventId == null && `${formattedDate}`}
 			</Text>
-		</Paper>
+		</Box>
 	);
 }
