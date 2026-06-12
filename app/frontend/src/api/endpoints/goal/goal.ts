@@ -10,7 +10,17 @@ import useSwr from "swr";
 import type { SWRMutationConfiguration } from "swr/mutation";
 import useSWRMutation from "swr/mutation";
 import { cFetch } from "../../../other/cfetch";
-import type { BearingCreate, DeleteGoalParams, GoalStats, MovementCreate, NorthStarCreate, NorthStarGet } from "../../models";
+import type {
+	BearingCreate,
+	BearingUpdate,
+	DeleteGoalParams,
+	GoalStats,
+	MovementCreate,
+	MovementUpdate,
+	NorthStarCreate,
+	NorthStarGet,
+	NorthStarUpdate,
+} from "../../models";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -276,17 +286,17 @@ export const getUpdateNorthStarUrl = (id: string) => {
 	return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/UpdateNorthStar/${id}`;
 };
 
-export const updateNorthStar = async (id: string, northStarCreate: NorthStarCreate, options?: RequestInit): Promise<updateNorthStarResponse> => {
+export const updateNorthStar = async (id: string, northStarUpdate: NorthStarUpdate, options?: RequestInit): Promise<updateNorthStarResponse> => {
 	return cFetch<updateNorthStarResponse>(getUpdateNorthStarUrl(id), {
 		...options,
 		method: "PATCH",
 		headers: { "Content-Type": "application/json", ...options?.headers },
-		body: JSON.stringify(northStarCreate),
+		body: JSON.stringify(northStarUpdate),
 	});
 };
 
 export const getUpdateNorthStarMutationFetcher = (id: string, options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, { arg }: { arg: NorthStarCreate }) => {
+	return (_: Key, { arg }: { arg: NorthStarUpdate }) => {
 		return updateNorthStar(id, arg, options);
 	};
 };
@@ -301,7 +311,7 @@ export const useUpdateNorthStar = <TError = unknown>(
 			Awaited<ReturnType<typeof updateNorthStar>>,
 			TError,
 			Key,
-			NorthStarCreate,
+			NorthStarUpdate,
 			Awaited<ReturnType<typeof updateNorthStar>>
 		> & { swrKey?: string };
 		request?: SecondParameter<typeof cFetch>;
@@ -334,17 +344,17 @@ export const getUpdateBearingUrl = (id: string) => {
 	return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/UpdateBearing/${id}`;
 };
 
-export const updateBearing = async (id: string, bearingCreate: BearingCreate, options?: RequestInit): Promise<updateBearingResponse> => {
+export const updateBearing = async (id: string, bearingUpdate: BearingUpdate, options?: RequestInit): Promise<updateBearingResponse> => {
 	return cFetch<updateBearingResponse>(getUpdateBearingUrl(id), {
 		...options,
 		method: "PATCH",
 		headers: { "Content-Type": "application/json", ...options?.headers },
-		body: JSON.stringify(bearingCreate),
+		body: JSON.stringify(bearingUpdate),
 	});
 };
 
 export const getUpdateBearingMutationFetcher = (id: string, options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, { arg }: { arg: BearingCreate }) => {
+	return (_: Key, { arg }: { arg: BearingUpdate }) => {
 		return updateBearing(id, arg, options);
 	};
 };
@@ -359,7 +369,7 @@ export const useUpdateBearing = <TError = unknown>(
 			Awaited<ReturnType<typeof updateBearing>>,
 			TError,
 			Key,
-			BearingCreate,
+			BearingUpdate,
 			Awaited<ReturnType<typeof updateBearing>>
 		> & { swrKey?: string };
 		request?: SecondParameter<typeof cFetch>;
@@ -392,17 +402,17 @@ export const getUpdateMovementUrl = (id: string) => {
 	return `${import.meta.env.VITE_API_ORIGIN}/api/Goal/UpdateMovement/${id}`;
 };
 
-export const updateMovement = async (id: string, movementCreate: MovementCreate, options?: RequestInit): Promise<updateMovementResponse> => {
+export const updateMovement = async (id: string, movementUpdate: MovementUpdate, options?: RequestInit): Promise<updateMovementResponse> => {
 	return cFetch<updateMovementResponse>(getUpdateMovementUrl(id), {
 		...options,
 		method: "PATCH",
 		headers: { "Content-Type": "application/json", ...options?.headers },
-		body: JSON.stringify(movementCreate),
+		body: JSON.stringify(movementUpdate),
 	});
 };
 
 export const getUpdateMovementMutationFetcher = (id: string, options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, { arg }: { arg: MovementCreate }) => {
+	return (_: Key, { arg }: { arg: MovementUpdate }) => {
 		return updateMovement(id, arg, options);
 	};
 };
@@ -417,7 +427,7 @@ export const useUpdateMovement = <TError = unknown>(
 			Awaited<ReturnType<typeof updateMovement>>,
 			TError,
 			Key,
-			MovementCreate,
+			MovementUpdate,
 			Awaited<ReturnType<typeof updateMovement>>
 		> & { swrKey?: string };
 		request?: SecondParameter<typeof cFetch>;

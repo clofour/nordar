@@ -7,6 +7,7 @@
 
 export * from "./bearingCreate";
 export * from "./bearingGet";
+export * from "./bearingUpdate";
 export * from "./deleteGoalParams";
 export * from "./deleteReflectionParams";
 export * from "./eventGet";
@@ -17,6 +18,7 @@ export * from "./eventGetRecurringEventGetType";
 export * from "./eventInstanceStateGet";
 export * from "./eventInstanceStateSet";
 export * from "./eventState";
+export * from "./eventSummary";
 export * from "./getReflectionParams";
 export * from "./goalImportance";
 export * from "./goalStats";
@@ -24,8 +26,10 @@ export * from "./goalType";
 export * from "./motivationType";
 export * from "./movementCreate";
 export * from "./movementGet";
+export * from "./movementUpdate";
 export * from "./northStarCreate";
 export * from "./northStarGet";
+export * from "./northStarUpdate";
 export * from "./onetimeEventCreate";
 export * from "./recurrenceGet";
 export * from "./recurrenceTypes";

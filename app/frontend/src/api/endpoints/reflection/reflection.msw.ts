@@ -8,11 +8,16 @@ import { faker } from "@faker-js/faker";
 import type { RequestHandlerOptions } from "msw";
 import { HttpResponse, http } from "msw";
 
-import type { ReflectionGet } from "../../models";
+import type { EventSummary, ReflectionGet } from "../../models";
+
+export const getGetReflectionResponseEventSummaryMock = (overrideResponse: Partial<EventSummary> = {}): EventSummary => ({
+	...{ id: faker.string.uuid(), name: faker.string.alpha({ length: { min: 10, max: 20 } }) },
+	...overrideResponse,
+});
 
 export const getGetReflectionResponseMock = (overrideResponse: Partial<Extract<ReflectionGet, object>> = {}): ReflectionGet => ({
 	id: faker.string.uuid(),
-	eventId: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(), null]), undefined]),
+	event: faker.helpers.arrayElement([faker.helpers.arrayElement([null, { ...getGetReflectionResponseEventSummaryMock() }]), undefined]),
 	date: faker.date.past().toISOString().slice(0, 19) + "Z",
 	positive: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
 		faker.string.alpha({ length: { min: 10, max: 20 } }),
@@ -26,10 +31,15 @@ export const getGetReflectionResponseMock = (overrideResponse: Partial<Extract<R
 	...overrideResponse,
 });
 
+export const getListReflectionsResponseEventSummaryMock = (overrideResponse: Partial<EventSummary> = {}): EventSummary => ({
+	...{ id: faker.string.uuid(), name: faker.string.alpha({ length: { min: 10, max: 20 } }) },
+	...overrideResponse,
+});
+
 export const getListReflectionsResponseMock = (): ReflectionGet[] =>
 	Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
 		id: faker.string.uuid(),
-		eventId: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(), null]), undefined]),
+		event: faker.helpers.arrayElement([faker.helpers.arrayElement([null, { ...getListReflectionsResponseEventSummaryMock() }]), undefined]),
 		date: faker.date.past().toISOString().slice(0, 19) + "Z",
 		positive: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
 			faker.string.alpha({ length: { min: 10, max: 20 } }),
