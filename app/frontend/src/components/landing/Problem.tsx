@@ -7,7 +7,7 @@ export default function Problem() {
 		<Module>
 			<Eyebrow text="The hard truth" />
 			<h2 className={classes.title}>
-				<span className={classes.highlighted}>Everyone wants to be an Olymphic athlete.</span>
+				<span className={classes.highlighted}>Everyone wants to be an Olympic athlete.</span>
 				<span className={classes.muted}> Almost no one wants to wake up for the 6 AM practice.</span>
 			</h2>
 			<p className={classes.description}>
