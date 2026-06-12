@@ -1,2 +1,5 @@
-.type::before {
+.type {
+    color: var(--explanation-color);
+    font-family: var(--landing-font-primary);
+    text-transform: uppercase;
 }
