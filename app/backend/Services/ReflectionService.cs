@@ -45,6 +45,7 @@ namespace backend.Services
         {
             Reflection reflection = new Reflection();
             mapper.Map(reflectionCreate, reflection);
+            reflection.Date = DateTime.UtcNow;
             reflection.UserId = userId;
 
             appDbContext.Reflections.Add(reflection);
