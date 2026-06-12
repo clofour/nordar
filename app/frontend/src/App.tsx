@@ -5,6 +5,7 @@ import { IconLayoutDashboard, IconCalendar, IconSparkles, IconNotes, IconLogout 
 import Logo, { LogoLayout } from "@/components/shared/Logo/Logo";
 import ThemeToggle from "./components/misc/ThemeToggle";
 import LogOutButton from "./components/auth/LogOutButton";
+import Background from "./components/misc/Background";
 
 export default function App() {
 	const location = useLocation();
@@ -44,6 +45,7 @@ export default function App() {
 				))}
 			</AppShell.Navbar>
 			<AppShell.Main>
+				<Background starDensity={0.001} />
 				<Outlet />
 			</AppShell.Main>
 		</AppShell>

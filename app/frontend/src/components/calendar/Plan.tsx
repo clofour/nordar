@@ -3,6 +3,7 @@ import { useListEvents } from "@/api/endpoints/event/event";
 import { theme } from "@/data/theme";
 import DataStateWrapper from "../shared/DataStateWrapper";
 import { IconCalendarEvent } from "@tabler/icons-react";
+import { Paper } from "@mantine/core";
 
 interface PlanProps {
 	createEvent: () => void;
@@ -24,7 +25,9 @@ export default function Plan({ createEvent }: PlanProps) {
 			cta: "Add event",
 			onCtaClick: createEvent
 		}}>
-			<Schedule events={events ?? []} layout="responsive" />
+			<Paper p="md" withBorder>
+				<Schedule events={events ?? []} layout="responsive" />
+			</Paper>
 		</DataStateWrapper>
 	);
 }
