@@ -14,7 +14,7 @@ interface EventFormProps {
 
 interface EventValues {
 	name: string;
-	startDate: string;
+	startDate: string | null;
 	startTime: string;
 	duration: string;
 	type: EventTypes;
@@ -41,7 +41,7 @@ export default function EventForm({ close }: EventFormProps) {
 		mode: "controlled",
 		initialValues: {
 			name: "",
-			startDate: "", // TODO: Fix "Invalid Date" error (tomorrowDate.toLocaleDateString())
+			startDate: null,
 			startTime: "",
 			duration: "",
 			type: EventTypes.Onetime,
@@ -77,6 +77,7 @@ export default function EventForm({ close }: EventFormProps) {
 	});
 	const handleSubmit = async (values: EventValues) => {
 		let processedValues = processValues(values);
+		if (processedValues.startDate == null) return;
 		let baseRequestData = {
 			name: processedValues.name,
 			startDate: processedValues.startDate,
@@ -84,6 +85,7 @@ export default function EventForm({ close }: EventFormProps) {
 			timeZoneId: Intl.DateTimeFormat().resolvedOptions().timeZone,
 			duration: processedValues.duration,
 		};
+
 		let requestData;
 		let response;
 
@@ -124,10 +126,10 @@ export default function EventForm({ close }: EventFormProps) {
 		{ label: "Recurring", value: EventTypes.Recurring },
 	];
 	const unitOptions = [
-		{ label: "day", value: RecurrenceTypes.DAILY },
-		{ label: "week", value: RecurrenceTypes.WEEKLY },
-		{ label: "month", value: RecurrenceTypes.MONTHLY },
-		{ label: "year", value: RecurrenceTypes.YEARLY },
+		{ label: "day(s)", value: RecurrenceTypes.DAILY },
+		{ label: "week(s)", value: RecurrenceTypes.WEEKLY },
+		{ label: "month(s)", value: RecurrenceTypes.MONTHLY },
+		{ label: "year(s)", value: RecurrenceTypes.YEARLY },
 	];
 	const weekDayOptions = [
 		{ label: "Monday", value: WeekDay.MO },
@@ -191,28 +193,31 @@ export default function EventForm({ close }: EventFormProps) {
 						{...form.getInputProps("duration")}
 					/>
 
-					<Input.Wrapper label="Type" description="Should this event be recurring?" required>
+					<Input.Wrapper label="Type" required>
 						<SegmentedControl data={eventTypeOptions} fullWidth key={form.key("type")} {...form.getInputProps("type")} />
 					</Input.Wrapper>
 
 					{form.values.type == EventTypes.Recurring && (
 						<>
-							<Group grow justify="flex-between">
-								<NumberInput
-									label="Amount"
-									placeholder="1"
-									required
-									key={form.key("recurrenceAmount")}
-									{...form.getInputProps("recurrenceAmount")}
-								/>
-								<Select
-									label="Unit"
-									required
-									data={unitOptions}
-									key={form.key("recurrenceType")}
-									{...form.getInputProps("recurrenceType")}
-								/>
-							</Group>
+							<Input.Wrapper
+								label="Every"
+								required
+							>
+								<Group grow justify="flex-between">
+									<NumberInput
+										placeholder="1"
+										required
+										key={form.key("recurrenceAmount")}
+										{...form.getInputProps("recurrenceAmount")}
+									/>
+									<Select
+										required
+										data={unitOptions}
+										key={form.key("recurrenceType")}
+										{...form.getInputProps("recurrenceType")}
+									/>
+								</Group>
+							</Input.Wrapper>
 
 							{form.values.recurrenceType == RecurrenceTypes.WEEKLY && (
 								<Checkbox.Group
