@@ -88,7 +88,7 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            ServiceResult serviceResult = await eventService.GetOnetimeInstanceState(user.Id, eventId);
+            ServiceResult serviceResult = await eventService.GetInstanceState(user.Id, eventId, null);
             return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
@@ -103,7 +103,7 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            ServiceResult serviceResult = await eventService.GetRecurringInstanceState(user.Id, eventId, eventOccurrence);
+            ServiceResult serviceResult = await eventService.GetInstanceState(user.Id, eventId, eventOccurrence);
             return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
@@ -118,7 +118,7 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            ServiceResult serviceResult = await eventService.SetOnetimeInstanceState(user.Id, eventId, eventInstanceStateSet);
+            ServiceResult serviceResult = await eventService.SetInstanceState(user.Id, eventId, null, eventInstanceStateSet);
             return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
@@ -133,7 +133,7 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            ServiceResult serviceResult = await eventService.SetRecurringInstanceState(user.Id, eventId, eventOccurrence, eventInstanceStateSet);
+            ServiceResult serviceResult = await eventService.SetInstanceState(user.Id, eventId, eventOccurrence, eventInstanceStateSet);
             return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
     }
