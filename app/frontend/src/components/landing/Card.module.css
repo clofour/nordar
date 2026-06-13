@@ -2,7 +2,8 @@
 	display: flex;
 	width: 100%;
 	padding: 16px;
-	align-items: center;
+	justify-content: left;
+	align-items: flex-start;
 	background: linear-gradient(180deg, rgba(20, 22, 52, 0.92), rgba(9, 10, 28, 0.96));
 	border: var(--card-border);
 	border-radius: 16px;

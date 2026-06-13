@@ -11,3 +11,15 @@
 	font-size: 20px;
 	max-width: 550px;
 }
+
+.reference {
+	position: relative;
+}
+
+.svgOverlay {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+}

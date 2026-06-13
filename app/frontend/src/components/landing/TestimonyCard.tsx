@@ -13,7 +13,7 @@ type TestimonyCardProps = {
 export default function TestimonyCard({ testimony, image, name, description }: TestimonyCardProps) {
 	return (
 		<Card>
-			<Stack w="100%" ta="left">
+			<Stack w="100%" h="100%" ta="left" justify="space-between">
 				<div className={classes.testimony}>{testimony}</div>
 				<Group w="100%">
 					<Image src={image} h="40px" w="40px" radius="50%"></Image>

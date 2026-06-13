@@ -4,12 +4,13 @@ import { IconActivity, IconCompass, IconStarFilled } from "@tabler/icons-react";
 import Card from "./Card";
 import { Group } from "@mantine/core";
 
-type GoalCardProps = {
+type GoalCardProps = React.HTMLAttributes<HTMLDivElement> & {
+	ref?: React.Ref<HTMLDivElement> | undefined;
 	type: GoalType;
 	text: string;
 };
 
-export default function GoalCard({ type, text }: GoalCardProps) {
+export default function GoalCard({ ref, type, text, ...other }: GoalCardProps) {
 	const cardTypes = {
 		[GoalType.NorthStar]: {
 			Icon: IconStarFilled,
@@ -34,7 +35,7 @@ export default function GoalCard({ type, text }: GoalCardProps) {
 	const cardType = cardTypes[type];
 
 	return (
-		<Card color={cardType.color} border={`1px solid ${cardType.border}`} shadow={cardType.shadow}>
+		<Card ref={ref} border={`1px solid ${cardType.border}`} shadow={cardType.shadow} {...other}>
 			<Group>
 				<cardType.Icon />
 				<span className={classes.title}>{text}</span>
