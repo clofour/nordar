@@ -38,7 +38,6 @@ export default function EventForm({ close }: EventFormProps) {
 		};
 	};
 	const form = useForm<EventValues>({
-		// TODO: Remove form descriptions, as they don't add anything
 		mode: "controlled",
 		initialValues: {
 			name: "",
@@ -160,7 +159,6 @@ export default function EventForm({ close }: EventFormProps) {
 				<Stack>
 					<TextInput
 						label="Name"
-						description="What should this event be called?"
 						placeholder="Go to the gym"
 						required
 						key={form.key("name")}
@@ -170,7 +168,6 @@ export default function EventForm({ close }: EventFormProps) {
 					<Group grow justify="flex-between">
 						<DatePickerInput
 							label="Start date"
-							description="What day should this event start?"
 							placeholder="Tomorrow"
 							required
 							key={form.key("startDate")}
@@ -179,7 +176,6 @@ export default function EventForm({ close }: EventFormProps) {
 
 						<TimePicker
 							label="Start time"
-							description="What time should this event start?"
 							format="24h"
 							required
 							key={form.key("startTime")}
@@ -189,7 +185,6 @@ export default function EventForm({ close }: EventFormProps) {
 
 					<TimePicker
 						label="Duration"
-						description="How long should this event last?"
 						type="duration"
 						required
 						key={form.key("duration")}
@@ -205,7 +200,6 @@ export default function EventForm({ close }: EventFormProps) {
 							<Group grow justify="flex-between">
 								<NumberInput
 									label="Amount"
-									description="How many recurrence units should there be?"
 									placeholder="1"
 									required
 									key={form.key("recurrenceAmount")}
@@ -213,7 +207,6 @@ export default function EventForm({ close }: EventFormProps) {
 								/>
 								<Select
 									label="Unit"
-									description="What should the recurrence unit be?"
 									required
 									data={unitOptions}
 									key={form.key("recurrenceType")}
@@ -224,7 +217,6 @@ export default function EventForm({ close }: EventFormProps) {
 							{form.values.recurrenceType == RecurrenceTypes.WEEKLY && (
 								<Checkbox.Group
 									label="Day of the week"
-									description="Which day of the week should this event take place?"
 									required
 									key={form.key("weekDays")}
 									{...form.getInputProps("weekDays")}
@@ -240,7 +232,6 @@ export default function EventForm({ close }: EventFormProps) {
 							{form.values.recurrenceType == RecurrenceTypes.MONTHLY && (
 								<NumberInput
 									label="Day of the month"
-									description="Which day of the month should this event take place?"
 									min={1}
 									max={31}
 									required
@@ -253,14 +244,12 @@ export default function EventForm({ close }: EventFormProps) {
 								<Group grow justify="flex-between">
 									<NumberInput
 										label="Day of the month"
-										description="Which day of the month should this event take place?"
 										required
 										key={form.key("monthDay")}
 										{...form.getInputProps("monthDay")}
 									/>
 									<Select
 										label="Month of the year"
-										description="Which month of the year should this event take place?"
 										required
 										data={yearMonthOptions}
 										key={form.key("yearMonth")}
