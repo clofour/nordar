@@ -107,7 +107,6 @@ namespace backend.Controllers
             return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
-        // [EndpointName("SetOnetimeInstanceState")]
         [HttpPut("onetime/{eventId}")]
         [EndpointName("SetOnetimeInstanceState")]
         public async Task<ActionResult> SetOnetimeInstanceState([FromRoute] Guid eventId, [FromBody] EventInstanceStateSet eventInstanceStateSet)
