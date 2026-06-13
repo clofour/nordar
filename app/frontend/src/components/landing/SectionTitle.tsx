@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import classes from "./SectionTitle.module.css";
 
 interface SectionTitleProps {
-    Order: "h1" | "h2" | "h3";
+	Order: "h1" | "h2" | "h3";
 	children: ReactNode;
 }
 

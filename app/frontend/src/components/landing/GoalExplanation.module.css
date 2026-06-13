@@ -1,9 +1,9 @@
 .type {
-    color: var(--explanation-color);
-    font-family: var(--landing-font-primary);
-    text-transform: uppercase;
+	color: var(--explanation-color);
+	font-family: var(--landing-font-primary);
+	text-transform: uppercase;
 }
 
 .description {
-    color: var(--landing-color-tertiary);
+	color: var(--landing-color-tertiary);
 }

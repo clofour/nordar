@@ -18,9 +18,16 @@ export function GoalExplanation({ type }: GoalExplanationProps) {
 
 	return (
 		<Stack gap="0" ta="left">
-			<div className={classes.type} style={{
-				"--explanation-color": theme.colors.goal[type],
-			} as CSSProperties}>{text[type]}</div>
+			<div
+				className={classes.type}
+				style={
+					{
+						"--explanation-color": theme.colors.goal[type],
+					} as CSSProperties
+				}
+			>
+				{text[type]}
+			</div>
 			<div className={classes.description}>{descriptions[type]}</div>
 		</Stack>
 	);

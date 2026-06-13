@@ -109,13 +109,13 @@ export default function ReflectionForm({ close, initialValues }: ReflectionFormP
 					processedValue.push(trimmedValue);
 				}
 			}
-			
+
 			processedValues[processableKey] = processedValue;
 		}
 
 		const response = await createReflection({
 			...values,
-			...processedValues
+			...processedValues,
 		});
 
 		if (response.status === 200) {

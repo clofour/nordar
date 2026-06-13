@@ -1,7 +1,3 @@
-interface TitleProps {
+interface TitleProps {}
 
-}
-
-export default function Title() {
-    
-}
+export default function Title() {}

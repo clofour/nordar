@@ -159,39 +159,15 @@ export default function EventForm({ close }: EventFormProps) {
 		<>
 			<form onSubmit={form.onSubmit(handleSubmit)}>
 				<Stack>
-					<TextInput
-						label="Name"
-						placeholder="Go to the gym"
-						required
-						key={form.key("name")}
-						{...form.getInputProps("name")}
-					/>
+					<TextInput label="Name" placeholder="Go to the gym" required key={form.key("name")} {...form.getInputProps("name")} />
 
 					<Group grow justify="flex-between">
-						<DatePickerInput
-							label="Start date"
-							placeholder="Tomorrow"
-							required
-							key={form.key("startDate")}
-							{...form.getInputProps("startDate")}
-						/>
+						<DatePickerInput label="Start date" placeholder="Tomorrow" required key={form.key("startDate")} {...form.getInputProps("startDate")} />
 
-						<TimePicker
-							label="Start time"
-							format="24h"
-							required
-							key={form.key("startTime")}
-							{...form.getInputProps("startTime")}
-						/>
+						<TimePicker label="Start time" format="24h" required key={form.key("startTime")} {...form.getInputProps("startTime")} />
 					</Group>
 
-					<TimePicker
-						label="Duration"
-						type="duration"
-						required
-						key={form.key("duration")}
-						{...form.getInputProps("duration")}
-					/>
+					<TimePicker label="Duration" type="duration" required key={form.key("duration")} {...form.getInputProps("duration")} />
 
 					<Input.Wrapper label="Type" required>
 						<SegmentedControl data={eventTypeOptions} fullWidth key={form.key("type")} {...form.getInputProps("type")} />
@@ -199,33 +175,15 @@ export default function EventForm({ close }: EventFormProps) {
 
 					{form.values.type == EventTypes.Recurring && (
 						<>
-							<Input.Wrapper
-								label="Every"
-								required
-							>
+							<Input.Wrapper label="Every" required>
 								<Group grow justify="flex-between">
-									<NumberInput
-										placeholder="1"
-										required
-										key={form.key("recurrenceAmount")}
-										{...form.getInputProps("recurrenceAmount")}
-									/>
-									<Select
-										required
-										data={unitOptions}
-										key={form.key("recurrenceType")}
-										{...form.getInputProps("recurrenceType")}
-									/>
+									<NumberInput placeholder="1" required key={form.key("recurrenceAmount")} {...form.getInputProps("recurrenceAmount")} />
+									<Select required data={unitOptions} key={form.key("recurrenceType")} {...form.getInputProps("recurrenceType")} />
 								</Group>
 							</Input.Wrapper>
 
 							{form.values.recurrenceType == RecurrenceTypes.WEEKLY && (
-								<Checkbox.Group
-									label="Day of the week"
-									required
-									key={form.key("weekDays")}
-									{...form.getInputProps("weekDays")}
-								>
+								<Checkbox.Group label="Day of the week" required key={form.key("weekDays")} {...form.getInputProps("weekDays")}>
 									<Group mt="xs">
 										{weekDayOptions.map((weekday) => (
 											<Checkbox key={weekday.value} label={weekday.label} value={weekday.value} />
@@ -235,24 +193,12 @@ export default function EventForm({ close }: EventFormProps) {
 							)}
 
 							{form.values.recurrenceType == RecurrenceTypes.MONTHLY && (
-								<NumberInput
-									label="Day of the month"
-									min={1}
-									max={31}
-									required
-									key={form.key("monthDay")}
-									{...form.getInputProps("monthDay")}
-								/>
+								<NumberInput label="Day of the month" min={1} max={31} required key={form.key("monthDay")} {...form.getInputProps("monthDay")} />
 							)}
 
 							{form.values.recurrenceType == RecurrenceTypes.YEARLY && (
 								<Group grow justify="flex-between">
-									<NumberInput
-										label="Day of the month"
-										required
-										key={form.key("monthDay")}
-										{...form.getInputProps("monthDay")}
-									/>
+									<NumberInput label="Day of the month" required key={form.key("monthDay")} {...form.getInputProps("monthDay")} />
 									<Select
 										label="Month of the year"
 										required

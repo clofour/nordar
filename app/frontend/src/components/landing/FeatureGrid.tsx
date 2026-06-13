@@ -35,7 +35,7 @@ export default function FeatureGrid() {
 			Icon: IconChartBar,
 			color: "#c4b0ff",
 			span: 6,
-		}
+		},
 	];
 
 	return (
@@ -43,21 +43,28 @@ export default function FeatureGrid() {
 			<Eyebrow text="What's inside" />
 			<SectionTitle Order="h2">Everything you need</SectionTitle>
 			<Grid w="100%">
-				{features.map((feature) =>
+				{features.map((feature) => (
 					<Grid.Col key={feature.name} span={{ base: 12, sm: feature.span }}>
 						<Card>
 							<Stack ta="left">
 								<Group>
 									<feature.Icon color={feature.color} size={22} />
-									<div className={classes.name} style={{
-										"--feature-color": feature.color,
-									} as CSSProperties}>{feature.name}</div>
+									<div
+										className={classes.name}
+										style={
+											{
+												"--feature-color": feature.color,
+											} as CSSProperties
+										}
+									>
+										{feature.name}
+									</div>
 								</Group>
 								<div>{feature.description}</div>
 							</Stack>
 						</Card>
 					</Grid.Col>
-				)}
+				))}
 			</Grid>
 		</Module>
 	);

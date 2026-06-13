@@ -49,7 +49,7 @@ const theme = createTheme({
 	defaultGradient: {
 		deg: 135,
 		from: "#5266b5",
-		to: "#7281c0"
+		to: "#7281c0",
 	},
 	autoContrast: true,
 	fontFamily: "Inter",
@@ -67,9 +67,9 @@ const theme = createTheme({
 		Card: {
 			styles: {
 				root: {
-					"background-color": "var(--mantine-color-body)"
-				}
-			}
+					"background-color": "var(--mantine-color-body)",
+				},
+			},
 		},
 		Notification: {
 			styles: {

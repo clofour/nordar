@@ -1,6 +1,6 @@
 .title {
-    color: var(--landing-color-primary);
-    font-family: var(--landing-font-primary);
-    font-size: clamp(38px, 5.2vw, 64px);
-    margin: 20px 0 20px;
+	color: var(--landing-color-primary);
+	font-family: var(--landing-font-primary);
+	font-size: clamp(38px, 5.2vw, 64px);
+	margin: 20px 0 20px;
 }
