@@ -22,6 +22,17 @@ namespace backend.Services
             return new ServiceResult(Status.Ok, eventsGet);
         }
 
+        private async Task<ServiceResult> Get(Guid userId, Guid eventId)
+        {
+            Event? e = appDbContext.Events.FirstOrDefault(e => e.UserId == userId && e.Id == eventId);
+            if (e == null)
+            {
+                return new ServiceResult(Status.NotFound);
+            }
+
+            return new ServiceResult(Status.Ok, e);
+        }
+
         public async Task<ServiceResult> CreateOnetime(Guid userId, OnetimeEventCreate onetimeEventCreate)
         {
             OnetimeEvent onetimeEvent = new OnetimeEvent();
@@ -68,6 +79,15 @@ namespace backend.Services
 
         public async Task<ServiceResult> SetInstanceState(Guid userId, Guid eventId, DateTime? eventOccurrence, EventInstanceStateSet eventInstanceStateSet)
         {
+            ServiceResult serviceResult = await Get(userId, eventId);
+            if (serviceResult.Status != Status.Ok || serviceResult.Data is not Event e)
+            {
+                return serviceResult;
+            }
+            if ((e is OnetimeEvent && eventOccurrence != null) || (e is RecurringEvent && eventOccurrence == null)) {
+                return new ServiceResult(Status.BadRequest);
+            }
+
             EventInstanceState? eventInstanceState = await appDbContext.EventInstanceStates.FirstOrDefaultAsync(obj =>
                 obj.UserId == userId &&
                 obj.EventId == eventId &&
