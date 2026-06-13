@@ -30,7 +30,7 @@ export default function SocialProof() {
 		<Module>
 			<Eyebrow text="Stories from the sky" />
 			<h1 className={classes.title}>Charted, not wished</h1>
-			<SimpleGrid w="100%" cols={3}>
+			<SimpleGrid w="100%" cols={{ base: 1, sm: 3 }}>
 				{testimonies.map((testimony) =>
 					<TestimonyCard {...testimony} />
 				)}

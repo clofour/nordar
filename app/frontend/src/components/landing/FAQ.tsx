@@ -1,6 +1,8 @@
-import { Accordion, Button, type ButtonVariant } from "@mantine/core";
-import { IconMoon, IconSun } from "@tabler/icons-react";
-import { Link } from "react-router";
+import { Accordion } from "@mantine/core";
+import classes from "./FAQ.module.css";
+import Module from "./Module";
+import Eyebrow from "./Eyebrow";
+import SectionTitle from "./SectionTitle";
 
 export default function FAQ() {
 	const faqs = [
@@ -31,13 +33,17 @@ export default function FAQ() {
 	];
 
 	return (
-		<Accordion variant="separated">
-			{faqs.map((faq) => (
-				<Accordion.Item key={faq.question} value={faq.question}>
-					<Accordion.Control>{faq.question}</Accordion.Control>
-					<Accordion.Panel>{faq.answer}</Accordion.Panel>
-				</Accordion.Item>
-			))}
-		</Accordion>
+		<Module>
+			<Eyebrow text="Common questions" />
+			<SectionTitle Order="h2">Straight answers</SectionTitle>
+			<Accordion w="100%" variant="separated" classNames={{ item: classes.item!, control: classes.control!, panel: classes.panel!  }}>
+				{faqs.map((faq) => (
+					<Accordion.Item key={faq.question} value={faq.question}>
+						<Accordion.Control>{faq.question}</Accordion.Control>
+						<Accordion.Panel>{faq.answer}</Accordion.Panel>
+					</Accordion.Item>
+				))}
+			</Accordion>
+		</Module>
 	);
 }

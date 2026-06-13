@@ -1,0 +1,5 @@
+.bodyText {
+    color: var(--landing-color-secondary);
+    font-family: var(--landing-font-secondary);
+    margin: 0;
+}

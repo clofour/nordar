@@ -7,7 +7,7 @@ interface ModuleProps {
 
 export default function Module({ children }: ModuleProps) {
 	return (
-		<Stack justify="center" align="center" ta="center">
+		<Stack w="100%" h="65vh" justify="center" align="center" ta="center">
 			{children}
 		</Stack>
 	);

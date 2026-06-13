@@ -46,6 +46,11 @@ const theme = createTheme({
 		nordar: ["#eff2ff", "#dde1f1", "#b9c1e0", "#929fcf", "#7281c0", "#5d6fb8", "#5266b5", "#4355a0", "#374889", "#2e4180"],
 	},
 	primaryColor: "nordar",
+	defaultGradient: {
+		deg: 135,
+		from: "#5266b5",
+		to: "#7281c0"
+	},
 	autoContrast: true,
 	fontFamily: "Inter",
 	components: {
