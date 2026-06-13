@@ -23,7 +23,7 @@ export default function FAQ() {
 		{
 			question: "Is Nordar free?",
 			answer:
-				"You can sign up and start for free — no credit card needed. We'll share more about future plans as they develop, but for now there is no price tag!",
+				"Yes. You can sign up and start for free — no credit card needed. We'll share more about future plans as they develop, but for now there is no price tag!",
 		},
 		{
 			question: "Is my data private?",
