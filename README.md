@@ -29,9 +29,7 @@ Nordar has a variety of features:
 * The **Stars** page, users can create, update and delete North Stars, Bearings and Movements.
 * In the **Reflections** page, users can look back at their past reflections to learn from them.
 
-### Architecture
-
-#### Stack
+### Stack
 
 #### Frontend
 
@@ -238,9 +236,6 @@ Nordar uses GitHub Actions as CI/CD. This table shows all workflows:
 | terraform-run.yaml | Run freeform Terraform commands | Manual |
 | terraform-validate.yaml | Validate Terraform manifests | Pushes and PRs to core branches |
 | vite-deploy.yaml | Build and upload frontend static files to CDN | Manual |
-
-### Development
-
 
 ### Images
 [TBA]
