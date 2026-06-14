@@ -198,6 +198,31 @@ graph LR
     DB2 -. "Patroni API\n:8008" .-> etcd
 ```
 
+### Credentials
+
+Deploying Nordar requires a set of credentials and variables in the `production` environment:
+| Credential | Description | Deployment Mode |
+| --- | --- | ---
+| ANSIBLE_SSH_PRIVATE_KEY | Ansible SSH private key | Full |
+| DO_API_TOKEN | DigitalOcean API token | Demo, Full |
+| PKI_ANSIBLE_PRIVATE_KEY | Private key for Ansible CA for signing service certificates | Full |
+| POSTGRESQL_APP_USER_PASSWORD | PostgreSQL password for app_user | Full |
+| POSTGRESQL_POSTGRES_PASSWORD | PostgreSQL password for postgres | Full |
+| POSTGRESQL_REPLICATION_USER_PASSWORD | PostgreSQL password for replication_user | Full |
+| POSTGRESQL_REWIND_USER_PASSWORD | PostgreSQL password for rewind_user | Full |
+| SPACES_ACCESS_ID | DigitalOcean Spaces access ID | Full |
+| SPACES_SECRET_KEY | DigitalOcean Spaces secret key | Full |
+
+| Variable | Description | Deployment Mode |
+| --- | --- | --- |
+| ANSIBLE_SSH_PUBLIC_KEY | Ansible SSH public key | Full |
+| DEV_SSH_PUBLIC_KEY | Developer SSH public key | Full |
+| DOMAIN | Domain to host Nordar on | Demo, Full |
+| PKI_ANSIBLE_CERTIFICATE | Public key for Ansible CA for signing service certificates | Full |
+| PKI_CHAIN_CERTIFICATE | Public key for Ansible CA for signing service certificates | Full |
+| PKI_ROOT_CERTIFICATE | Public key for root CA for signing service certificates | Full |
+| RUNNER_DATA_DIR | Directory for data exchange with the runner (such as `/tmp/.data`) | Full |
+
 ### Workflows
 
 Nordar uses GitHub Actions as CI/CD. This table shows all workflows:
