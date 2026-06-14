@@ -15,8 +15,8 @@ export default function Hero() {
 			<p className={classes.description}>Nordar turns your biggest ambitions into plans you can actually follow.</p>
 
 			<div className={classes.heroCTA}>
-				<LinkButton variant="filled" label="Start free — no card needed" to="/auth/signup" />
-				<LinkButton variant="default" label="See the method" to="#tbd" />
+				<LinkButton variant="gradient" size="md" label="Start free — no card needed" to="/auth/signup" />
+				<LinkButton variant="default" size="md" label="See the method" to="#tbd" />
 			</div>
 		</Module>
 	);

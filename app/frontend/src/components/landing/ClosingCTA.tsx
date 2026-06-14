@@ -16,7 +16,7 @@ export default function ClosingCTA() {
 			<p className={classes.description}>
 				Stop wishing on it. Start steering by it. Spot your first star, set your bearings, and have your week planned — it takes about three minutes.
 			</p>
-			<LinkButton variant="filled" label="Sign Up" to="/auth/signup" />
+			<LinkButton variant="gradient" size="md" label="Sign Up" to="/auth/signup" />
 			<p>Placeholder</p>
 		</Module>
 	);
