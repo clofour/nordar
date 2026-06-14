@@ -23,7 +23,7 @@ export default function Landing() {
 					</Group>
 					<Group gap="xs">
 						<LinkButton variant="default" label="Sign In" to="/auth/signin" />
-						<LinkButton variant="filled" label="Start free" to="/auth/signup" />
+						<LinkButton variant="gradient" label="Start free" to="/auth/signup" />
 					</Group>
 				</Group>
 			</AppShell.Header>
