@@ -6,8 +6,9 @@ Nordar is a research-backed galaxy-themed web application to help you set meanin
 ## Quick Start
 
 To run the web application on your machine, you can use the provided Docker Compose project.
-1. Run docker compose *
-********
+1. Navigate to the `./app` with `cd ./app`.
+2. Run `docker compose up`.
+3. Head to `localhost:3000`.
 
 ## Knowledge Base
 
