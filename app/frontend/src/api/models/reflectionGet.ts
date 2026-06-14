@@ -4,11 +4,11 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
+import type { EventSummary } from "./eventSummary";
 
 export interface ReflectionGet {
 	id: string;
-	/** @nullable */
-	eventId?: string | null;
+	event?: null | EventSummary;
 	date: string;
 	positive: string[];
 	negative: string[];

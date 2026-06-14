@@ -1,4 +1,4 @@
-import { Stack, SimpleGrid, Paper, Group, ThemeIcon, Text, Checkbox, Title } from "@mantine/core";
+import { Paper, Group, ThemeIcon, Text } from "@mantine/core";
 import type { Icon } from "@tabler/icons-react";
 
 interface CardData {

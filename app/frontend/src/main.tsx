@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { AppShellNavbar, MantineProvider, createTheme } from "@mantine/core";
+import { AppShellNavbar, MantineProvider, createTheme, virtualColor, type CSSVariablesResolver } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
@@ -19,7 +19,7 @@ import { SWRConfig } from "swr";
 import { assert } from "@/helpers";
 import AuthenticationRequirement from "@/components/shared/AuthenticationRequirement";
 import { AuthProvider } from "@/contexts/AuthContext";
-import LandingPage from "./pages/LandingPage";
+import LandingPage from "./pages/Landing";
 import Background from "./components/misc/Background";
 
 const rootElement = document.getElementById("root");
@@ -36,18 +36,40 @@ const SWRConfiguration = {
 	errorRetryInterval: 3000,
 };
 
+const frostedGlass = {
+	background: "color-mix(in srgb, 25% var(--mantine-color-body), 75% transparent)",
+	backdropFilter: "blur(16px)",
+};
+
 const theme = createTheme({
+	colors: {
+		nordar: ["#eff2ff", "#dde1f1", "#b9c1e0", "#929fcf", "#7281c0", "#5d6fb8", "#5266b5", "#4355a0", "#374889", "#2e4180"],
+	},
+	primaryColor: "nordar",
+	defaultGradient: {
+		deg: 135,
+		from: "#5266b5",
+		to: "#7281c0",
+	},
+	autoContrast: true,
 	fontFamily: "Inter",
 	components: {
 		AppShell: {
 			styles: {
 				header: {
-					background: "none",
+					...frostedGlass,
 				},
 				navbar: {
-					background: "none",
-				}
-			}
+					...frostedGlass,
+				},
+			},
+		},
+		Card: {
+			styles: {
+				root: {
+					"background-color": "var(--mantine-color-body)",
+				},
+			},
 		},
 		Notification: {
 			styles: {
@@ -57,14 +79,22 @@ const theme = createTheme({
 			},
 		},
 	},
+	other: {
+		testing: "y",
+	},
+});
+
+const resolver: CSSVariablesResolver = (theme) => ({
+	variables: {},
+	light: {},
+	dark: {},
 });
 
 createRoot(rootElement).render(
 	<StrictMode>
 		<SWRConfig value={SWRConfiguration}>
 			<AuthProvider>
-				<MantineProvider theme={theme}>
-					<Background />
+				<MantineProvider theme={theme} cssVariablesResolver={resolver}>
 					<Notifications containerWidth="25%" />
 					<BrowserRouter>
 						<Routes>

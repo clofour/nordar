@@ -4,7 +4,9 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
+import type { GoalType } from "./goalType";
 
-export type GetApiReflectionGetParams = {
-	Id?: string;
+export type DeleteGoalParams = {
+	id?: string;
+	goalType?: GoalType;
 };

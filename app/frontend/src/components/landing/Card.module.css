@@ -1,0 +1,11 @@
+.card {
+	display: flex;
+	width: 100%;
+	padding: 16px;
+	justify-content: left;
+	align-items: flex-start;
+	background: var(--card-background, var(--landing-color-card));
+	border: var(--card-border);
+	border-radius: 16px;
+	box-shadow: var(--card-shadow);
+}

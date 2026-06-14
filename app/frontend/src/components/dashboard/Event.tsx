@@ -4,10 +4,10 @@ import type { ScheduleEventData } from "@mantine/schedule";
 import { useEffect, useState } from "react";
 import { EventTypes } from "@/metadata/events";
 import {
-	putApiEventSetOnetimeInstanceStateOnetimeEventId,
-	putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurence,
-	useGetApiEventGetOnetimeInstanceStateOnetimeEventId,
-	useGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurence,
+	setOnetimeInstanceState,
+	setRecurringInstanceState,
+	useGetOnetimeInstanceState,
+	useGetRecurringInstanceState,
 } from "@/api/endpoints/event/event";
 import { NotificationType, useNotification } from "@/helpers";
 import { getErrorMessage } from "@/data/error";
@@ -38,8 +38,8 @@ export default function Event({ event }: EventProps) {
 		isLoading,
 		mutate,
 	} = event.type == "recurring" && "recurringEventId" in event && "recurrenceId" in event
-			? useGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurence(event.recurringEventId, new Date(event.recurrenceId).toISOString())
-			: useGetApiEventGetOnetimeInstanceStateOnetimeEventId(event.id);
+		? useGetRecurringInstanceState(event.recurringEventId, new Date(event.recurrenceId).toISOString())
+		: useGetOnetimeInstanceState(event.id);
 	useEffect(() => {
 		if (response?.data) {
 			setChecked(getBoolFromState(response.data.eventState));
@@ -50,9 +50,8 @@ export default function Event({ event }: EventProps) {
 		const result = Math.random();
 
 		if (result < 0.5) {
-			
 		}
-	}
+	};
 
 	const onChange = async (checkBoxEvent: React.ChangeEvent<HTMLInputElement>) => {
 		const newCheckboxValue = checkBoxEvent.currentTarget.checked;
@@ -64,13 +63,9 @@ export default function Event({ event }: EventProps) {
 
 		let response = null;
 		if (event.type == "onetime") {
-			response = await putApiEventSetOnetimeInstanceStateOnetimeEventId(event.id, requestData);
+			response = await setOnetimeInstanceState(event.id, requestData);
 		} else if (event.type == "recurring" && "recurringEventId" in event && "recurrenceId" in event) {
-			response = await putApiEventSetRecurringInstanceStateRecurringEventIdEventOccurence(
-				event.recurringEventId,
-				new Date(event.recurrenceId).toISOString(),
-				requestData,
-			);
+			response = await setRecurringInstanceState(event.recurringEventId, new Date(event.recurrenceId).toISOString(), requestData);
 		} else {
 			throw Error("Incorrect schema on Event object.");
 		}

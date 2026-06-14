@@ -1,33 +1,40 @@
 import type { ReflectionGet } from "@/api/models";
 import { Card, Group, Paper, ScrollArea, Stack, Text } from "@mantine/core";
-import type { ReactNode } from "react";
 import Item from "@/components/reflections/Item";
+import type { Icon } from "@tabler/icons-react";
 
 interface BarProps {
 	label: string;
 	value: "positive" | "negative" | "improvement";
+	Icon: Icon;
 	reflections: ReflectionGet[];
 }
 
-export default function Bar({ label, value, reflections }: BarProps) {
+export default function Bar({ label, value, Icon, reflections }: BarProps) {
 	const itemData = reflections.flatMap((reflection) =>
 		reflection[value].map((point) => ({
 			name: point,
-			eventId: reflection.eventId,
+			eventName: reflection.event?.name,
 			date: reflection.date,
 		})),
 	);
-	const items = itemData.map((data) => <Item key={data.name} name={data.name} eventId={data.eventId} date={data.date} />);
 
 	return (
-		<Card w="100%" h="100%" shadow="sm" withBorder>
-			<Card.Section withBorder inheritPadding>
+		<Card w="100%" h="100%" withBorder>
+			<Card.Section p="sm" withBorder>
 				<Group justify="space-between">
-					<Text>{label}</Text>
+					<Group>
+						<Icon size={16} />
+						<Text>{label}</Text>
+					</Group>
 					<Text>{itemData.length}</Text>
 				</Group>
 			</Card.Section>
-			<ScrollArea>{items}</ScrollArea>
+			{itemData.map((data) => (
+				<Card.Section p="xs" withBorder>
+					<Item key={data.name} name={data.name} eventName={data.eventName} date={data.date} />
+				</Card.Section>
+			))}
 		</Card>
 	);
 }

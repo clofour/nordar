@@ -11,7 +11,6 @@ namespace backend.Data
     {
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
-        public DbSet<AccessCode> AccessCodes { get; set; }
         public DbSet<NorthStar> NorthStars { get; set; }
         public DbSet<Bearing> Bearings { get; set; }
         public DbSet<Movement> Movements { get; set; }

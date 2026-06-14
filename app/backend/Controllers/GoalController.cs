@@ -17,11 +17,12 @@ namespace backend.Controllers
     [ApiController]
     [Route("api/[controller]/[action]")]
     [Authorize]
-    public class GoalController(AppDbContext appDbContext, UserManager<User> userManager, ILogger<GoalController> logger, IMapper mapper, GoalService goalService) : ControllerBase
+    public class GoalController(UserManager<User> userManager, GoalService goalService) : ControllerBase
     {
         [HttpGet]
+        [EndpointName("ListGoals")]
         [ProducesResponseType(typeof(List<NorthStarGet>), StatusCodes.Status200OK, "application/json")]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult> List()
         {
             var user = await userManager.GetUserAsync(User);
             if (user == null)
@@ -29,20 +30,12 @@ namespace backend.Controllers
                 return Forbid();
             }
 
-            await appDbContext.Entry(user)
-                .Collection(user => user.NorthStars)
-                .Query()
-                .Include(northStar => northStar.Bearings)
-                    .ThenInclude(bearing => bearing.Movements)
-                .LoadAsync();
-
-            List<NorthStar> northStars = user.NorthStars;
-            List<NorthStarGet> northStarsDTO = mapper.Map<List<NorthStarGet>>(northStars);
-
-            return Ok(northStarsDTO);
+            ServiceResult serviceResult = await goalService.List(user);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpGet]
+        [EndpointName("GoalStats")]
         [ProducesResponseType(typeof(GoalStats), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> Stats()
         {
@@ -52,17 +45,12 @@ namespace backend.Controllers
                 return Forbid();
             }
 
-            GoalStats goalStats = new GoalStats
-            {
-                NorthStarCount = await goalService.CountGoals<NorthStar>(user),
-                BearingCount = await goalService.CountGoals<Bearing>(user),
-                MovementCount = await goalService.CountGoals<Movement>(user)
-            };
-
-            return Ok(goalStats);
+            ServiceResult serviceResult = await goalService.Stats(user);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPost]
+        [EndpointName("CreateNorthStar")]
         public async Task<ActionResult> CreateNorthStar([FromBody] NorthStarCreate northStarCreate)
         {
             var user = await userManager.GetUserAsync(User);
@@ -71,17 +59,12 @@ namespace backend.Controllers
                 return Forbid();
             }
 
-            NorthStar northStar = new NorthStar();
-            mapper.Map(northStarCreate, northStar);
-            northStar.User = user;
-
-            appDbContext.NorthStars.Add(northStar);
-            await appDbContext.SaveChangesAsync();
-
-            return Ok();
+            ServiceResult serviceResult = await goalService.CreateNorthStar(user.Id, northStarCreate);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPost]
+        [EndpointName("CreateBearing")]
         public async Task<ActionResult> CreateBearing([FromBody] BearingCreate bearingCreate)
         {
             var user = await userManager.GetUserAsync(User);
@@ -90,26 +73,12 @@ namespace backend.Controllers
                 return Forbid();
             }
 
-            NorthStar? parent = await goalService.FindParent<NorthStar>(user, bearingCreate.NorthStarId);
-            if (parent == null)
-            {
-                return NotFound("The parent goal does not exist.");
-            }
-
-            await appDbContext.Entry(parent).Collection(northStar => northStar.Bearings).LoadAsync();
-
-            Bearing bearing = new Bearing();
-            mapper.Map(bearingCreate, bearing);
-            bearing.User = user;
-            bearing.NorthStar = parent;
-
-            appDbContext.Bearings.Add(bearing);
-            await appDbContext.SaveChangesAsync();
-
-            return Ok();
+            ServiceResult serviceResult = await goalService.CreateBearing(user, bearingCreate);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPost]
+        [EndpointName("CreateMovement")]
         public async Task<ActionResult> CreateMovement([FromBody] MovementCreate movementCreate)
         {
             var user = await userManager.GetUserAsync(User);
@@ -118,26 +87,54 @@ namespace backend.Controllers
                 return Forbid();
             }
 
-            Bearing? parent = await goalService.FindParent<Bearing>(user, movementCreate.BearingId);
-            if (parent == null)
+            ServiceResult serviceResult = await goalService.CreateMovement(user, movementCreate);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
+        }
+
+        [HttpPatch("{id}")]
+        [EndpointName("UpdateNorthStar")]
+        public async Task<ActionResult> UpdateNorthStar([FromRoute] Guid id, [FromBody] NorthStarUpdate northStarUpdate)
+        {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
             {
-                return NotFound("The parent goal does not exist.");
+                return Forbid();
             }
 
-            await appDbContext.Entry(parent).Collection(bearing => bearing.Movements).LoadAsync();
+            ServiceResult serviceResult = await goalService.UpdateGoal<NorthStar, NorthStarUpdate>(user.Id, id, northStarUpdate);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
+        }
 
-            Movement movement = new Movement();
-            mapper.Map(movementCreate, movement);
-            movement.User = user;
-            movement.Bearing = parent;
+        [HttpPatch("{id}")]
+        [EndpointName("UpdateBearing")]
+        public async Task<ActionResult> UpdateBearing([FromRoute] Guid id, [FromBody] BearingUpdate bearingUpdate)
+        {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Forbid();
+            }
 
-            appDbContext.Movements.Add(movement);
-            await appDbContext.SaveChangesAsync();
+            ServiceResult serviceResult = await goalService.UpdateGoal<Bearing, BearingUpdate>(user.Id, id, bearingUpdate);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
+        }
 
-            return Ok();
+        [HttpPatch("{id}")]
+        [EndpointName("UpdateMovement")]
+        public async Task<ActionResult> UpdateMovement([FromRoute] Guid id, [FromBody] MovementUpdate movementUpdate)
+        {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Forbid();
+            }
+
+            ServiceResult serviceResult = await goalService.UpdateGoal<Movement, MovementUpdate>(user.Id, id, movementUpdate);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPost]
+        [EndpointName("DeleteGoal")]
         public async Task<ActionResult> Delete(Guid id, GoalType goalType)
         {
             var user = await userManager.GetUserAsync(User);
@@ -146,17 +143,8 @@ namespace backend.Controllers
                 return Forbid();
             }
 
-            int goalsDeleted = await goalService.ResolveGoalDbSet(goalType)
-                .Where(goal => goal.UserId == user.Id && goal.Id == id)
-                .ExecuteDeleteAsync();
-
-            if (goalsDeleted == 1)
-            {
-                return Ok();
-            }
-            else {
-                return NotFound();
-            }
+            ServiceResult serviceResult = await goalService.Delete(user.Id, id, goalType);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
     }
 }

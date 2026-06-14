@@ -1,29 +1,37 @@
 import { Button, Group, Input, SegmentedControl, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm, schemaResolver } from "@mantine/form";
-import { postApiGoalCreateNorthStar } from "@/api/endpoints/goal/goal.js";
-import { PostApiGoalCreateNorthStarBody } from "@/api/endpoints/goal/goal.zod.js";
+import { createNorthStar, updateNorthStar } from "@/api/endpoints/goal/goal";
+import { CreateNorthStarBody, UpdateNorthStarBody } from "@/api/endpoints/goal/goal.zod";
 import { getErrorMessage } from "@/data/error";
 import type { NorthStarCreate } from "@/api/models";
 import { NotificationType, useNotification } from "@/helpers";
-import type { Mode } from "@/pages/Goals";
+import { Mode } from "@/pages/Goals";
 
-interface NorthStarFormProps {
-	mode: Mode;
-	close: () => void;
-	initialValues?: NorthStarCreate | undefined;
-}
+type NorthStarFormProps =
+	| {
+			mode: Mode.Create;
+			id?: never;
+			initialValues?: never;
+	  }
+	| {
+			mode: Mode.Edit;
+			id: string;
+			initialValues: NorthStarCreate;
+	  };
 
-export default function NorthStarForm({ close, initialValues }: NorthStarFormProps) {
+export default function NorthStarForm({ mode, id, initialValues }: NorthStarFormProps) {
 	const notify = useNotification();
+
+	const schema = mode == Mode.Create ? CreateNorthStarBody : UpdateNorthStarBody;
 
 	const form = useForm({
 		mode: "uncontrolled",
 		initialValues: initialValues,
-		validate: schemaResolver(PostApiGoalCreateNorthStarBody, { sync: true }),
+		validate: schemaResolver(schema, { sync: true }),
 	});
 
 	const handleSubmit = async (values: typeof form.values) => {
-		const response = await postApiGoalCreateNorthStar(values);
+		const response = mode == Mode.Create ? await createNorthStar(values) : await updateNorthStar(id, values);
 
 		if (response.status === 200) {
 			close();
@@ -47,15 +55,15 @@ export default function NorthStarForm({ close, initialValues }: NorthStarFormPro
 					<Textarea
 						label="Description"
 						description="What does your goal consist of?"
-						placeholder="Be healthy"
+						placeholder="My goal consists of being in good physical shape, getting enough sleep, avoiding stress and eating a healthy diet."
 						required
 						key={form.key("description")}
 						{...form.getInputProps("description")}
 					/>
 					<Textarea
 						label="Justification"
-						description="Why do you want to achieve this goal? How is it linked to your values and your identity?"
-						placeholder="Be healthy"
+						description="Why do you want to achieve this goal?"
+						placeholder="I want to achieve this goal for two reasons. Firstly, my dad passed away at 42 because of a heart attack, and I don't want the same to happen to me. Secondly, being healthy makes me feel better in general."
 						key={form.key("justification")}
 						{...form.getInputProps("justification")}
 					/>

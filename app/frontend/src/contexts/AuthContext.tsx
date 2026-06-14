@@ -1,4 +1,4 @@
-import { useGetApiAuthIsAuthenticated } from "@/api/endpoints/auth/auth";
+import { useIsAuthenticated } from "@/api/endpoints/auth/auth";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
 interface AuthContextType {
@@ -20,7 +20,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 		error,
 		isLoading,
 		mutate,
-	} = useGetApiAuthIsAuthenticated({
+	} = useIsAuthenticated({
 		swr: {
 			dedupingInterval: 0,
 		},

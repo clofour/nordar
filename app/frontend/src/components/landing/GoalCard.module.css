@@ -1,0 +1,6 @@
+.title {
+	color: var(--card-text-color);
+	font-family: var(--landing-font-primary);
+	font-size: 20px;
+	font-weight: bold;
+}

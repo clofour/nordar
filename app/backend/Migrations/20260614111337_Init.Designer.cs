@@ -13,7 +13,7 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260531183515_Init")]
+    [Migration("20260614111337_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -25,6 +25,25 @@ namespace backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.DataProtectionKey", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FriendlyName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Xml")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DataProtectionKeys");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
@@ -90,20 +109,6 @@ namespace backend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("backend.Models.AccessCode", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasMaxLength(25)
-                        .HasColumnType("character varying(25)");
-
-                    b.Property<int>("Uses")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Name");
-
-                    b.ToTable("AccessCodes");
-                });
-
             modelBuilder.Entity("backend.Models.Event", b =>
                 {
                     b.Property<Guid>("Id")
@@ -154,7 +159,7 @@ namespace backend.Migrations
                     b.Property<Guid>("EventId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("EventOccurence")
+                    b.Property<DateTime?>("EventOccurrence")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("EventState")
@@ -212,14 +217,17 @@ namespace backend.Migrations
 
                     b.PrimitiveCollection<List<string>>("Improvement")
                         .IsRequired()
+                        .HasMaxLength(20)
                         .HasColumnType("text[]");
 
                     b.PrimitiveCollection<List<string>>("Negative")
                         .IsRequired()
+                        .HasMaxLength(20)
                         .HasColumnType("text[]");
 
                     b.PrimitiveCollection<List<string>>("Positive")
                         .IsRequired()
+                        .HasMaxLength(20)
                         .HasColumnType("text[]");
 
                     b.Property<Guid>("UserId")
@@ -239,10 +247,6 @@ namespace backend.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<string>("AccessCode")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");

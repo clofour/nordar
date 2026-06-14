@@ -2,9 +2,9 @@ import { Button, Checkbox, Group, Input, NumberInput, SegmentedControl, Select, 
 import { useForm, schemaResolver } from "@mantine/form";
 import { DatePickerInput, TimePicker } from "@mantine/dates";
 import { getErrorMessage } from "@/data/error";
-import { postApiEventCreateOnetime, postApiEventCreateRecurring } from "@/api/endpoints/event/event";
+import { createOnetime, createRecurring } from "@/api/endpoints/event/event";
 import { RecurrenceTypes, WeekDay } from "@/api/models";
-import { PostApiEventCreateOnetimeBody, PostApiEventCreateRecurringBody } from "@/api/endpoints/event/event.zod";
+import { CreateOnetimeBody, CreateRecurringBody } from "@/api/endpoints/event/event.zod";
 import { durationToMinutes, NotificationType, useNotification } from "@/helpers";
 import { EventTypes } from "@/metadata/events";
 
@@ -14,7 +14,7 @@ interface EventFormProps {
 
 interface EventValues {
 	name: string;
-	startDate: string;
+	startDate: string | null;
 	startTime: string;
 	duration: string;
 	type: EventTypes;
@@ -38,11 +38,10 @@ export default function EventForm({ close }: EventFormProps) {
 		};
 	};
 	const form = useForm<EventValues>({
-		// TODO: Remove form descriptions, as they don't add anything
 		mode: "controlled",
 		initialValues: {
 			name: "",
-			startDate: "", // TODO: Fix "Invalid Date" error (tomorrowDate.toLocaleDateString())
+			startDate: null,
 			startTime: "",
 			duration: "",
 			type: EventTypes.Onetime,
@@ -59,10 +58,10 @@ export default function EventForm({ close }: EventFormProps) {
 
 			switch (processedValues.type) {
 				case EventTypes.Onetime:
-					formSchema = PostApiEventCreateOnetimeBody;
+					formSchema = CreateOnetimeBody;
 					break;
 				case EventTypes.Recurring:
-					formSchema = PostApiEventCreateRecurringBody;
+					formSchema = CreateRecurringBody;
 					break;
 				default:
 					throw new RangeError("Type is not valid.");
@@ -78,6 +77,7 @@ export default function EventForm({ close }: EventFormProps) {
 	});
 	const handleSubmit = async (values: EventValues) => {
 		let processedValues = processValues(values);
+		if (processedValues.startDate == null) return;
 		let baseRequestData = {
 			name: processedValues.name,
 			startDate: processedValues.startDate,
@@ -85,6 +85,7 @@ export default function EventForm({ close }: EventFormProps) {
 			timeZoneId: Intl.DateTimeFormat().resolvedOptions().timeZone,
 			duration: processedValues.duration,
 		};
+
 		let requestData;
 		let response;
 
@@ -93,7 +94,7 @@ export default function EventForm({ close }: EventFormProps) {
 				requestData = {
 					...baseRequestData,
 				};
-				response = await postApiEventCreateOnetime(requestData);
+				response = await createOnetime(requestData);
 				break;
 
 			case EventTypes.Recurring:
@@ -106,7 +107,7 @@ export default function EventForm({ close }: EventFormProps) {
 					yearMonth: values.yearMonth,
 				};
 
-				response = await postApiEventCreateRecurring(requestData);
+				response = await createRecurring(requestData);
 				break;
 
 			default:
@@ -125,10 +126,10 @@ export default function EventForm({ close }: EventFormProps) {
 		{ label: "Recurring", value: EventTypes.Recurring },
 	];
 	const unitOptions = [
-		{ label: "day", value: RecurrenceTypes.DAILY },
-		{ label: "week", value: RecurrenceTypes.WEEKLY },
-		{ label: "month", value: RecurrenceTypes.MONTHLY },
-		{ label: "year", value: RecurrenceTypes.YEARLY },
+		{ label: "day(s)", value: RecurrenceTypes.DAILY },
+		{ label: "week(s)", value: RecurrenceTypes.WEEKLY },
+		{ label: "month(s)", value: RecurrenceTypes.MONTHLY },
+		{ label: "year(s)", value: RecurrenceTypes.YEARLY },
 	];
 	const weekDayOptions = [
 		{ label: "Monday", value: WeekDay.MO },
@@ -158,77 +159,31 @@ export default function EventForm({ close }: EventFormProps) {
 		<>
 			<form onSubmit={form.onSubmit(handleSubmit)}>
 				<Stack>
-					<TextInput
-						label="Name"
-						description="What should this event be called?"
-						placeholder="Go to the gym"
-						required
-						key={form.key("name")}
-						{...form.getInputProps("name")}
-					/>
+					<TextInput label="Name" placeholder="Go to the gym" required key={form.key("name")} {...form.getInputProps("name")} />
 
 					<Group grow justify="flex-between">
-						<DatePickerInput
-							label="Start date"
-							description="What day should this event start?"
-							placeholder="Tomorrow"
-							required
-							key={form.key("startDate")}
-							{...form.getInputProps("startDate")}
-						/>
+						<DatePickerInput label="Start date" placeholder="Tomorrow" required key={form.key("startDate")} {...form.getInputProps("startDate")} />
 
-						<TimePicker
-							label="Start time"
-							description="What time should this event start?"
-							format="24h"
-							required
-							key={form.key("startTime")}
-							{...form.getInputProps("startTime")}
-						/>
+						<TimePicker label="Start time" format="24h" required key={form.key("startTime")} {...form.getInputProps("startTime")} />
 					</Group>
 
-					<TimePicker
-						label="Duration"
-						description="How long should this event last?"
-						type="duration"
-						required
-						key={form.key("duration")}
-						{...form.getInputProps("duration")}
-					/>
+					<TimePicker label="Duration" type="duration" required key={form.key("duration")} {...form.getInputProps("duration")} />
 
-					<Input.Wrapper label="Type" description="Should this event be recurring?" required>
+					<Input.Wrapper label="Type" required>
 						<SegmentedControl data={eventTypeOptions} fullWidth key={form.key("type")} {...form.getInputProps("type")} />
 					</Input.Wrapper>
 
 					{form.values.type == EventTypes.Recurring && (
 						<>
-							<Group grow justify="flex-between">
-								<NumberInput
-									label="Amount"
-									description="How many recurrence units should there be?"
-									placeholder="1"
-									required
-									key={form.key("recurrenceAmount")}
-									{...form.getInputProps("recurrenceAmount")}
-								/>
-								<Select
-									label="Unit"
-									description="What should the recurrence unit be?"
-									required
-									data={unitOptions}
-									key={form.key("recurrenceType")}
-									{...form.getInputProps("recurrenceType")}
-								/>
-							</Group>
+							<Input.Wrapper label="Every" required>
+								<Group grow justify="flex-between">
+									<NumberInput placeholder="1" required key={form.key("recurrenceAmount")} {...form.getInputProps("recurrenceAmount")} />
+									<Select required data={unitOptions} key={form.key("recurrenceType")} {...form.getInputProps("recurrenceType")} />
+								</Group>
+							</Input.Wrapper>
 
 							{form.values.recurrenceType == RecurrenceTypes.WEEKLY && (
-								<Checkbox.Group
-									label="Day of the week"
-									description="Which day of the week should this event take place?"
-									required
-									key={form.key("weekDays")}
-									{...form.getInputProps("weekDays")}
-								>
+								<Checkbox.Group label="Day of the week" required key={form.key("weekDays")} {...form.getInputProps("weekDays")}>
 									<Group mt="xs">
 										{weekDayOptions.map((weekday) => (
 											<Checkbox key={weekday.value} label={weekday.label} value={weekday.value} />
@@ -238,29 +193,14 @@ export default function EventForm({ close }: EventFormProps) {
 							)}
 
 							{form.values.recurrenceType == RecurrenceTypes.MONTHLY && (
-								<NumberInput
-									label="Day of the month"
-									description="Which day of the month should this event take place?"
-									min={1}
-									max={31}
-									required
-									key={form.key("monthDay")}
-									{...form.getInputProps("monthDay")}
-								/>
+								<NumberInput label="Day of the month" min={1} max={31} required key={form.key("monthDay")} {...form.getInputProps("monthDay")} />
 							)}
 
 							{form.values.recurrenceType == RecurrenceTypes.YEARLY && (
 								<Group grow justify="flex-between">
-									<NumberInput
-										label="Day of the month"
-										description="Which day of the month should this event take place?"
-										required
-										key={form.key("monthDay")}
-										{...form.getInputProps("monthDay")}
-									/>
+									<NumberInput label="Day of the month" required key={form.key("monthDay")} {...form.getInputProps("monthDay")} />
 									<Select
 										label="Month of the year"
-										description="Which month of the year should this event take place?"
 										required
 										data={yearMonthOptions}
 										key={form.key("yearMonth")}

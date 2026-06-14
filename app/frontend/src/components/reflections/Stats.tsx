@@ -1,4 +1,4 @@
-import { useGetApiReflectionList } from "@/api/endpoints/reflection/reflection";
+import { useListReflections } from "@/api/endpoints/reflection/reflection";
 import { Paper, SimpleGrid, Stack, Text } from "@mantine/core";
 
 interface StatsProps {
@@ -9,7 +9,7 @@ interface StatsProps {
 
 export default function Stats() {
 	return (
-		<Paper shadow="sm" withBorder p="md">
+		<Paper withBorder p="md">
 			Hi!
 		</Paper>
 	);

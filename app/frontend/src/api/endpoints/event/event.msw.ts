@@ -10,7 +10,7 @@ import { HttpResponse, http } from "msw";
 import type { EventGet, EventInstanceStateGet } from "../../models";
 import { EventState } from "../../models";
 
-export const getGetApiEventGetResponseMock = (): EventGet[] =>
+export const getListEventsResponseMock = (): EventGet[] =>
 	Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
 		faker.helpers.arrayElement([
 			{
@@ -38,31 +38,31 @@ export const getGetApiEventGetResponseMock = (): EventGet[] =>
 		]),
 	);
 
-export const getPostApiEventCreateOnetimeResponseMock = (): string => faker.word.sample();
+export const getCreateOnetimeResponseMock = (): string => faker.word.sample();
 
-export const getPostApiEventCreateRecurringResponseMock = (): string => faker.word.sample();
+export const getCreateRecurringResponseMock = (): string => faker.word.sample();
 
-export const getGetApiEventGetOnetimeInstanceStateOnetimeEventIdResponseMock = (
+export const getGetOnetimeInstanceStateResponseMock = (
 	overrideResponse: Partial<Extract<EventInstanceStateGet, object>> = {},
 ): EventInstanceStateGet => ({ eventState: faker.helpers.arrayElement(Object.values(EventState)), ...overrideResponse });
 
-export const getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponseMock = (
+export const getGetRecurringInstanceStateResponseMock = (
 	overrideResponse: Partial<Extract<EventInstanceStateGet, object>> = {},
 ): EventInstanceStateGet => ({ eventState: faker.helpers.arrayElement(Object.values(EventState)), ...overrideResponse });
 
-export const getGetApiEventGetMockHandler = (
+export const getListEventsMockHandler = (
 	overrideResponse?: EventGet[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<EventGet[]> | EventGet[]),
 	options?: RequestHandlerOptions,
 ) => {
 	return http.get(
-		"*/api/Event/Get",
+		"*/api/Event/List",
 		async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
 			return HttpResponse.json(
 				overrideResponse !== undefined
 					? typeof overrideResponse === "function"
 						? await overrideResponse(info)
 						: overrideResponse
-					: getGetApiEventGetResponseMock(),
+					: getListEventsResponseMock(),
 				{ status: 200 },
 			);
 		},
@@ -70,7 +70,7 @@ export const getGetApiEventGetMockHandler = (
 	);
 };
 
-export const getPostApiEventCreateOnetimeMockHandler = (
+export const getCreateOnetimeMockHandler = (
 	overrideResponse?: string | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<string> | string),
 	options?: RequestHandlerOptions,
 ) => {
@@ -82,7 +82,7 @@ export const getPostApiEventCreateOnetimeMockHandler = (
 					? typeof overrideResponse === "function"
 						? await overrideResponse(info)
 						: overrideResponse
-					: getPostApiEventCreateOnetimeResponseMock(),
+					: getCreateOnetimeResponseMock(),
 				{ status: 200 },
 			);
 		},
@@ -90,7 +90,7 @@ export const getPostApiEventCreateOnetimeMockHandler = (
 	);
 };
 
-export const getPostApiEventCreateRecurringMockHandler = (
+export const getCreateRecurringMockHandler = (
 	overrideResponse?: string | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<string> | string),
 	options?: RequestHandlerOptions,
 ) => {
@@ -102,7 +102,7 @@ export const getPostApiEventCreateRecurringMockHandler = (
 					? typeof overrideResponse === "function"
 						? await overrideResponse(info)
 						: overrideResponse
-					: getPostApiEventCreateRecurringResponseMock(),
+					: getCreateRecurringResponseMock(),
 				{ status: 200 },
 			);
 		},
@@ -110,7 +110,7 @@ export const getPostApiEventCreateRecurringMockHandler = (
 	);
 };
 
-export const getPostApiEventUpdateMockHandler = (
+export const getUpdateEventMockHandler = (
 	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void),
 	options?: RequestHandlerOptions,
 ) => {
@@ -127,7 +127,7 @@ export const getPostApiEventUpdateMockHandler = (
 	);
 };
 
-export const getPostApiEventDeleteMockHandler = (
+export const getDeleteEventMockHandler = (
 	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void),
 	options?: RequestHandlerOptions,
 ) => {
@@ -144,7 +144,7 @@ export const getPostApiEventDeleteMockHandler = (
 	);
 };
 
-export const getGetApiEventGetOnetimeInstanceStateOnetimeEventIdMockHandler = (
+export const getGetOnetimeInstanceStateMockHandler = (
 	overrideResponse?:
 		| EventInstanceStateGet
 		| ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<EventInstanceStateGet> | EventInstanceStateGet),
@@ -158,7 +158,7 @@ export const getGetApiEventGetOnetimeInstanceStateOnetimeEventIdMockHandler = (
 					? typeof overrideResponse === "function"
 						? await overrideResponse(info)
 						: overrideResponse
-					: getGetApiEventGetOnetimeInstanceStateOnetimeEventIdResponseMock(),
+					: getGetOnetimeInstanceStateResponseMock(),
 				{ status: 200 },
 			);
 		},
@@ -166,21 +166,21 @@ export const getGetApiEventGetOnetimeInstanceStateOnetimeEventIdMockHandler = (
 	);
 };
 
-export const getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceMockHandler = (
+export const getGetRecurringInstanceStateMockHandler = (
 	overrideResponse?:
 		| EventInstanceStateGet
 		| ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<EventInstanceStateGet> | EventInstanceStateGet),
 	options?: RequestHandlerOptions,
 ) => {
 	return http.get(
-		"*/api/Event/GetRecurringInstanceState/recurring/:eventId/:eventOccurence",
+		"*/api/Event/GetRecurringInstanceState/recurring/:eventId/:eventOccurrence",
 		async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
 			return HttpResponse.json(
 				overrideResponse !== undefined
 					? typeof overrideResponse === "function"
 						? await overrideResponse(info)
 						: overrideResponse
-					: getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceResponseMock(),
+					: getGetRecurringInstanceStateResponseMock(),
 				{ status: 200 },
 			);
 		},
@@ -188,7 +188,7 @@ export const getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccuren
 	);
 };
 
-export const getPutApiEventSetOnetimeInstanceStateOnetimeEventIdMockHandler = (
+export const getSetOnetimeInstanceStateMockHandler = (
 	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<void> | void),
 	options?: RequestHandlerOptions,
 ) => {
@@ -205,12 +205,12 @@ export const getPutApiEventSetOnetimeInstanceStateOnetimeEventIdMockHandler = (
 	);
 };
 
-export const getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceMockHandler = (
+export const getSetRecurringInstanceStateMockHandler = (
 	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<void> | void),
 	options?: RequestHandlerOptions,
 ) => {
 	return http.put(
-		"*/api/Event/SetRecurringInstanceState/recurring/:eventId/:eventOccurence",
+		"*/api/Event/SetRecurringInstanceState/recurring/:eventId/:eventOccurrence",
 		async (info: Parameters<Parameters<typeof http.put>[1]>[0]) => {
 			if (typeof overrideResponse === "function") {
 				await overrideResponse(info);
@@ -222,13 +222,13 @@ export const getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccuren
 	);
 };
 export const getEventMock = () => [
-	getGetApiEventGetMockHandler(),
-	getPostApiEventCreateOnetimeMockHandler(),
-	getPostApiEventCreateRecurringMockHandler(),
-	getPostApiEventUpdateMockHandler(),
-	getPostApiEventDeleteMockHandler(),
-	getGetApiEventGetOnetimeInstanceStateOnetimeEventIdMockHandler(),
-	getGetApiEventGetRecurringInstanceStateRecurringEventIdEventOccurenceMockHandler(),
-	getPutApiEventSetOnetimeInstanceStateOnetimeEventIdMockHandler(),
-	getPutApiEventSetRecurringInstanceStateRecurringEventIdEventOccurenceMockHandler(),
+	getListEventsMockHandler(),
+	getCreateOnetimeMockHandler(),
+	getCreateRecurringMockHandler(),
+	getUpdateEventMockHandler(),
+	getDeleteEventMockHandler(),
+	getGetOnetimeInstanceStateMockHandler(),
+	getGetRecurringInstanceStateMockHandler(),
+	getSetOnetimeInstanceStateMockHandler(),
+	getSetRecurringInstanceStateMockHandler(),
 ];

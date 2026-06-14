@@ -139,12 +139,15 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 builder.Services.AddAutoMapper(cfg =>
 {
-    cfg.CreateMap<NorthStarCreate, NorthStar>();
-    cfg.CreateMap<BearingCreate, Bearing>();
-    cfg.CreateMap<MovementCreate, Movement>();
     cfg.CreateMap<NorthStar, NorthStarGet>();
     cfg.CreateMap<Bearing, BearingGet>();
     cfg.CreateMap<Movement, MovementGet>();
+    cfg.CreateMap<NorthStarCreate, NorthStar>();
+    cfg.CreateMap<BearingCreate, Bearing>();
+    cfg.CreateMap<MovementCreate, Movement>();
+    cfg.CreateMap<NorthStarUpdate, NorthStar>();
+    cfg.CreateMap<BearingUpdate, Bearing>();
+    cfg.CreateMap<MovementUpdate, Movement>();
 
     cfg.CreateMap<OnetimeEventCreate, OnetimeEvent>();
     cfg.CreateMap<RecurringEventCreate, RecurringEvent>();
@@ -168,28 +171,20 @@ builder.Services.AddAutoMapper(cfg =>
         .IncludeBase<Event, EventGet>();
     cfg.CreateMap<EventInstanceStateSet, EventInstanceState>();
     cfg.CreateMap<EventInstanceState, EventInstanceStateGet>();
+    cfg.CreateMap<Event, EventSummary>();
 
     cfg.CreateMap<ReflectionCreate, Reflection>();
     cfg.CreateMap<Reflection, ReflectionGet>();
 });
 
+builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<GoalService>();
 builder.Services.AddScoped<EventService>();
+builder.Services.AddScoped<ReflectionService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Default"))
-    .UseSeeding((context, _) =>
-    {
-        AppDbContext appDbContext = (AppDbContext)context;
-        if (appDbContext.AccessCodes.Find("cat") == null)
-        {
-            AccessCode newAccessCode = new AccessCode("cat", 10);
-            appDbContext.AccessCodes.Add(newAccessCode);
-
-            context.SaveChanges();
-        }
-    });
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default"));
 });
 
 var app = builder.Build();

@@ -1,14 +1,11 @@
 import { Link, Outlet, useLocation } from "react-router";
-import { ActionIcon, AppShell, Burger, Group, NavLink } from "@mantine/core";
+import { AppShell, Burger, Group, NavLink } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconLayoutDashboard, IconCalendar, IconSparkles, IconNotes, IconLogout } from "@tabler/icons-react";
 import Logo, { LogoLayout } from "@/components/shared/Logo/Logo";
-import { useAuth } from "./contexts/AuthContext";
-import { postApiAuthSignOut } from "./api/endpoints/auth/auth";
-import { NotificationType, useNotification } from "./helpers";
-import { getErrorMessage } from "./data/error";
 import ThemeToggle from "./components/misc/ThemeToggle";
 import LogOutButton from "./components/auth/LogOutButton";
+import Background from "./components/misc/Background";
 
 export default function App() {
 	const location = useLocation();
@@ -22,7 +19,7 @@ export default function App() {
 	const [opened, { toggle }] = useDisclosure();
 
 	return (
-		<AppShell header={{ height: 60 }} navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: !opened } }} padding="md">
+		<AppShell header={{ height: 60 }} navbar={{ width: 250, breakpoint: "sm", collapsed: { mobile: !opened } }} padding="md">
 			<AppShell.Header>
 				<Group h="100%" justify="space-between" px="md">
 					<Group gap="sm">
@@ -48,6 +45,7 @@ export default function App() {
 				))}
 			</AppShell.Navbar>
 			<AppShell.Main>
+				<Background starDensity={0.001} />
 				<Outlet />
 			</AppShell.Main>
 		</AppShell>

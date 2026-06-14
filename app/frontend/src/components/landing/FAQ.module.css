@@ -1,0 +1,12 @@
+.item {
+    background: var(--landing-color-card);
+}
+
+.control {
+    color: var(--landing-color-primary);
+}
+
+.panel {
+    color: var(--landing-color-secondary);
+    font-family: var(--landing-font-secondary);
+}

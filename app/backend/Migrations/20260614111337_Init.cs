@@ -14,23 +14,10 @@ namespace backend.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AccessCodes",
-                columns: table => new
-                {
-                    Name = table.Column<string>(type: "character varying(25)", maxLength: 25, nullable: false),
-                    Uses = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AccessCodes", x => x.Name);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    AccessCode = table.Column<string>(type: "text", nullable: false),
                     NextReflection = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -50,6 +37,20 @@ namespace backend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DataProtectionKeys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    FriendlyName = table.Column<string>(type: "text", nullable: true),
+                    Xml = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DataProtectionKeys", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -243,9 +244,9 @@ namespace backend.Migrations
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     EventId = table.Column<Guid>(type: "uuid", nullable: true),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Positive = table.Column<List<string>>(type: "text[]", nullable: false),
-                    Negative = table.Column<List<string>>(type: "text[]", nullable: false),
-                    Improvement = table.Column<List<string>>(type: "text[]", nullable: false)
+                    Positive = table.Column<List<string>>(type: "text[]", maxLength: 20, nullable: false),
+                    Negative = table.Column<List<string>>(type: "text[]", maxLength: 20, nullable: false),
+                    Improvement = table.Column<List<string>>(type: "text[]", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -269,7 +270,7 @@ namespace backend.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     EventId = table.Column<Guid>(type: "uuid", nullable: false),
-                    EventOccurence = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    EventOccurrence = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     EventState = table.Column<int>(type: "integer", nullable: true),
                     ReflectionId = table.Column<Guid>(type: "uuid", nullable: true)
@@ -381,9 +382,6 @@ namespace backend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AccessCodes");
-
-            migrationBuilder.DropTable(
                 name: "AspNetUserClaims");
 
             migrationBuilder.DropTable(
@@ -391,6 +389,9 @@ namespace backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "DataProtectionKeys");
 
             migrationBuilder.DropTable(
                 name: "EventInstanceStates");

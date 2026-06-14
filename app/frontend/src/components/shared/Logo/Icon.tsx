@@ -1,19 +1,29 @@
-import { useMantineTheme } from "@mantine/core";
+import { useComputedColorScheme, useMantineTheme } from "@mantine/core";
 
 type IconProps = {
 	size: string;
 };
 
-export default function Logo({ size }: IconProps) {
+export default function Icon({ size }: IconProps) {
 	const theme = useMantineTheme();
+	const computedColorScheme = useComputedColorScheme();
+
+	const sizeValue = size in theme.spacing ? theme.spacing[size] : size;
 
 	return (
-		<svg viewBox="0 0 53.455975 51.002312" version="1.1" width={theme.spacing[size]} height={theme.spacing[size]}>
+		<svg viewBox="0 0 53.455975 51.002312" version="1.1" width={sizeValue} height={sizeValue}>
 			<defs id="defs3">
-				<linearGradient gradientTransform="rotate(25)" id="star-gradient" x1="0" y1="0" x2="1" y2="0">
-					<stop offset="0%" stopColor="#5106FF" stopOpacity="1" />
-					<stop offset="100%" stopColor="#61CBF2" stopOpacity="1" id="stop3" />
-				</linearGradient>
+				{computedColorScheme == "light" ? (
+					<linearGradient gradientTransform="rotate(25)" id="star-gradient" x1="0" y1="0" x2="1" y2="0">
+						<stop offset="0%" stopColor="#5106FF" stopOpacity="1" />
+						<stop offset="100%" stopColor="#61CBF2" stopOpacity="1" id="stop3" />
+					</linearGradient>
+				) : (
+					<linearGradient gradientTransform="rotate(25)" id="star-gradient" x1="0" y1="0" x2="1" y2="0">
+						<stop offset="0%" stopColor="#FFD27A" stopOpacity="1" />
+						<stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" id="stop3" />
+					</linearGradient>
+				)}
 			</defs>
 			<g stroke="none" fill="url(#star-gradient)" transform="matrix(0.53880417,0,0,0.53880417,-0.21070756,-1.4391541)">
 				<path

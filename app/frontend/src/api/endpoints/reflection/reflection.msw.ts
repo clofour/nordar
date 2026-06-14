@@ -8,11 +8,16 @@ import { faker } from "@faker-js/faker";
 import type { RequestHandlerOptions } from "msw";
 import { HttpResponse, http } from "msw";
 
-import type { ReflectionGet } from "../../models";
+import type { EventSummary, ReflectionGet } from "../../models";
 
-export const getGetApiReflectionGetResponseMock = (overrideResponse: Partial<Extract<ReflectionGet, object>> = {}): ReflectionGet => ({
+export const getGetReflectionResponseEventSummaryMock = (overrideResponse: Partial<EventSummary> = {}): EventSummary => ({
+	...{ id: faker.string.uuid(), name: faker.string.alpha({ length: { min: 10, max: 20 } }) },
+	...overrideResponse,
+});
+
+export const getGetReflectionResponseMock = (overrideResponse: Partial<Extract<ReflectionGet, object>> = {}): ReflectionGet => ({
 	id: faker.string.uuid(),
-	eventId: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(), null]), undefined]),
+	event: faker.helpers.arrayElement([faker.helpers.arrayElement([null, { ...getGetReflectionResponseEventSummaryMock() }]), undefined]),
 	date: faker.date.past().toISOString().slice(0, 19) + "Z",
 	positive: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
 		faker.string.alpha({ length: { min: 10, max: 20 } }),
@@ -26,10 +31,15 @@ export const getGetApiReflectionGetResponseMock = (overrideResponse: Partial<Ext
 	...overrideResponse,
 });
 
-export const getGetApiReflectionListResponseMock = (): ReflectionGet[] =>
+export const getListReflectionsResponseEventSummaryMock = (overrideResponse: Partial<EventSummary> = {}): EventSummary => ({
+	...{ id: faker.string.uuid(), name: faker.string.alpha({ length: { min: 10, max: 20 } }) },
+	...overrideResponse,
+});
+
+export const getListReflectionsResponseMock = (): ReflectionGet[] =>
 	Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
 		id: faker.string.uuid(),
-		eventId: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(), null]), undefined]),
+		event: faker.helpers.arrayElement([faker.helpers.arrayElement([null, { ...getListReflectionsResponseEventSummaryMock() }]), undefined]),
 		date: faker.date.past().toISOString().slice(0, 19) + "Z",
 		positive: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
 			faker.string.alpha({ length: { min: 10, max: 20 } }),
@@ -42,11 +52,11 @@ export const getGetApiReflectionListResponseMock = (): ReflectionGet[] =>
 		),
 	}));
 
-export const getPostApiReflectionCreateResponseMock = (): string => faker.word.sample();
+export const getCreateReflectionResponseMock = (): string => faker.word.sample();
 
-export const getPostApiReflectionPromptDataResponseMock = (): string => faker.word.sample();
+export const getReflectionPromptDataResponseMock = (): string => faker.word.sample();
 
-export const getGetApiReflectionGetMockHandler = (
+export const getGetReflectionMockHandler = (
 	overrideResponse?: ReflectionGet | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<ReflectionGet> | ReflectionGet),
 	options?: RequestHandlerOptions,
 ) => {
@@ -58,7 +68,7 @@ export const getGetApiReflectionGetMockHandler = (
 					? typeof overrideResponse === "function"
 						? await overrideResponse(info)
 						: overrideResponse
-					: getGetApiReflectionGetResponseMock(),
+					: getGetReflectionResponseMock(),
 				{ status: 200 },
 			);
 		},
@@ -66,7 +76,7 @@ export const getGetApiReflectionGetMockHandler = (
 	);
 };
 
-export const getGetApiReflectionListMockHandler = (
+export const getListReflectionsMockHandler = (
 	overrideResponse?: ReflectionGet[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<ReflectionGet[]> | ReflectionGet[]),
 	options?: RequestHandlerOptions,
 ) => {
@@ -78,7 +88,7 @@ export const getGetApiReflectionListMockHandler = (
 					? typeof overrideResponse === "function"
 						? await overrideResponse(info)
 						: overrideResponse
-					: getGetApiReflectionListResponseMock(),
+					: getListReflectionsResponseMock(),
 				{ status: 200 },
 			);
 		},
@@ -86,7 +96,7 @@ export const getGetApiReflectionListMockHandler = (
 	);
 };
 
-export const getPostApiReflectionCreateMockHandler = (
+export const getCreateReflectionMockHandler = (
 	overrideResponse?: string | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<string> | string),
 	options?: RequestHandlerOptions,
 ) => {
@@ -98,7 +108,7 @@ export const getPostApiReflectionCreateMockHandler = (
 					? typeof overrideResponse === "function"
 						? await overrideResponse(info)
 						: overrideResponse
-					: getPostApiReflectionCreateResponseMock(),
+					: getCreateReflectionResponseMock(),
 				{ status: 200 },
 			);
 		},
@@ -106,7 +116,7 @@ export const getPostApiReflectionCreateMockHandler = (
 	);
 };
 
-export const getPostApiReflectionUpdateMockHandler = (
+export const getUpdateReflectionMockHandler = (
 	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void),
 	options?: RequestHandlerOptions,
 ) => {
@@ -123,7 +133,7 @@ export const getPostApiReflectionUpdateMockHandler = (
 	);
 };
 
-export const getPostApiReflectionDeleteMockHandler = (
+export const getDeleteReflectionMockHandler = (
 	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void),
 	options?: RequestHandlerOptions,
 ) => {
@@ -140,7 +150,7 @@ export const getPostApiReflectionDeleteMockHandler = (
 	);
 };
 
-export const getPostApiReflectionPromptDataMockHandler = (
+export const getReflectionPromptDataMockHandler = (
 	overrideResponse?: string | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<string> | string),
 	options?: RequestHandlerOptions,
 ) => {
@@ -152,7 +162,7 @@ export const getPostApiReflectionPromptDataMockHandler = (
 					? typeof overrideResponse === "function"
 						? await overrideResponse(info)
 						: overrideResponse
-					: getPostApiReflectionPromptDataResponseMock(),
+					: getReflectionPromptDataResponseMock(),
 				{ status: 200 },
 			);
 		},
@@ -160,7 +170,7 @@ export const getPostApiReflectionPromptDataMockHandler = (
 	);
 };
 
-export const getPostApiReflectionPromptMockHandler = (
+export const getReflectionPromptMockHandler = (
 	overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void),
 	options?: RequestHandlerOptions,
 ) => {
@@ -177,11 +187,11 @@ export const getPostApiReflectionPromptMockHandler = (
 	);
 };
 export const getReflectionMock = () => [
-	getGetApiReflectionGetMockHandler(),
-	getGetApiReflectionListMockHandler(),
-	getPostApiReflectionCreateMockHandler(),
-	getPostApiReflectionUpdateMockHandler(),
-	getPostApiReflectionDeleteMockHandler(),
-	getPostApiReflectionPromptDataMockHandler(),
-	getPostApiReflectionPromptMockHandler(),
+	getGetReflectionMockHandler(),
+	getListReflectionsMockHandler(),
+	getCreateReflectionMockHandler(),
+	getUpdateReflectionMockHandler(),
+	getDeleteReflectionMockHandler(),
+	getReflectionPromptDataMockHandler(),
+	getReflectionPromptMockHandler(),
 ];

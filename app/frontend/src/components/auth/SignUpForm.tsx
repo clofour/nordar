@@ -1,5 +1,5 @@
-import { postApiAuthSignUp } from "@/api/endpoints/auth/auth.js";
-import { PostApiAuthSignUpBody } from "@/api/endpoints/auth/auth.zod.js";
+import { signUp } from "@/api/endpoints/auth/auth";
+import { SignUpBody } from "@/api/endpoints/auth/auth.zod";
 import { getErrorMessage } from "@/data/error";
 import { NotificationType, useNotification } from "@/helpers";
 import { Button, Checkbox, Group, PasswordInput, Progress, Stack, TextInput } from "@mantine/core";
@@ -42,11 +42,10 @@ export default function SignUpForm({ setLoading, loading }: SignUpFormProps) {
 		setPasswordColor(getStrengthColor(newStrength));
 	}
 
-	const formSchema = PostApiAuthSignUpBody.omit({});
+	const formSchema = SignUpBody.omit({});
 	const form = useForm({
 		mode: "uncontrolled",
 		initialValues: {
-			accessCode: "",
 			username: "",
 			email: "",
 			password: "",
@@ -63,7 +62,7 @@ export default function SignUpForm({ setLoading, loading }: SignUpFormProps) {
 		const requestData = {
 			...values,
 		};
-		const response = await postApiAuthSignUp(requestData);
+		const response = await signUp(requestData);
 
 		if (response.status === 200) {
 			form.reset();
@@ -79,28 +78,26 @@ export default function SignUpForm({ setLoading, loading }: SignUpFormProps) {
 			<Stack gap="sm">
 				<TextInput
 					withAsterisk
-					label="Access Code"
-					placeholder="Your access code"
-					disabled={loading}
-					key={form.key("accessCode")}
-					{...form.getInputProps("accessCode")}
-				/>
-
-				<TextInput
-					withAsterisk
 					label="Username"
-					placeholder="Your username"
+					placeholder="johndoe"
 					disabled={loading}
 					key={form.key("username")}
 					{...form.getInputProps("username")}
 				/>
 
-				<TextInput withAsterisk label="Email" placeholder="Your email" disabled={loading} key={form.key("email")} {...form.getInputProps("email")} />
+				<TextInput
+					withAsterisk
+					label="Email"
+					placeholder="john@example.com"
+					disabled={loading}
+					key={form.key("email")}
+					{...form.getInputProps("email")}
+				/>
 
 				<PasswordInput
 					withAsterisk
 					label="Password"
-					placeholder="Your password"
+					placeholder="••••••••••••••••"
 					disabled={loading}
 					key={form.key("password")}
 					{...form.getInputProps("password")}

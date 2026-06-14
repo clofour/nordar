@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 import { Box, Button, Group, Input, Stack, Text, Textarea, TextInput, UnstyledButton } from "@mantine/core";
 import { useForm, schemaResolver, type UseFormReturnType } from "@mantine/form";
 import type { ReflectionCreate } from "@/api/models";
-import { PostApiReflectionCreateBody } from "@/api/endpoints/reflection/reflection.zod";
-import { postApiReflectionCreate } from "@/api/endpoints/reflection/reflection";
+import { CreateReflectionBody } from "@/api/endpoints/reflection/reflection.zod";
+import { createReflection } from "@/api/endpoints/reflection/reflection";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { NotificationType, useNotification } from "@/helpers";
 import { getErrorMessage } from "@/data/error";
@@ -87,15 +87,36 @@ export default function ReflectionForm({ close, initialValues }: ReflectionFormP
 	const form = useForm({
 		mode: "uncontrolled",
 		initialValues: initialValues ?? {
-			positive: [],
-			negative: [],
-			improvement: [],
+			positive: [""],
+			negative: [""],
+			improvement: [""],
 		},
-		validate: schemaResolver(PostApiReflectionCreateBody, { sync: true }),
+		validate: schemaResolver(CreateReflectionBody, { sync: true }),
 	});
 
 	const handleSubmit = async (values: typeof form.values) => {
-		const response = await postApiReflectionCreate(values);
+		const processableKeys = ["positive", "negative", "improvement"] as const;
+		const processedValues: Partial<typeof form.values> = {};
+
+		for (const processableKey of processableKeys) {
+			const processedValue = [];
+
+			for (const value of values[processableKey]) {
+				const trimmedValue = value.trim();
+
+				console.log(trimmedValue);
+				if (trimmedValue != "") {
+					processedValue.push(trimmedValue);
+				}
+			}
+
+			processedValues[processableKey] = processedValue;
+		}
+
+		const response = await createReflection({
+			...values,
+			...processedValues,
+		});
 
 		if (response.status === 200) {
 			close();
@@ -108,15 +129,6 @@ export default function ReflectionForm({ close, initialValues }: ReflectionFormP
 		<>
 			<form onSubmit={form.onSubmit(handleSubmit)}>
 				<Stack>
-					<TextInput
-						label="Name"
-						description="What is your goal?"
-						placeholder="Be healthy"
-						required
-						key={form.key("name")}
-						{...form.getInputProps("name")}
-					/>
-
 					<InputGroup form={form} type="positive" label="Wins" description="What went well?" />
 
 					<InputGroup form={form} type="negative" label="Challenges" description="What could have been even better?" />

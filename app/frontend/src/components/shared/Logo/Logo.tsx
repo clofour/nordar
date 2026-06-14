@@ -5,6 +5,7 @@ import LogoText from "./LogoText";
 export enum LogoLayout {
 	Horizontal,
 	Vertical,
+	Icon,
 	Text,
 }
 
@@ -25,11 +26,14 @@ export default function Logo({ layout, size = "md" }: LogoProps) {
 
 		case LogoLayout.Horizontal:
 			return (
-				<Group justify="center">
+				<Group>
 					<Icon size={size} />
 					<LogoText size={size} />
 				</Group>
 			);
+
+		case LogoLayout.Icon:
+			return <Icon size={size} />;
 
 		case LogoLayout.Text:
 			return <LogoText size={size} />;

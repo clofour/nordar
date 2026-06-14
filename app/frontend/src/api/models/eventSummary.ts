@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetApiEventGetOnetimeInstanceStateOnetimeEventIdParams = {
-	eventOccurence?: string;
-};
+export interface EventSummary {
+	id: string;
+	name: string;
+}

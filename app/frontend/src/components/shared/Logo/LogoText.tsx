@@ -6,7 +6,7 @@ type LogoTextProps = {
 
 export default function LogoText({ size }: LogoTextProps) {
 	return (
-		<Text size={size} fw={500}>
+		<Text size={size} ff="Space Grotesk" fw={500}>
 			Nordar
 		</Text>
 	);

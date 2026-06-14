@@ -16,9 +16,10 @@ namespace backend.Controllers
     [ApiController]
     [Route("api/[controller]/[action]")]
     [Authorize]
-    public class ReflectionController(AppDbContext appDbContext, UserManager<User> userManager, ILogger<ReflectionController> logger, IMapper mapper, EventService eventService) : ControllerBase
+    public class ReflectionController(ReflectionService reflectionService, UserManager<User> userManager) : ControllerBase
     {
         [HttpGet]
+        [EndpointName("GetReflection")]
         [ProducesResponseType(typeof(ReflectionGet), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> Get(Guid Id)
         {
@@ -28,22 +29,12 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            Reflection? reflection = await appDbContext.Reflections
-                .AsNoTracking()
-                .FirstOrDefaultAsync(reflection => reflection.UserId == user.Id && reflection.Id == Id);
-
-            if (reflection == null)
-            {
-                return NotFound();
-            }
-
-            ReflectionGet reflectionGet = new ReflectionGet();
-            mapper.Map(reflection, reflectionGet);
-
-            return Ok(reflectionGet);
+            ServiceResult serviceResult = await reflectionService.Get(user.Id, Id);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpGet]
+        [EndpointName("ListReflections")]
         [ProducesResponseType(typeof(List<ReflectionGet>), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> List()
         {
@@ -53,17 +44,12 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            List<Reflection> events = await appDbContext.Reflections
-                .Where(e => e.UserId == user.Id)
-                .ToListAsync();
-            
-            List<ReflectionGet> reflectionsGet = new List<ReflectionGet>();
-            mapper.Map(events, reflectionsGet);
-
-            return Ok(reflectionsGet);
+            ServiceResult serviceResult = await reflectionService.List(user.Id);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPost]
+        [EndpointName("CreateReflection")]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> Create([FromBody] ReflectionCreate reflectionCreate)
         {
@@ -73,23 +59,19 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            Reflection reflection = new Reflection();
-            mapper.Map(reflectionCreate, reflection);
-            reflection.User = user;
-
-            appDbContext.Reflections.Add(reflection);
-            await appDbContext.SaveChangesAsync();
-
-            return Ok();
+            ServiceResult serviceResult = await reflectionService.Create(user.Id, reflectionCreate);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPost]
+        [EndpointName("UpdateReflection")]
         public async Task<ActionResult> Update()
         {
             throw new NotImplementedException();
         }
 
         [HttpPost]
+        [EndpointName("DeleteReflection")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var user = await userManager.GetUserAsync(User);
@@ -98,20 +80,12 @@ namespace backend.Controllers
                 return Forbid();
             }
 
-            int reflectionsDeleted = await appDbContext.Reflections
-                .Where(reflection => reflection.UserId == user.Id && reflection.Id == id)
-                .ExecuteDeleteAsync();
-
-            if (reflectionsDeleted == 1)
-            {
-                return Ok();
-            }
-            else {
-                return NotFound();
-            }
+            ServiceResult serviceResult = await reflectionService.Delete(user.Id, id);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPost]
+        [EndpointName("ReflectionPromptData")]
         [ProducesResponseType(typeof(DateTime), StatusCodes.Status200OK, "application/json")]
         public async Task<ActionResult> PromptData()
         {
@@ -121,10 +95,12 @@ namespace backend.Controllers
                 return Forbid();
             }
             
-            return Ok(user.NextReflection);
+            ServiceResult serviceResult = await reflectionService.PromptData(user);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
 
         [HttpPost]
+        [EndpointName("ReflectionPrompt")]
         public async Task<ActionResult> Prompt()
         {
             var user = await userManager.GetUserAsync(User);
@@ -133,17 +109,8 @@ namespace backend.Controllers
                 return Forbid();
             }
 
-            Random random = new Random();
-            int dayOffset = random.Next(1, 7);
-
-            DateTime lastReflection = new DateTime();
-            DateTime nextReflection = lastReflection.AddDays(dayOffset);
-
-            user.NextReflection = nextReflection;
-
-            await appDbContext.SaveChangesAsync();
-            
-            return Ok();
+            ServiceResult serviceResult = await reflectionService.Prompt(user);
+            return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }
     }
 }

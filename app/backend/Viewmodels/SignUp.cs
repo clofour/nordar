@@ -3,13 +3,8 @@ using backend.DataAnnotations;
 using Destructurama.Attributed;
 namespace backend.Viewmodels
 {
-    public class SignupForm(string accessCode, string username, string email, string password, bool termsOfService)
+    public class SignupForm(string username, string email, string password, bool termsOfService)
     {
-        [Required(ErrorMessage = "Access Code is required.")]
-        [MinLength(3, ErrorMessage = "Access Code must contain between 3 and 20 characters.")]
-        [MaxLength(20, ErrorMessage = "Access Code must contain between 3 and 20 characters.")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Access code must only contain letters.")]
-        public string AccessCode { get; set; } = accessCode;
         [Required(ErrorMessage = "Username is required.")]
         [MinLength(3, ErrorMessage = "Username must contain between 3 and 20 characters.")]
         [MaxLength(20, ErrorMessage = "Username must contain between 3 and 20 characters.")]

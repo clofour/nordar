@@ -1,5 +1,5 @@
-import { postApiAuthSignIn } from "@/api/endpoints/auth/auth.js";
-import { PostApiAuthSignInBody } from "@/api/endpoints/auth/auth.zod.js";
+import { signIn } from "@/api/endpoints/auth/auth";
+import { SignInBody } from "@/api/endpoints/auth/auth.zod";
 import { useAuth } from "@/contexts/AuthContext";
 import { getErrorMessage } from "@/data/error";
 import { NotificationType, useNotification } from "@/helpers";
@@ -17,7 +17,7 @@ export default function SignInForm({ setLoading, loading }: SignInFormProps) {
 
 	const { setAuthenticationState } = useAuth();
 
-	const formSchema = PostApiAuthSignInBody.omit({});
+	const formSchema = SignInBody.omit({});
 	const form = useForm({
 		mode: "uncontrolled",
 		validate: schemaResolver(formSchema, { sync: true }),
@@ -28,7 +28,7 @@ export default function SignInForm({ setLoading, loading }: SignInFormProps) {
 		const requestData = {
 			...values,
 		};
-		const response = await postApiAuthSignIn(requestData);
+		const response = await signIn(requestData);
 
 		if (response.status === 200) {
 			setAuthenticationState(true);
@@ -44,7 +44,7 @@ export default function SignInForm({ setLoading, loading }: SignInFormProps) {
 				<TextInput
 					withAsterisk
 					label="Username"
-					placeholder="Your username"
+					placeholder="johndoe"
 					disabled={loading}
 					key={form.key("username")}
 					{...form.getInputProps("username")}
@@ -53,7 +53,7 @@ export default function SignInForm({ setLoading, loading }: SignInFormProps) {
 				<PasswordInput
 					withAsterisk
 					label="Password"
-					placeholder="Your password"
+					placeholder="••••••••••••••••"
 					disabled={loading}
 					key={form.key("password")}
 					{...form.getInputProps("password")}

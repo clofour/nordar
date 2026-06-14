@@ -7,41 +7,55 @@
 import * as zod from 'zod';
 
 
-export const GetApiReflectionGetQueryParams = zod.object({
+export const GetReflectionQueryParams = zod.object({
   "Id": zod.string().uuid().optional()
 })
 
-export const GetApiReflectionGetResponse = zod.object({
+export const GetReflectionResponse = zod.object({
   "id": zod.string().uuid(),
-  "eventId": zod.string().uuid().nullish(),
+  "event": zod.union([zod.null(),zod.object({
+  "id": zod.string().uuid(),
+  "name": zod.string()
+})]).optional(),
   "date": zod.string().datetime({"offset":true}),
   "positive": zod.array(zod.string()),
   "negative": zod.array(zod.string()),
   "improvement": zod.array(zod.string())
 })
 
-export const GetApiReflectionListResponseItem = zod.object({
+export const ListReflectionsResponseItem = zod.object({
   "id": zod.string().uuid(),
-  "eventId": zod.string().uuid().nullish(),
+  "event": zod.union([zod.null(),zod.object({
+  "id": zod.string().uuid(),
+  "name": zod.string()
+})]).optional(),
   "date": zod.string().datetime({"offset":true}),
   "positive": zod.array(zod.string()),
   "negative": zod.array(zod.string()),
   "improvement": zod.array(zod.string())
 })
-export const GetApiReflectionListResponse = zod.array(GetApiReflectionListResponseItem)
+export const ListReflectionsResponse = zod.array(ListReflectionsResponseItem)
 
-export const PostApiReflectionCreateBody = zod.object({
+export const createReflectionBodyPositiveMax = 20;
+
+export const createReflectionBodyNegativeMax = 20;
+
+export const createReflectionBodyImprovementMax = 20;
+
+
+
+export const CreateReflectionBody = zod.object({
   "eventId": zod.string().uuid().nullish(),
-  "positive": zod.array(zod.string()),
-  "negative": zod.array(zod.string()),
-  "improvement": zod.array(zod.string())
+  "positive": zod.array(zod.string()).max(createReflectionBodyPositiveMax),
+  "negative": zod.array(zod.string()).max(createReflectionBodyNegativeMax),
+  "improvement": zod.array(zod.string()).max(createReflectionBodyImprovementMax)
 })
 
-export const PostApiReflectionCreateResponse = zod.string().uuid()
+export const CreateReflectionResponse = zod.string().uuid()
 
-export const PostApiReflectionDeleteQueryParams = zod.object({
+export const DeleteReflectionQueryParams = zod.object({
   "id": zod.string().uuid().optional()
 })
 
-export const PostApiReflectionPromptDataResponse = zod.string().datetime({"offset":true})
+export const ReflectionPromptDataResponse = zod.string().datetime({"offset":true})
 
