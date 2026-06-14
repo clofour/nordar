@@ -66,7 +66,7 @@ export default function Overview() {
 
 			updatedPaths.push({
 				d: generateCurve(northStarRight.x, northStarRight.y, bearingLeft.x, bearingLeft.y),
-				strokeColor: isActive ? "#5b6ec8" : "#rgba(150, 162, 220, 0.18)",
+				strokeColor: isActive ? "#86a4ff" : "rgba(150, 162, 220, 0.18)",
 				strokeWidth: isActive ? 2 : 1.2,
 				strokeOpacity: isActive ? 0.9 : 1,
 			});
@@ -81,7 +81,7 @@ export default function Overview() {
 
 					updatedPaths.push({
 						d: generateCurve(bearingRight.x, bearingRight.y, movementLeft.x, movementLeft.y),
-						strokeColor: "#5fe6c3",
+						strokeColor: "#5fe6c4",
 						strokeWidth: 1.6,
 						strokeOpacity: 0.85
 					});
@@ -151,15 +151,15 @@ export default function Overview() {
 						<GoalExplanation type={GoalType.Bearing} />
 						<Stack flex="1 1 0" align="center" justify="center">
 							{goals.bearings.map((bearing, index) => (
-								<GoalCard ref={(element) => { bearingRefs.current[index] = element; }} type={GoalType.Bearing} text={bearing.name} onMouseEnter={() => (setActive(index))} />
+								<GoalCard ref={(element) => { bearingRefs.current[index] = element; }} className={`${classes.bearing} ${active == index ? classes.bearingActive : classes.bearingInactive}`} type={GoalType.Bearing} text={bearing.name} onMouseEnter={() => (setActive(index))} />
 							))}
 						</Stack>
 					</Stack>
 					<Stack>
 						<GoalExplanation type={GoalType.Movement} />
-						<Stack flex="1 1 0" align="center" justify="center">
+						<Stack key={active} flex="1 1 0" align="center" justify="center">
 							{goals.bearings[active]?.movements?.map((movement, index) => (
-								<GoalCard ref={(element) => { movementRefs.current[index] = element; }} type={GoalType.Movement} text={movement.name} />
+								<GoalCard ref={(element) => { movementRefs.current[index] = element; }} className={classes.movement} type={GoalType.Movement} text={movement.name} detail={movement.time} />
 							))}
 						</Stack>
 					</Stack>

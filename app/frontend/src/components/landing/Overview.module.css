@@ -23,3 +23,35 @@
 	inset: 0;
 	pointer-events: none;
 }
+
+.bearing {
+	transition: opacity 0.25s, transform 0.25s;
+}
+
+.bearing:hover {
+	transform: translateY(-2px);
+}
+
+.bearingActive {
+	opacity: 1;
+	transform: scale(1.02);
+}
+
+.bearingInactive {
+	opacity: 0.4;
+}
+
+.movement {
+	animation: enter 0.3s ease both;
+}
+
+@keyframes enter {
+	from {
+		opacity: 0;
+		transform: translateX(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0px);
+	}
+}
