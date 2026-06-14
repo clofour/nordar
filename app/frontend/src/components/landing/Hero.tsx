@@ -8,7 +8,8 @@ export default function Hero() {
 	return (
 		<Module>
 			<Eyebrow text="A goal-setting app" />
-			<SectionTitle Order="h1">Aim for your
+			<SectionTitle Order="h1">
+				Aim for your
 				<br />
 				<span className={classes.highlight}>North Star</span>.
 			</SectionTitle>

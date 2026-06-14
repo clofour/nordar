@@ -12,7 +12,7 @@ import SectionTitle from "./SectionTitle";
 interface Point {
 	x: number;
 	y: number;
-};
+}
 
 interface Path {
 	d: string;
@@ -41,13 +41,13 @@ export default function Overview() {
 		return {
 			x: elementBounds[side] - referenceBounds.left,
 			y: elementBounds.top + elementBounds.height / 2 - referenceBounds.top,
-		}
-	}
+		};
+	};
 
 	const generateCurve = (x1: number, y1: number, x2: number, y2: number) => {
 		const offset = (x2 - x1) * 0.5;
-		return `M ${x1} ${y1} C ${x1 + offset} ${y1}, ${x2 - offset} ${y2}, ${x2} ${y2}`
-	}
+		return `M ${x1} ${y1} C ${x1 + offset} ${y1}, ${x2 - offset} ${y2}, ${x2} ${y2}`;
+	};
 
 	const drawLinks = useCallback(() => {
 		const reference = referenceRef.current;
@@ -84,18 +84,18 @@ export default function Overview() {
 						d: generateCurve(bearingRight.x, bearingRight.y, movementLeft.x, movementLeft.y),
 						strokeColor: "#5fe6c4",
 						strokeWidth: 1.6,
-						strokeOpacity: 0.85
+						strokeOpacity: 0.85,
 					});
 				});
 			}
-		})
+		});
 
 		setPaths(updatedPaths);
 	}, [active]);
 
 	useEffect(() => {
 		requestAnimationFrame(drawLinks);
-	})
+	});
 
 	useEffect(() => {
 		requestAnimationFrame(drawLinks);
@@ -104,13 +104,13 @@ export default function Overview() {
 	useEffect(() => {
 		const resize = () => {
 			requestAnimationFrame(drawLinks);
-		}
+		};
 		window.addEventListener("resize", resize);
 
 		return () => {
 			window.removeEventListener("resize", resize);
-		}
-	}, [drawLinks, active])
+		};
+	}, [drawLinks, active]);
 
 	return (
 		<Module>
@@ -136,8 +136,7 @@ export default function Overview() {
 							strokeWidth={path.strokeWidth}
 							opacity={path.strokeOpacity}
 							strokeLinecap="round"
-						>
-						</path>
+						></path>
 					))}
 				</svg>
 
@@ -152,7 +151,15 @@ export default function Overview() {
 						<GoalExplanation type={GoalType.Bearing} />
 						<Stack flex="1 1 0" align="center" justify="center">
 							{goals.bearings.map((bearing, index) => (
-								<GoalCard ref={(element) => { bearingRefs.current[index] = element; }} className={`${classes.bearing} ${active == index ? classes.bearingActive : classes.bearingInactive}`} type={GoalType.Bearing} text={bearing.name} onMouseEnter={() => (setActive(index))} />
+								<GoalCard
+									ref={(element) => {
+										bearingRefs.current[index] = element;
+									}}
+									className={`${classes.bearing} ${active == index ? classes.bearingActive : classes.bearingInactive}`}
+									type={GoalType.Bearing}
+									text={bearing.name}
+									onMouseEnter={() => setActive(index)}
+								/>
 							))}
 						</Stack>
 					</Stack>
@@ -160,7 +167,15 @@ export default function Overview() {
 						<GoalExplanation type={GoalType.Movement} />
 						<Stack key={active} flex="1 1 0" align="center" justify="center">
 							{goals.bearings[active]?.movements?.map((movement, index) => (
-								<GoalCard ref={(element) => { movementRefs.current[index] = element; }} className={classes.movement} type={GoalType.Movement} text={movement.name} detail={movement.time} />
+								<GoalCard
+									ref={(element) => {
+										movementRefs.current[index] = element;
+									}}
+									className={classes.movement}
+									type={GoalType.Movement}
+									text={movement.name}
+									detail={movement.time}
+								/>
 							))}
 						</Stack>
 					</Stack>

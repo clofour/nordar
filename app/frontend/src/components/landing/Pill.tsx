@@ -1,13 +1,9 @@
 import classes from "./Pill.module.css";
 
 interface PillProps {
-    children: string;
+	children: string;
 }
 
 export default function Pill({ children }: PillProps) {
-    return (
-        <div className={classes.pill}>
-            {children}
-        </div>
-    )
+	return <div className={classes.pill}>{children}</div>;
 }

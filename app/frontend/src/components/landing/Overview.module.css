@@ -25,7 +25,9 @@
 }
 
 .bearing {
-	transition: opacity 0.25s, transform 0.25s;
+	transition:
+		opacity 0.25s,
+		transform 0.25s;
 }
 
 .bearing:hover {
