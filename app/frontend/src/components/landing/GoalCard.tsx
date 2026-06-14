@@ -19,21 +19,21 @@ export default function GoalCard({ ref, type, text, detail, ...other }: GoalCard
 			color: "#ffe6b0",
 			border: "rgba(255, 210, 122, 0.32)",
 			shadow: "0 0 40px -10px rgba(255, 210, 122, 0.4)",
-			background: "linear-gradient(180deg, rgba(40, 32, 18, 0.6), rgba(14, 15, 38, 0.72))"
+			background: "linear-gradient(180deg, rgba(40, 32, 18, 0.6), rgba(14, 15, 38, 0.72))",
 		},
 		[GoalType.Bearing]: {
 			Icon: IconCompass,
 			color: "#f4f6ff",
 			border: "rgba(134, 164, 255, 0.55)",
 			shadow: "none",
-			background: "rgba(14, 15, 38, 0.72)"
+			background: "rgba(14, 15, 38, 0.72)",
 		},
 		[GoalType.Movement]: {
 			Icon: IconActivity,
 			color: "#b7bee0",
 			border: "rgba(95, 230, 195, 0.22)",
 			shadow: "none",
-			background: "rgba(10, 25, 21, 0.55)"
+			background: "rgba(10, 25, 21, 0.55)",
 		},
 	};
 
@@ -46,9 +46,7 @@ export default function GoalCard({ ref, type, text, detail, ...other }: GoalCard
 					<cardType.Icon color={cardType.color} />
 					<span className={classes.title}>{text}</span>
 				</Group>
-				{detail && (
-					<Pill>{detail}</Pill>
-				)}
+				{detail && <Pill>{detail}</Pill>}
 			</Group>
 		</Card>
 	);

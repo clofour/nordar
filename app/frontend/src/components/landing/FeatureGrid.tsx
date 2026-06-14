@@ -10,7 +10,8 @@ export default function FeatureGrid() {
 	const features = [
 		{
 			name: "Goals",
-			description: "Set your North Stars, define the bearings that pull you toward them, and break each one into movements small enough to actually take on. All your ambitions, in one hierarchy.",
+			description:
+				"Set your North Stars, define the bearings that pull you toward them, and break each one into movements small enough to actually take on. All your ambitions, in one hierarchy.",
 			Icon: IconTarget,
 			color: "#ffe6b0",
 			span: 9,
@@ -24,7 +25,8 @@ export default function FeatureGrid() {
 		},
 		{
 			name: "Reflections",
-			description: "A random check-in to figure out what moved you forward, and what knocked you off course — so you can adjust before drifting off-course.",
+			description:
+				"A random check-in to figure out what moved you forward, and what knocked you off course — so you can adjust before drifting off-course.",
 			Icon: IconNotebook,
 			color: "#7eecd4",
 			span: 6,

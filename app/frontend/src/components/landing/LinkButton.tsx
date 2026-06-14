@@ -9,7 +9,7 @@ interface LinkButtonProps {
 	size?: MantineSize;
 }
 
-export default function LinkButton({ label, to, variant, size="sm" }: LinkButtonProps) {
+export default function LinkButton({ label, to, variant, size = "sm" }: LinkButtonProps) {
 	return (
 		<Button variant={variant} size={size} component={Link} to={to}>
 			{label}

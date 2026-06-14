@@ -35,9 +35,7 @@ export default function Footer() {
 				<Grid.Col span={{ base: 6, sm: 4 }}>
 					<Stack gap="sm">
 						<Logo layout={LogoLayout.Horizontal} size="30px" />
-						<Text className={classes.description!}>
-							Set the right goals. Steer by them daily. Become who you want to be.
-						</Text>
+						<Text className={classes.description!}>Set the right goals. Steer by them daily. Become who you want to be.</Text>
 					</Stack>
 				</Grid.Col>
 
