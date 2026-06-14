@@ -30,11 +30,6 @@ export default function FAQ() {
 			answer:
 				"Yes. Your goals, reflections, and schedule are yours. Nordar doesn't sell your data or run advertisement. Ambitions are a sensitive topic, and we treat them that way.",
 		},
-		{
-			question: "What's an access code, and how do I get one?",
-			answer:
-				"Nordar is in early access right now, so sign-ups require an access code. You can request one by contacting us or get one from someone who's already using Nordar. This helps us grow at a pace that does not hinder your experience.",
-		},
 	];
 
 	return (

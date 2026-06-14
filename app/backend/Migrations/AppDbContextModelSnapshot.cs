@@ -106,20 +106,6 @@ namespace backend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("backend.Models.AccessCode", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasMaxLength(25)
-                        .HasColumnType("character varying(25)");
-
-                    b.Property<int>("Uses")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Name");
-
-                    b.ToTable("AccessCodes");
-                });
-
             modelBuilder.Entity("backend.Models.Event", b =>
                 {
                     b.Property<Guid>("Id")
@@ -258,10 +244,6 @@ namespace backend.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<string>("AccessCode")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");

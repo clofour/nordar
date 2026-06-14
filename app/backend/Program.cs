@@ -184,18 +184,7 @@ builder.Services.AddScoped<ReflectionService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Default"))
-    .UseSeeding((context, _) =>
-    {
-        AppDbContext appDbContext = (AppDbContext)context;
-        if (appDbContext.AccessCodes.Find("cat") == null)
-        {
-            AccessCode newAccessCode = new AccessCode("cat", 10);
-            appDbContext.AccessCodes.Add(newAccessCode);
-
-            context.SaveChanges();
-        }
-    });
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default"));
 });
 
 var app = builder.Build();

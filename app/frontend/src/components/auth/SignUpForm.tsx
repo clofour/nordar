@@ -46,7 +46,6 @@ export default function SignUpForm({ setLoading, loading }: SignUpFormProps) {
 	const form = useForm({
 		mode: "uncontrolled",
 		initialValues: {
-			accessCode: "",
 			username: "",
 			email: "",
 			password: "",
@@ -77,15 +76,6 @@ export default function SignUpForm({ setLoading, loading }: SignUpFormProps) {
 	return (
 		<form onSubmit={form.onSubmit(handleSubmit)}>
 			<Stack gap="sm">
-				<TextInput
-					withAsterisk
-					label="Access Code"
-					placeholder="XXXX-XXXX"
-					disabled={loading}
-					key={form.key("accessCode")}
-					{...form.getInputProps("accessCode")}
-				/>
-
 				<TextInput
 					withAsterisk
 					label="Username"

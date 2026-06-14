@@ -14,18 +14,11 @@ namespace backend.Services
     {
         public async Task<ServiceResult> SignUp(SignupForm signupForm)
         {
-            AccessCode? accessCodeObject = await appDbContext.AccessCodes.FirstOrDefaultAsync(item => item.Name == signupForm.AccessCode && item.Uses >= 1);
-            if (accessCodeObject == null)
-            {
-                logger.LogWarning("Invalid Access Code: {AccessCode}", signupForm.AccessCode);
-                return new ServiceResult(Status.BadRequest, "Access Code is invalid.");
-            }
-
             using (var transaction = await appDbContext.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    User user = new User(accessCodeObject.Name)
+                    User user = new User()
                     {
                         Email = signupForm.Email,
                         UserName = signupForm.Username
@@ -35,8 +28,6 @@ namespace backend.Services
 
                     if (accountCreation.Succeeded)
                     {
-                        accessCodeObject.Uses--;
-
                         await appDbContext.SaveChangesAsync();
                         await transaction.CommitAsync();
                         logger.LogInformation("Account Creation: {Username}", signupForm.Username);
