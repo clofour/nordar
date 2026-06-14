@@ -2,10 +2,11 @@ import classes from "./ClosingCTA.module.css";
 import { Stack } from "@mantine/core";
 import Logo, { LogoLayout } from "../shared/Logo/Logo";
 import LinkButton from "./LinkButton";
+import Module from "./Module";
 
 export default function ClosingCTA() {
 	return (
-		<Stack justify="center" align="center" ta="center">
+		<Module>
 			<Logo layout={LogoLayout.Icon} size="90px" />
 			<h2 className={classes.title}>
 				Your North Star
@@ -17,6 +18,6 @@ export default function ClosingCTA() {
 			</p>
 			<LinkButton variant="filled" label="Sign Up" to="/auth/signup" />
 			<p>Placeholder</p>
-		</Stack>
+		</Module>
 	);
 }
