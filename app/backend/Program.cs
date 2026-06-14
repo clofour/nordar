@@ -233,4 +233,11 @@ app.MapControllerRoute(
     pattern: "api/{controller}/{action}"
 );
 
+if (app.Configuration.GetValue<bool>("Migrate") == true)
+{
+    using IServiceScope scope = app.Services.CreateScope();
+    AppDbContext appDbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    appDbContext.Database.Migrate();
+}
+
 app.Run();

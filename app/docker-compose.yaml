@@ -1,0 +1,34 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_ORIGIN: http://localhost:8080
+    ports:
+      - 3000:8080
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      Migrate: true
+      ConnectionStrings__Default: "Host=database:5432;Username=postgres;Password=postgres;Database=nordar"
+      Origins__Frontend: https://localhost
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+
+  database:
+    image: dhi.io/postgres:18.4-alpine3.23
+    volumes:
+      - data:/var/lib/postgresql
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+volumes:
+  data:
