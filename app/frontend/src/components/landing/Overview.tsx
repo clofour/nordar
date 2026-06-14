@@ -7,6 +7,7 @@ import { GoalType } from "@/api/models";
 import GoalCard from "./GoalCard";
 import { goals } from "./OverviewData";
 import { useCallback, useEffect, useRef, useState } from "react";
+import SectionTitle from "./SectionTitle";
 
 interface Point {
 	x: number;
@@ -114,11 +115,11 @@ export default function Overview() {
 	return (
 		<Module>
 			<Eyebrow text="The method" />
-			<h1 className={classes.title}>
+			<SectionTitle Order="h2">
 				Three altitudes.
 				<br />
 				One unbroken line of sight.
-			</h1>
+			</SectionTitle>
 			<p className={classes.description}>
 				Big goals fail when they stay big. Nordar breaks every ambition into three connected altitudes — so a sleepy Thursday alarm is visibly pulling
 				you toward who you want to become.

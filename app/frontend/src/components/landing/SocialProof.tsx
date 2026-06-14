@@ -3,6 +3,7 @@ import { SimpleGrid } from "@mantine/core";
 import TestimonyCard from "./TestimonyCard";
 import Eyebrow from "./Eyebrow";
 import Module from "./Module";
+import SectionTitle from "./SectionTitle";
 
 export default function SocialProof() {
 	const testimonies = [
@@ -32,7 +33,7 @@ export default function SocialProof() {
 	return (
 		<Module>
 			<Eyebrow text="Stories from the sky" />
-			<h1 className={classes.title}>Charted, not wished</h1>
+			<SectionTitle Order="h2">Charted, not wished</SectionTitle>
 			<SimpleGrid w="100%" cols={{ base: 1, sm: 3 }}>
 				{testimonies.map((testimony) => (
 					<TestimonyCard {...testimony} />
