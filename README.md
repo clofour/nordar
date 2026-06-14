@@ -5,7 +5,7 @@ Nordar is a research-backed galaxy-themed web application to help you set meanin
 
 ## Quick Start
 
-To run the web application on your machine, you can use the provided Docker Compose project.
+To run the web application on your machine, you can use the provided Docker Compose project. Before starting, make sure to install Docker Desktop and log in to Docker Hub to be able to pull Docker Hardened Images.
 1. Navigate to the `./app` with `cd ./app`.
 2. Run `docker compose up`.
 3. Head to `localhost:3000`.
@@ -198,6 +198,24 @@ graph LR
     DB2 -. "Patroni API\n:8008" .-> etcd
 ```
 
+### Workflows
+
+Nordar uses GitHub Actions as CI/CD. This table shows all workflows:
+
+| Workflow | Purpose | Trigger |
+| --- | --- | --- |
+| ansible-deploy.yaml | Apply runtime Ansible manifests | Manual
+| ansible-lint.yaml | Lint Ansible manifests | Pushes and PRs to core branches
+| docker-deploy.yaml | Build and publish Docker images on GHCR | Pushes to main |
+| packer-deploy.yaml | Build and upload golden machine images to Docker | Manual |
+| packer-validate.yaml | Validate Packer manifests | Pushes and PRs to core branches |
+| terraform-deploy.yaml | Provision necessary resources | Manual |
+| terraform-run.yaml | Run freeform Terraform commands | Manual |
+| terraform-validate.yaml | Validate Terraform manifests | Pushes and PRs to core branches |
+| vite-deploy.yaml | Build and upload frontend static files to CDN | Manual |
+
+### Development
+
+
 ### Images
-
-
+[TBA]
