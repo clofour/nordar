@@ -1,3 +1,8 @@
+.footer {
+	border-top: 1px solid var(--landing-color-border);
+	padding: 30px 0 0 0;
+}
+
 .description {
 	color: var(--landing-color-tertiary);
 	font-family: var(--landing-font-secondary);
@@ -18,5 +23,5 @@
 }
 
 .link:hover {
-	color: white;
+	color: var(--landing-color-secondary);
 }

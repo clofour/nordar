@@ -10,28 +10,28 @@ export default function FeatureGrid() {
 	const features = [
 		{
 			name: "Goals",
-			description: "I don't know",
+			description: "Set your North Stars, define the bearings that pull you toward them, and break each one into movements small enough to actually take on. All your ambitions, in one hierarchy.",
 			Icon: IconTarget,
 			color: "#ffe6b0",
 			span: 9,
 		},
 		{
 			name: "Calendar",
-			description: "I don't know",
+			description: "Schedule your movements directly on your week.",
 			Icon: IconCalendar,
 			color: "#b0c4ff",
 			span: 3,
 		},
 		{
 			name: "Reflections",
-			description: "I don't know",
+			description: "A random check-in to figure out what moved you forward, and what knocked you off course — so you can adjust before drifting off-course.",
 			Icon: IconNotebook,
 			color: "#7eecd4",
 			span: 6,
 		},
 		{
 			name: "Analytics",
-			description: "I don't know",
+			description: "Track your progress and learn about yourself, by seeing what makes you thrive and what makes you struggle.",
 			Icon: IconChartBar,
 			color: "#c4b0ff",
 			span: 6,

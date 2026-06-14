@@ -41,7 +41,7 @@ export default function FAQ() {
 		<Module>
 			<Eyebrow text="Common questions" />
 			<SectionTitle Order="h2">Straight answers</SectionTitle>
-			<Accordion w="100%" variant="separated" classNames={{ item: classes.item!, control: classes.control!, panel: classes.panel! }}>
+			<Accordion w="100%" variant="separated" classNames={{ item: classes.item!, control: classes.control!, panel: classes.panel! }} ta="left">
 				{faqs.map((faq) => (
 					<Accordion.Item key={faq.question} value={faq.question}>
 						<Accordion.Control>{faq.question}</Accordion.Control>

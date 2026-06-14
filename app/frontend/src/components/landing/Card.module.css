@@ -4,7 +4,7 @@
 	padding: 16px;
 	justify-content: left;
 	align-items: flex-start;
-	background: var(--card-background, linear-gradient(180deg, rgba(20, 22, 52, 0.92), rgba(9, 10, 28, 0.96)));
+	background: var(--card-background, var(--landing-color-card));
 	border: var(--card-border);
 	border-radius: 16px;
 	box-shadow: var(--card-shadow);
