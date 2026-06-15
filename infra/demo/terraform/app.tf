@@ -43,6 +43,7 @@ resource "digitalocean_app" "main" {
 
         static_site {
             name = "frontend"
+            source_dir = "app/frontend"
             build_command = "npm run build"
 
             environment_slug = "node-js"
@@ -63,6 +64,7 @@ resource "digitalocean_app" "main" {
 
         service {
             name = "backend"
+            source_dir = "app/backend"
 
             environment_slug = "dotnet"
             env {
@@ -85,7 +87,6 @@ resource "digitalocean_app" "main" {
                 repo = "clofour/nordar"
             }
 
-            source_dir = "app/backend"
             http_port = 8080
 
             run_command = "dotnet run"
