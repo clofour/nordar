@@ -67,7 +67,7 @@ const theme = createTheme({
 		Card: {
 			styles: {
 				root: {
-					"background-color": "var(--mantine-color-body)",
+					"backgroundColor": "var(--mantine-color-body)",
 				},
 			},
 		},
