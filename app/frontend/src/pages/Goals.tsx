@@ -119,10 +119,9 @@ export default function Goals() {
 						<Stack gap="sm">
 							{response &&
 								response.data.map((star) => (
-									<Stack>
+									<Stack key={star.id}>
 										<Stack>
 											<GoalCard
-												key={star.id}
 												id={star.id}
 												name={star.name}
 												type={GoalType.NorthStar}
@@ -142,9 +141,8 @@ export default function Goals() {
 											>
 												{star.bearings &&
 													star.bearings.map((bearing) => (
-														<Stack gap="sm">
+														<Stack key={bearing.id} gap="sm">
 															<GoalCard
-																key={bearing.id}
 																id={bearing.id}
 																name={bearing.name}
 																type={GoalType.Bearing}
