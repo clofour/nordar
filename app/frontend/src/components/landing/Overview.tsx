@@ -113,7 +113,7 @@ export default function Overview() {
 	}, [drawLinks, active]);
 
 	return (
-		<Module>
+		<Module id="overview">
 			<Eyebrow text="The method" />
 			<SectionTitle Order="h2">
 				Three altitudes.

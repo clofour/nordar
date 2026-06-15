@@ -17,7 +17,7 @@ export default function Hero() {
 
 			<div className={classes.heroCTA}>
 				<LinkButton variant="gradient" size="md" label="Start free — no card needed" to="/auth/signup" />
-				<LinkButton variant="default" size="md" label="See the method" to="#tbd" />
+				<LinkButton variant="default" size="md" label="See the method" to="#overview" />
 			</div>
 		</Module>
 	);

@@ -5,28 +5,28 @@ import classes from "./Footer.module.css";
 
 export default function Footer() {
 	const sections = [
-		{
-			name: "Product",
-			links: [
-				{ label: "Features", to: "#tbd" },
-				{ label: "Pricing", to: "#tbd" },
-				{ label: "TBD", to: "#tbd" },
-			],
-		},
-		{
-			name: "Legal",
-			links: [
-				{ label: "Privacy Policy", to: "#tbd" },
-				{ label: "Terms of Service", to: "#tbd" },
-			],
-		},
-		{
-			name: "Other",
-			links: [
-				{ label: "Blog", to: "#tbd" },
-				{ label: "Status", to: "#tbd" },
-			],
-		},
+		// {
+		// 	name: "Product",
+		// 	links: [
+		// 		{ label: "Features", to: "#tbd" },
+		// 		{ label: "Pricing", to: "#tbd" },
+		// 		{ label: "TBD", to: "#tbd" },
+		// 	],
+		// },
+		// {
+		// 	name: "Legal",
+		// 	links: [
+		// 		{ label: "Privacy Policy", to: "#tbd" },
+		// 		{ label: "Terms of Service", to: "#tbd" },
+		// 	],
+		// },
+		// {
+		// 	name: "Other",
+		// 	links: [
+		// 		{ label: "Blog", to: "#tbd" },
+		// 		{ label: "Status", to: "#tbd" },
+		// 	],
+		// },
 	];
 
 	return (

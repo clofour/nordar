@@ -7,8 +7,11 @@ import type { EventGet } from "@/api/models";
 import EmptyState from "../shared/EmptyState";
 import { IconCalendarEvent } from "@tabler/icons-react";
 import DataStateWrapper from "../shared/DataStateWrapper";
+import { useNavigate } from "react-router";
 
 export default function EventsToday() {
+	const navigate = useNavigate();
+
 	const dayStart = new Date();
 	dayStart.setHours(0, 0, 0, 0);
 	const dayEnd = new Date();
@@ -37,6 +40,7 @@ export default function EventsToday() {
 				text: "No events yet",
 				description: "All your events will be shown here. Create your first event.",
 				cta: "Add event",
+				onCtaClick: () => navigate("/app/calendar"),
 			}}
 		>
 			<Stack gap="xs">{cards}</Stack>
