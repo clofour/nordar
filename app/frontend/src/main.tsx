@@ -6,7 +6,7 @@ import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/schedule/styles.css";
 import "@mantine/notifications/styles.css";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router";
 import "@/index.css";
 import NotFound from "@/pages/NotFound";
 import Authentication from "@/pages/Authentication";
@@ -90,16 +90,34 @@ const resolver: CSSVariablesResolver = (theme) => ({
 	dark: {},
 });
 
+function AnyTheme() {
+	return (
+		<MantineProvider theme={theme} cssVariablesResolver={resolver} defaultColorScheme="dark">
+			<Outlet />
+		</MantineProvider>
+	)
+}
+
+function DarkTheme() {
+	return (
+		<MantineProvider theme={theme} cssVariablesResolver={resolver} forceColorScheme="dark">
+			<Notifications containerWidth="25%" />
+			<Outlet />
+		</MantineProvider>
+	)
+}
+
 createRoot(rootElement).render(
 	<StrictMode>
 		<SWRConfig value={SWRConfiguration}>
 			<AuthProvider>
-				<MantineProvider theme={theme} cssVariablesResolver={resolver}>
-					<Notifications containerWidth="25%" />
-					<BrowserRouter>
-						<Routes>
+				<BrowserRouter>
+					<Routes>
+						<Route element={<DarkTheme />}>
 							<Route path="" element={<LandingPage />} />
+						</Route>
 
+						<Route element={<AnyTheme />}>
 							<Route element={<AuthenticationRequirement type={true} />}>
 								<Route path="app" element={<App />}>
 									<Route index element={<Navigate to="dashboard" replace />} />
@@ -116,9 +134,9 @@ createRoot(rootElement).render(
 							</Route>
 
 							<Route path="*" element={<NotFound />} />
-						</Routes>
-					</BrowserRouter>
-				</MantineProvider>
+						</Route>
+					</Routes>
+				</BrowserRouter>
 			</AuthProvider>
 		</SWRConfig>
 	</StrictMode>,
