@@ -239,5 +239,7 @@ if (app.Configuration.GetValue<bool>("Migrate") == true)
     AppDbContext appDbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     appDbContext.Database.Migrate();
 }
-
-app.Run();
+else
+{
+    app.Run();
+}

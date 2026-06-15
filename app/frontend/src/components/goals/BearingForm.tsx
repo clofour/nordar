@@ -48,7 +48,7 @@ export default function BearingForm({ mode, id, parentId, initialValues }: Beari
 		}
 
 		if (response.status === 200) {
-			close();
+			
 		} else {
 			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
 		}

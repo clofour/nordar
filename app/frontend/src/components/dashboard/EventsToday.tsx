@@ -37,8 +37,8 @@ export default function EventsToday() {
 			isEmpty={cards.length == 0}
 			emptyProps={{
 				Icon: IconCalendarEvent,
-				text: "No events yet",
-				description: "All your events will be shown here. Create your first event.",
+				text: "No events today",
+				description: "All events scheduled for today will be shown here. Create an event.",
 				cta: "Add event",
 				onCtaClick: () => navigate("/app/calendar"),
 			}}

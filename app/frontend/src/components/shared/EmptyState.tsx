@@ -5,7 +5,7 @@ export interface EmptyStateProps {
 	Icon: Icon;
 	text: string;
 	description: string;
-	cta: string;
+	cta?: string;
 	onCtaClick?: () => void;
 }
 
@@ -20,7 +20,9 @@ export default function EmptyState({ Icon, text, description, cta, onCtaClick }:
 					<Text c="dimmed">{description}</Text>
 				</Stack>
 
-				<Button onClick={onCtaClick}>{cta}</Button>
+				{cta && (
+					<Button onClick={onCtaClick}>{cta}</Button>
+				)}
 			</Stack>
 		</Paper>
 	);
