@@ -96,8 +96,11 @@ resource "digitalocean_app" "main" {
             kind = "POST_DEPLOY"
 
             environment_slug = "dotnet"
-            build_command = ""
-            run_command = ""
+            env {
+                key = "Migrate"
+                scope = "RUN_TIME"
+                value= "true"
+            }
 
             instance_count = 1
             instance_size_slug = "apps-s-1vcpu-1gb"

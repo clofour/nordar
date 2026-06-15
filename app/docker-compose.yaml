@@ -15,13 +15,24 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     environment:
-      Migrate: true
       ConnectionStrings__Default: "Host=database:5432;Username=postgres;Password=postgres;Database=nordar"
       Origins__Frontend: https://localhost
     ports:
       - 8080:8080
     depends_on:
-      - database
+      database:
+        condition: service_started
+      migrations:
+        condition: service_completed_successfully
+
+  migrations:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      Migrate: true
+      ConnectionStrings__Default: "Host=database:5432;Username=postgres;Password=postgres;Database=nordar"
+      Origins__Frontend: https://localhost
 
   database:
     image: dhi.io/postgres:18.4-alpine3.23
