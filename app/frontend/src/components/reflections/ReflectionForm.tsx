@@ -118,7 +118,7 @@ export default function ReflectionForm({ close, initialValues }: ReflectionFormP
 		});
 
 		if (response.status === 200) {
-			close();
+			
 		} else {
 			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
 		}
