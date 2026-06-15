@@ -88,8 +88,6 @@ resource "digitalocean_app" "main" {
             }
 
             http_port = 8080
-
-            run_command = "dotnet run"
         }
 
         database {
