@@ -1,6 +1,6 @@
 import { Stack, Text, Badge, UnstyledButton, Group, Button, Grid, Title, Card, Paper } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconStar, IconPlus, IconCompass, IconActivity } from "@tabler/icons-react";
+import { IconStar, IconPlus, IconCompass, IconActivity, IconStarFilled } from "@tabler/icons-react";
 import PageTitle from "@/components/shared/PageTitle";
 import { useMemo, useState } from "react";
 import GoalCard from "@/components/goals/GoalCard";
@@ -113,10 +113,14 @@ export default function Goals() {
 				</Button>
 			</Group>
 
-			<DataStateWrapper isLoading={isLoading} isEmpty={false}>
-				<Grid>
-					<Grid.Col span={3}>
-						<Stack gap="sm">
+			<Grid>
+				<Grid.Col span={3}>
+					<Stack gap="sm">
+						<DataStateWrapper isLoading={isLoading} isEmpty={response?.data.length == 0} emptyProps={{
+							Icon: IconStar,
+							text: "No goals yet",
+							description: "All your goals will show up here. Add one to get started."
+						}}>
 							{response &&
 								response.data.map((star) => (
 									<Stack key={star.id}>
@@ -185,16 +189,18 @@ export default function Goals() {
 										<GoalAddButton onGoalAdd={() => setEditorState({ mode: Mode.Create, type: GoalType.NorthStar })} text="Add North Star" />
 									</Stack>
 								))}
-						</Stack>
-					</Grid.Col>
-					<Grid.Col span={9}>
+						</DataStateWrapper>
+					</Stack>
+				</Grid.Col>
+				<Grid.Col span={9}>
+					<DataStateWrapper isLoading={isLoading} isEmpty={false}>
 						<Paper p="md" withBorder>
 							<Title order={3}>{`${capitalize(editorState.mode)} ${text[editorState.type]}`}</Title>
 							{renderForm(editorState)}
 						</Paper>
-					</Grid.Col>
-				</Grid>
-			</DataStateWrapper>
+					</DataStateWrapper>
+				</Grid.Col>
+			</Grid>
 		</Stack>
 	);
 }
