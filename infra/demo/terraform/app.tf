@@ -107,6 +107,16 @@ resource "digitalocean_app" "main" {
                 scope = "RUN_TIME"
                 value= "true"
             }
+            env {
+                key = "ConnectionStrings__Default"
+                scope = "RUN_TIME"
+                value = "$${database.DATABASE_URL}"
+            }
+            env {
+                key = "Origins__Frontend"
+                scope = "RUN_AND_BUILD_TIME"
+                value = "${var.frontend_subdomain}.${var.domain}"
+            }
 
             instance_count = 1
             instance_size_slug = "apps-s-1vcpu-1gb"
