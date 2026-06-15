@@ -101,7 +101,7 @@ resource "digitalocean_app" "main" {
 
         job {
             name = "migrations"
-            kind = "POST_DEPLOY"
+            kind = "PRE_DEPLOY"
 
             environment_slug = "dotnet"
             env {
