@@ -3,6 +3,13 @@ resource "digitalocean_app" "main" {
         name = "nordar"
         region = var.region
 
+        domain {
+            name = "${var.frontend_subdomain}.${var.domain}"
+        }
+        domain {
+            name = "${var.backend_subdomain}.${var.domain}"
+        }
+
         ingress {
             rule {
                 component {
