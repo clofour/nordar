@@ -50,7 +50,7 @@ resource "digitalocean_app" "main" {
             env {
                 key = "VITE_API_ORIGIN"
                 scope = "BUILD_TIME"
-                value = "${var.backend_subdomain}.${var.domain}"
+                value = "https://${var.backend_subdomain}.${var.domain}"
             }
 
             catchall_document = "index.html"
