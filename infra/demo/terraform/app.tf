@@ -38,6 +38,12 @@ resource "digitalocean_app" "main" {
                       prefix = "/"
                     }
                 }
+                cors {
+                    allow_origins {
+                        exact = "${var.frontend_subdomain}.${var.domain}"
+                    }
+                    allow_credentials = true
+                }
             }
         }
 
