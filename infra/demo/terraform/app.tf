@@ -40,7 +40,7 @@ resource "digitalocean_app" "main" {
                 }
                 cors {
                     allow_origins {
-                        exact = "${var.frontend_subdomain}.${var.domain}"
+                        exact = "https://${var.frontend_subdomain}.${var.domain}"
                     }
                     allow_credentials = true
                 }
