@@ -69,8 +69,9 @@ resource "digitalocean_app" "main" {
             environment_slug = "dotnet"
             env {
                 key = "ConnectionStrings__Default"
+                type = "SECRET"
                 scope = "RUN_TIME"
-                value = "$${database.DATABASE_URL}"
+                value = "Host=$${database.HOSTNAME};Port=$${database.PORT};Username=$${database.USERNAME};Password=$${database.PASSWORD};Database=$${database.DATABASE}"
             }
             env {
                 key = "Origins__Frontend"
@@ -109,8 +110,9 @@ resource "digitalocean_app" "main" {
             }
             env {
                 key = "ConnectionStrings__Default"
+                type = "SECRET"
                 scope = "RUN_TIME"
-                value = "$${database.DATABASE_URL}"
+                value = "Host=$${database.HOSTNAME};Port=$${database.PORT};Username=$${database.USERNAME};Password=$${database.PASSWORD};Database=$${database.DATABASE}"
             }
             env {
                 key = "Origins__Frontend"
