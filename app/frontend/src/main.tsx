@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { AppShellNavbar, MantineProvider, createTheme, virtualColor, type CSSVariablesResolver } from "@mantine/core";
+import { MantineProvider, createTheme, type CSSVariablesResolver } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
@@ -20,7 +20,6 @@ import { assert } from "@/helpers";
 import AuthenticationRequirement from "@/components/shared/AuthenticationRequirement";
 import { AuthProvider } from "@/contexts/AuthContext";
 import LandingPage from "./pages/Landing";
-import Background from "./components/misc/Background";
 
 const rootElement = document.getElementById("root");
 assert(rootElement != null, "Root element cannot be null.");
@@ -80,15 +79,68 @@ const theme = createTheme({
 		},
 	},
 	other: {
-		testing: "y",
+		landing: {
+			colors: {
+				primary: "#f4f6ff",
+				secondary: "#b7bee0",
+				tertiary: "#7b82a8",
+				goldLight: "#ffe6b0",
+				goldDark: "#ffd27a",
+				teal: "#5fe6c4",
+				blue: "#86a4ff",
+				slate: "#96a2dc",
+				periwinkle: "#b0c4ff",
+				mint: "#7eecd4",
+				lavender: "#c4b0ff",
+				backgroundLight: "#05050f",
+				backgroundDark: "#04040c"
+			},
+			fonts: {
+				primary: "Space Grotesk",
+				secondary: "Inter"
+			}
+		}
 	},
 });
 
-const resolver: CSSVariablesResolver = (theme) => ({
-	variables: {},
-	light: {},
-	dark: {},
-});
+const resolver: CSSVariablesResolver = (theme) => {
+	const { colors, fonts } = theme.other.landing;
+
+	return {
+		variables: {
+			"--landing-color-primary": colors.primary,
+			"--landing-color-secondary": colors.secondary,
+			"--landing-color-tertiary": colors.tertiary,
+			"--landing-color-gold-light": colors.goldLight,
+			"--landing-color-gold-dark": colors.goldDark,
+			"--landing-color-teal": colors.teal,
+			"--landing-color-blue": colors.blue,
+			"--landing-color-slate": colors.slate,
+			"--landing-color-periwinkle": colors.periwinkle,
+			"--landing-color-mint": colors.mint,
+			"--landing-color-lavender": colors.lavender,
+			"--landing-color-background-light": colors.backgroundLight,
+			"--landing-color-background-dark": colors.backgroundDark,
+
+			"--landing-font-primary": fonts.primary,
+			"--landing-font-secondary": fonts.secondary,
+
+			"--landing-surface-navy": "rgba(14, 15, 38, 0.72)",
+			"--landing-color-card": "linear-gradient(180deg, rgba(20, 22, 52, 0.92), rgba(9, 10, 28, 0.96))",
+			"--landing-color-border": "color-mix(in srgb, var(--landing-color-slate), 12% transparent)",
+
+			"--landing-northstar-bg": "linear-gradient(180deg, rgba(40, 32, 18, 0.6), var(--landing-surface-navy))",
+			"--landing-northstar-border": "1px solid color-mix(in srgb, var(--landing-color-gold-dark), 68% transparent)",
+			"--landing-northstar-shadow": "0 0 40px -10px color-mix(in srgb, var(--landing-color-gold-dark), 60% transparent)",
+			"--landing-bearing-bg": "var(--landing-surface-navy)",
+			"--landing-bearing-border": "1px solid color-mix(in srgb, var(--landing-color-blue), 45% transparent)",
+			"--landing-movement-bg": "rgba(10, 25, 21, 0.55)",
+			"--landing-movement-border": "1px solid color-mix(in srgb, var(--landing-color-teal), 78% transparent)"
+		},
+		light: {},
+		dark: {},
+	}
+};
 
 function AnyTheme() {
 	return (

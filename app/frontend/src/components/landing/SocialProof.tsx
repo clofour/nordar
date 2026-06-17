@@ -1,4 +1,3 @@
-import classes from "./SocialProof.module.css";
 import { SimpleGrid } from "@mantine/core";
 import TestimonyCard from "./TestimonyCard";
 import Eyebrow from "./Eyebrow";

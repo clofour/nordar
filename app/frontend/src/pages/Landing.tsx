@@ -1,4 +1,3 @@
-import "./Landing.css";
 import ClosingCTA from "@/components/landing/ClosingCTA";
 import FAQ from "@/components/landing/FAQ";
 import FeatureGrid from "@/components/landing/FeatureGrid";

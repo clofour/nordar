@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import classes from "./Eyebrow.module.css";
+import classes from "./BodyText.module.css";
 
 interface BodyTextProps {
 	children: ReactNode;
