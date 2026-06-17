@@ -3,7 +3,7 @@ import { useEffect, useRef, type ReactElement } from "react";
 import classes from "@/components/misc/Background.module.css";
 
 interface BackgroundProps {
-	starDensity: number;
+	starDensity?: number;
 	background?: ReactElement;
 }
 
