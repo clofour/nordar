@@ -145,6 +145,7 @@ const resolver: CSSVariablesResolver = (theme) => {
 function AnyTheme() {
 	return (
 		<MantineProvider theme={theme} cssVariablesResolver={resolver} defaultColorScheme="dark">
+			<Notifications containerWidth="25%" />
 			<Outlet />
 		</MantineProvider>
 	)
