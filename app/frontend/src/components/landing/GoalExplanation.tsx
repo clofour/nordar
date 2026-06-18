@@ -2,7 +2,7 @@ import { Stack } from "@mantine/core";
 import classes from "./GoalExplanation.module.css";
 import { GoalType } from "@/api/models";
 import { text } from "@/data/text";
-import { theme } from "@/data/theme";
+import { otherTheme } from "@/data/theme";
 import type { CSSProperties } from "react";
 
 type GoalExplanationProps = {
@@ -22,7 +22,7 @@ export function GoalExplanation({ type }: GoalExplanationProps) {
 				className={classes.type}
 				style={
 					{
-						"--explanation-color": theme.colors.goal[type],
+						"--explanation-color": otherTheme.app.colors.goals[type],
 					} as CSSProperties
 				}
 			>

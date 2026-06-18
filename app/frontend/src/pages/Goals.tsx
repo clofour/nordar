@@ -1,10 +1,9 @@
 import { Stack, Text, Badge, UnstyledButton, Group, Button, Grid, Title, Card, Paper } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { IconStar, IconPlus, IconCompass, IconActivity, IconStarFilled } from "@tabler/icons-react";
+import { IconStar, IconPlus, IconCompass, IconActivity } from "@tabler/icons-react";
 import PageTitle from "@/components/shared/PageTitle";
 import { useMemo, useState } from "react";
 import GoalCard from "@/components/goals/GoalCard";
-import { theme } from "@/data/theme";
+import { otherTheme, theme } from "@/data/theme";
 import NorthStarForm from "@/components/goals/NorthStarForm";
 import BearingForm from "@/components/goals/BearingForm";
 import MovementForm from "@/components/goals/MovementForm";
@@ -132,7 +131,7 @@ export default function Goals() {
 												description={star.description}
 												left={<IconStar size={16} />}
 												right={
-													<Badge variant="light" color={theme.colors.priority[star.importance]}>
+													<Badge variant="light" color={otherTheme.app.colors.priority[star.importance]}>
 														{star.importance}
 													</Badge>
 												}
@@ -141,7 +140,7 @@ export default function Goals() {
 
 											<Stack
 												pl="lg"
-												style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal[GoalType.NorthStar] }}
+												style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: otherTheme.app.colors.goal[GoalType.NorthStar] }}
 											>
 												{star.bearings &&
 													star.bearings.map((bearing) => (
@@ -158,7 +157,7 @@ export default function Goals() {
 															<Stack
 																gap="xs"
 																pl="lg"
-																style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: theme.colors.goal[GoalType.Bearing] }}
+																style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: otherTheme.app.colors.goal[GoalType.Bearing] }}
 															>
 																{bearing.movements &&
 																	bearing.movements.map((movement) => (

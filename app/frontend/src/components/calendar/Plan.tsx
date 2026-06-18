@@ -1,6 +1,6 @@
 import { Schedule } from "@mantine/schedule";
 import { useListEvents } from "@/api/endpoints/event/event";
-import { theme } from "@/data/theme";
+import { otherTheme } from "@/data/theme";
 import DataStateWrapper from "../shared/DataStateWrapper";
 import { IconCalendarEvent } from "@tabler/icons-react";
 import { Paper } from "@mantine/core";
@@ -14,7 +14,7 @@ export default function Plan({ createEvent }: PlanProps) {
 
 	const events = response?.data.map((event) => ({
 		...event,
-		color: theme.colors.event,
+		color: otherTheme.app.colors.event,
 	}));
 
 	return (
