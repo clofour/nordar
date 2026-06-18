@@ -5,9 +5,11 @@ resource "digitalocean_app" "main" {
 
         domain {
             name = "${var.frontend_subdomain}.${var.domain}"
+            type = "ALIAS"
         }
         domain {
             name = "${var.backend_subdomain}.${var.domain}"
+            type = "ALIAS"
         }
 
         ingress {
@@ -42,6 +44,7 @@ resource "digitalocean_app" "main" {
                     allow_origins {
                         exact = "https://${var.frontend_subdomain}.${var.domain}"
                     }
+                    allow_methods = [ "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS" ]
                     allow_credentials = true
                 }
             }
