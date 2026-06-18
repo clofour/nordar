@@ -41,6 +41,8 @@ export function useNotification() {
 		});
 		const Icon = notificationConfig["icon"];
 
+		console.log(colors);
+
 		notifications.show({
 			message: message,
 			position: "top-center",
@@ -48,7 +50,7 @@ export function useNotification() {
 			color: colors["background"],
 			style: {
 				backgroundColor: colors["background"],
-				border: `1px solid ${colors["color"]}`,
+				border: `1px solid ${colors["border"]}`,
 			},
 		});
 	};
