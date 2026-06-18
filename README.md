@@ -25,9 +25,9 @@ Nordar has a variety of features:
 * The **Landing** page is a marketing page with various sections to entice users.
 * The **Authentication** page can be used for signing in and signing up. A "sign out" button is available on the top right inside the application.
 * The **Dashboard** page shows basic statistics as well as the events scheduled for that day. Event state can be managed on this page.
-* The **Calendar** page lets users manage their events, which can be linked to Movements. Events can be one-time or recurring, where the latter is defined with RRULEs.
+* The **Calendar** page lets users manage their events, which can be linked to Movements. Events can be one-time or recurring, where the latter is defined with RRULEs. Currently, events cannot be updated or deleted.
 * The **Stars** page, users can create, update and delete North Stars, Bearings and Movements.
-* In the **Reflections** page, users can look back at their past reflections to learn from them.
+* In the **Reflections** page, users can look back at their past reflections to learn from them. Currently, reflections cannot be updated or deleted.
 
 ### Stack
 
