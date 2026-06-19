@@ -40,13 +40,6 @@ resource "digitalocean_app" "main" {
                       prefix = "/"
                     }
                 }
-                cors {
-                    allow_origins {
-                        exact = "https://${var.frontend_subdomain}.${var.domain}"
-                    }
-                    allow_methods = [ "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS" ]
-                    allow_credentials = true
-                }
             }
         }
 
@@ -85,7 +78,7 @@ resource "digitalocean_app" "main" {
             env {
                 key = "Origins__Frontend"
                 scope = "RUN_AND_BUILD_TIME"
-                value = "${var.frontend_subdomain}.${var.domain}"
+                value = "https://${var.frontend_subdomain}.${var.domain}"
             }
 
             instance_count = 2
@@ -126,7 +119,7 @@ resource "digitalocean_app" "main" {
             env {
                 key = "Origins__Frontend"
                 scope = "RUN_AND_BUILD_TIME"
-                value = "${var.frontend_subdomain}.${var.domain}"
+                value = "https://${var.frontend_subdomain}.${var.domain}"
             }
 
             instance_count = 1
