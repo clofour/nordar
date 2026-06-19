@@ -15,7 +15,7 @@ import Dashboard from "@/pages/Dashboard";
 import Calendar from "@/pages/Calendar";
 import Goals from "@/pages/Goals";
 import Reflections from "@/pages/Reflections";
-import { SWRConfig } from "swr";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { assert } from "@/helpers";
 import AuthenticationRequirement from "@/components/shared/AuthenticationRequirement";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -25,16 +25,7 @@ import { resolver, theme } from "./data/theme";
 const rootElement = document.getElementById("root");
 assert(rootElement != null, "Root element cannot be null.");
 
-const SWRConfiguration = {
-	refreshInterval: 0,
-	revalidateOnFocus: false,
-	revalidateOnReconnect: true,
-	revalidateIfStale: true,
-	dedupingInterval: 5000,
-	shouldRetryOnError: true,
-	errorRetryCount: 2,
-	errorRetryInterval: 3000,
-};
+const queryClient = new QueryClient();
 
 function AnyTheme() {
 	return (
@@ -56,7 +47,7 @@ function DarkTheme() {
 
 createRoot(rootElement).render(
 	<StrictMode>
-		<SWRConfig value={SWRConfiguration}>
+		<QueryClientProvider client={queryClient}>
 			<AuthProvider>
 				<BrowserRouter>
 					<Routes>
@@ -85,6 +76,6 @@ createRoot(rootElement).render(
 					</Routes>
 				</BrowserRouter>
 			</AuthProvider>
-		</SWRConfig>
+		</QueryClientProvider>
 	</StrictMode>,
 );
