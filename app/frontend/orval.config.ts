@@ -16,7 +16,7 @@ export default defineConfig({
 				},
 			},
 			mode: "tags-split",
-			client: "swr",
+			client: "react-query",
 			target: "src/api/endpoints",
 			schemas: "src/api/models",
 			mock: true,
