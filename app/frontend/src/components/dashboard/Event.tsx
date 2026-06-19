@@ -8,6 +8,8 @@ import {
 	setRecurringInstanceState,
 	useGetOnetimeInstanceState,
 	useGetRecurringInstanceState,
+	useSetOnetimeInstanceState,
+	useSetRecurringInstanceState,
 } from "@/api/endpoints/event/event";
 import { NotificationType, useNotification } from "@/helpers";
 import { getErrorMessage } from "@/data/error";
@@ -35,8 +37,7 @@ export default function Event({ event }: EventProps) {
 	const {
 		data: response,
 		error,
-		isLoading,
-		mutate,
+		isLoading
 	} = event.type == "recurring" && "recurringEventId" in event && "recurrenceId" in event
 		? useGetRecurringInstanceState(event.recurringEventId, new Date(event.recurrenceId).toISOString())
 		: useGetOnetimeInstanceState(event.id);
@@ -50,9 +51,19 @@ export default function Event({ event }: EventProps) {
 		const result = Math.random();
 
 		if (result < 0.5) {
+			console.log("Easter egg!");
 		}
 	};
 
+	const onMutationError = (error: number) => {
+		notify(NotificationType.Error, getErrorMessage(error));
+	};
+	const onetimeMutation = useSetOnetimeInstanceState({
+		mutation: { onError: onMutationError }
+	});
+	const recurringMutation = useSetRecurringInstanceState({
+		mutation: { onError: onMutationError }
+	});
 	const onChange = async (checkBoxEvent: React.ChangeEvent<HTMLInputElement>) => {
 		const newCheckboxValue = checkBoxEvent.currentTarget.checked;
 		const newState = getStateFromBool(newCheckboxValue);
@@ -61,23 +72,12 @@ export default function Event({ event }: EventProps) {
 			eventState: newState,
 		};
 
-		let response = null;
 		if (event.type == "onetime") {
-			response = await setOnetimeInstanceState(event.id, requestData);
+			onetimeMutation.mutate({eventId: event.id, data: requestData});
 		} else if (event.type == "recurring" && "recurringEventId" in event && "recurrenceId" in event) {
-			response = await setRecurringInstanceState(event.recurringEventId, new Date(event.recurrenceId).toISOString(), requestData);
+			recurringMutation.mutate({eventId: event.recurringEventId, eventOccurrence: new Date(event.recurrenceId).toISOString(), data: requestData});
 		} else {
 			throw Error("Incorrect schema on Event object.");
-		}
-
-		if (response && response.status === 200) {
-			setChecked(newCheckboxValue);
-
-			if (newCheckboxValue == true) {
-				prompt();
-			}
-		} else {
-			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
 		}
 	};
 
