@@ -14,7 +14,7 @@ resource "digitalocean_droplet" "app" {
     count = var.app_count
 
     region = var.region
-    image = data.digitalocean_images.backend.images[0].id
+    image = data.digitalocean_images.app.images[0].id
     name = "app-${count.index}"
     size = var.droplet_size
 
