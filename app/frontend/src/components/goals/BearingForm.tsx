@@ -1,27 +1,29 @@
 import { Button, Group, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm, schemaResolver } from "@mantine/form";
-import { createBearing, updateBearing } from "@/api/endpoints/goal/goal";
+import { createBearing, updateBearing, useCreateBearing, useUpdateBearing } from "@/api/endpoints/goal/goal";
 import { CreateBearingBody, UpdateBearingBody } from "@/api/endpoints/goal/goal.zod";
 import { getErrorMessage } from "@/data/error";
 import type { BearingCreate } from "@/api/models";
 import { NotificationType, useNotification } from "@/helpers";
 import { Mode } from "@/pages/Goals";
+import { useQueryClient } from "@tanstack/react-query";
 
 type BearingFormProps =
 	| {
-			mode: Mode.Create;
-			id?: never;
-			parentId: string;
-			initialValues?: never;
-	  }
+		mode: Mode.Create;
+		id?: never;
+		parentId: string;
+		initialValues?: never;
+	}
 	| {
-			mode: Mode.Edit;
-			id: string;
-			parentId?: never;
-			initialValues: BearingCreate;
-	  };
+		mode: Mode.Edit;
+		id: string;
+		parentId?: never;
+		initialValues: BearingCreate;
+	};
 
 export default function BearingForm({ mode, id, parentId, initialValues }: BearingFormProps) {
+	const queryClient = useQueryClient();
 	const notify = useNotification();
 
 	const schema = mode == Mode.Create ? CreateBearingBody : UpdateBearingBody;
@@ -34,22 +36,37 @@ export default function BearingForm({ mode, id, parentId, initialValues }: Beari
 		validate: schemaResolver(formSchema, { sync: true }),
 	});
 
+	const onSuccess = () => {
+		
+	};
+	const onError = (error: number) => {
+		notify(NotificationType.Error, getErrorMessage(error));
+	};
+	const createMutation = useCreateBearing({
+		mutation: {
+			onSuccess: onSuccess,
+			onError: onError
+		}
+	});
+	const updateMutation = useUpdateBearing({
+		mutation: {
+			onSuccess: onSuccess,
+			onError: onError
+		}
+	})
 	const handleSubmit = async (values: typeof form.values) => {
 		const requestData = {
 			...values,
 			northStarId: parentId,
 		};
 
-		let response;
-		if (mode == Mode.Create) {
-			response = await createBearing(requestData);
-		} else {
-			response = await updateBearing(id, requestData);
-		}
-
-		if (response.status === 200) {
-		} else {
-			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
+		switch (mode) {
+			case Mode.Create:
+				createMutation.mutate({ data: requestData });
+				break;
+			case Mode.Edit:
+				updateMutation.mutate({ id, data: requestData })
+				break;
 		}
 	};
 

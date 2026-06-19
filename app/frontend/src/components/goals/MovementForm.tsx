@@ -1,27 +1,29 @@
 import { Button, Group, Input, SegmentedControl, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm, schemaResolver } from "@mantine/form";
-import { createMovement, updateMovement } from "@/api/endpoints/goal/goal";
+import { createMovement, updateMovement, useCreateMovement, useUpdateMovement } from "@/api/endpoints/goal/goal";
 import { CreateMovementBody, UpdateMovementBody } from "@/api/endpoints/goal/goal.zod";
 import { getErrorMessage } from "@/data/error";
 import type { MovementCreate } from "@/api/models";
 import { NotificationType, useNotification } from "@/helpers";
 import { Mode } from "@/pages/Goals";
+import { useQueryClient } from "@tanstack/react-query";
 
 type MovementFormProps =
 	| {
-			mode: Mode.Create;
-			id?: never;
-			parentId: string;
-			initialValues?: never;
-	  }
+		mode: Mode.Create;
+		id?: never;
+		parentId: string;
+		initialValues?: never;
+	}
 	| {
-			mode: Mode.Edit;
-			id: string;
-			parentId?: never;
-			initialValues: MovementCreate;
-	  };
+		mode: Mode.Edit;
+		id: string;
+		parentId?: never;
+		initialValues: MovementCreate;
+	};
 
 export default function MovementForm({ mode, id, parentId, initialValues }: MovementFormProps) {
+	const queryClient = useQueryClient();
 	const notify = useNotification();
 
 	const schema = mode == Mode.Create ? CreateMovementBody : UpdateMovementBody;
@@ -34,22 +36,37 @@ export default function MovementForm({ mode, id, parentId, initialValues }: Move
 		validate: schemaResolver(formSchema, { sync: true }),
 	});
 
+	const onSuccess = () => {
+		
+	};
+	const onError = (error: number) => {
+		notify(NotificationType.Error, getErrorMessage(error));
+	};
+	const createMutation = useCreateMovement({
+		mutation: {
+			onSuccess: onSuccess,
+			onError: onError
+		}
+	});
+	const updateMutation = useUpdateMovement({
+		mutation: {
+			onSuccess: onSuccess,
+			onError: onError
+		}
+	})
 	const handleSubmit = async (values: typeof form.values) => {
 		const requestData = {
 			...values,
 			bearingId: parentId,
 		};
 
-		let response;
-		if (mode == Mode.Create) {
-			response = await createMovement(requestData);
-		} else {
-			response = await updateMovement(id, requestData);
-		}
-
-		if (response.status === 200) {
-		} else {
-			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
+		switch (mode) {
+			case Mode.Create:
+				createMutation.mutate({ data: requestData });
+				break;
+			case Mode.Edit:
+				updateMutation.mutate({ id, data: requestData })
+				break;
 		}
 	};
 

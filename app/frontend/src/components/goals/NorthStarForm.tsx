@@ -1,11 +1,12 @@
 import { Button, Group, Input, SegmentedControl, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm, schemaResolver } from "@mantine/form";
-import { createNorthStar, updateNorthStar } from "@/api/endpoints/goal/goal";
+import { createNorthStar, updateNorthStar, useCreateNorthStar, useUpdateNorthStar } from "@/api/endpoints/goal/goal";
 import { CreateNorthStarBody, UpdateNorthStarBody } from "@/api/endpoints/goal/goal.zod";
 import { getErrorMessage } from "@/data/error";
 import type { NorthStarCreate } from "@/api/models";
 import { NotificationType, useNotification } from "@/helpers";
 import { Mode } from "@/pages/Goals";
+import { useQueryClient } from "@tanstack/react-query";
 
 type NorthStarFormProps =
 	| {
@@ -20,6 +21,7 @@ type NorthStarFormProps =
 	  };
 
 export default function NorthStarForm({ mode, id, initialValues }: NorthStarFormProps) {
+	const queryClient = useQueryClient();
 	const notify = useNotification();
 
 	const schema = mode == Mode.Create ? CreateNorthStarBody : UpdateNorthStarBody;
@@ -30,12 +32,32 @@ export default function NorthStarForm({ mode, id, initialValues }: NorthStarForm
 		validate: schemaResolver(schema, { sync: true }),
 	});
 
+	const onSuccess = () => {
+		
+	};
+	const onError = (error: number) => {
+		notify(NotificationType.Error, getErrorMessage(error));
+	};
+	const createMutation = useCreateNorthStar({
+		mutation: {
+			onSuccess: onSuccess,
+			onError: onError
+		}
+	});
+	const updateMutation = useUpdateNorthStar({
+		mutation: {
+			onSuccess: onSuccess,
+			onError: onError
+		}
+	})
 	const handleSubmit = async (values: typeof form.values) => {
-		const response = mode == Mode.Create ? await createNorthStar(values) : await updateNorthStar(id, values);
-
-		if (response.status === 200) {
-		} else {
-			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
+		switch (mode) {
+			case Mode.Create:
+				createMutation.mutate({ data: values });
+				break;
+			case Mode.Edit:
+				updateMutation.mutate({ id, data: values })
+				break;
 		}
 	};
 
