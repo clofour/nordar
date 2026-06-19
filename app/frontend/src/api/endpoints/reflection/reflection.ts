@@ -9,7 +9,9 @@ import type {
 	DataTag,
 	DefinedInitialDataOptions,
 	DefinedUseQueryResult,
+	InvalidateOptions,
 	MutationFunction,
+	MutationFunctionContext,
 	QueryClient,
 	QueryFunction,
 	QueryKey,
@@ -19,7 +21,7 @@ import type {
 	UseQueryOptions,
 	UseQueryResult,
 } from "@tanstack/react-query";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { cFetch } from "../../../other/cfetch";
 import type { DeleteReflectionParams, GetReflectionParams, ReflectionCreate, ReflectionGet } from "../../models";
 
@@ -60,7 +62,7 @@ export const getReflection = async (params?: GetReflectionParams, options?: Requ
 };
 
 export const getGetReflectionQueryKey = (params?: GetReflectionParams) => {
-	return [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Get`, ...(params ? [params] : [])] as const;
+	return ["getReflection", ...(params ? [params] : [])] as const;
 };
 
 export const getGetReflectionQueryOptions = <TData = Awaited<ReturnType<typeof getReflection>>, TError = unknown>(
@@ -117,6 +119,16 @@ export function useGetReflection<TData = Awaited<ReturnType<typeof getReflection
 	return { ...query, queryKey: queryOptions.queryKey };
 }
 
+export const invalidateGetReflection = async (
+	queryClient: QueryClient,
+	params?: GetReflectionParams,
+	options?: InvalidateOptions,
+): Promise<QueryClient> => {
+	await queryClient.invalidateQueries({ queryKey: getGetReflectionQueryKey(params) }, options);
+
+	return queryClient;
+};
+
 export type listReflectionsResponse200 = {
 	data: ReflectionGet[];
 	status: 200;
@@ -140,7 +152,7 @@ export const listReflections = async (options?: RequestInit): Promise<listReflec
 };
 
 export const getListReflectionsQueryKey = () => {
-	return [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/List`] as const;
+	return ["listReflections"] as const;
 };
 
 export const getListReflectionsQueryOptions = <TData = Awaited<ReturnType<typeof listReflections>>, TError = unknown>(options?: {
@@ -205,6 +217,12 @@ export function useListReflections<TData = Awaited<ReturnType<typeof listReflect
 	return { ...query, queryKey: queryOptions.queryKey };
 }
 
+export const invalidateListReflections = async (queryClient: QueryClient, options?: InvalidateOptions): Promise<QueryClient> => {
+	await queryClient.invalidateQueries({ queryKey: getListReflectionsQueryKey() }, options);
+
+	return queryClient;
+};
+
 export type createReflectionResponse200 = {
 	data: string;
 	status: 200;
@@ -229,10 +247,14 @@ export const createReflection = async (reflectionCreate: ReflectionCreate, optio
 	});
 };
 
-export const getCreateReflectionMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof createReflection>>, TError, { data: ReflectionCreate }, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof createReflection>>, TError, { data: ReflectionCreate }, TContext> => {
+export const getCreateReflectionMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createReflection>>, TError, { data: ReflectionCreate }, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof createReflection>>, TError, { data: ReflectionCreate }, TContext> => {
 	const mutationKey = ["createReflection"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -246,7 +268,20 @@ export const getCreateReflectionMutationOptions = <TError = unknown, TContext = 
 		return createReflection(data, requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof createReflection>>,
+		variables: { data: ReflectionCreate },
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getGetReflectionQueryKey() });
+			queryClient.invalidateQueries({ queryKey: getListReflectionsQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type CreateReflectionMutationResult = NonNullable<Awaited<ReturnType<typeof createReflection>>>;
@@ -256,11 +291,13 @@ export type CreateReflectionMutationError = unknown;
 export const useCreateReflection = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createReflection>>, TError, { data: ReflectionCreate }, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof createReflection>>, TError, { data: ReflectionCreate }, TContext> => {
-	return useMutation(getCreateReflectionMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getCreateReflectionMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type updateReflectionResponse200 = {
 	data: void;
@@ -284,10 +321,14 @@ export const updateReflection = async (options?: RequestInit): Promise<updateRef
 	});
 };
 
-export const getUpdateReflectionMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateReflection>>, TError, void, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof updateReflection>>, TError, void, TContext> => {
+export const getUpdateReflectionMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateReflection>>, TError, void, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof updateReflection>>, TError, void, TContext> => {
 	const mutationKey = ["updateReflection"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -299,7 +340,20 @@ export const getUpdateReflectionMutationOptions = <TError = unknown, TContext = 
 		return updateReflection(requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof updateReflection>>,
+		variables: void,
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getGetReflectionQueryKey() });
+			queryClient.invalidateQueries({ queryKey: getListReflectionsQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type UpdateReflectionMutationResult = NonNullable<Awaited<ReturnType<typeof updateReflection>>>;
@@ -309,11 +363,13 @@ export type UpdateReflectionMutationError = unknown;
 export const useUpdateReflection = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateReflection>>, TError, void, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof updateReflection>>, TError, void, TContext> => {
-	return useMutation(getUpdateReflectionMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getUpdateReflectionMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type deleteReflectionResponse200 = {
 	data: void;
@@ -349,10 +405,14 @@ export const deleteReflection = async (params?: DeleteReflectionParams, options?
 	});
 };
 
-export const getDeleteReflectionMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteReflection>>, TError, { params?: DeleteReflectionParams }, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof deleteReflection>>, TError, { params?: DeleteReflectionParams }, TContext> => {
+export const getDeleteReflectionMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteReflection>>, TError, { params?: DeleteReflectionParams }, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof deleteReflection>>, TError, { params?: DeleteReflectionParams }, TContext> => {
 	const mutationKey = ["deleteReflection"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -366,7 +426,20 @@ export const getDeleteReflectionMutationOptions = <TError = unknown, TContext = 
 		return deleteReflection(params, requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof deleteReflection>>,
+		variables: { params?: DeleteReflectionParams },
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getGetReflectionQueryKey() });
+			queryClient.invalidateQueries({ queryKey: getListReflectionsQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type DeleteReflectionMutationResult = NonNullable<Awaited<ReturnType<typeof deleteReflection>>>;
@@ -376,11 +449,13 @@ export type DeleteReflectionMutationError = unknown;
 export const useDeleteReflection = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteReflection>>, TError, { params?: DeleteReflectionParams }, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof deleteReflection>>, TError, { params?: DeleteReflectionParams }, TContext> => {
-	return useMutation(getDeleteReflectionMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getDeleteReflectionMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type reflectionPromptDataResponse200 = {
 	data: string;

@@ -9,7 +9,9 @@ import type {
 	DataTag,
 	DefinedInitialDataOptions,
 	DefinedUseQueryResult,
+	InvalidateOptions,
 	MutationFunction,
+	MutationFunctionContext,
 	QueryClient,
 	QueryFunction,
 	QueryKey,
@@ -19,7 +21,7 @@ import type {
 	UseQueryOptions,
 	UseQueryResult,
 } from "@tanstack/react-query";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { cFetch } from "../../../other/cfetch";
 import type { SigninForm, SignupForm } from "../../models";
 
@@ -49,10 +51,14 @@ export const signUp = async (signupForm: SignupForm, options?: RequestInit): Pro
 	});
 };
 
-export const getSignUpMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError, { data: SignupForm }, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError, { data: SignupForm }, TContext> => {
+export const getSignUpMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError, { data: SignupForm }, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError, { data: SignupForm }, TContext> => {
 	const mutationKey = ["signUp"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -66,7 +72,19 @@ export const getSignUpMutationOptions = <TError = unknown, TContext = unknown>(o
 		return signUp(data, requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof signUp>>,
+		variables: { data: SignupForm },
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getSignInQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type SignUpMutationResult = NonNullable<Awaited<ReturnType<typeof signUp>>>;
@@ -76,11 +94,13 @@ export type SignUpMutationError = unknown;
 export const useSignUp = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError, { data: SignupForm }, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof signUp>>, TError, { data: SignupForm }, TContext> => {
-	return useMutation(getSignUpMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getSignUpMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type signInResponse200 = {
 	data: string;
@@ -106,10 +126,14 @@ export const signIn = async (signinForm: SigninForm, options?: RequestInit): Pro
 	});
 };
 
-export const getSignInMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof signIn>>, TError, { data: SigninForm }, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof signIn>>, TError, { data: SigninForm }, TContext> => {
+export const getSignInMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof signIn>>, TError, { data: SigninForm }, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof signIn>>, TError, { data: SigninForm }, TContext> => {
 	const mutationKey = ["signIn"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -123,7 +147,19 @@ export const getSignInMutationOptions = <TError = unknown, TContext = unknown>(o
 		return signIn(data, requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof signIn>>,
+		variables: { data: SigninForm },
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getIsAuthenticatedQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type SignInMutationResult = NonNullable<Awaited<ReturnType<typeof signIn>>>;
@@ -133,11 +169,13 @@ export type SignInMutationError = unknown;
 export const useSignIn = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof signIn>>, TError, { data: SigninForm }, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof signIn>>, TError, { data: SigninForm }, TContext> => {
-	return useMutation(getSignInMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getSignInMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type signOutResponse204 = {
 	data: void;
@@ -161,10 +199,14 @@ export const signOut = async (options?: RequestInit): Promise<signOutResponse> =
 	});
 };
 
-export const getSignOutMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof signOut>>, TError, void, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof signOut>>, TError, void, TContext> => {
+export const getSignOutMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof signOut>>, TError, void, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof signOut>>, TError, void, TContext> => {
 	const mutationKey = ["signOut"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -176,7 +218,14 @@ export const getSignOutMutationOptions = <TError = unknown, TContext = unknown>(
 		return signOut(requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (data: Awaited<ReturnType<typeof signOut>>, variables: void, onMutateResult: TContext, context: MutationFunctionContext) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getIsAuthenticatedQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type SignOutMutationResult = NonNullable<Awaited<ReturnType<typeof signOut>>>;
@@ -184,10 +233,15 @@ export type SignOutMutationResult = NonNullable<Awaited<ReturnType<typeof signOu
 export type SignOutMutationError = unknown;
 
 export const useSignOut = <TError = unknown, TContext = unknown>(
-	options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof signOut>>, TError, void, TContext>; request?: SecondParameter<typeof cFetch> },
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof signOut>>, TError, void, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof signOut>>, TError, void, TContext> => {
-	return useMutation(getSignOutMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getSignOutMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type isAuthenticatedResponse200 = {
 	data: string;
@@ -212,7 +266,7 @@ export const isAuthenticated = async (options?: RequestInit): Promise<isAuthenti
 };
 
 export const getIsAuthenticatedQueryKey = () => {
-	return [`${import.meta.env.VITE_API_ORIGIN}/api/Auth/IsAuthenticated`] as const;
+	return ["isAuthenticated"] as const;
 };
 
 export const getIsAuthenticatedQueryOptions = <TData = Awaited<ReturnType<typeof isAuthenticated>>, TError = unknown>(options?: {
@@ -276,3 +330,9 @@ export function useIsAuthenticated<TData = Awaited<ReturnType<typeof isAuthentic
 
 	return { ...query, queryKey: queryOptions.queryKey };
 }
+
+export const invalidateIsAuthenticated = async (queryClient: QueryClient, options?: InvalidateOptions): Promise<QueryClient> => {
+	await queryClient.invalidateQueries({ queryKey: getIsAuthenticatedQueryKey() }, options);
+
+	return queryClient;
+};

@@ -10,6 +10,40 @@ export default defineConfig({
 				runtime: "import.meta.env.VITE_API_ORIGIN",
 			},
 			override: {
+				query: {
+					useOperationIdAsQueryKey: true,
+					useInvalidate: true,
+					mutationInvalidates: [
+						{
+							onMutations: ["signUp"],
+							invalidates: ["signIn"]
+						},
+						{
+							onMutations: ["signIn", "signOut"],
+							invalidates: ["isAuthenticated"]
+						},
+						{
+							onMutations: ["createNorthStar", "createBearing", "createMovement", "updateNorthStar", "updateBearing", "updateMovement", "deleteGoal"],
+							invalidates: ["listGoals", "goalStats"]
+						},
+						{
+							onMutations: ["createOnetime", "createRecurring", "updateEvent", "deleteEvent"],
+							invalidates: ["listEvents"]
+						},
+						{
+							onMutations: ["setOnetimeInstanceState", "setRecurringInstanceState"],
+							invalidates: ["getOnetimeInstanceState", "getRecurringInstanceState"]
+						},
+						{
+							onMutations: ["createReflection", "updateReflection", "deleteReflection"],
+							invalidates: ["getReflection", "listReflections"]
+						},
+						{
+							onMutations: ["prompt"],
+							invalidates: ["promptData"]
+						}
+					]
+				},
 				mutator: {
 					path: "./src/other/cfetch.ts",
 					name: "cFetch",

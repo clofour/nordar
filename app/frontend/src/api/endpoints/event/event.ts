@@ -9,7 +9,9 @@ import type {
 	DataTag,
 	DefinedInitialDataOptions,
 	DefinedUseQueryResult,
+	InvalidateOptions,
 	MutationFunction,
+	MutationFunctionContext,
 	QueryClient,
 	QueryFunction,
 	QueryKey,
@@ -19,7 +21,7 @@ import type {
 	UseQueryOptions,
 	UseQueryResult,
 } from "@tanstack/react-query";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { cFetch } from "../../../other/cfetch";
 import type { EventGet, EventInstanceStateGet, EventInstanceStateSet, OnetimeEventCreate, RecurringEventCreate } from "../../models";
 
@@ -48,7 +50,7 @@ export const listEvents = async (options?: RequestInit): Promise<listEventsRespo
 };
 
 export const getListEventsQueryKey = () => {
-	return [`${import.meta.env.VITE_API_ORIGIN}/api/Event/List`] as const;
+	return ["listEvents"] as const;
 };
 
 export const getListEventsQueryOptions = <TData = Awaited<ReturnType<typeof listEvents>>, TError = unknown>(options?: {
@@ -101,6 +103,12 @@ export function useListEvents<TData = Awaited<ReturnType<typeof listEvents>>, TE
 	return { ...query, queryKey: queryOptions.queryKey };
 }
 
+export const invalidateListEvents = async (queryClient: QueryClient, options?: InvalidateOptions): Promise<QueryClient> => {
+	await queryClient.invalidateQueries({ queryKey: getListEventsQueryKey() }, options);
+
+	return queryClient;
+};
+
 export type createOnetimeResponse200 = {
 	data: string;
 	status: 200;
@@ -125,10 +133,14 @@ export const createOnetime = async (onetimeEventCreate: OnetimeEventCreate, opti
 	});
 };
 
-export const getCreateOnetimeMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof createOnetime>>, TError, { data: OnetimeEventCreate }, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof createOnetime>>, TError, { data: OnetimeEventCreate }, TContext> => {
+export const getCreateOnetimeMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createOnetime>>, TError, { data: OnetimeEventCreate }, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof createOnetime>>, TError, { data: OnetimeEventCreate }, TContext> => {
 	const mutationKey = ["createOnetime"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -142,7 +154,19 @@ export const getCreateOnetimeMutationOptions = <TError = unknown, TContext = unk
 		return createOnetime(data, requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof createOnetime>>,
+		variables: { data: OnetimeEventCreate },
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getListEventsQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type CreateOnetimeMutationResult = NonNullable<Awaited<ReturnType<typeof createOnetime>>>;
@@ -152,11 +176,13 @@ export type CreateOnetimeMutationError = unknown;
 export const useCreateOnetime = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createOnetime>>, TError, { data: OnetimeEventCreate }, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof createOnetime>>, TError, { data: OnetimeEventCreate }, TContext> => {
-	return useMutation(getCreateOnetimeMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getCreateOnetimeMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type createRecurringResponse200 = {
 	data: string;
@@ -182,10 +208,14 @@ export const createRecurring = async (recurringEventCreate: RecurringEventCreate
 	});
 };
 
-export const getCreateRecurringMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof createRecurring>>, TError, { data: RecurringEventCreate }, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof createRecurring>>, TError, { data: RecurringEventCreate }, TContext> => {
+export const getCreateRecurringMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createRecurring>>, TError, { data: RecurringEventCreate }, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof createRecurring>>, TError, { data: RecurringEventCreate }, TContext> => {
 	const mutationKey = ["createRecurring"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -199,7 +229,19 @@ export const getCreateRecurringMutationOptions = <TError = unknown, TContext = u
 		return createRecurring(data, requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof createRecurring>>,
+		variables: { data: RecurringEventCreate },
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getListEventsQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type CreateRecurringMutationResult = NonNullable<Awaited<ReturnType<typeof createRecurring>>>;
@@ -209,11 +251,13 @@ export type CreateRecurringMutationError = unknown;
 export const useCreateRecurring = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createRecurring>>, TError, { data: RecurringEventCreate }, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof createRecurring>>, TError, { data: RecurringEventCreate }, TContext> => {
-	return useMutation(getCreateRecurringMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getCreateRecurringMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type updateEventResponse200 = {
 	data: void;
@@ -237,10 +281,14 @@ export const updateEvent = async (options?: RequestInit): Promise<updateEventRes
 	});
 };
 
-export const getUpdateEventMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateEvent>>, TError, void, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof updateEvent>>, TError, void, TContext> => {
+export const getUpdateEventMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateEvent>>, TError, void, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof updateEvent>>, TError, void, TContext> => {
 	const mutationKey = ["updateEvent"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -252,7 +300,14 @@ export const getUpdateEventMutationOptions = <TError = unknown, TContext = unkno
 		return updateEvent(requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (data: Awaited<ReturnType<typeof updateEvent>>, variables: void, onMutateResult: TContext, context: MutationFunctionContext) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getListEventsQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type UpdateEventMutationResult = NonNullable<Awaited<ReturnType<typeof updateEvent>>>;
@@ -262,11 +317,13 @@ export type UpdateEventMutationError = unknown;
 export const useUpdateEvent = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateEvent>>, TError, void, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof updateEvent>>, TError, void, TContext> => {
-	return useMutation(getUpdateEventMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getUpdateEventMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type deleteEventResponse200 = {
 	data: void;
@@ -290,10 +347,14 @@ export const deleteEvent = async (options?: RequestInit): Promise<deleteEventRes
 	});
 };
 
-export const getDeleteEventMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteEvent>>, TError, void, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof deleteEvent>>, TError, void, TContext> => {
+export const getDeleteEventMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteEvent>>, TError, void, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof deleteEvent>>, TError, void, TContext> => {
 	const mutationKey = ["deleteEvent"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -305,7 +366,14 @@ export const getDeleteEventMutationOptions = <TError = unknown, TContext = unkno
 		return deleteEvent(requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (data: Awaited<ReturnType<typeof deleteEvent>>, variables: void, onMutateResult: TContext, context: MutationFunctionContext) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getListEventsQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type DeleteEventMutationResult = NonNullable<Awaited<ReturnType<typeof deleteEvent>>>;
@@ -315,11 +383,13 @@ export type DeleteEventMutationError = unknown;
 export const useDeleteEvent = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteEvent>>, TError, void, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof deleteEvent>>, TError, void, TContext> => {
-	return useMutation(getDeleteEventMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getDeleteEventMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type getOnetimeInstanceStateResponse200 = {
 	data: EventInstanceStateGet;
@@ -344,7 +414,7 @@ export const getOnetimeInstanceState = async (eventId: string, options?: Request
 };
 
 export const getGetOnetimeInstanceStateQueryKey = (eventId: string) => {
-	return [`${import.meta.env.VITE_API_ORIGIN}/api/Event/GetOnetimeInstanceState/onetime/${eventId}`] as const;
+	return ["getOnetimeInstanceState", ...(eventId ? [eventId] : [])] as const;
 };
 
 export const getGetOnetimeInstanceStateQueryOptions = <TData = Awaited<ReturnType<typeof getOnetimeInstanceState>>, TError = unknown>(
@@ -419,6 +489,16 @@ export function useGetOnetimeInstanceState<TData = Awaited<ReturnType<typeof get
 	return { ...query, queryKey: queryOptions.queryKey };
 }
 
+export const invalidateGetOnetimeInstanceState = async (
+	queryClient: QueryClient,
+	eventId: string,
+	options?: InvalidateOptions,
+): Promise<QueryClient> => {
+	await queryClient.invalidateQueries({ queryKey: getGetOnetimeInstanceStateQueryKey(eventId) }, options);
+
+	return queryClient;
+};
+
 export type getRecurringInstanceStateResponse200 = {
 	data: EventInstanceStateGet;
 	status: 200;
@@ -446,7 +526,7 @@ export const getRecurringInstanceState = async (
 };
 
 export const getGetRecurringInstanceStateQueryKey = (eventId: string, eventOccurrence: string) => {
-	return [`${import.meta.env.VITE_API_ORIGIN}/api/Event/GetRecurringInstanceState/recurring/${eventId}/${eventOccurrence}`] as const;
+	return ["getRecurringInstanceState", ...(eventOccurrence ? [eventOccurrence] : []), ...(eventId ? [eventId] : [])] as const;
 };
 
 export const getGetRecurringInstanceStateQueryOptions = <TData = Awaited<ReturnType<typeof getRecurringInstanceState>>, TError = unknown>(
@@ -534,6 +614,17 @@ export function useGetRecurringInstanceState<TData = Awaited<ReturnType<typeof g
 	return { ...query, queryKey: queryOptions.queryKey };
 }
 
+export const invalidateGetRecurringInstanceState = async (
+	queryClient: QueryClient,
+	eventId: string,
+	eventOccurrence: string,
+	options?: InvalidateOptions,
+): Promise<QueryClient> => {
+	await queryClient.invalidateQueries({ queryKey: getGetRecurringInstanceStateQueryKey(eventId, eventOccurrence) }, options);
+
+	return queryClient;
+};
+
 export type setOnetimeInstanceStateResponse200 = {
 	data: void;
 	status: 200;
@@ -562,15 +653,19 @@ export const setOnetimeInstanceState = async (
 	});
 };
 
-export const getSetOnetimeInstanceStateMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof setOnetimeInstanceState>>,
-		TError,
-		{ eventId: string; data: EventInstanceStateSet },
-		TContext
-	>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof setOnetimeInstanceState>>, TError, { eventId: string; data: EventInstanceStateSet }, TContext> => {
+export const getSetOnetimeInstanceStateMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof setOnetimeInstanceState>>,
+			TError,
+			{ eventId: string; data: EventInstanceStateSet },
+			TContext
+		>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof setOnetimeInstanceState>>, TError, { eventId: string; data: EventInstanceStateSet }, TContext> => {
 	const mutationKey = ["setOnetimeInstanceState"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -586,7 +681,25 @@ export const getSetOnetimeInstanceStateMutationOptions = <TError = unknown, TCon
 		return setOnetimeInstanceState(eventId, data, requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof setOnetimeInstanceState>>,
+		variables: { eventId: string; data: EventInstanceStateSet },
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({
+				predicate: (query) => typeof query.queryKey[0] === "string" && query.queryKey[0].startsWith("/api/Event/GetOnetimeInstanceState/onetime/"),
+			});
+			queryClient.invalidateQueries({
+				predicate: (query) =>
+					typeof query.queryKey[0] === "string" && query.queryKey[0].startsWith("/api/Event/GetRecurringInstanceState/recurring/"),
+			});
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type SetOnetimeInstanceStateMutationResult = NonNullable<Awaited<ReturnType<typeof setOnetimeInstanceState>>>;
@@ -601,11 +714,13 @@ export const useSetOnetimeInstanceState = <TError = unknown, TContext = unknown>
 			{ eventId: string; data: EventInstanceStateSet },
 			TContext
 		>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof setOnetimeInstanceState>>, TError, { eventId: string; data: EventInstanceStateSet }, TContext> => {
-	return useMutation(getSetOnetimeInstanceStateMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getSetOnetimeInstanceStateMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type setRecurringInstanceStateResponse200 = {
 	data: void;
@@ -636,15 +751,19 @@ export const setRecurringInstanceState = async (
 	});
 };
 
-export const getSetRecurringInstanceStateMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof setRecurringInstanceState>>,
-		TError,
-		{ eventId: string; eventOccurrence: string; data: EventInstanceStateSet },
-		TContext
-	>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<
+export const getSetRecurringInstanceStateMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof setRecurringInstanceState>>,
+			TError,
+			{ eventId: string; eventOccurrence: string; data: EventInstanceStateSet },
+			TContext
+		>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<
 	Awaited<ReturnType<typeof setRecurringInstanceState>>,
 	TError,
 	{ eventId: string; eventOccurrence: string; data: EventInstanceStateSet },
@@ -666,7 +785,25 @@ export const getSetRecurringInstanceStateMutationOptions = <TError = unknown, TC
 		return setRecurringInstanceState(eventId, eventOccurrence, data, requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof setRecurringInstanceState>>,
+		variables: { eventId: string; eventOccurrence: string; data: EventInstanceStateSet },
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({
+				predicate: (query) => typeof query.queryKey[0] === "string" && query.queryKey[0].startsWith("/api/Event/GetOnetimeInstanceState/onetime/"),
+			});
+			queryClient.invalidateQueries({
+				predicate: (query) =>
+					typeof query.queryKey[0] === "string" && query.queryKey[0].startsWith("/api/Event/GetRecurringInstanceState/recurring/"),
+			});
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type SetRecurringInstanceStateMutationResult = NonNullable<Awaited<ReturnType<typeof setRecurringInstanceState>>>;
@@ -681,6 +818,7 @@ export const useSetRecurringInstanceState = <TError = unknown, TContext = unknow
 			{ eventId: string; eventOccurrence: string; data: EventInstanceStateSet },
 			TContext
 		>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
@@ -690,5 +828,6 @@ export const useSetRecurringInstanceState = <TError = unknown, TContext = unknow
 	{ eventId: string; eventOccurrence: string; data: EventInstanceStateSet },
 	TContext
 > => {
-	return useMutation(getSetRecurringInstanceStateMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getSetRecurringInstanceStateMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };

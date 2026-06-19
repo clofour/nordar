@@ -9,7 +9,9 @@ import type {
 	DataTag,
 	DefinedInitialDataOptions,
 	DefinedUseQueryResult,
+	InvalidateOptions,
 	MutationFunction,
+	MutationFunctionContext,
 	QueryClient,
 	QueryFunction,
 	QueryKey,
@@ -19,7 +21,7 @@ import type {
 	UseQueryOptions,
 	UseQueryResult,
 } from "@tanstack/react-query";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { cFetch } from "../../../other/cfetch";
 import type {
 	BearingCreate,
@@ -58,7 +60,7 @@ export const listGoals = async (options?: RequestInit): Promise<listGoalsRespons
 };
 
 export const getListGoalsQueryKey = () => {
-	return [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/List`] as const;
+	return ["listGoals"] as const;
 };
 
 export const getListGoalsQueryOptions = <TData = Awaited<ReturnType<typeof listGoals>>, TError = unknown>(options?: {
@@ -111,6 +113,12 @@ export function useListGoals<TData = Awaited<ReturnType<typeof listGoals>>, TErr
 	return { ...query, queryKey: queryOptions.queryKey };
 }
 
+export const invalidateListGoals = async (queryClient: QueryClient, options?: InvalidateOptions): Promise<QueryClient> => {
+	await queryClient.invalidateQueries({ queryKey: getListGoalsQueryKey() }, options);
+
+	return queryClient;
+};
+
 export type goalStatsResponse200 = {
 	data: GoalStats;
 	status: 200;
@@ -134,7 +142,7 @@ export const goalStats = async (options?: RequestInit): Promise<goalStatsRespons
 };
 
 export const getGoalStatsQueryKey = () => {
-	return [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/Stats`] as const;
+	return ["goalStats"] as const;
 };
 
 export const getGoalStatsQueryOptions = <TData = Awaited<ReturnType<typeof goalStats>>, TError = unknown>(options?: {
@@ -187,6 +195,12 @@ export function useGoalStats<TData = Awaited<ReturnType<typeof goalStats>>, TErr
 	return { ...query, queryKey: queryOptions.queryKey };
 }
 
+export const invalidateGoalStats = async (queryClient: QueryClient, options?: InvalidateOptions): Promise<QueryClient> => {
+	await queryClient.invalidateQueries({ queryKey: getGoalStatsQueryKey() }, options);
+
+	return queryClient;
+};
+
 export type createNorthStarResponse200 = {
 	data: void;
 	status: 200;
@@ -211,10 +225,14 @@ export const createNorthStar = async (northStarCreate: NorthStarCreate, options?
 	});
 };
 
-export const getCreateNorthStarMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof createNorthStar>>, TError, { data: NorthStarCreate }, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof createNorthStar>>, TError, { data: NorthStarCreate }, TContext> => {
+export const getCreateNorthStarMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createNorthStar>>, TError, { data: NorthStarCreate }, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof createNorthStar>>, TError, { data: NorthStarCreate }, TContext> => {
 	const mutationKey = ["createNorthStar"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -228,7 +246,20 @@ export const getCreateNorthStarMutationOptions = <TError = unknown, TContext = u
 		return createNorthStar(data, requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof createNorthStar>>,
+		variables: { data: NorthStarCreate },
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getListGoalsQueryKey() });
+			queryClient.invalidateQueries({ queryKey: getGoalStatsQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type CreateNorthStarMutationResult = NonNullable<Awaited<ReturnType<typeof createNorthStar>>>;
@@ -238,11 +269,13 @@ export type CreateNorthStarMutationError = unknown;
 export const useCreateNorthStar = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createNorthStar>>, TError, { data: NorthStarCreate }, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof createNorthStar>>, TError, { data: NorthStarCreate }, TContext> => {
-	return useMutation(getCreateNorthStarMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getCreateNorthStarMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type createBearingResponse200 = {
 	data: void;
@@ -268,10 +301,14 @@ export const createBearing = async (bearingCreate: BearingCreate, options?: Requ
 	});
 };
 
-export const getCreateBearingMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof createBearing>>, TError, { data: BearingCreate }, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof createBearing>>, TError, { data: BearingCreate }, TContext> => {
+export const getCreateBearingMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createBearing>>, TError, { data: BearingCreate }, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof createBearing>>, TError, { data: BearingCreate }, TContext> => {
 	const mutationKey = ["createBearing"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -285,7 +322,20 @@ export const getCreateBearingMutationOptions = <TError = unknown, TContext = unk
 		return createBearing(data, requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof createBearing>>,
+		variables: { data: BearingCreate },
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getListGoalsQueryKey() });
+			queryClient.invalidateQueries({ queryKey: getGoalStatsQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type CreateBearingMutationResult = NonNullable<Awaited<ReturnType<typeof createBearing>>>;
@@ -295,11 +345,13 @@ export type CreateBearingMutationError = unknown;
 export const useCreateBearing = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createBearing>>, TError, { data: BearingCreate }, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof createBearing>>, TError, { data: BearingCreate }, TContext> => {
-	return useMutation(getCreateBearingMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getCreateBearingMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type createMovementResponse200 = {
 	data: void;
@@ -325,10 +377,14 @@ export const createMovement = async (movementCreate: MovementCreate, options?: R
 	});
 };
 
-export const getCreateMovementMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof createMovement>>, TError, { data: MovementCreate }, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof createMovement>>, TError, { data: MovementCreate }, TContext> => {
+export const getCreateMovementMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createMovement>>, TError, { data: MovementCreate }, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof createMovement>>, TError, { data: MovementCreate }, TContext> => {
 	const mutationKey = ["createMovement"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -342,7 +398,20 @@ export const getCreateMovementMutationOptions = <TError = unknown, TContext = un
 		return createMovement(data, requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof createMovement>>,
+		variables: { data: MovementCreate },
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getListGoalsQueryKey() });
+			queryClient.invalidateQueries({ queryKey: getGoalStatsQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type CreateMovementMutationResult = NonNullable<Awaited<ReturnType<typeof createMovement>>>;
@@ -352,11 +421,13 @@ export type CreateMovementMutationError = unknown;
 export const useCreateMovement = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createMovement>>, TError, { data: MovementCreate }, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof createMovement>>, TError, { data: MovementCreate }, TContext> => {
-	return useMutation(getCreateMovementMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getCreateMovementMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type updateNorthStarResponse200 = {
 	data: void;
@@ -382,10 +453,14 @@ export const updateNorthStar = async (id: string, northStarUpdate: NorthStarUpda
 	});
 };
 
-export const getUpdateNorthStarMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateNorthStar>>, TError, { id: string; data: NorthStarUpdate }, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof updateNorthStar>>, TError, { id: string; data: NorthStarUpdate }, TContext> => {
+export const getUpdateNorthStarMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateNorthStar>>, TError, { id: string; data: NorthStarUpdate }, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof updateNorthStar>>, TError, { id: string; data: NorthStarUpdate }, TContext> => {
 	const mutationKey = ["updateNorthStar"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -399,7 +474,20 @@ export const getUpdateNorthStarMutationOptions = <TError = unknown, TContext = u
 		return updateNorthStar(id, data, requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof updateNorthStar>>,
+		variables: { id: string; data: NorthStarUpdate },
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getListGoalsQueryKey() });
+			queryClient.invalidateQueries({ queryKey: getGoalStatsQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type UpdateNorthStarMutationResult = NonNullable<Awaited<ReturnType<typeof updateNorthStar>>>;
@@ -409,11 +497,13 @@ export type UpdateNorthStarMutationError = unknown;
 export const useUpdateNorthStar = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateNorthStar>>, TError, { id: string; data: NorthStarUpdate }, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof updateNorthStar>>, TError, { id: string; data: NorthStarUpdate }, TContext> => {
-	return useMutation(getUpdateNorthStarMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getUpdateNorthStarMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type updateBearingResponse200 = {
 	data: void;
@@ -439,10 +529,14 @@ export const updateBearing = async (id: string, bearingUpdate: BearingUpdate, op
 	});
 };
 
-export const getUpdateBearingMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateBearing>>, TError, { id: string; data: BearingUpdate }, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof updateBearing>>, TError, { id: string; data: BearingUpdate }, TContext> => {
+export const getUpdateBearingMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateBearing>>, TError, { id: string; data: BearingUpdate }, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof updateBearing>>, TError, { id: string; data: BearingUpdate }, TContext> => {
 	const mutationKey = ["updateBearing"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -456,7 +550,20 @@ export const getUpdateBearingMutationOptions = <TError = unknown, TContext = unk
 		return updateBearing(id, data, requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof updateBearing>>,
+		variables: { id: string; data: BearingUpdate },
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getListGoalsQueryKey() });
+			queryClient.invalidateQueries({ queryKey: getGoalStatsQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type UpdateBearingMutationResult = NonNullable<Awaited<ReturnType<typeof updateBearing>>>;
@@ -466,11 +573,13 @@ export type UpdateBearingMutationError = unknown;
 export const useUpdateBearing = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateBearing>>, TError, { id: string; data: BearingUpdate }, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof updateBearing>>, TError, { id: string; data: BearingUpdate }, TContext> => {
-	return useMutation(getUpdateBearingMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getUpdateBearingMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type updateMovementResponse200 = {
 	data: void;
@@ -496,10 +605,14 @@ export const updateMovement = async (id: string, movementUpdate: MovementUpdate,
 	});
 };
 
-export const getUpdateMovementMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateMovement>>, TError, { id: string; data: MovementUpdate }, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof updateMovement>>, TError, { id: string; data: MovementUpdate }, TContext> => {
+export const getUpdateMovementMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateMovement>>, TError, { id: string; data: MovementUpdate }, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof updateMovement>>, TError, { id: string; data: MovementUpdate }, TContext> => {
 	const mutationKey = ["updateMovement"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -513,7 +626,20 @@ export const getUpdateMovementMutationOptions = <TError = unknown, TContext = un
 		return updateMovement(id, data, requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof updateMovement>>,
+		variables: { id: string; data: MovementUpdate },
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getListGoalsQueryKey() });
+			queryClient.invalidateQueries({ queryKey: getGoalStatsQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type UpdateMovementMutationResult = NonNullable<Awaited<ReturnType<typeof updateMovement>>>;
@@ -523,11 +649,13 @@ export type UpdateMovementMutationError = unknown;
 export const useUpdateMovement = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateMovement>>, TError, { id: string; data: MovementUpdate }, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof updateMovement>>, TError, { id: string; data: MovementUpdate }, TContext> => {
-	return useMutation(getUpdateMovementMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getUpdateMovementMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
 export type deleteGoalResponse200 = {
 	data: void;
@@ -563,10 +691,14 @@ export const deleteGoal = async (params?: DeleteGoalParams, options?: RequestIni
 	});
 };
 
-export const getDeleteGoalMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-	mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteGoal>>, TError, { params?: DeleteGoalParams }, TContext>;
-	request?: SecondParameter<typeof cFetch>;
-}): UseMutationOptions<Awaited<ReturnType<typeof deleteGoal>>, TError, { params?: DeleteGoalParams }, TContext> => {
+export const getDeleteGoalMutationOptions = <TError = unknown, TContext = unknown>(
+	queryClient: QueryClient,
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteGoal>>, TError, { params?: DeleteGoalParams }, TContext>;
+		skipInvalidation?: boolean;
+		request?: SecondParameter<typeof cFetch>;
+	},
+): UseMutationOptions<Awaited<ReturnType<typeof deleteGoal>>, TError, { params?: DeleteGoalParams }, TContext> => {
 	const mutationKey = ["deleteGoal"];
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
@@ -580,7 +712,20 @@ export const getDeleteGoalMutationOptions = <TError = unknown, TContext = unknow
 		return deleteGoal(params, requestOptions);
 	};
 
-	return { mutationFn, ...mutationOptions };
+	const onSuccess = (
+		data: Awaited<ReturnType<typeof deleteGoal>>,
+		variables: { params?: DeleteGoalParams },
+		onMutateResult: TContext,
+		context: MutationFunctionContext,
+	) => {
+		if (!options?.skipInvalidation) {
+			queryClient.invalidateQueries({ queryKey: getListGoalsQueryKey() });
+			queryClient.invalidateQueries({ queryKey: getGoalStatsQueryKey() });
+		}
+		mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
+	};
+
+	return { ...mutationOptions, mutationFn, onSuccess };
 };
 
 export type DeleteGoalMutationResult = NonNullable<Awaited<ReturnType<typeof deleteGoal>>>;
@@ -590,9 +735,11 @@ export type DeleteGoalMutationError = unknown;
 export const useDeleteGoal = <TError = unknown, TContext = unknown>(
 	options?: {
 		mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteGoal>>, TError, { params?: DeleteGoalParams }, TContext>;
+		skipInvalidation?: boolean;
 		request?: SecondParameter<typeof cFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<Awaited<ReturnType<typeof deleteGoal>>, TError, { params?: DeleteGoalParams }, TContext> => {
-	return useMutation(getDeleteGoalMutationOptions(options), queryClient);
+	const backupQueryClient = useQueryClient();
+	return useMutation(getDeleteGoalMutationOptions(queryClient ?? backupQueryClient, options), queryClient);
 };
