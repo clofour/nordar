@@ -1,5 +1,4 @@
 locals {
-    network = yamldecode(file("${path.module}/../shared/network.yaml"))
     ports = local.network.ports
 }
 
