@@ -25,7 +25,19 @@ import { resolver, theme } from "./data/theme";
 const rootElement = document.getElementById("root");
 assert(rootElement != null, "Root element cannot be null.");
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			refetchInterval: false,
+			refetchOnWindowFocus: false,
+			refetchOnReconnect: true,
+			staleTime: 0,
+			gcTime: 5 * 60 * 1000,
+			retry: 2,
+			retryDelay: 3000
+		}
+	}
+});
 
 function AnyTheme() {
 	return (
