@@ -32,7 +32,7 @@ export const theme = createTheme({
 		Card: {
 			styles: {
 				root: {
-					"backgroundColor": "var(--mantine-color-body)",
+					backgroundColor: "var(--mantine-color-body)",
 				},
 			},
 		},
@@ -59,12 +59,12 @@ export const theme = createTheme({
 				mint: "#7eecd4",
 				lavender: "#c4b0ff",
 				backgroundLight: "#05050f",
-				backgroundDark: "#04040c"
+				backgroundDark: "#04040c",
 			},
 			fonts: {
 				primary: "Space Grotesk",
-				secondary: "Inter"
-			}
+				secondary: "Inter",
+			},
 		},
 		app: {
 			colors: {
@@ -77,9 +77,9 @@ export const theme = createTheme({
 					high: "var(--mantine-color-red-6)",
 					none: "var(--mantine-color-gray-6)",
 				},
-				event: "blue"
-			}
-		}
+				event: "blue",
+			},
+		},
 	},
 } as const);
 
@@ -126,10 +126,9 @@ export const resolver: CSSVariablesResolver = (theme) => {
 			"--app-color-priority-high": app.colors.priority.high,
 			"--app-color-priority-none": app.colors.priority.none,
 
-			"--app-color-event": app.colors.event
-
+			"--app-color-event": app.colors.event,
 		},
 		light: {},
 		dark: {},
-	}
+	};
 };

@@ -115,11 +115,15 @@ export default function Goals() {
 			<Grid>
 				<Grid.Col span={3}>
 					<Stack gap="sm">
-						<DataStateWrapper isLoading={isLoading} isEmpty={response?.data.length == 0} emptyProps={{
-							Icon: IconStar,
-							text: "No goals yet",
-							description: "All your goals will show up here. Add one to get started."
-						}}>
+						<DataStateWrapper
+							isLoading={isLoading}
+							isEmpty={response?.data.length == 0}
+							emptyProps={{
+								Icon: IconStar,
+								text: "No goals yet",
+								description: "All your goals will show up here. Add one to get started.",
+							}}
+						>
 							{response &&
 								response.data.map((star) => (
 									<Stack key={star.id}>
@@ -157,7 +161,11 @@ export default function Goals() {
 															<Stack
 																gap="xs"
 																pl="lg"
-																style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderLeftColor: otherTheme.app.colors.goals[GoalType.Bearing] }}
+																style={{
+																	borderLeftWidth: "2px",
+																	borderLeftStyle: "solid",
+																	borderLeftColor: otherTheme.app.colors.goals[GoalType.Bearing],
+																}}
 															>
 																{bearing.movements &&
 																	bearing.movements.map((movement) => (

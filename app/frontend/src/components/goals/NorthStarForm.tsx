@@ -34,7 +34,6 @@ export default function NorthStarForm({ mode, id, initialValues }: NorthStarForm
 		const response = mode == Mode.Create ? await createNorthStar(values) : await updateNorthStar(id, values);
 
 		if (response.status === 200) {
-			
 		} else {
 			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
 		}

@@ -33,7 +33,7 @@ function AnyTheme() {
 			<Notifications containerWidth="25%" />
 			<Outlet />
 		</MantineProvider>
-	)
+	);
 }
 
 function DarkTheme() {
@@ -42,7 +42,7 @@ function DarkTheme() {
 			<Notifications containerWidth="25%" />
 			<Outlet />
 		</MantineProvider>
-	)
+	);
 }
 
 createRoot(rootElement).render(

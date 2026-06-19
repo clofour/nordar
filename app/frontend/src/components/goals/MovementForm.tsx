@@ -48,7 +48,6 @@ export default function MovementForm({ mode, id, parentId, initialValues }: Move
 		}
 
 		if (response.status === 200) {
-			
 		} else {
 			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
 		}

@@ -103,7 +103,7 @@ export default function ReflectionForm({ close, initialValues }: ReflectionFormP
 
 			for (const value of values[processableKey]) {
 				const trimmedValue = value.trim();
-				
+
 				if (trimmedValue != "") {
 					processedValue.push(trimmedValue);
 				}

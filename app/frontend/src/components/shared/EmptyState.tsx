@@ -20,9 +20,7 @@ export default function EmptyState({ Icon, text, description, cta, onCtaClick }:
 					<Text c="dimmed">{description}</Text>
 				</Stack>
 
-				{cta && (
-					<Button onClick={onCtaClick}>{cta}</Button>
-				)}
+				{cta && <Button onClick={onCtaClick}>{cta}</Button>}
 			</Stack>
 		</Paper>
 	);
