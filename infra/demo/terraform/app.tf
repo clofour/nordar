@@ -81,7 +81,7 @@ resource "digitalocean_app" "main" {
                 value = "https://${var.frontend_subdomain}.${var.domain}"
             }
 
-            instance_count = 2
+            instance_count = 1
             instance_size_slug = "apps-s-1vcpu-1gb"
 
             github {
