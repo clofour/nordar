@@ -17,7 +17,7 @@ export default function EventsToday() {
 	const dayEnd = new Date();
 	dayEnd.setHours(23, 59, 59, 999);
 
-	const { data: response, error, isLoading, mutate } = useListEvents();
+	const { data: response, error, isLoading } = useListEvents();
 	const events = response?.data ?? [];
 	const preprocessedEvents = events.map((event) => ({
 		...event,

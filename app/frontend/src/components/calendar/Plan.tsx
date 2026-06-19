@@ -10,7 +10,7 @@ interface PlanProps {
 }
 
 export default function Plan({ createEvent }: PlanProps) {
-	const { data: response, error, isLoading, mutate } = useListEvents();
+	const { data: response, error, isLoading } = useListEvents();
 
 	const events = response?.data.map((event) => ({
 		...event,

@@ -5,7 +5,7 @@ import SummaryCard from "./SummaryCard";
 import DataStateWrapper from "../shared/DataStateWrapper";
 
 export default function DailySummary() {
-	const { data: response, error, isLoading, mutate } = useGoalStats();
+	const { data: response, error, isLoading } = useGoalStats();
 	const goalStats = response?.data;
 
 	const summaryCardData = [

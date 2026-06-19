@@ -54,7 +54,7 @@ export default function Goals() {
 		type: GoalType.NorthStar,
 	});
 
-	const { data: response, error, isLoading, mutate } = useListGoals();
+	const { data: response, error, isLoading } = useListGoals();
 	const goals = response?.data ?? [];
 
 	const goalIndex = useMemo(() => {

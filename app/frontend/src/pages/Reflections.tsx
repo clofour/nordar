@@ -11,7 +11,7 @@ import { IconArrowNarrowRight, IconMinus, IconNotes, IconPlus } from "@tabler/ic
 export default function Reflections() {
 	const [opened, { open, close }] = useDisclosure(false);
 
-	const { data: response, error, isLoading, mutate } = useListReflections();
+	const { data: response, error, isLoading } = useListReflections();
 	const reflections = response?.data ?? [];
 
 	const aspects = [
