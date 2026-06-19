@@ -5,10 +5,21 @@
  * OpenAPI spec version: 1.0.0
  */
 
-import type { Arguments, Key, SWRConfiguration } from "swr";
-import useSwr from "swr";
-import type { SWRMutationConfiguration } from "swr/mutation";
-import useSWRMutation from "swr/mutation";
+import type {
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	MutationFunction,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseMutationOptions,
+	UseMutationResult,
+	UseQueryOptions,
+	UseQueryResult,
+} from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { cFetch } from "../../../other/cfetch";
 import type {
 	BearingCreate,
@@ -46,27 +57,60 @@ export const listGoals = async (options?: RequestInit): Promise<listGoalsRespons
 	});
 };
 
-export const getListGoalsKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/List`] as const;
+export const getListGoalsQueryKey = () => {
+	return [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/List`] as const;
+};
 
-export type ListGoalsQueryResult = NonNullable<Awaited<ReturnType<typeof listGoals>>>;
-
-export const useListGoals = <TError = unknown>(options?: {
-	swr?: SWRConfiguration<Awaited<ReturnType<typeof listGoals>>, TError> & { swrKey?: Key; enabled?: boolean };
+export const getListGoalsQueryOptions = <TData = Awaited<ReturnType<typeof listGoals>>, TError = unknown>(options?: {
+	query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listGoals>>, TError, TData>>;
 	request?: SecondParameter<typeof cFetch>;
 }) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const isEnabled = swrOptions?.enabled !== false;
-	const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getListGoalsKey() : null));
-	const swrFn = () => listGoals(requestOptions);
+	const queryKey = queryOptions?.queryKey ?? getListGoalsQueryKey();
 
-	const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof listGoals>>> = ({ signal }) => listGoals({ signal, ...requestOptions });
 
-	return {
-		swrKey,
-		...query,
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<Awaited<ReturnType<typeof listGoals>>, TError, TData> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
 	};
 };
+
+export type ListGoalsQueryResult = NonNullable<Awaited<ReturnType<typeof listGoals>>>;
+export type ListGoalsQueryError = unknown;
+
+export function useListGoals<TData = Awaited<ReturnType<typeof listGoals>>, TError = unknown>(
+	options: {
+		query: Partial<UseQueryOptions<Awaited<ReturnType<typeof listGoals>>, TError, TData>> &
+			Pick<DefinedInitialDataOptions<Awaited<ReturnType<typeof listGoals>>, TError, Awaited<ReturnType<typeof listGoals>>>, "initialData">;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useListGoals<TData = Awaited<ReturnType<typeof listGoals>>, TError = unknown>(
+	options?: {
+		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listGoals>>, TError, TData>> &
+			Pick<UndefinedInitialDataOptions<Awaited<ReturnType<typeof listGoals>>, TError, Awaited<ReturnType<typeof listGoals>>>, "initialData">;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useListGoals<TData = Awaited<ReturnType<typeof listGoals>>, TError = unknown>(
+	options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listGoals>>, TError, TData>>; request?: SecondParameter<typeof cFetch> },
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+export function useListGoals<TData = Awaited<ReturnType<typeof listGoals>>, TError = unknown>(
+	options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listGoals>>, TError, TData>>; request?: SecondParameter<typeof cFetch> },
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+	const queryOptions = getListGoalsQueryOptions(options);
+
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+	return { ...query, queryKey: queryOptions.queryKey };
+}
+
 export type goalStatsResponse200 = {
 	data: GoalStats;
 	status: 200;
@@ -89,27 +133,60 @@ export const goalStats = async (options?: RequestInit): Promise<goalStatsRespons
 	});
 };
 
-export const getGoalStatsKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/Stats`] as const;
+export const getGoalStatsQueryKey = () => {
+	return [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/Stats`] as const;
+};
 
-export type GoalStatsQueryResult = NonNullable<Awaited<ReturnType<typeof goalStats>>>;
-
-export const useGoalStats = <TError = unknown>(options?: {
-	swr?: SWRConfiguration<Awaited<ReturnType<typeof goalStats>>, TError> & { swrKey?: Key; enabled?: boolean };
+export const getGoalStatsQueryOptions = <TData = Awaited<ReturnType<typeof goalStats>>, TError = unknown>(options?: {
+	query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof goalStats>>, TError, TData>>;
 	request?: SecondParameter<typeof cFetch>;
 }) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const isEnabled = swrOptions?.enabled !== false;
-	const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getGoalStatsKey() : null));
-	const swrFn = () => goalStats(requestOptions);
+	const queryKey = queryOptions?.queryKey ?? getGoalStatsQueryKey();
 
-	const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof goalStats>>> = ({ signal }) => goalStats({ signal, ...requestOptions });
 
-	return {
-		swrKey,
-		...query,
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<Awaited<ReturnType<typeof goalStats>>, TError, TData> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
 	};
 };
+
+export type GoalStatsQueryResult = NonNullable<Awaited<ReturnType<typeof goalStats>>>;
+export type GoalStatsQueryError = unknown;
+
+export function useGoalStats<TData = Awaited<ReturnType<typeof goalStats>>, TError = unknown>(
+	options: {
+		query: Partial<UseQueryOptions<Awaited<ReturnType<typeof goalStats>>, TError, TData>> &
+			Pick<DefinedInitialDataOptions<Awaited<ReturnType<typeof goalStats>>, TError, Awaited<ReturnType<typeof goalStats>>>, "initialData">;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGoalStats<TData = Awaited<ReturnType<typeof goalStats>>, TError = unknown>(
+	options?: {
+		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof goalStats>>, TError, TData>> &
+			Pick<UndefinedInitialDataOptions<Awaited<ReturnType<typeof goalStats>>, TError, Awaited<ReturnType<typeof goalStats>>>, "initialData">;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGoalStats<TData = Awaited<ReturnType<typeof goalStats>>, TError = unknown>(
+	options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof goalStats>>, TError, TData>>; request?: SecondParameter<typeof cFetch> },
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+export function useGoalStats<TData = Awaited<ReturnType<typeof goalStats>>, TError = unknown>(
+	options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof goalStats>>, TError, TData>>; request?: SecondParameter<typeof cFetch> },
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+	const queryOptions = getGoalStatsQueryOptions(options);
+
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+	return { ...query, queryKey: queryOptions.queryKey };
+}
+
 export type createNorthStarResponse200 = {
 	data: void;
 	status: 200;
@@ -134,36 +211,38 @@ export const createNorthStar = async (northStarCreate: NorthStarCreate, options?
 	});
 };
 
-export const getCreateNorthStarMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, { arg }: { arg: NorthStarCreate }) => {
-		return createNorthStar(arg, options);
+export const getCreateNorthStarMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+	mutation?: UseMutationOptions<Awaited<ReturnType<typeof createNorthStar>>, TError, { data: NorthStarCreate }, TContext>;
+	request?: SecondParameter<typeof cFetch>;
+}): UseMutationOptions<Awaited<ReturnType<typeof createNorthStar>>, TError, { data: NorthStarCreate }, TContext> => {
+	const mutationKey = ["createNorthStar"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<Awaited<ReturnType<typeof createNorthStar>>, { data: NorthStarCreate }> = (props) => {
+		const { data } = props ?? {};
+
+		return createNorthStar(data, requestOptions);
 	};
+
+	return { mutationFn, ...mutationOptions };
 };
-export const getCreateNorthStarMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateNorthStar`] as const;
 
 export type CreateNorthStarMutationResult = NonNullable<Awaited<ReturnType<typeof createNorthStar>>>;
+export type CreateNorthStarMutationBody = NorthStarCreate;
+export type CreateNorthStarMutationError = unknown;
 
-export const useCreateNorthStar = <TError = unknown>(options?: {
-	swr?: SWRMutationConfiguration<
-		Awaited<ReturnType<typeof createNorthStar>>,
-		TError,
-		Key,
-		NorthStarCreate,
-		Awaited<ReturnType<typeof createNorthStar>>
-	> & { swrKey?: string };
-	request?: SecondParameter<typeof cFetch>;
-}) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
-
-	const swrKey = swrOptions?.swrKey ?? getCreateNorthStarMutationKey();
-	const swrFn = getCreateNorthStarMutationFetcher(requestOptions);
-
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
-
-	return {
-		swrKey,
-		...query,
-	};
+export const useCreateNorthStar = <TError = unknown, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createNorthStar>>, TError, { data: NorthStarCreate }, TContext>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof createNorthStar>>, TError, { data: NorthStarCreate }, TContext> => {
+	return useMutation(getCreateNorthStarMutationOptions(options), queryClient);
 };
 export type createBearingResponse200 = {
 	data: void;
@@ -189,32 +268,38 @@ export const createBearing = async (bearingCreate: BearingCreate, options?: Requ
 	});
 };
 
-export const getCreateBearingMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, { arg }: { arg: BearingCreate }) => {
-		return createBearing(arg, options);
+export const getCreateBearingMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+	mutation?: UseMutationOptions<Awaited<ReturnType<typeof createBearing>>, TError, { data: BearingCreate }, TContext>;
+	request?: SecondParameter<typeof cFetch>;
+}): UseMutationOptions<Awaited<ReturnType<typeof createBearing>>, TError, { data: BearingCreate }, TContext> => {
+	const mutationKey = ["createBearing"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<Awaited<ReturnType<typeof createBearing>>, { data: BearingCreate }> = (props) => {
+		const { data } = props ?? {};
+
+		return createBearing(data, requestOptions);
 	};
+
+	return { mutationFn, ...mutationOptions };
 };
-export const getCreateBearingMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateBearing`] as const;
 
 export type CreateBearingMutationResult = NonNullable<Awaited<ReturnType<typeof createBearing>>>;
+export type CreateBearingMutationBody = BearingCreate;
+export type CreateBearingMutationError = unknown;
 
-export const useCreateBearing = <TError = unknown>(options?: {
-	swr?: SWRMutationConfiguration<Awaited<ReturnType<typeof createBearing>>, TError, Key, BearingCreate, Awaited<ReturnType<typeof createBearing>>> & {
-		swrKey?: string;
-	};
-	request?: SecondParameter<typeof cFetch>;
-}) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
-
-	const swrKey = swrOptions?.swrKey ?? getCreateBearingMutationKey();
-	const swrFn = getCreateBearingMutationFetcher(requestOptions);
-
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
-
-	return {
-		swrKey,
-		...query,
-	};
+export const useCreateBearing = <TError = unknown, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createBearing>>, TError, { data: BearingCreate }, TContext>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof createBearing>>, TError, { data: BearingCreate }, TContext> => {
+	return useMutation(getCreateBearingMutationOptions(options), queryClient);
 };
 export type createMovementResponse200 = {
 	data: void;
@@ -240,36 +325,38 @@ export const createMovement = async (movementCreate: MovementCreate, options?: R
 	});
 };
 
-export const getCreateMovementMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, { arg }: { arg: MovementCreate }) => {
-		return createMovement(arg, options);
+export const getCreateMovementMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+	mutation?: UseMutationOptions<Awaited<ReturnType<typeof createMovement>>, TError, { data: MovementCreate }, TContext>;
+	request?: SecondParameter<typeof cFetch>;
+}): UseMutationOptions<Awaited<ReturnType<typeof createMovement>>, TError, { data: MovementCreate }, TContext> => {
+	const mutationKey = ["createMovement"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<Awaited<ReturnType<typeof createMovement>>, { data: MovementCreate }> = (props) => {
+		const { data } = props ?? {};
+
+		return createMovement(data, requestOptions);
 	};
+
+	return { mutationFn, ...mutationOptions };
 };
-export const getCreateMovementMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/CreateMovement`] as const;
 
 export type CreateMovementMutationResult = NonNullable<Awaited<ReturnType<typeof createMovement>>>;
+export type CreateMovementMutationBody = MovementCreate;
+export type CreateMovementMutationError = unknown;
 
-export const useCreateMovement = <TError = unknown>(options?: {
-	swr?: SWRMutationConfiguration<
-		Awaited<ReturnType<typeof createMovement>>,
-		TError,
-		Key,
-		MovementCreate,
-		Awaited<ReturnType<typeof createMovement>>
-	> & { swrKey?: string };
-	request?: SecondParameter<typeof cFetch>;
-}) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
-
-	const swrKey = swrOptions?.swrKey ?? getCreateMovementMutationKey();
-	const swrFn = getCreateMovementMutationFetcher(requestOptions);
-
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
-
-	return {
-		swrKey,
-		...query,
-	};
+export const useCreateMovement = <TError = unknown, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createMovement>>, TError, { data: MovementCreate }, TContext>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof createMovement>>, TError, { data: MovementCreate }, TContext> => {
+	return useMutation(getCreateMovementMutationOptions(options), queryClient);
 };
 export type updateNorthStarResponse200 = {
 	data: void;
@@ -295,39 +382,38 @@ export const updateNorthStar = async (id: string, northStarUpdate: NorthStarUpda
 	});
 };
 
-export const getUpdateNorthStarMutationFetcher = (id: string, options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, { arg }: { arg: NorthStarUpdate }) => {
-		return updateNorthStar(id, arg, options);
+export const getUpdateNorthStarMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+	mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateNorthStar>>, TError, { id: string; data: NorthStarUpdate }, TContext>;
+	request?: SecondParameter<typeof cFetch>;
+}): UseMutationOptions<Awaited<ReturnType<typeof updateNorthStar>>, TError, { id: string; data: NorthStarUpdate }, TContext> => {
+	const mutationKey = ["updateNorthStar"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateNorthStar>>, { id: string; data: NorthStarUpdate }> = (props) => {
+		const { id, data } = props ?? {};
+
+		return updateNorthStar(id, data, requestOptions);
 	};
+
+	return { mutationFn, ...mutationOptions };
 };
-export const getUpdateNorthStarMutationKey = (id: string) => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/UpdateNorthStar/${id}`] as const;
 
 export type UpdateNorthStarMutationResult = NonNullable<Awaited<ReturnType<typeof updateNorthStar>>>;
+export type UpdateNorthStarMutationBody = NorthStarUpdate;
+export type UpdateNorthStarMutationError = unknown;
 
-export const useUpdateNorthStar = <TError = unknown>(
-	id: string,
+export const useUpdateNorthStar = <TError = unknown, TContext = unknown>(
 	options?: {
-		swr?: SWRMutationConfiguration<
-			Awaited<ReturnType<typeof updateNorthStar>>,
-			TError,
-			Key,
-			NorthStarUpdate,
-			Awaited<ReturnType<typeof updateNorthStar>>
-		> & { swrKey?: string };
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateNorthStar>>, TError, { id: string; data: NorthStarUpdate }, TContext>;
 		request?: SecondParameter<typeof cFetch>;
 	},
-) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
-
-	const swrKey = swrOptions?.swrKey ?? getUpdateNorthStarMutationKey(id);
-	const swrFn = getUpdateNorthStarMutationFetcher(id, requestOptions);
-
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
-
-	return {
-		swrKey,
-		...query,
-	};
+	queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof updateNorthStar>>, TError, { id: string; data: NorthStarUpdate }, TContext> => {
+	return useMutation(getUpdateNorthStarMutationOptions(options), queryClient);
 };
 export type updateBearingResponse200 = {
 	data: void;
@@ -353,39 +439,38 @@ export const updateBearing = async (id: string, bearingUpdate: BearingUpdate, op
 	});
 };
 
-export const getUpdateBearingMutationFetcher = (id: string, options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, { arg }: { arg: BearingUpdate }) => {
-		return updateBearing(id, arg, options);
+export const getUpdateBearingMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+	mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateBearing>>, TError, { id: string; data: BearingUpdate }, TContext>;
+	request?: SecondParameter<typeof cFetch>;
+}): UseMutationOptions<Awaited<ReturnType<typeof updateBearing>>, TError, { id: string; data: BearingUpdate }, TContext> => {
+	const mutationKey = ["updateBearing"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateBearing>>, { id: string; data: BearingUpdate }> = (props) => {
+		const { id, data } = props ?? {};
+
+		return updateBearing(id, data, requestOptions);
 	};
+
+	return { mutationFn, ...mutationOptions };
 };
-export const getUpdateBearingMutationKey = (id: string) => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/UpdateBearing/${id}`] as const;
 
 export type UpdateBearingMutationResult = NonNullable<Awaited<ReturnType<typeof updateBearing>>>;
+export type UpdateBearingMutationBody = BearingUpdate;
+export type UpdateBearingMutationError = unknown;
 
-export const useUpdateBearing = <TError = unknown>(
-	id: string,
+export const useUpdateBearing = <TError = unknown, TContext = unknown>(
 	options?: {
-		swr?: SWRMutationConfiguration<
-			Awaited<ReturnType<typeof updateBearing>>,
-			TError,
-			Key,
-			BearingUpdate,
-			Awaited<ReturnType<typeof updateBearing>>
-		> & { swrKey?: string };
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateBearing>>, TError, { id: string; data: BearingUpdate }, TContext>;
 		request?: SecondParameter<typeof cFetch>;
 	},
-) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
-
-	const swrKey = swrOptions?.swrKey ?? getUpdateBearingMutationKey(id);
-	const swrFn = getUpdateBearingMutationFetcher(id, requestOptions);
-
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
-
-	return {
-		swrKey,
-		...query,
-	};
+	queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof updateBearing>>, TError, { id: string; data: BearingUpdate }, TContext> => {
+	return useMutation(getUpdateBearingMutationOptions(options), queryClient);
 };
 export type updateMovementResponse200 = {
 	data: void;
@@ -411,39 +496,38 @@ export const updateMovement = async (id: string, movementUpdate: MovementUpdate,
 	});
 };
 
-export const getUpdateMovementMutationFetcher = (id: string, options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, { arg }: { arg: MovementUpdate }) => {
-		return updateMovement(id, arg, options);
+export const getUpdateMovementMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+	mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateMovement>>, TError, { id: string; data: MovementUpdate }, TContext>;
+	request?: SecondParameter<typeof cFetch>;
+}): UseMutationOptions<Awaited<ReturnType<typeof updateMovement>>, TError, { id: string; data: MovementUpdate }, TContext> => {
+	const mutationKey = ["updateMovement"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateMovement>>, { id: string; data: MovementUpdate }> = (props) => {
+		const { id, data } = props ?? {};
+
+		return updateMovement(id, data, requestOptions);
 	};
+
+	return { mutationFn, ...mutationOptions };
 };
-export const getUpdateMovementMutationKey = (id: string) => [`${import.meta.env.VITE_API_ORIGIN}/api/Goal/UpdateMovement/${id}`] as const;
 
 export type UpdateMovementMutationResult = NonNullable<Awaited<ReturnType<typeof updateMovement>>>;
+export type UpdateMovementMutationBody = MovementUpdate;
+export type UpdateMovementMutationError = unknown;
 
-export const useUpdateMovement = <TError = unknown>(
-	id: string,
+export const useUpdateMovement = <TError = unknown, TContext = unknown>(
 	options?: {
-		swr?: SWRMutationConfiguration<
-			Awaited<ReturnType<typeof updateMovement>>,
-			TError,
-			Key,
-			MovementUpdate,
-			Awaited<ReturnType<typeof updateMovement>>
-		> & { swrKey?: string };
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateMovement>>, TError, { id: string; data: MovementUpdate }, TContext>;
 		request?: SecondParameter<typeof cFetch>;
 	},
-) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
-
-	const swrKey = swrOptions?.swrKey ?? getUpdateMovementMutationKey(id);
-	const swrFn = getUpdateMovementMutationFetcher(id, requestOptions);
-
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
-
-	return {
-		swrKey,
-		...query,
-	};
+	queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof updateMovement>>, TError, { id: string; data: MovementUpdate }, TContext> => {
+	return useMutation(getUpdateMovementMutationOptions(options), queryClient);
 };
 export type deleteGoalResponse200 = {
 	data: void;
@@ -479,34 +563,36 @@ export const deleteGoal = async (params?: DeleteGoalParams, options?: RequestIni
 	});
 };
 
-export const getDeleteGoalMutationFetcher = (params?: DeleteGoalParams, options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, __: { arg: Arguments }) => {
-		return deleteGoal(params, options);
+export const getDeleteGoalMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+	mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteGoal>>, TError, { params?: DeleteGoalParams }, TContext>;
+	request?: SecondParameter<typeof cFetch>;
+}): UseMutationOptions<Awaited<ReturnType<typeof deleteGoal>>, TError, { params?: DeleteGoalParams }, TContext> => {
+	const mutationKey = ["deleteGoal"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteGoal>>, { params?: DeleteGoalParams }> = (props) => {
+		const { params } = props ?? {};
+
+		return deleteGoal(params, requestOptions);
 	};
+
+	return { mutationFn, ...mutationOptions };
 };
-export const getDeleteGoalMutationKey = (params?: DeleteGoalParams) =>
-	[`${import.meta.env.VITE_API_ORIGIN}/api/Goal/Delete`, ...(params ? [params] : [])] as const;
 
 export type DeleteGoalMutationResult = NonNullable<Awaited<ReturnType<typeof deleteGoal>>>;
 
-export const useDeleteGoal = <TError = unknown>(
-	params?: DeleteGoalParams,
+export type DeleteGoalMutationError = unknown;
+
+export const useDeleteGoal = <TError = unknown, TContext = unknown>(
 	options?: {
-		swr?: SWRMutationConfiguration<Awaited<ReturnType<typeof deleteGoal>>, TError, Key, Arguments, Awaited<ReturnType<typeof deleteGoal>>> & {
-			swrKey?: string;
-		};
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteGoal>>, TError, { params?: DeleteGoalParams }, TContext>;
 		request?: SecondParameter<typeof cFetch>;
 	},
-) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
-
-	const swrKey = swrOptions?.swrKey ?? getDeleteGoalMutationKey(params);
-	const swrFn = getDeleteGoalMutationFetcher(params, requestOptions);
-
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
-
-	return {
-		swrKey,
-		...query,
-	};
+	queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof deleteGoal>>, TError, { params?: DeleteGoalParams }, TContext> => {
+	return useMutation(getDeleteGoalMutationOptions(options), queryClient);
 };

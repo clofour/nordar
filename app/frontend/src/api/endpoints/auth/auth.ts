@@ -5,10 +5,21 @@
  * OpenAPI spec version: 1.0.0
  */
 
-import type { Arguments, Key, SWRConfiguration } from "swr";
-import useSwr from "swr";
-import type { SWRMutationConfiguration } from "swr/mutation";
-import useSWRMutation from "swr/mutation";
+import type {
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	MutationFunction,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseMutationOptions,
+	UseMutationResult,
+	UseQueryOptions,
+	UseQueryResult,
+} from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { cFetch } from "../../../other/cfetch";
 import type { SigninForm, SignupForm } from "../../models";
 
@@ -38,32 +49,38 @@ export const signUp = async (signupForm: SignupForm, options?: RequestInit): Pro
 	});
 };
 
-export const getSignUpMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, { arg }: { arg: SignupForm }) => {
-		return signUp(arg, options);
+export const getSignUpMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+	mutation?: UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError, { data: SignupForm }, TContext>;
+	request?: SecondParameter<typeof cFetch>;
+}): UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError, { data: SignupForm }, TContext> => {
+	const mutationKey = ["signUp"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<Awaited<ReturnType<typeof signUp>>, { data: SignupForm }> = (props) => {
+		const { data } = props ?? {};
+
+		return signUp(data, requestOptions);
 	};
+
+	return { mutationFn, ...mutationOptions };
 };
-export const getSignUpMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Auth/SignUp`] as const;
 
 export type SignUpMutationResult = NonNullable<Awaited<ReturnType<typeof signUp>>>;
+export type SignUpMutationBody = SignupForm;
+export type SignUpMutationError = unknown;
 
-export const useSignUp = <TError = unknown>(options?: {
-	swr?: SWRMutationConfiguration<Awaited<ReturnType<typeof signUp>>, TError, Key, SignupForm, Awaited<ReturnType<typeof signUp>>> & {
-		swrKey?: string;
-	};
-	request?: SecondParameter<typeof cFetch>;
-}) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
-
-	const swrKey = swrOptions?.swrKey ?? getSignUpMutationKey();
-	const swrFn = getSignUpMutationFetcher(requestOptions);
-
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
-
-	return {
-		swrKey,
-		...query,
-	};
+export const useSignUp = <TError = unknown, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError, { data: SignupForm }, TContext>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof signUp>>, TError, { data: SignupForm }, TContext> => {
+	return useMutation(getSignUpMutationOptions(options), queryClient);
 };
 export type signInResponse200 = {
 	data: string;
@@ -89,32 +106,38 @@ export const signIn = async (signinForm: SigninForm, options?: RequestInit): Pro
 	});
 };
 
-export const getSignInMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, { arg }: { arg: SigninForm }) => {
-		return signIn(arg, options);
+export const getSignInMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+	mutation?: UseMutationOptions<Awaited<ReturnType<typeof signIn>>, TError, { data: SigninForm }, TContext>;
+	request?: SecondParameter<typeof cFetch>;
+}): UseMutationOptions<Awaited<ReturnType<typeof signIn>>, TError, { data: SigninForm }, TContext> => {
+	const mutationKey = ["signIn"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<Awaited<ReturnType<typeof signIn>>, { data: SigninForm }> = (props) => {
+		const { data } = props ?? {};
+
+		return signIn(data, requestOptions);
 	};
+
+	return { mutationFn, ...mutationOptions };
 };
-export const getSignInMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Auth/SignIn`] as const;
 
 export type SignInMutationResult = NonNullable<Awaited<ReturnType<typeof signIn>>>;
+export type SignInMutationBody = SigninForm;
+export type SignInMutationError = unknown;
 
-export const useSignIn = <TError = unknown>(options?: {
-	swr?: SWRMutationConfiguration<Awaited<ReturnType<typeof signIn>>, TError, Key, SigninForm, Awaited<ReturnType<typeof signIn>>> & {
-		swrKey?: string;
-	};
-	request?: SecondParameter<typeof cFetch>;
-}) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
-
-	const swrKey = swrOptions?.swrKey ?? getSignInMutationKey();
-	const swrFn = getSignInMutationFetcher(requestOptions);
-
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
-
-	return {
-		swrKey,
-		...query,
-	};
+export const useSignIn = <TError = unknown, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof signIn>>, TError, { data: SigninForm }, TContext>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof signIn>>, TError, { data: SigninForm }, TContext> => {
+	return useMutation(getSignInMutationOptions(options), queryClient);
 };
 export type signOutResponse204 = {
 	data: void;
@@ -138,32 +161,33 @@ export const signOut = async (options?: RequestInit): Promise<signOutResponse> =
 	});
 };
 
-export const getSignOutMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, __: { arg: Arguments }) => {
-		return signOut(options);
+export const getSignOutMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+	mutation?: UseMutationOptions<Awaited<ReturnType<typeof signOut>>, TError, void, TContext>;
+	request?: SecondParameter<typeof cFetch>;
+}): UseMutationOptions<Awaited<ReturnType<typeof signOut>>, TError, void, TContext> => {
+	const mutationKey = ["signOut"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<Awaited<ReturnType<typeof signOut>>, void> = () => {
+		return signOut(requestOptions);
 	};
+
+	return { mutationFn, ...mutationOptions };
 };
-export const getSignOutMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Auth/SignOut`] as const;
 
 export type SignOutMutationResult = NonNullable<Awaited<ReturnType<typeof signOut>>>;
 
-export const useSignOut = <TError = unknown>(options?: {
-	swr?: SWRMutationConfiguration<Awaited<ReturnType<typeof signOut>>, TError, Key, Arguments, Awaited<ReturnType<typeof signOut>>> & {
-		swrKey?: string;
-	};
-	request?: SecondParameter<typeof cFetch>;
-}) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
+export type SignOutMutationError = unknown;
 
-	const swrKey = swrOptions?.swrKey ?? getSignOutMutationKey();
-	const swrFn = getSignOutMutationFetcher(requestOptions);
-
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
-
-	return {
-		swrKey,
-		...query,
-	};
+export const useSignOut = <TError = unknown, TContext = unknown>(
+	options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof signOut>>, TError, void, TContext>; request?: SecondParameter<typeof cFetch> },
+	queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof signOut>>, TError, void, TContext> => {
+	return useMutation(getSignOutMutationOptions(options), queryClient);
 };
 export type isAuthenticatedResponse200 = {
 	data: string;
@@ -187,24 +211,68 @@ export const isAuthenticated = async (options?: RequestInit): Promise<isAuthenti
 	});
 };
 
-export const getIsAuthenticatedKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Auth/IsAuthenticated`] as const;
+export const getIsAuthenticatedQueryKey = () => {
+	return [`${import.meta.env.VITE_API_ORIGIN}/api/Auth/IsAuthenticated`] as const;
+};
 
-export type IsAuthenticatedQueryResult = NonNullable<Awaited<ReturnType<typeof isAuthenticated>>>;
-
-export const useIsAuthenticated = <TError = unknown>(options?: {
-	swr?: SWRConfiguration<Awaited<ReturnType<typeof isAuthenticated>>, TError> & { swrKey?: Key; enabled?: boolean };
+export const getIsAuthenticatedQueryOptions = <TData = Awaited<ReturnType<typeof isAuthenticated>>, TError = unknown>(options?: {
+	query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof isAuthenticated>>, TError, TData>>;
 	request?: SecondParameter<typeof cFetch>;
 }) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const isEnabled = swrOptions?.enabled !== false;
-	const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getIsAuthenticatedKey() : null));
-	const swrFn = () => isAuthenticated(requestOptions);
+	const queryKey = queryOptions?.queryKey ?? getIsAuthenticatedQueryKey();
 
-	const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof isAuthenticated>>> = ({ signal }) => isAuthenticated({ signal, ...requestOptions });
 
-	return {
-		swrKey,
-		...query,
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<Awaited<ReturnType<typeof isAuthenticated>>, TError, TData> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
 	};
 };
+
+export type IsAuthenticatedQueryResult = NonNullable<Awaited<ReturnType<typeof isAuthenticated>>>;
+export type IsAuthenticatedQueryError = unknown;
+
+export function useIsAuthenticated<TData = Awaited<ReturnType<typeof isAuthenticated>>, TError = unknown>(
+	options: {
+		query: Partial<UseQueryOptions<Awaited<ReturnType<typeof isAuthenticated>>, TError, TData>> &
+			Pick<
+				DefinedInitialDataOptions<Awaited<ReturnType<typeof isAuthenticated>>, TError, Awaited<ReturnType<typeof isAuthenticated>>>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useIsAuthenticated<TData = Awaited<ReturnType<typeof isAuthenticated>>, TError = unknown>(
+	options?: {
+		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof isAuthenticated>>, TError, TData>> &
+			Pick<
+				UndefinedInitialDataOptions<Awaited<ReturnType<typeof isAuthenticated>>, TError, Awaited<ReturnType<typeof isAuthenticated>>>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useIsAuthenticated<TData = Awaited<ReturnType<typeof isAuthenticated>>, TError = unknown>(
+	options?: {
+		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof isAuthenticated>>, TError, TData>>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+export function useIsAuthenticated<TData = Awaited<ReturnType<typeof isAuthenticated>>, TError = unknown>(
+	options?: {
+		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof isAuthenticated>>, TError, TData>>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+	const queryOptions = getIsAuthenticatedQueryOptions(options);
+
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+	return { ...query, queryKey: queryOptions.queryKey };
+}

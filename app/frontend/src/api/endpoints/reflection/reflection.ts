@@ -5,10 +5,21 @@
  * OpenAPI spec version: 1.0.0
  */
 
-import type { Arguments, Key, SWRConfiguration } from "swr";
-import useSwr from "swr";
-import type { SWRMutationConfiguration } from "swr/mutation";
-import useSWRMutation from "swr/mutation";
+import type {
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	MutationFunction,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseMutationOptions,
+	UseMutationResult,
+	UseQueryOptions,
+	UseQueryResult,
+} from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { cFetch } from "../../../other/cfetch";
 import type { DeleteReflectionParams, GetReflectionParams, ReflectionCreate, ReflectionGet } from "../../models";
 
@@ -48,31 +59,64 @@ export const getReflection = async (params?: GetReflectionParams, options?: Requ
 	});
 };
 
-export const getGetReflectionKey = (params?: GetReflectionParams) =>
-	[`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Get`, ...(params ? [params] : [])] as const;
+export const getGetReflectionQueryKey = (params?: GetReflectionParams) => {
+	return [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Get`, ...(params ? [params] : [])] as const;
+};
 
-export type GetReflectionQueryResult = NonNullable<Awaited<ReturnType<typeof getReflection>>>;
-
-export const useGetReflection = <TError = unknown>(
+export const getGetReflectionQueryOptions = <TData = Awaited<ReturnType<typeof getReflection>>, TError = unknown>(
 	params?: GetReflectionParams,
-	options?: {
-		swr?: SWRConfiguration<Awaited<ReturnType<typeof getReflection>>, TError> & { swrKey?: Key; enabled?: boolean };
-		request?: SecondParameter<typeof cFetch>;
-	},
+	options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getReflection>>, TError, TData>>; request?: SecondParameter<typeof cFetch> },
 ) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const isEnabled = swrOptions?.enabled !== false;
-	const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getGetReflectionKey(params) : null));
-	const swrFn = () => getReflection(params, requestOptions);
+	const queryKey = queryOptions?.queryKey ?? getGetReflectionQueryKey(params);
 
-	const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getReflection>>> = ({ signal }) => getReflection(params, { signal, ...requestOptions });
 
-	return {
-		swrKey,
-		...query,
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<Awaited<ReturnType<typeof getReflection>>, TError, TData> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
 	};
 };
+
+export type GetReflectionQueryResult = NonNullable<Awaited<ReturnType<typeof getReflection>>>;
+export type GetReflectionQueryError = unknown;
+
+export function useGetReflection<TData = Awaited<ReturnType<typeof getReflection>>, TError = unknown>(
+	params: undefined | GetReflectionParams,
+	options: {
+		query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getReflection>>, TError, TData>> &
+			Pick<DefinedInitialDataOptions<Awaited<ReturnType<typeof getReflection>>, TError, Awaited<ReturnType<typeof getReflection>>>, "initialData">;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetReflection<TData = Awaited<ReturnType<typeof getReflection>>, TError = unknown>(
+	params?: GetReflectionParams,
+	options?: {
+		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getReflection>>, TError, TData>> &
+			Pick<UndefinedInitialDataOptions<Awaited<ReturnType<typeof getReflection>>, TError, Awaited<ReturnType<typeof getReflection>>>, "initialData">;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetReflection<TData = Awaited<ReturnType<typeof getReflection>>, TError = unknown>(
+	params?: GetReflectionParams,
+	options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getReflection>>, TError, TData>>; request?: SecondParameter<typeof cFetch> },
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+export function useGetReflection<TData = Awaited<ReturnType<typeof getReflection>>, TError = unknown>(
+	params?: GetReflectionParams,
+	options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getReflection>>, TError, TData>>; request?: SecondParameter<typeof cFetch> },
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+	const queryOptions = getGetReflectionQueryOptions(params, options);
+
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+	return { ...query, queryKey: queryOptions.queryKey };
+}
+
 export type listReflectionsResponse200 = {
 	data: ReflectionGet[];
 	status: 200;
@@ -95,27 +139,72 @@ export const listReflections = async (options?: RequestInit): Promise<listReflec
 	});
 };
 
-export const getListReflectionsKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/List`] as const;
+export const getListReflectionsQueryKey = () => {
+	return [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/List`] as const;
+};
 
-export type ListReflectionsQueryResult = NonNullable<Awaited<ReturnType<typeof listReflections>>>;
-
-export const useListReflections = <TError = unknown>(options?: {
-	swr?: SWRConfiguration<Awaited<ReturnType<typeof listReflections>>, TError> & { swrKey?: Key; enabled?: boolean };
+export const getListReflectionsQueryOptions = <TData = Awaited<ReturnType<typeof listReflections>>, TError = unknown>(options?: {
+	query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listReflections>>, TError, TData>>;
 	request?: SecondParameter<typeof cFetch>;
 }) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const isEnabled = swrOptions?.enabled !== false;
-	const swrKey = swrOptions?.swrKey ?? (() => (isEnabled ? getListReflectionsKey() : null));
-	const swrFn = () => listReflections(requestOptions);
+	const queryKey = queryOptions?.queryKey ?? getListReflectionsQueryKey();
 
-	const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof listReflections>>> = ({ signal }) => listReflections({ signal, ...requestOptions });
 
-	return {
-		swrKey,
-		...query,
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<Awaited<ReturnType<typeof listReflections>>, TError, TData> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
 	};
 };
+
+export type ListReflectionsQueryResult = NonNullable<Awaited<ReturnType<typeof listReflections>>>;
+export type ListReflectionsQueryError = unknown;
+
+export function useListReflections<TData = Awaited<ReturnType<typeof listReflections>>, TError = unknown>(
+	options: {
+		query: Partial<UseQueryOptions<Awaited<ReturnType<typeof listReflections>>, TError, TData>> &
+			Pick<
+				DefinedInitialDataOptions<Awaited<ReturnType<typeof listReflections>>, TError, Awaited<ReturnType<typeof listReflections>>>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useListReflections<TData = Awaited<ReturnType<typeof listReflections>>, TError = unknown>(
+	options?: {
+		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listReflections>>, TError, TData>> &
+			Pick<
+				UndefinedInitialDataOptions<Awaited<ReturnType<typeof listReflections>>, TError, Awaited<ReturnType<typeof listReflections>>>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useListReflections<TData = Awaited<ReturnType<typeof listReflections>>, TError = unknown>(
+	options?: {
+		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listReflections>>, TError, TData>>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+export function useListReflections<TData = Awaited<ReturnType<typeof listReflections>>, TError = unknown>(
+	options?: {
+		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listReflections>>, TError, TData>>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+	const queryOptions = getListReflectionsQueryOptions(options);
+
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+	return { ...query, queryKey: queryOptions.queryKey };
+}
+
 export type createReflectionResponse200 = {
 	data: string;
 	status: 200;
@@ -140,36 +229,38 @@ export const createReflection = async (reflectionCreate: ReflectionCreate, optio
 	});
 };
 
-export const getCreateReflectionMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, { arg }: { arg: ReflectionCreate }) => {
-		return createReflection(arg, options);
+export const getCreateReflectionMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+	mutation?: UseMutationOptions<Awaited<ReturnType<typeof createReflection>>, TError, { data: ReflectionCreate }, TContext>;
+	request?: SecondParameter<typeof cFetch>;
+}): UseMutationOptions<Awaited<ReturnType<typeof createReflection>>, TError, { data: ReflectionCreate }, TContext> => {
+	const mutationKey = ["createReflection"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<Awaited<ReturnType<typeof createReflection>>, { data: ReflectionCreate }> = (props) => {
+		const { data } = props ?? {};
+
+		return createReflection(data, requestOptions);
 	};
+
+	return { mutationFn, ...mutationOptions };
 };
-export const getCreateReflectionMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Create`] as const;
 
 export type CreateReflectionMutationResult = NonNullable<Awaited<ReturnType<typeof createReflection>>>;
+export type CreateReflectionMutationBody = ReflectionCreate;
+export type CreateReflectionMutationError = unknown;
 
-export const useCreateReflection = <TError = unknown>(options?: {
-	swr?: SWRMutationConfiguration<
-		Awaited<ReturnType<typeof createReflection>>,
-		TError,
-		Key,
-		ReflectionCreate,
-		Awaited<ReturnType<typeof createReflection>>
-	> & { swrKey?: string };
-	request?: SecondParameter<typeof cFetch>;
-}) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
-
-	const swrKey = swrOptions?.swrKey ?? getCreateReflectionMutationKey();
-	const swrFn = getCreateReflectionMutationFetcher(requestOptions);
-
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
-
-	return {
-		swrKey,
-		...query,
-	};
+export const useCreateReflection = <TError = unknown, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof createReflection>>, TError, { data: ReflectionCreate }, TContext>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof createReflection>>, TError, { data: ReflectionCreate }, TContext> => {
+	return useMutation(getCreateReflectionMutationOptions(options), queryClient);
 };
 export type updateReflectionResponse200 = {
 	data: void;
@@ -193,36 +284,36 @@ export const updateReflection = async (options?: RequestInit): Promise<updateRef
 	});
 };
 
-export const getUpdateReflectionMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, __: { arg: Arguments }) => {
-		return updateReflection(options);
+export const getUpdateReflectionMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+	mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateReflection>>, TError, void, TContext>;
+	request?: SecondParameter<typeof cFetch>;
+}): UseMutationOptions<Awaited<ReturnType<typeof updateReflection>>, TError, void, TContext> => {
+	const mutationKey = ["updateReflection"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateReflection>>, void> = () => {
+		return updateReflection(requestOptions);
 	};
+
+	return { mutationFn, ...mutationOptions };
 };
-export const getUpdateReflectionMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Update`] as const;
 
 export type UpdateReflectionMutationResult = NonNullable<Awaited<ReturnType<typeof updateReflection>>>;
 
-export const useUpdateReflection = <TError = unknown>(options?: {
-	swr?: SWRMutationConfiguration<
-		Awaited<ReturnType<typeof updateReflection>>,
-		TError,
-		Key,
-		Arguments,
-		Awaited<ReturnType<typeof updateReflection>>
-	> & { swrKey?: string };
-	request?: SecondParameter<typeof cFetch>;
-}) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
+export type UpdateReflectionMutationError = unknown;
 
-	const swrKey = swrOptions?.swrKey ?? getUpdateReflectionMutationKey();
-	const swrFn = getUpdateReflectionMutationFetcher(requestOptions);
-
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
-
-	return {
-		swrKey,
-		...query,
-	};
+export const useUpdateReflection = <TError = unknown, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof updateReflection>>, TError, void, TContext>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof updateReflection>>, TError, void, TContext> => {
+	return useMutation(getUpdateReflectionMutationOptions(options), queryClient);
 };
 export type deleteReflectionResponse200 = {
 	data: void;
@@ -258,40 +349,38 @@ export const deleteReflection = async (params?: DeleteReflectionParams, options?
 	});
 };
 
-export const getDeleteReflectionMutationFetcher = (params?: DeleteReflectionParams, options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, __: { arg: Arguments }) => {
-		return deleteReflection(params, options);
+export const getDeleteReflectionMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+	mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteReflection>>, TError, { params?: DeleteReflectionParams }, TContext>;
+	request?: SecondParameter<typeof cFetch>;
+}): UseMutationOptions<Awaited<ReturnType<typeof deleteReflection>>, TError, { params?: DeleteReflectionParams }, TContext> => {
+	const mutationKey = ["deleteReflection"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteReflection>>, { params?: DeleteReflectionParams }> = (props) => {
+		const { params } = props ?? {};
+
+		return deleteReflection(params, requestOptions);
 	};
+
+	return { mutationFn, ...mutationOptions };
 };
-export const getDeleteReflectionMutationKey = (params?: DeleteReflectionParams) =>
-	[`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Delete`, ...(params ? [params] : [])] as const;
 
 export type DeleteReflectionMutationResult = NonNullable<Awaited<ReturnType<typeof deleteReflection>>>;
 
-export const useDeleteReflection = <TError = unknown>(
-	params?: DeleteReflectionParams,
+export type DeleteReflectionMutationError = unknown;
+
+export const useDeleteReflection = <TError = unknown, TContext = unknown>(
 	options?: {
-		swr?: SWRMutationConfiguration<
-			Awaited<ReturnType<typeof deleteReflection>>,
-			TError,
-			Key,
-			Arguments,
-			Awaited<ReturnType<typeof deleteReflection>>
-		> & { swrKey?: string };
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteReflection>>, TError, { params?: DeleteReflectionParams }, TContext>;
 		request?: SecondParameter<typeof cFetch>;
 	},
-) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
-
-	const swrKey = swrOptions?.swrKey ?? getDeleteReflectionMutationKey(params);
-	const swrFn = getDeleteReflectionMutationFetcher(params, requestOptions);
-
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
-
-	return {
-		swrKey,
-		...query,
-	};
+	queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof deleteReflection>>, TError, { params?: DeleteReflectionParams }, TContext> => {
+	return useMutation(getDeleteReflectionMutationOptions(options), queryClient);
 };
 export type reflectionPromptDataResponse200 = {
 	data: string;
@@ -315,36 +404,36 @@ export const reflectionPromptData = async (options?: RequestInit): Promise<refle
 	});
 };
 
-export const getReflectionPromptDataMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, __: { arg: Arguments }) => {
-		return reflectionPromptData(options);
+export const getReflectionPromptDataMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+	mutation?: UseMutationOptions<Awaited<ReturnType<typeof reflectionPromptData>>, TError, void, TContext>;
+	request?: SecondParameter<typeof cFetch>;
+}): UseMutationOptions<Awaited<ReturnType<typeof reflectionPromptData>>, TError, void, TContext> => {
+	const mutationKey = ["reflectionPromptData"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<Awaited<ReturnType<typeof reflectionPromptData>>, void> = () => {
+		return reflectionPromptData(requestOptions);
 	};
+
+	return { mutationFn, ...mutationOptions };
 };
-export const getReflectionPromptDataMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/PromptData`] as const;
 
 export type ReflectionPromptDataMutationResult = NonNullable<Awaited<ReturnType<typeof reflectionPromptData>>>;
 
-export const useReflectionPromptData = <TError = unknown>(options?: {
-	swr?: SWRMutationConfiguration<
-		Awaited<ReturnType<typeof reflectionPromptData>>,
-		TError,
-		Key,
-		Arguments,
-		Awaited<ReturnType<typeof reflectionPromptData>>
-	> & { swrKey?: string };
-	request?: SecondParameter<typeof cFetch>;
-}) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
+export type ReflectionPromptDataMutationError = unknown;
 
-	const swrKey = swrOptions?.swrKey ?? getReflectionPromptDataMutationKey();
-	const swrFn = getReflectionPromptDataMutationFetcher(requestOptions);
-
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
-
-	return {
-		swrKey,
-		...query,
-	};
+export const useReflectionPromptData = <TError = unknown, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof reflectionPromptData>>, TError, void, TContext>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof reflectionPromptData>>, TError, void, TContext> => {
+	return useMutation(getReflectionPromptDataMutationOptions(options), queryClient);
 };
 export type reflectionPromptResponse200 = {
 	data: void;
@@ -368,34 +457,34 @@ export const reflectionPrompt = async (options?: RequestInit): Promise<reflectio
 	});
 };
 
-export const getReflectionPromptMutationFetcher = (options?: SecondParameter<typeof cFetch>) => {
-	return (_: Key, __: { arg: Arguments }) => {
-		return reflectionPrompt(options);
+export const getReflectionPromptMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+	mutation?: UseMutationOptions<Awaited<ReturnType<typeof reflectionPrompt>>, TError, void, TContext>;
+	request?: SecondParameter<typeof cFetch>;
+}): UseMutationOptions<Awaited<ReturnType<typeof reflectionPrompt>>, TError, void, TContext> => {
+	const mutationKey = ["reflectionPrompt"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
+
+	const mutationFn: MutationFunction<Awaited<ReturnType<typeof reflectionPrompt>>, void> = () => {
+		return reflectionPrompt(requestOptions);
 	};
+
+	return { mutationFn, ...mutationOptions };
 };
-export const getReflectionPromptMutationKey = () => [`${import.meta.env.VITE_API_ORIGIN}/api/Reflection/Prompt`] as const;
 
 export type ReflectionPromptMutationResult = NonNullable<Awaited<ReturnType<typeof reflectionPrompt>>>;
 
-export const useReflectionPrompt = <TError = unknown>(options?: {
-	swr?: SWRMutationConfiguration<
-		Awaited<ReturnType<typeof reflectionPrompt>>,
-		TError,
-		Key,
-		Arguments,
-		Awaited<ReturnType<typeof reflectionPrompt>>
-	> & { swrKey?: string };
-	request?: SecondParameter<typeof cFetch>;
-}) => {
-	const { swr: swrOptions, request: requestOptions } = options ?? {};
+export type ReflectionPromptMutationError = unknown;
 
-	const swrKey = swrOptions?.swrKey ?? getReflectionPromptMutationKey();
-	const swrFn = getReflectionPromptMutationFetcher(requestOptions);
-
-	const query = useSWRMutation(swrKey, swrFn, swrOptions);
-
-	return {
-		swrKey,
-		...query,
-	};
+export const useReflectionPrompt = <TError = unknown, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<Awaited<ReturnType<typeof reflectionPrompt>>, TError, void, TContext>;
+		request?: SecondParameter<typeof cFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof reflectionPrompt>>, TError, void, TContext> => {
+	return useMutation(getReflectionPromptMutationOptions(options), queryClient);
 };
