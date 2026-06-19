@@ -6,12 +6,12 @@ locals {
         frontend = {
             type = "A",
             name = var.frontend_subdomain,
-            value = digitalocean_loadbalancer.app.ip
+            value = digitalocean_loadbalancer.frontend.ip
         },
         backend = {
             type = "A",
             name = var.backend_subdomain,
-            value = digitalocean_loadbalancer.app.ip
+            value = digitalocean_loadbalancer.backend.ip
         }
     }
 

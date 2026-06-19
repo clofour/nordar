@@ -13,6 +13,8 @@ ports:
   etcd_client: 2379
   etcd_peer: 2380
 
+  frontend: 3008
+
   postgres: 5432
 
   haproxy_database: 5432
@@ -21,3 +23,5 @@ ports:
   haproxy_stats: 7000
 
   patroni_rest: 8008
+
+  backend: 8080

@@ -1,3 +1,8 @@
+locals {
+    network = yamldecode(file("${path.module}/../shared/network.yaml"))
+    ports = local.network.ports
+}
+
 resource "digitalocean_loadbalancer" "frontend" {
     name = "frontend-lb"
     type = "REGIONAL"
@@ -9,15 +14,15 @@ resource "digitalocean_loadbalancer" "frontend" {
 
     healthcheck {
         protocol = "http"
-        port = 80
+        port = local.ports.frontend
         path = "/healthz"
     }
 
     forwarding_rule {
-        entry_port = 443
+        entry_port = local.ports.https
         entry_protocol = "https"
 
-        target_port = 3080
+        target_port = local.ports.frontend
         target_protocol = "http"
 
         certificate_name = digitalocean_certificate.certificate.name
@@ -37,15 +42,15 @@ resource "digitalocean_loadbalancer" "backend" {
 
     healthcheck {
         protocol = "http"
-        port = 80
+        port = local.ports.backend
         path = "/healthz"
     }
 
     forwarding_rule {
-        entry_port = 443
+        entry_port = local.ports.https
         entry_protocol = "https"
 
-        target_port = 8080
+        target_port = local.ports.backend
         target_protocol = "http"
 
         certificate_name = digitalocean_certificate.certificate.name

@@ -1,6 +1,6 @@
 ---
 
-frontend_origin: "{{ hostnames.frontend }}.{{ domain }}"
+frontend_origin: "https://{{ hostnames.frontend }}.{{ domain }}"
 backend_origin: "{{ hostnames.backend }}.{{ domain }}"
 
 postgresql_app_user: app_user

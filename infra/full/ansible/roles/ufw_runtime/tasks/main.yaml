@@ -1,5 +1,17 @@
 ---
 
+- name: Allow app ports
+  community.general.ufw:
+    proto: tcp
+    port: "{{ item }}"
+    direction: in
+    rule: allow
+  when: "'app' in group_names"
+  loop:
+    - "{{ ports.frontend }}"
+    - "{{ ports.backend }}"
+  notify: Restart ufw
+
 - name: Allow proxy source ports
   community.general.ufw:
     proto: tcp

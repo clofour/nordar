@@ -18,20 +18,6 @@
     rule: allow
   notify: Restart ufw
 
-- name: Allow HTTP
-  community.general.ufw:
-    port: 80
-    proto: tcp
-    rule: allow
-  notify: Restart ufw
-
-- name: Allow HTTPS
-  community.general.ufw:
-    port: 443
-    proto: tcp
-    rule: allow
-  notify: Restart ufw
-
 - name: Enable UFW
   community.general.ufw:
     state: enabled
