@@ -1,7 +1,7 @@
 import Event from "@/components/dashboard/Event";
 import { useListEvents } from "@/api/endpoints/event/event";
 import { expandRecurringEvents, type ScheduleEventData } from "@mantine/schedule";
-import { theme } from "@/data/theme";
+import { otherTheme, theme } from "@/data/theme";
 import { Stack } from "@mantine/core";
 import type { EventGet } from "@/api/models";
 import EmptyState from "../shared/EmptyState";
@@ -21,7 +21,7 @@ export default function EventsToday() {
 	const events = response?.data ?? [];
 	const preprocessedEvents = events.map((event) => ({
 		...event,
-		color: theme.colors.event,
+		color: otherTheme.app.colors.event,
 	}));
 	const expandedEvents = expandRecurringEvents({
 		events: preprocessedEvents,
