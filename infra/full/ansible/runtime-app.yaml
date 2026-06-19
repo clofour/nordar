@@ -1,12 +1,13 @@
 ---
 
-- name: Deploy to backend at runtime
+- name: Deploy to app at runtime
   become: true
-  hosts: backend
+  hosts: app
   vars_files:
     - ../shared/network.yaml
   roles:
     - ufw_runtime
     - migrations_runtime
     - pki_runtime
+    - frontend_runtime
     - backend_runtime

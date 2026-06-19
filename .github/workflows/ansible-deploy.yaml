@@ -6,6 +6,10 @@ on:
         description: "Backend version"
         default: main
         type: string
+      frontend_version:
+        description: "Frontend version"
+        default: main
+        type: string
 jobs:
   create-migration-bundle:
     name: Create Migration Bundle
@@ -79,6 +83,7 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: "False"
           DIGITALOCEAN_TOKEN: ${{ secrets.DO_API_TOKEN }}
           DOMAIN: ${{ vars.DOMAIN }}
+          FRONTEND_VERSION: ${{ inputs.frontend_version }}
           BACKEND_VERSION: ${{ inputs.backend_version }}
           POSTGRESQL_POSTGRES_PASSWORD: ${{ secrets.POSTGRESQL_POSTGRES_PASSWORD }}
           POSTGRESQL_REPLICATION_USER_PASSWORD: ${{ secrets.POSTGRESQL_REPLICATION_USER_PASSWORD }}

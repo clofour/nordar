@@ -1,8 +1,8 @@
 ---
 
-- name: Deploy to backend
+- name: Deploy to app
   become: true
-  hosts: backend
+  hosts: app
   roles:
     - pre
     - sshd

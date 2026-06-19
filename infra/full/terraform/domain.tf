@@ -6,12 +6,12 @@ locals {
         frontend = {
             type = "CNAME",
             name = var.frontend_subdomain,
-            value = "${digitalocean_cdn.cdn.endpoint}."
+            value = digitalocean_loadbalancer.app.ip
         },
         backend = {
             type = "A",
             name = var.backend_subdomain,
-            value = digitalocean_loadbalancer.backend.ip
+            value = digitalocean_loadbalancer.app.ip
         }
     }
 

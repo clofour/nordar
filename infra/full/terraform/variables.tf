@@ -17,7 +17,7 @@ variable "region" {
     default = "fra1"
 }
 
-variable "backend_count" {
+variable "app_count" {
     type = number
     default = 2
 }
