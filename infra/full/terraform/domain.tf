@@ -4,7 +4,7 @@ locals {
 
     public_records = {
         frontend = {
-            type = "CNAME",
+            type = "A",
             name = var.frontend_subdomain,
             value = digitalocean_loadbalancer.app.ip
         },

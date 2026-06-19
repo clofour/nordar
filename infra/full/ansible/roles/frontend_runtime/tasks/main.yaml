@@ -5,7 +5,7 @@
     name: frontend
     image: "{{ frontend_runtime_image }}"
     published_ports:
-      - 80:8080
+      - 3080:8080
     restart_policy: always
     state: started
   no_log: true

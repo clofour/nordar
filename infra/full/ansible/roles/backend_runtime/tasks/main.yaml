@@ -5,7 +5,7 @@
     name: backend
     image: "{{ backend_runtime_image }}"
     published_ports:
-      - 80:8080
+      - 8080:8080
     env:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__Default: "{{ db_connection_string }}"
