@@ -13,7 +13,7 @@ ports:
   etcd_client: 2379
   etcd_peer: 2380
 
-  frontend: 3008
+  frontend: 3080
 
   postgres: 5432
 
