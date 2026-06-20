@@ -75,7 +75,7 @@ Partial mode, similarly to demo mode, is meant for more advanced demonstrations.
 * A backend service
 * A database
 
-To use this mode, create a DigitalOcean Spaces bucket called `nordar-tfstate` in `fra1` for state and run the `terraform-deploy` workflow with the `partial` parameter. Updates will be deployed automatically.
+To use this mode, create a DigitalOcean Spaces bucket called `nordar-partial-tfstate` in `fra1` for state and run the `terraform-deploy` workflow with the `partial` parameter. Updates will be deployed automatically.
 
 ```mermaid
 ---
