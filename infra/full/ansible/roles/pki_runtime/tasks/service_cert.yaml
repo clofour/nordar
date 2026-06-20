@@ -37,7 +37,11 @@
     content: >-
       {{
         (pki_runtime_service_crt_content.content | b64decode)
-        if (pki_runtime_service_crt_content is defined and pki_runtime_service_crt_content.content is defined and not (pki_runtime_service_crt_content.content.failed | default(true)))
+        if (
+          pki_runtime_service_crt_content is defined and
+          pki_runtime_service_crt_content.content is defined and
+          not (pki_runtime_service_crt_content.content.failed | default(true))
+        )
         else omit
       }}
     csr_content: "{{ pki_runtime_csr.csr }}"
