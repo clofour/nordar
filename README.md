@@ -1,7 +1,7 @@
 # nordar
 Nordar is a research-backed galaxy-themed web application to help you set meaningful goals. It comes with two deployment modes: demo (for demonstrations) and full (for production, with a HA setup).
 
- I created this project as I struggled with keeping up with my goals; I would usually give up after only a couple of weeks. Ironically enough, the time spent on this project ended up harming my ambitions. Regardless, I did learn a couple of tips from all the research I did.
+I created this project as I struggled with keeping up with my goals; I would usually give up after only a couple of weeks. Ironically enough, the time spent on this project ended up harming my ambitions. Regardless, I did learn a couple of tips from all the research I did.
 
 ## Quick Start
 
@@ -238,4 +238,10 @@ Nordar uses GitHub Actions as CI/CD. This table shows all workflows:
 | vite-deploy.yaml | Build and upload frontend static files to CDN | Manual |
 
 ### Images
-[TBA]
+![Landing Page](/docs/assets/landing_page.png)
+![Sign Up](/docs/assets/sign_up.png)
+![Sign In](/docs/assets/sign_in.png)
+![Dashboard](/docs/assets/dashboard.png)
+![Calendar](/docs/assets/calendar.png)
+![Stars](/docs/assets/stars.png)
+![Reflections](/docs/assets/reflections.png)
