@@ -1,7 +1,7 @@
 import classes from "./Overview.module.css";
 import Eyebrow from "./Eyebrow";
 import Module from "./Module";
-import { SimpleGrid, Stack } from "@mantine/core";
+import { Grid, SimpleGrid, Stack } from "@mantine/core";
 import { GoalExplanation } from "./GoalExplanation";
 import { GoalType } from "@/api/models";
 import GoalCard from "./GoalCard";
@@ -143,16 +143,24 @@ export default function Overview() {
 					))}
 				</svg>
 
-				<SimpleGrid w="100%" cols={3} spacing="lg">
-					<Stack>
+				<Grid w="100%" gap="lg">
+					<Grid.Col span={4}>
 						<GoalExplanation type={GoalType.NorthStar} />
-						<Stack flex="1 1 0" align="center" justify="center">
+					</Grid.Col>
+					<Grid.Col span={4}>
+						<GoalExplanation type={GoalType.Bearing} />
+					</Grid.Col>
+					<Grid.Col span={4}>
+						<GoalExplanation type={GoalType.Movement} />
+					</Grid.Col>
+
+					<Grid.Col span={4}>
+						<Stack h="100%" align="center" justify="center">
 							<GoalCard ref={northStarRef} type={GoalType.NorthStar} text={goals.name} />
 						</Stack>
-					</Stack>
-					<Stack>
-						<GoalExplanation type={GoalType.Bearing} />
-						<Stack flex="1 1 0" align="center" justify="center">
+					</Grid.Col>
+					<Grid.Col span={4}>
+						<Stack h="100%" align="center" justify="center">
 							{goals.bearings.map((bearing, index) => (
 								<GoalCard
 									ref={(element) => {
@@ -165,10 +173,9 @@ export default function Overview() {
 								/>
 							))}
 						</Stack>
-					</Stack>
-					<Stack>
-						<GoalExplanation type={GoalType.Movement} />
-						<Stack key={active} flex="1 1 0" align="center" justify="center">
+					</Grid.Col>
+					<Grid.Col span={4}>
+						<Stack key={active} h="100%" align="center" justify="center">
 							{goals.bearings[active]?.movements?.map((movement, index) => (
 								<GoalCard
 									ref={(element) => {
@@ -181,8 +188,8 @@ export default function Overview() {
 								/>
 							))}
 						</Stack>
-					</Stack>
-				</SimpleGrid>
+					</Grid.Col>
+				</Grid>
 			</div>
 		</Module>
 	);
