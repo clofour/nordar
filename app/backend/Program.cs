@@ -130,7 +130,10 @@ builder.Services.AddRateLimiter(options =>
             }));
 });
 
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi((options) =>
+{
+    options.AddSchemaTransformer<EmailFormatTransformer>();
+});
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {

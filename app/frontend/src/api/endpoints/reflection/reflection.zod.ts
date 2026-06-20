@@ -4,46 +4,37 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import * as zod from "zod";
+import * as zod from 'zod';
+
 
 export const GetReflectionQueryParams = zod.object({
-	Id: zod.string().uuid().optional(),
-});
+  "Id": zod.string().uuid().optional()
+})
 
 export const GetReflectionResponse = zod.object({
-	id: zod.string().uuid(),
-	event: zod
-		.union([
-			zod.null(),
-			zod.object({
-				id: zod.string().uuid(),
-				name: zod.string(),
-			}),
-		])
-		.optional(),
-	date: zod.string().datetime({ offset: true }),
-	positive: zod.array(zod.string()),
-	negative: zod.array(zod.string()),
-	improvement: zod.array(zod.string()),
-});
+  "id": zod.string().uuid(),
+  "event": zod.union([zod.null(),zod.object({
+  "id": zod.string().uuid(),
+  "name": zod.string()
+})]).optional(),
+  "date": zod.string().datetime({"offset":true}),
+  "positive": zod.array(zod.string()),
+  "negative": zod.array(zod.string()),
+  "improvement": zod.array(zod.string())
+})
 
 export const ListReflectionsResponseItem = zod.object({
-	id: zod.string().uuid(),
-	event: zod
-		.union([
-			zod.null(),
-			zod.object({
-				id: zod.string().uuid(),
-				name: zod.string(),
-			}),
-		])
-		.optional(),
-	date: zod.string().datetime({ offset: true }),
-	positive: zod.array(zod.string()),
-	negative: zod.array(zod.string()),
-	improvement: zod.array(zod.string()),
-});
-export const ListReflectionsResponse = zod.array(ListReflectionsResponseItem);
+  "id": zod.string().uuid(),
+  "event": zod.union([zod.null(),zod.object({
+  "id": zod.string().uuid(),
+  "name": zod.string()
+})]).optional(),
+  "date": zod.string().datetime({"offset":true}),
+  "positive": zod.array(zod.string()),
+  "negative": zod.array(zod.string()),
+  "improvement": zod.array(zod.string())
+})
+export const ListReflectionsResponse = zod.array(ListReflectionsResponseItem)
 
 export const createReflectionBodyPositiveMax = 20;
 
@@ -51,23 +42,26 @@ export const createReflectionBodyNegativeMax = 20;
 
 export const createReflectionBodyImprovementMax = 20;
 
+
+
 export const CreateReflectionBody = zod.object({
-	eventId: zod.string().uuid().nullish(),
-	positive: zod.array(zod.string()).max(createReflectionBodyPositiveMax),
-	negative: zod.array(zod.string()).max(createReflectionBodyNegativeMax),
-	improvement: zod.array(zod.string()).max(createReflectionBodyImprovementMax),
-});
+  "eventId": zod.string().uuid().nullish(),
+  "positive": zod.array(zod.string()).max(createReflectionBodyPositiveMax),
+  "negative": zod.array(zod.string()).max(createReflectionBodyNegativeMax),
+  "improvement": zod.array(zod.string()).max(createReflectionBodyImprovementMax)
+})
 
-export const CreateReflectionResponse = zod.string().uuid();
+export const CreateReflectionResponse = zod.string().uuid()
 
-export const UpdateReflectionResponse = zod.unknown();
+export const UpdateReflectionResponse = zod.unknown()
 
 export const DeleteReflectionQueryParams = zod.object({
-	id: zod.string().uuid().optional(),
-});
+  "id": zod.string().uuid().optional()
+})
 
-export const DeleteReflectionResponse = zod.unknown();
+export const DeleteReflectionResponse = zod.unknown()
 
-export const ReflectionPromptDataResponse = zod.string().datetime({ offset: true });
+export const ReflectionPromptDataResponse = zod.string().datetime({"offset":true})
 
-export const ReflectionPromptResponse = zod.unknown();
+export const ReflectionPromptResponse = zod.unknown()
+
