@@ -79,7 +79,7 @@ Partial mode, similarly to demo mode, is meant for more advanced demonstrations.
 * A backend service
 * A database
 
-To use this mode, create a DigitalOcean Spaces bucket called `nordar-partial-tfstate` in `fra1` for state and run the `terraform-deploy` workflow with the `partial` parameter. Updates will be deployed automatically.
+To use this mode, create a DigitalOcean Spaces bucket called `nordar-partial-tfstate` in `fra1` for state and set up a domain on DigitalOcean. Finally, run the `terraform-deploy` workflow with the `partial` parameter. Updates will be deployed automatically.
 
 ```mermaid
 ---
@@ -129,7 +129,7 @@ Full mode is meant for production deployments, as it comes with a HA setup (inte
 * HAProxy nodes, to route to backend nodes
 * Database nodes, with PostgreSQL, Patroni and etcd
 
-To use this mode, create a DigitalOcean Spaces bucket called `nordar-tfstate` in `fra1` for state. The deployment consists of three stages, which must be executed in order:
+To use this mode, create a DigitalOcean Spaces bucket called `nordar-tfstate` in `fra1` for state and set up a domain on DigitalOcean. The deployment consists of three stages, which must be executed in order:
 * `packer-deploy.yaml`: Packer builds and uploads three machine images (backend, database-proxy, database) on top of Debian 13 images. It uses Ansible to apply server hardening as well as machine-type specific configuration.
 * `terraform-deploy.yaml`: Terraform provisions nodes, LBs and DNS records. It stores state in a DigitalOcean Spaces bucket.
 * `ansible-deploy.yaml`: Ansible bootstraps all machines. It distributes TLS certificates, templates configuration files, creates clusters, starts containers and runs migrations.
