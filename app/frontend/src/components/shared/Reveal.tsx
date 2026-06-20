@@ -1,16 +1,19 @@
 import { useReveal } from "@/hooks/useReveal";
-import type { ReactNode } from "react";
+import { cloneElement, isValidElement, type ReactElement, type ReactNode } from "react";
+import clsx from "clsx";
 
 interface RevealProps {
-	children: ReactNode;
+	order?: 1 | 2 | 3 | 4;
+	children: ReactElement<{ className?: string }>;
 }
 
-export default function Reveal({ children }: RevealProps) {
+export default function Reveal({ order=1, children }: RevealProps) {
 	const { ref, className } = useReveal();
 
-	return (
-		<div ref={ref} className={className}>
-			{children}
-		</div>
-	);
+	if (!isValidElement(children)) return children;
+
+	return cloneElement(children, {
+		ref,
+		className: clsx(children.props.className, className)
+	} as any);
 }
