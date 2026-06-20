@@ -3,6 +3,7 @@ import classes from "./FAQ.module.css";
 import Module from "./Module";
 import Eyebrow from "./Eyebrow";
 import SectionTitle from "./SectionTitle";
+import SectionIntroduction from "./SectionIntroduction";
 
 export default function FAQ() {
 	const faqs = [
@@ -34,8 +35,11 @@ export default function FAQ() {
 
 	return (
 		<Module>
-			<Eyebrow text="Common questions" />
-			<SectionTitle Order="h2">Straight answers</SectionTitle>
+			<SectionIntroduction>
+				<Eyebrow text="Common questions" />
+				<SectionTitle Order="h2">Straight answers</SectionTitle>
+			</SectionIntroduction>
+
 			<Accordion w="100%" variant="separated" classNames={{ item: classes.item!, control: classes.control!, panel: classes.panel! }} ta="left">
 				{faqs.map((faq) => (
 					<Accordion.Item key={faq.question} value={faq.question}>

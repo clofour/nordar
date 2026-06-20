@@ -1,6 +1,8 @@
 .type {
 	color: var(--explanation-color);
-	font-family: var(--landing-font-primary);
+	font-family: var(--landing-font-secondary);
+	font-weight: 600;
+	letter-spacing: 0.1em;
 	text-transform: uppercase;
 }
 

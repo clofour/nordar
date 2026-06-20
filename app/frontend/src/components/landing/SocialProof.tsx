@@ -3,6 +3,7 @@ import TestimonyCard from "./TestimonyCard";
 import Eyebrow from "./Eyebrow";
 import Module from "./Module";
 import SectionTitle from "./SectionTitle";
+import SectionIntroduction from "./SectionIntroduction";
 
 export default function SocialProof() {
 	const testimonies = [
@@ -31,8 +32,11 @@ export default function SocialProof() {
 
 	return (
 		<Module>
-			<Eyebrow text="Stories from the sky" />
-			<SectionTitle Order="h2">Charted, not wished</SectionTitle>
+			<SectionIntroduction>
+				<Eyebrow text="Stories from the sky" />
+				<SectionTitle Order="h2">Charted, not wished</SectionTitle>
+			</SectionIntroduction>
+			
 			<SimpleGrid w="100%" cols={{ base: 1, sm: 3 }}>
 				{testimonies.map((testimony) => (
 					<TestimonyCard {...testimony} />

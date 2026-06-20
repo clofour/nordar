@@ -11,9 +11,18 @@ type GoalExplanationProps = {
 
 export function GoalExplanation({ type }: GoalExplanationProps) {
 	const descriptions = {
-		[GoalType.NorthStar]: "Your highest ambitions. Set it once, and work on it for years.",
-		[GoalType.Bearing]: "A few directions to pull you towards your North Stars.",
-		[GoalType.Movement]: "Small actions to accomplish your Bearings.",
+		[GoalType.NorthStar]: {
+			text: "Your highest ambitions. Set it once, and work on it for years.",
+			color: "var(--landing-color-gold-dark)"
+		},
+		[GoalType.Bearing]: {
+			text: "A few directions to pull you towards your North Stars.",
+			color: "var(--landing-color-blue)"
+		},
+		[GoalType.Movement]: {
+			text: "Small actions to accomplish your Bearings.",
+			color: "var(--landing-color-teal)"
+		}
 	};
 
 	return (
@@ -22,13 +31,13 @@ export function GoalExplanation({ type }: GoalExplanationProps) {
 				className={classes.type}
 				style={
 					{
-						"--explanation-color": otherTheme.app.colors.goals[type],
+						"--explanation-color": descriptions[type].color,
 					} as CSSProperties
 				}
 			>
 				{text[type]}
 			</div>
-			<div className={classes.description}>{descriptions[type]}</div>
+			<div className={classes.description}>{descriptions[type].text}</div>
 		</Stack>
 	);
 }

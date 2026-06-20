@@ -5,6 +5,7 @@ import classes from "./FeatureGrid.module.css";
 import Module from "./Module";
 import Eyebrow from "./Eyebrow";
 import SectionTitle from "./SectionTitle";
+import SectionIntroduction from "./SectionIntroduction";
 
 export default function FeatureGrid() {
 	const features = [
@@ -42,8 +43,11 @@ export default function FeatureGrid() {
 
 	return (
 		<Module>
-			<Eyebrow text="What's inside" />
-			<SectionTitle Order="h2">Everything you need</SectionTitle>
+			<SectionIntroduction>
+				<Eyebrow text="What's inside" />
+				<SectionTitle Order="h2">Everything you need</SectionTitle>
+			</SectionIntroduction>
+
 			<Grid w="100%">
 				{features.map((feature) => (
 					<Grid.Col key={feature.name} span={{ base: 12, sm: feature.span }}>

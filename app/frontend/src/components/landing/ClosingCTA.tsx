@@ -3,19 +3,24 @@ import { Stack } from "@mantine/core";
 import Logo, { LogoLayout } from "../shared/Logo/Logo";
 import LinkButton from "./LinkButton";
 import Module from "./Module";
+import SectionIntroduction from "./SectionIntroduction";
+import SectionTitle from "./SectionTitle";
 
 export default function ClosingCTA() {
 	return (
 		<Module>
-			<Logo layout={LogoLayout.Icon} size="90px" />
-			<h2 className={classes.title}>
-				Your North Star
-				<br />
-				is already up there.
-			</h2>
-			<p className={classes.description}>
-				Stop wishing on it. Start steering by it. Spot your first star, set your bearings, and have your week planned — it takes about three minutes.
-			</p>
+			<SectionIntroduction>
+				<Logo layout={LogoLayout.Icon} size="90px" />
+				<SectionTitle Order="h2">
+					Your North Star
+					<br />
+					is already up there.
+				</SectionTitle>
+				<p className={classes.description}>
+					Stop wishing on it. Start steering by it. Spot your first star, set your bearings, and have your week planned — it takes about three minutes.
+				</p>
+			</SectionIntroduction>
+
 			<Stack gap="0">
 				<LinkButton variant="gradient" size="lg" label="Sign Up" to="/auth/signup" />
 				<p>No credit card required</p>

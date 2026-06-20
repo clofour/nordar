@@ -8,6 +8,7 @@ import GoalCard from "./GoalCard";
 import { goals } from "./OverviewData";
 import { useCallback, useEffect, useRef, useState } from "react";
 import SectionTitle from "./SectionTitle";
+import SectionIntroduction from "./SectionIntroduction";
 
 interface Point {
 	x: number;
@@ -114,16 +115,18 @@ export default function Overview() {
 
 	return (
 		<Module id="overview">
-			<Eyebrow text="The method" />
-			<SectionTitle Order="h2">
-				Three altitudes.
-				<br />
-				One unbroken line of sight.
-			</SectionTitle>
-			<p className={classes.description}>
-				Big goals fail when they stay big. Nordar breaks every ambition into three connected altitudes — so a sleepy Thursday alarm is visibly pulling
-				you toward who you want to become.
-			</p>
+			<SectionIntroduction>
+				<Eyebrow text="The method" />
+				<SectionTitle Order="h2">
+					Three altitudes.
+					<br />
+					One unbroken line of sight.
+				</SectionTitle>
+				<p className={classes.description}>
+					Big goals fail when they stay big. Nordar breaks every ambition into three connected altitudes — so a sleepy Thursday alarm is visibly pulling
+					you toward who you want to become.
+				</p>
+			</SectionIntroduction>
 
 			<div ref={referenceRef} className={classes.reference}>
 				<svg className={classes.svgOverlay} viewBox={`0 0 ${width} ${height}`}>
