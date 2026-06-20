@@ -7,8 +7,8 @@ pki_runtime_app_name: app
 pki_runtime_public_dir_name: public
 pki_runtime_private_dir_name: private
 pki_runtime_source_dir: "{{ runner_data_dir }}"
-pki_runtime_target_dir: /etc/{{ pki_app_name }}
-pki_runtime_public_dir: "{{ pki_target_dir }}/{{ pki_public_dir_name }}"
-pki_runtime_private_dir: "{{ pki_target_dir }}/{{ pki_private_dir_name }}"
+pki_runtime_target_dir: /etc/{{ pki_runtime_app_name }}
+pki_runtime_public_dir: "{{ pki_runtime_target_dir }}/{{ pki_runtime_public_dir_name }}"
+pki_runtime_private_dir: "{{ pki_runtime_target_dir }}/{{ pki_runtime_private_dir_name }}"
 pki_runtime_system_trust_dir: /usr/local/share/ca-certificates
-pki_runtime_app_trust_dir: "{{ pki_system_trust_dir }}/{{ pki_app_name }}"
+pki_runtime_app_trust_dir: "{{ pki_runtime_system_trust_dir }}/{{ pki_runtime_app_name }}"
