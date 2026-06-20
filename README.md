@@ -38,6 +38,8 @@ Nordar has a variety of features:
 * **Framework**: React and TypeScript
 * **Routing**: React Router
 * **UI**: Mantine and Tabler Icons
+* **Data**: TanStack Query
+* **API Client**: Orval
 * **Validation**: Zod
 
 #### Backend
