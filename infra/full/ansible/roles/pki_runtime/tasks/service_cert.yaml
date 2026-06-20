@@ -46,8 +46,8 @@
       }}
     csr_content: "{{ pki_runtime_csr.csr }}"
     provider: ownca
-    ownca_path: "{{ pki_source_dir }}/{{ pki_runtime_ansible_crt_name }}.crt"
-    ownca_privatekey_path: "{{ pki_source_dir }}/{{ pki_runtime_ansible_crt_name }}.key"
+    ownca_path: "{{ pki_runtime_source_dir }}/{{ pki_runtime_ansible_crt_name }}.crt"
+    ownca_privatekey_path: "{{ pki_runtime_source_dir }}/{{ pki_runtime_ansible_crt_name }}.key"
     ownca_not_before: "-1d"
     ownca_not_after: "+365d"
   delegate_to: localhost
