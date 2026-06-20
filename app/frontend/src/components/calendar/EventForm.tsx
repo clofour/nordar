@@ -78,7 +78,7 @@ export default function EventForm({ close }: EventFormProps) {
 
 	const onMutationSuccess = () => {
 		close();
-	}
+	};
 	const onMutationError = (error: number) => {
 		notify(NotificationType.Error, getErrorMessage(error));
 	};
@@ -106,7 +106,7 @@ export default function EventForm({ close }: EventFormProps) {
 				requestData = {
 					...baseRequestData,
 				};
-				onetimeMutation.mutate({data: requestData});
+				onetimeMutation.mutate({ data: requestData });
 				break;
 
 			case EventTypes.Recurring:
@@ -119,7 +119,7 @@ export default function EventForm({ close }: EventFormProps) {
 					yearMonth: values.yearMonth,
 				};
 
-				recurringMutation.mutate({data: requestData});
+				recurringMutation.mutate({ data: requestData });
 				break;
 
 			default:

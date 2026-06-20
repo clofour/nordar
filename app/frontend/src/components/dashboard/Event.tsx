@@ -41,8 +41,8 @@ export default function Event({ event }: EventProps) {
 		error,
 		isLoading,
 	} = event.type == "recurring" && "recurringEventId" in event && "recurrenceId" in event
-			? useGetRecurringInstanceState(event.recurringEventId, new Date(event.recurrenceId).toISOString())
-			: useGetOnetimeInstanceState(event.id);
+		? useGetRecurringInstanceState(event.recurringEventId, new Date(event.recurrenceId).toISOString())
+		: useGetOnetimeInstanceState(event.id);
 	useEffect(() => {
 		if (response?.data) {
 			setChecked(getBoolFromState(response.data.eventState));
@@ -65,7 +65,7 @@ export default function Event({ event }: EventProps) {
 			onError: onMutationError,
 			onSuccess: () => {
 				invalidateGetOnetimeInstanceState(queryClient, event.id);
-			}
+			},
 		},
 	});
 	const recurringMutation = useSetRecurringInstanceState({
@@ -73,7 +73,7 @@ export default function Event({ event }: EventProps) {
 			onError: onMutationError,
 			onSuccess: () => {
 				invalidateGetRecurringInstanceState(queryClient, event.id, new Date(event.recurrenceId ?? "").toISOString());
-			}
+			},
 		},
 	});
 	const onChange = async (checkBoxEvent: React.ChangeEvent<HTMLInputElement>) => {

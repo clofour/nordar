@@ -4,52 +4,44 @@
  * backend | v1
  * OpenAPI spec version: 1.0.0
  */
-import * as zod from 'zod';
-
+import * as zod from "zod";
 
 export const signUpBodyUsernameMin = 3;
 export const signUpBodyUsernameMax = 20;
 
-
-export const signUpBodyUsernameRegExp = new RegExp('^[a-zA-Z0-9]+$');
+export const signUpBodyUsernameRegExp = new RegExp("^[a-zA-Z0-9]+$");
 export const signUpBodyEmailMax = 256;
 
 export const signUpBodyPasswordMin = 16;
 export const signUpBodyPasswordMax = 64;
 
-
-export const signUpBodyPasswordRegExp = new RegExp('^[a-zA-Z0-9]+$');
-
+export const signUpBodyPasswordRegExp = new RegExp("^[a-zA-Z0-9]+$");
 
 export const SignUpBody = zod.object({
-  "username": zod.string().min(signUpBodyUsernameMin).max(signUpBodyUsernameMax).regex(signUpBodyUsernameRegExp),
-  "email": zod.string().max(signUpBodyEmailMax),
-  "password": zod.string().min(signUpBodyPasswordMin).max(signUpBodyPasswordMax).regex(signUpBodyPasswordRegExp),
-  "termsOfService": zod.boolean()
-})
+	username: zod.string().min(signUpBodyUsernameMin).max(signUpBodyUsernameMax).regex(signUpBodyUsernameRegExp),
+	email: zod.string().max(signUpBodyEmailMax),
+	password: zod.string().min(signUpBodyPasswordMin).max(signUpBodyPasswordMax).regex(signUpBodyPasswordRegExp),
+	termsOfService: zod.boolean(),
+});
 
-export const SignUpResponse = zod.string()
+export const SignUpResponse = zod.string();
 
 export const signInBodyUsernameMin = 3;
 export const signInBodyUsernameMax = 20;
 
-
-export const signInBodyUsernameRegExp = new RegExp('^[a-zA-Z0-9]+$');
+export const signInBodyUsernameRegExp = new RegExp("^[a-zA-Z0-9]+$");
 export const signInBodyPasswordMin = 16;
 export const signInBodyPasswordMax = 64;
 
-
-export const signInBodyPasswordRegExp = new RegExp('^[a-zA-Z0-9]+$');
-
+export const signInBodyPasswordRegExp = new RegExp("^[a-zA-Z0-9]+$");
 
 export const SignInBody = zod.object({
-  "username": zod.string().min(signInBodyUsernameMin).max(signInBodyUsernameMax).regex(signInBodyUsernameRegExp),
-  "password": zod.string().min(signInBodyPasswordMin).max(signInBodyPasswordMax).regex(signInBodyPasswordRegExp)
-})
+	username: zod.string().min(signInBodyUsernameMin).max(signInBodyUsernameMax).regex(signInBodyUsernameRegExp),
+	password: zod.string().min(signInBodyPasswordMin).max(signInBodyPasswordMax).regex(signInBodyPasswordRegExp),
+});
 
-export const SignInResponse = zod.string()
+export const SignInResponse = zod.string();
 
-export const SignOutResponse = zod.void()
+export const SignOutResponse = zod.void();
 
-export const IsAuthenticatedResponse = zod.string()
-
+export const IsAuthenticatedResponse = zod.string();
