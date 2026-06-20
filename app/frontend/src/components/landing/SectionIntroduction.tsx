@@ -7,8 +7,8 @@ interface SectionIntroductionProps {
 
 export default function SectionIntroduction({ children }: SectionIntroductionProps) {
 	return (
-        <Stack w="100%" justify="center" align="center" ta="center">
-            {children}
-        </Stack>
-    );
+		<Stack w="100%" justify="center" align="center" ta="center">
+			{children}
+		</Stack>
+	);
 }

@@ -123,8 +123,8 @@ export default function Overview() {
 					One unbroken line of sight.
 				</SectionTitle>
 				<p className={classes.description}>
-					Big goals fail when they stay big. Nordar breaks every ambition into three connected altitudes — so a sleepy Thursday alarm is visibly pulling
-					you toward who you want to become.
+					Big goals fail when they stay big. Nordar breaks every ambition into three connected altitudes — so a sleepy Thursday alarm is visibly
+					pulling you toward who you want to become.
 				</p>
 			</SectionIntroduction>
 

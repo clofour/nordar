@@ -14,8 +14,8 @@ export default function Problem() {
 					<span className={classes.muted}> Almost no one wants to wake up for the 6 AM practice.</span>
 				</SectionTitle>
 				<p className={classes.description}>
-					The dream is the easy part. Nordar exists for the gap between the goal you admire and the actions you'll actually repeat — because <i>that</i>{" "}
-					gap is where every ambition lives or dies.
+					The dream is the easy part. Nordar exists for the gap between the goal you admire and the actions you'll actually repeat — because{" "}
+					<i>that</i> gap is where every ambition lives or dies.
 				</p>
 			</SectionIntroduction>
 		</Module>

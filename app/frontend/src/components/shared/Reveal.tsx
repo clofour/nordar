@@ -7,13 +7,13 @@ interface RevealProps {
 	children: ReactElement<{ className?: string }>;
 }
 
-export default function Reveal({ order=1, children }: RevealProps) {
+export default function Reveal({ order = 1, children }: RevealProps) {
 	const { ref, className } = useReveal();
 
 	if (!isValidElement(children)) return children;
 
 	return cloneElement(children, {
 		ref,
-		className: clsx(children.props.className, className)
+		className: clsx(children.props.className, className),
 	} as any);
 }

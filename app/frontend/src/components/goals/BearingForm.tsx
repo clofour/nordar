@@ -10,17 +10,17 @@ import { useQueryClient } from "@tanstack/react-query";
 
 type BearingFormProps =
 	| {
-		mode: Mode.Create;
-		id?: never;
-		parentId: string;
-		initialValues?: never;
-	}
+			mode: Mode.Create;
+			id?: never;
+			parentId: string;
+			initialValues?: never;
+	  }
 	| {
-		mode: Mode.Edit;
-		id: string;
-		parentId?: never;
-		initialValues: BearingCreate;
-	};
+			mode: Mode.Edit;
+			id: string;
+			parentId?: never;
+			initialValues: BearingCreate;
+	  };
 
 export default function BearingForm({ mode, id, parentId, initialValues }: BearingFormProps) {
 	const queryClient = useQueryClient();
@@ -36,24 +36,22 @@ export default function BearingForm({ mode, id, parentId, initialValues }: Beari
 		validate: schemaResolver(formSchema, { sync: true }),
 	});
 
-	const onSuccess = () => {
-		
-	};
+	const onSuccess = () => {};
 	const onError = (error: number) => {
 		notify(NotificationType.Error, getErrorMessage(error));
 	};
 	const createMutation = useCreateBearing({
 		mutation: {
 			onSuccess: onSuccess,
-			onError: onError
-		}
+			onError: onError,
+		},
 	});
 	const updateMutation = useUpdateBearing({
 		mutation: {
 			onSuccess: onSuccess,
-			onError: onError
-		}
-	})
+			onError: onError,
+		},
+	});
 	const handleSubmit = async (values: typeof form.values) => {
 		const requestData = {
 			...values,
@@ -65,7 +63,7 @@ export default function BearingForm({ mode, id, parentId, initialValues }: Beari
 				createMutation.mutate({ data: requestData });
 				break;
 			case Mode.Edit:
-				updateMutation.mutate({ id, data: requestData })
+				updateMutation.mutate({ id, data: requestData });
 				break;
 		}
 	};

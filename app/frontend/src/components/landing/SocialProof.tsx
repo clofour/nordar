@@ -36,7 +36,7 @@ export default function SocialProof() {
 				<Eyebrow text="Stories from the sky" />
 				<SectionTitle Order="h2">Charted, not wished</SectionTitle>
 			</SectionIntroduction>
-			
+
 			<SimpleGrid w="100%" cols={{ base: 1, sm: 3 }}>
 				{testimonies.map((testimony) => (
 					<TestimonyCard {...testimony} />

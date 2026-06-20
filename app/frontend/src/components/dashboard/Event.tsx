@@ -37,7 +37,7 @@ export default function Event({ event }: EventProps) {
 	const {
 		data: response,
 		error,
-		isLoading
+		isLoading,
 	} = event.type == "recurring" && "recurringEventId" in event && "recurrenceId" in event
 		? useGetRecurringInstanceState(event.recurringEventId, new Date(event.recurrenceId).toISOString())
 		: useGetOnetimeInstanceState(event.id);
@@ -59,10 +59,10 @@ export default function Event({ event }: EventProps) {
 		notify(NotificationType.Error, getErrorMessage(error));
 	};
 	const onetimeMutation = useSetOnetimeInstanceState({
-		mutation: { onError: onMutationError }
+		mutation: { onError: onMutationError },
 	});
 	const recurringMutation = useSetRecurringInstanceState({
-		mutation: { onError: onMutationError }
+		mutation: { onError: onMutationError },
 	});
 	const onChange = async (checkBoxEvent: React.ChangeEvent<HTMLInputElement>) => {
 		const newCheckboxValue = checkBoxEvent.currentTarget.checked;
@@ -73,9 +73,9 @@ export default function Event({ event }: EventProps) {
 		};
 
 		if (event.type == "onetime") {
-			onetimeMutation.mutate({eventId: event.id, data: requestData});
+			onetimeMutation.mutate({ eventId: event.id, data: requestData });
 		} else if (event.type == "recurring" && "recurringEventId" in event && "recurrenceId" in event) {
-			recurringMutation.mutate({eventId: event.recurringEventId, eventOccurrence: new Date(event.recurrenceId).toISOString(), data: requestData});
+			recurringMutation.mutate({ eventId: event.recurringEventId, eventOccurrence: new Date(event.recurrenceId).toISOString(), data: requestData });
 		} else {
 			throw Error("Incorrect schema on Event object.");
 		}

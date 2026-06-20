@@ -32,31 +32,29 @@ export default function NorthStarForm({ mode, id, initialValues }: NorthStarForm
 		validate: schemaResolver(schema, { sync: true }),
 	});
 
-	const onSuccess = () => {
-		
-	};
+	const onSuccess = () => {};
 	const onError = (error: number) => {
 		notify(NotificationType.Error, getErrorMessage(error));
 	};
 	const createMutation = useCreateNorthStar({
 		mutation: {
 			onSuccess: onSuccess,
-			onError: onError
-		}
+			onError: onError,
+		},
 	});
 	const updateMutation = useUpdateNorthStar({
 		mutation: {
 			onSuccess: onSuccess,
-			onError: onError
-		}
-	})
+			onError: onError,
+		},
+	});
 	const handleSubmit = async (values: typeof form.values) => {
 		switch (mode) {
 			case Mode.Create:
 				createMutation.mutate({ data: values });
 				break;
 			case Mode.Edit:
-				updateMutation.mutate({ id, data: values })
+				updateMutation.mutate({ id, data: values });
 				break;
 		}
 	};

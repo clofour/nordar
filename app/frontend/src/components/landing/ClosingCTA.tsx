@@ -17,7 +17,8 @@ export default function ClosingCTA() {
 					is already up there.
 				</SectionTitle>
 				<p className={classes.description}>
-					Stop wishing on it. Start steering by it. Spot your first star, set your bearings, and have your week planned — it takes about three minutes.
+					Stop wishing on it. Start steering by it. Spot your first star, set your bearings, and have your week planned — it takes about three
+					minutes.
 				</p>
 			</SectionIntroduction>
 

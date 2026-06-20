@@ -34,9 +34,9 @@ const queryClient = new QueryClient({
 			staleTime: 0,
 			gcTime: 5 * 60 * 1000,
 			retry: 2,
-			retryDelay: 3000
-		}
-	}
+			retryDelay: 3000,
+		},
+	},
 });
 
 function AnyTheme() {

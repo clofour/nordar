@@ -13,16 +13,16 @@ export function GoalExplanation({ type }: GoalExplanationProps) {
 	const descriptions = {
 		[GoalType.NorthStar]: {
 			text: "Your highest ambitions. Set it once, and work on it for years.",
-			color: "var(--landing-color-gold-dark)"
+			color: "var(--landing-color-gold-dark)",
 		},
 		[GoalType.Bearing]: {
 			text: "A few directions to pull you towards your North Stars.",
-			color: "var(--landing-color-blue)"
+			color: "var(--landing-color-blue)",
 		},
 		[GoalType.Movement]: {
 			text: "Small actions to accomplish your Bearings.",
-			color: "var(--landing-color-teal)"
-		}
+			color: "var(--landing-color-teal)",
+		},
 	};
 
 	return (

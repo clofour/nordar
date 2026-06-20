@@ -16,33 +16,33 @@ export default defineConfig({
 					mutationInvalidates: [
 						{
 							onMutations: ["signUp"],
-							invalidates: ["signIn"]
+							invalidates: ["signIn"],
 						},
 						{
 							onMutations: ["signIn", "signOut"],
-							invalidates: ["isAuthenticated"]
+							invalidates: ["isAuthenticated"],
 						},
 						{
 							onMutations: ["createNorthStar", "createBearing", "createMovement", "updateNorthStar", "updateBearing", "updateMovement", "deleteGoal"],
-							invalidates: ["listGoals", "goalStats"]
+							invalidates: ["listGoals", "goalStats"],
 						},
 						{
 							onMutations: ["createOnetime", "createRecurring", "updateEvent", "deleteEvent"],
-							invalidates: ["listEvents"]
+							invalidates: ["listEvents"],
 						},
 						{
 							onMutations: ["setOnetimeInstanceState", "setRecurringInstanceState"],
-							invalidates: ["getOnetimeInstanceState", "getRecurringInstanceState"]
+							invalidates: ["getOnetimeInstanceState", "getRecurringInstanceState"],
 						},
 						{
 							onMutations: ["createReflection", "updateReflection", "deleteReflection"],
-							invalidates: ["getReflection", "listReflections"]
+							invalidates: ["getReflection", "listReflections"],
 						},
 						{
 							onMutations: ["prompt"],
-							invalidates: ["promptData"]
-						}
-					]
+							invalidates: ["promptData"],
+						},
+					],
 				},
 				mutator: {
 					path: "./src/other/cfetch.ts",

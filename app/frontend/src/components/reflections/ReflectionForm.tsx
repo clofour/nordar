@@ -103,8 +103,8 @@ export default function ReflectionForm({ close, initialValues }: ReflectionFormP
 	const createMutation = useCreateReflection({
 		mutation: {
 			onSuccess: onSuccess,
-			onError: onError
-		}
+			onError: onError,
+		},
 	});
 	const handleSubmit = async (values: typeof form.values) => {
 		const processableKeys = ["positive", "negative", "improvement"] as const;
@@ -124,10 +124,12 @@ export default function ReflectionForm({ close, initialValues }: ReflectionFormP
 			processedValues[processableKey] = processedValue;
 		}
 
-		createMutation.mutate({data: {
-			...values,
-			...processedValues,
-		}});
+		createMutation.mutate({
+			data: {
+				...values,
+				...processedValues,
+			},
+		});
 	};
 
 	return (
