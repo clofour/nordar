@@ -2,7 +2,7 @@ import { Button, Checkbox, Group, Input, NumberInput, SegmentedControl, Select, 
 import { useForm, schemaResolver } from "@mantine/form";
 import { DatePickerInput, TimePicker } from "@mantine/dates";
 import { getErrorMessage } from "@/data/error";
-import { createOnetime, createRecurring } from "@/api/endpoints/event/event";
+import { createOnetime, createRecurring, useCreateOnetime, useCreateRecurring } from "@/api/endpoints/event/event";
 import { RecurrenceTypes, WeekDay } from "@/api/models";
 import { CreateOnetimeBody, CreateRecurringBody } from "@/api/endpoints/event/event.zod";
 import { durationToMinutes, NotificationType, useNotification } from "@/helpers";
@@ -75,6 +75,19 @@ export default function EventForm({ close }: EventFormProps) {
 			return formSchemaResolver(processedValues);
 		},
 	});
+
+	const onMutationSuccess = () => {
+		close();
+	}
+	const onMutationError = (error: number) => {
+		notify(NotificationType.Error, getErrorMessage(error));
+	};
+	const onetimeMutation = useCreateOnetime({
+		mutation: { onError: onMutationError, onSuccess: onMutationSuccess },
+	});
+	const recurringMutation = useCreateRecurring({
+		mutation: { onError: onMutationError, onSuccess: onMutationSuccess },
+	});
 	const handleSubmit = async (values: EventValues) => {
 		let processedValues = processValues(values);
 		if (processedValues.startDate == null) return;
@@ -87,14 +100,13 @@ export default function EventForm({ close }: EventFormProps) {
 		};
 
 		let requestData;
-		let response;
 
 		switch (processedValues.type) {
 			case EventTypes.Onetime:
 				requestData = {
 					...baseRequestData,
 				};
-				response = await createOnetime(requestData);
+				onetimeMutation.mutate({data: requestData});
 				break;
 
 			case EventTypes.Recurring:
@@ -107,17 +119,11 @@ export default function EventForm({ close }: EventFormProps) {
 					yearMonth: values.yearMonth,
 				};
 
-				response = await createRecurring(requestData);
+				recurringMutation.mutate({data: requestData});
 				break;
 
 			default:
 				throw RangeError("Event type must be either 'EventTypes.Onetime' or 'EventTypes.Recurring'.");
-		}
-
-		if (response.status === 200) {
-			close();
-		} else {
-			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
 		}
 	};
 

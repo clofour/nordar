@@ -4,8 +4,6 @@ import type { ScheduleEventData } from "@mantine/schedule";
 import { useEffect, useState } from "react";
 import { EventTypes } from "@/metadata/events";
 import {
-	setOnetimeInstanceState,
-	setRecurringInstanceState,
 	useGetOnetimeInstanceState,
 	useGetRecurringInstanceState,
 	useSetOnetimeInstanceState,
