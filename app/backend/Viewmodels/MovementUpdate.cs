@@ -5,7 +5,7 @@ using backend.Enums;
 namespace backend.Viewmodels
 {
     public class MovementUpdate : GoalUpdate
-    {        
+    {
         [MaxLength(FieldLimits.LongText)]
         public string? Difficulty { get; set; }
         public MotivationType? MotivationType { get; set; }

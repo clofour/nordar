@@ -4,8 +4,8 @@ using backend.Enums;
 
 namespace backend.Viewmodels
 {
-    public class OnetimeEventCreate: EventCreate
+    public class OnetimeEventCreate : EventCreate
     {
-        
+
     }
 }

@@ -4,7 +4,7 @@ using backend.Enums;
 
 namespace backend.Viewmodels
 {
-    public class RecurringEventGet: EventGet
+    public class RecurringEventGet : EventGet
     {
         [Required]
         public RecurrenceGet Recurrence { get; set; }

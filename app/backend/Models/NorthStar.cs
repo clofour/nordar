@@ -12,7 +12,7 @@ namespace backend.Models
         public GoalImportance Importance { get; set; }
         [MaxLength(FieldLimits.LongText)]
         public string Justification { get; set; }
-        
+
         public List<Bearing> Bearings { get; set; }
     }
 }

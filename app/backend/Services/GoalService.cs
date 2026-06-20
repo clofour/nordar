@@ -91,7 +91,7 @@ namespace backend.Services
             return new ServiceResult(Status.Ok);
         }
 
-        public async Task<ServiceResult> UpdateGoal<TEntity, TDTO>(Guid userId, Guid id, TDTO DTO) where TEntity: Goal where TDTO: GoalUpdate
+        public async Task<ServiceResult> UpdateGoal<TEntity, TDTO>(Guid userId, Guid id, TDTO DTO) where TEntity : Goal where TDTO : GoalUpdate
         {
             DbSet<TEntity> dbSet = ResolveGoalDbSet<TEntity>();
             TEntity? entity = await dbSet.FirstOrDefaultAsync((goal) => goal.UserId == userId && goal.Id == id);
@@ -117,12 +117,13 @@ namespace backend.Services
             {
                 return new ServiceResult(Status.Ok);
             }
-            else {
+            else
+            {
                 return new ServiceResult(Status.NotFound);
             }
         }
 
-        public async Task<T?> FindParent<T>(User user, Guid id) where T: Goal
+        public async Task<T?> FindParent<T>(User user, Guid id) where T : Goal
         {
             T? parent = await ResolveGoalDbSet<T>().FindAsync(id);
             if (parent == null || parent.UserId != user.Id)
@@ -147,12 +148,12 @@ namespace backend.Services
             throw new ArgumentOutOfRangeException(nameof(goalType));
         }
 
-        public DbSet<T> ResolveGoalDbSet<T>() where T: Goal
+        public DbSet<T> ResolveGoalDbSet<T>() where T : Goal
         {
             return appDbContext.Set<T>();
         }
 
-        public async Task<int> CountGoals<T>(User user) where T: Goal
+        public async Task<int> CountGoals<T>(User user) where T : Goal
         {
             return await appDbContext.Set<T>().CountAsync(goal => goal.User == user);
         }

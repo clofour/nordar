@@ -1,6 +1,7 @@
 namespace backend.Enums
 {
-    public enum GoalType {
+    public enum GoalType
+    {
         NorthStar,
         Bearing,
         Movement

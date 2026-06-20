@@ -4,8 +4,8 @@ using backend.Config;
 
 namespace backend.Models
 {
-    public class OnetimeEvent(): Event
+    public class OnetimeEvent() : Event
     {
-        
+
     }
 }

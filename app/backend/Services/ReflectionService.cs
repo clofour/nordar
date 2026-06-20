@@ -63,7 +63,8 @@ namespace backend.Services
             {
                 return new ServiceResult(Status.Ok);
             }
-            else {
+            else
+            {
                 return new ServiceResult(Status.NotFound);
             }
         }

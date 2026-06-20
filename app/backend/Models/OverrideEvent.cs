@@ -4,7 +4,7 @@ using backend.Config;
 
 namespace backend.Models
 {
-    public class OverrideEvent(): Event
+    public class OverrideEvent() : Event
     {
         public Guid RecurringEventId { get; set; }
         [ForeignKey("RecurringEventId")]

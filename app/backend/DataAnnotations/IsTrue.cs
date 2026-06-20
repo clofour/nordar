@@ -6,7 +6,7 @@ namespace backend.DataAnnotations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            if (value != null && (bool) value == true)
+            if (value != null && (bool)value == true)
             {
                 return ValidationResult.Success;
             }

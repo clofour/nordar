@@ -4,7 +4,7 @@ using backend.Enums;
 
 namespace backend.Viewmodels
 {
-    public class OnetimeEventGet: EventGet
+    public class OnetimeEventGet : EventGet
     {
     }
 }

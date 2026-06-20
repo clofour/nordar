@@ -24,7 +24,7 @@ namespace backend.Viewmodels
 
     }
 
-    public class RecurringEventCreate: EventCreate
+    public class RecurringEventCreate : EventCreate
     {
         [Required]
         public int RecurrenceAmount { get; set; }

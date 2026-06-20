@@ -94,7 +94,7 @@ namespace backend.Controllers
             {
                 return Forbid();
             }
-            
+
             ServiceResult serviceResult = await reflectionService.PromptData(user);
             return ServiceBoundaryHelper.ConvertToActionResult(serviceResult);
         }

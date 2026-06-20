@@ -84,7 +84,8 @@ namespace backend.Services
             {
                 return serviceResult;
             }
-            if ((e is OnetimeEvent && eventOccurrence != null) || (e is RecurringEvent && eventOccurrence == null)) {
+            if ((e is OnetimeEvent && eventOccurrence != null) || (e is RecurringEvent && eventOccurrence == null))
+            {
                 return new ServiceResult(Status.BadRequest);
             }
 
@@ -110,7 +111,7 @@ namespace backend.Services
             return new ServiceResult(Status.Ok);
         }
 
-        public T CreateEvent<T>() where T: Event, new()
+        public T CreateEvent<T>() where T : Event, new()
         {
             return new T();
         }
@@ -129,14 +130,14 @@ namespace backend.Services
                         throw new ArgumentException("WeekDays is required for weekly recurrence.");
 
                     parts.Add($"BYDAY={string.Join(",", recurringEventCreate.WeekDays)}");
-                    
+
                     break;
                 case RecurrenceTypes.MONTHLY:
                     if (recurringEventCreate.MonthDay == null)
                         throw new ArgumentException("MonthDay is required for monthly recurrence.");
 
                     parts.Add($"BYMONTHDAY={recurringEventCreate.MonthDay}");
-                    
+
                     break;
                 case RecurrenceTypes.YEARLY:
                     if (recurringEventCreate.MonthDay == null || recurringEventCreate.YearMonth == null)
@@ -144,11 +145,11 @@ namespace backend.Services
 
                     parts.Add($"BYMONTHDAY={recurringEventCreate.MonthDay}");
                     parts.Add($"BYMONTH={recurringEventCreate.YearMonth}");
-                    
+
                     break;
 
                 default:
-                    throw new InvalidEnumArgumentException(nameof(recurringEventCreate.RecurrenceType), (int) recurringEventCreate.RecurrenceType, typeof(RecurrenceTypes));
+                    throw new InvalidEnumArgumentException(nameof(recurringEventCreate.RecurrenceType), (int)recurringEventCreate.RecurrenceType, typeof(RecurrenceTypes));
             }
 
             return string.Join(";", parts);

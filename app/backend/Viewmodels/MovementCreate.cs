@@ -8,7 +8,7 @@ namespace backend.Viewmodels
     {
         [Required]
         public Guid BearingId { get; set; }
-        
+
         [MaxLength(FieldLimits.LongText)]
         public string? Difficulty { get; set; }
         public MotivationType? MotivationType { get; set; }

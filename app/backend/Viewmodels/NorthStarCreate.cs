@@ -4,7 +4,7 @@ using backend.Enums;
 
 namespace backend.Viewmodels
 {
-    public class NorthStarCreate: GoalCreate
+    public class NorthStarCreate : GoalCreate
     {
         [Required(AllowEmptyStrings = false)]
         [MaxLength(FieldLimits.ShortText)]
