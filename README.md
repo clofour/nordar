@@ -67,7 +67,7 @@ Demo mode, as its name suggests, is meant for demonstrations. It uses DigitalOce
 * A backend service
 * A database
 
-To use this mode, run the `terraform-deploy` workflow with the demo parameter. Updates will be deployed automatically.
+To use this mode, create a DigitalOcean Spaces bucket called `nordar-tfstate` in `fra1` for state and run the `terraform-deploy` workflow with the demo parameter. Updates will be deployed automatically.
 
 ```mermaid
 ---
@@ -120,10 +120,10 @@ Full mode is meant for production deployments, as it comes with a HA setup (inte
 * HAProxy nodes, to route to backend nodes
 * Database nodes, with PostgreSQL, Patroni and etcd
 
-It is deployed in four stages:
-* Packer builds and uploads three machine images (backend, database-proxy, database) on top of Debian 13 images. It uses Ansible to apply server hardening as well as machine-type specific configuration.
-* Terraform provisions nodes, LBs and DNS records.
-* Ansible bootstraps all machines. It distributes TLS certificates, templates configuration files, creates clusters, starts containers and runs migrations.
+To use this mode, create a DigitalOcean Spaces bucket called `nordar-tfstate` in `fra1` for state. The deployment consists of three stages, which must be executed in order:
+* `packer-deploy.yaml`: Packer builds and uploads three machine images (backend, database-proxy, database) on top of Debian 13 images. It uses Ansible to apply server hardening as well as machine-type specific configuration.
+* `terraform-deploy.yaml`: Terraform provisions nodes, LBs and DNS records. It stores state in a DigitalOcean Spaces bucket.
+* `ansible-deploy.yaml`: Ansible bootstraps all machines. It distributes TLS certificates, templates configuration files, creates clusters, starts containers and runs migrations.
 
 ```mermaid
 ---
@@ -208,8 +208,8 @@ Deploying Nordar requires a set of credentials and variables in the `production`
 | POSTGRESQL_POSTGRES_PASSWORD | PostgreSQL password for postgres | Full |
 | POSTGRESQL_REPLICATION_USER_PASSWORD | PostgreSQL password for replication_user | Full |
 | POSTGRESQL_REWIND_USER_PASSWORD | PostgreSQL password for rewind_user | Full |
-| SPACES_ACCESS_ID | DigitalOcean Spaces access ID | Full |
-| SPACES_SECRET_KEY | DigitalOcean Spaces secret key | Full |
+| SPACES_ACCESS_ID | DigitalOcean Spaces access ID | Demo, Full |
+| SPACES_SECRET_KEY | DigitalOcean Spaces secret key | Demo, Full |
 
 | Variable | Description | Deployment Mode |
 | --- | --- | --- |
