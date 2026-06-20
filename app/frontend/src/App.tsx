@@ -32,7 +32,7 @@ export default function App() {
 					</Group>
 				</Group>
 			</AppShell.Header>
-			<AppShell.Navbar p="md">
+			<AppShell.Navbar p="xs">
 				{navLinks.map((link) => (
 					<NavLink
 						key={link.label}
