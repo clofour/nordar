@@ -34,9 +34,9 @@
 
 - name: Sign service certificate with Ansible CA
   community.crypto.x509_certificate_pipe:
-    content: >- 
+    content: >-
       {{
-        (service_crt_content.content | b64decode) 
+        (service_crt_content.content | b64decode)
         if (service_crt_content is defined and service_crt_content.content is defined and not (service_crt_content.content.failed | default(true)))
         else omit
       }}
