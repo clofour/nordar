@@ -8,7 +8,7 @@ I created this project as I struggled with keeping up with my goals; I would usu
 To run the web application on your machine, you can use the provided Docker Compose project. Before starting, make sure to install Docker Desktop and log in to Docker Hub to be able to pull Docker Hardened Images.
 1. Navigate to the `./app` with `cd ./app`.
 2. Run `docker compose up`.
-3. Head to `localhost:3000`.
+3. Head to `localhost:3080`.
 
 ## Knowledge Base
 
@@ -239,7 +239,6 @@ Nordar uses GitHub Actions as CI/CD. This table shows all workflows:
 | terraform-deploy.yaml | Provision necessary resources | Manual |
 | terraform-run.yaml | Run freeform Terraform commands | Manual |
 | terraform-validate.yaml | Validate Terraform manifests | Pushes and PRs to core branches |
-| vite-deploy.yaml | Build and upload frontend static files to CDN | Manual |
 
 ### Images
 ![Landing Page](/docs/assets/landing_page.png)
