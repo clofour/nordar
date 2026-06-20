@@ -67,6 +67,8 @@ Demo mode, as its name suggests, is meant for demonstrations. It uses Docker Com
 * migrations
 * database
 
+A tutorial for using this deployment mode is available in the Quick Start section.
+
 ##### Partial
 
 Partial mode, similarly to demo mode, is meant for more advanced demonstrations. It uses DigitalOcean App Platform. It creates four components:
