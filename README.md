@@ -71,7 +71,7 @@ To use this mode, create a DigitalOcean Spaces bucket called `nordar-tfstate` in
 
 ```mermaid
 ---
-title: "Demo Mode (DigitalOcean App Platform)"
+title: "Demo Mode (App Platform)"
 ---
 graph LR
     User["User"]
@@ -90,10 +90,9 @@ graph LR
 
         subgraph BackendTier["Backend Service"]
             Backend1["ASP.NET Instance 1\n(1 vCPU / 1 GB)"]
-            Backend2["ASP.NET Instance 2\n(1 vCPU / 1 GB)"]
         end
 
-        subgraph Jobs["Post-Deploy Jobs"]
+        subgraph Jobs["Pre-Deploy Jobs"]
             Migration["EF Core\nMigration Runner"]
         end
 
@@ -106,10 +105,8 @@ graph LR
     User -- "HTTPS" --> BackendRule
     FrontendRule --> StaticSite
     BackendRule --> Backend1
-    BackendRule --> Backend2
     Backend1 -- "DATABASE_URL" --> PG
-    Backend2 -- "DATABASE_URL" --> PG
-    Migration -- "post-deploy" --> PG
+    Migration -- "pre-deploy" --> PG
 ```
 
 ##### Full
@@ -127,31 +124,27 @@ To use this mode, create a DigitalOcean Spaces bucket called `nordar-tfstate` in
 
 ```mermaid
 ---
-title: "Nordar — Full Mode (DigitalOcean IaaS)"
+title: "Nordar — Full Mode"
 ---
 graph LR
     User["User"]
 
     subgraph DNS["DNS (DigitalOcean)"]
-        FrontendDNS["CNAME → frontend.domain"]
+        FrontendDNS["A → frontend.domain"]
         BackendDNS["A → backend.domain"]
-    end
-
-    subgraph CDNLayer["Content Delivery"]
-        CDN["DigitalOcean CDN\n+ Let's Encrypt TLS"]
-        Spaces[("Spaces Bucket\n(React SPA build)")]
     end
 
     subgraph VPC["VPC  ·  10.30.0.0/16  ·  fra1"]
         direction LR
 
-        subgraph LB["Load Balancer"]
-            LoadBalancer["DO Load Balancer\nHTTPS:443 → HTTP:80\nHealth: /healthz"]
+        subgraph LB["DO Load Balancers"]
+            FrontendLB["frontend-lb\nHTTPS:443 → HTTP:3080\nHealth: /healthz"]
+            BackendLB["backend-lb\nHTTPS:443 → HTTP:8080\nHealthcheck: /healthz"]
         end
 
-        subgraph BackendTier["Backend Tier (×2 Droplets)"]
-            B0["backend-0\nDocker · ASP.NET"]
-            B1["backend-1\nDocker · ASP.NET"]
+        subgraph AppTier["App Tier (×2 Droplets)"]
+            A0["app-0\nDocker: frontend (nginx) · backend (ASP.NET)"]
+            A1["app-1\nDocker: frontend (nginx) · backend (ASP.NET)"]
         end
 
         subgraph ProxyTier["Database Proxy Tier (×2 Droplets)"]
@@ -167,20 +160,23 @@ graph LR
         end
     end
 
-    %% External traffic
+    %% External → LB
     User -- "HTTPS" --> FrontendDNS
     User -- "HTTPS" --> BackendDNS
-    FrontendDNS --> CDN
-    CDN --> Spaces
-    BackendDNS --> LoadBalancer
+    FrontendDNS --> FrontendLB
+    BackendDNS --> BackendLB
 
-    %% Backend → Proxy
-    LoadBalancer --> B0
-    LoadBalancer --> B1
-    B0 -- ":5432" --> P0
-    B0 -- ":5432" --> P1
-    B1 -- ":5432" --> P0
-    B1 -- ":5432" --> P1
+    %% LB → App
+    FrontendLB --> A0
+    FrontendLB --> A1
+    BackendLB --> A0
+    BackendLB --> A1
+
+    %% App → Database Proxy
+    A0 -- ":5432" --> P0
+    A0 -- ":5432" --> P1
+    A1 -- ":5432" --> P0
+    A1 -- ":5432" --> P1
 
     %% Proxy → Database (read/write split)
     P0 -- "write :5433\n(primary only)" --> DB0
