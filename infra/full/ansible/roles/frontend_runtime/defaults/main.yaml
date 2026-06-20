@@ -1,4 +1,4 @@
 ---
 
-frontend_runtime_image_repo: ghcr.io/clofour/frontend
+frontend_runtime_image_repo: "{{ container_registry }}/frontend"
 frontend_runtime_image_tag: "{{ lookup('ansible.builtin.env', 'FRONTEND_VERSION', default='main') }}"

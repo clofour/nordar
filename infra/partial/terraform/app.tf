@@ -60,7 +60,7 @@ resource "digitalocean_app" "main" {
             github {
                 branch = "main"
                 deploy_on_push = true
-                repo = "clofour/nordar"
+                repo = var.repo
             }
         }
 
@@ -87,7 +87,7 @@ resource "digitalocean_app" "main" {
             github {
                 branch = "main"
                 deploy_on_push = true
-                repo = "clofour/nordar"
+                repo = var.repo
             }
 
             http_port = 8080
@@ -128,7 +128,7 @@ resource "digitalocean_app" "main" {
             github {
                 branch = "main"
                 deploy_on_push = true
-                repo = "clofour/nordar"
+                repo = var.repo
             }
             source_dir = "app/backend"
         }

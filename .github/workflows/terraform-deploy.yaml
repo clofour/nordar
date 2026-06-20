@@ -21,6 +21,7 @@ jobs:
       SPACES_ACCESS_KEY_ID: ${{ secrets.SPACES_ACCESS_ID }}
       SPACES_SECRET_ACCESS_KEY: ${{ secrets.SPACES_SECRET_KEY }}
       TF_VAR_domain: ${{ vars.DOMAIN }}
+      TF_VAR_repo: ${{ vars.REPO }}
     defaults:
       run:
         working-directory: ./infra/${{ inputs.mode }}/terraform

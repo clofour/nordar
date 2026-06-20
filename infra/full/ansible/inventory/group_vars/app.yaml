@@ -1,5 +1,8 @@
 ---
 
+repo: "{{ lookup('ansible.builtin.env', 'REPO') }}"
+container_registry: "{{ lookup('ansible.builtin.env', 'CONTAINER_REGISTRY') }}"
+
 frontend_origin: "https://{{ hostnames.frontend }}.{{ domain }}"
 backend_origin: "{{ hostnames.backend }}.{{ domain }}"
 

@@ -1,3 +1,7 @@
+variable "repo" {
+    type = string
+}
+
 variable "domain" {
     type = string
 }

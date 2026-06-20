@@ -83,6 +83,7 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: "False"
           DIGITALOCEAN_TOKEN: ${{ secrets.DO_API_TOKEN }}
           DOMAIN: ${{ vars.DOMAIN }}
+          CONTAINER_REGISTRY: ${{ vars.CONTAINER_REGISTRY }}
           FRONTEND_VERSION: ${{ inputs.frontend_version }}
           BACKEND_VERSION: ${{ inputs.backend_version }}
           POSTGRESQL_POSTGRES_PASSWORD: ${{ secrets.POSTGRESQL_POSTGRES_PASSWORD }}

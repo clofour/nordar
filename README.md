@@ -228,6 +228,8 @@ Deploying Nordar requires a set of credentials and variables in the `production`
 | PKI_CHAIN_CERTIFICATE | Public key for Ansible CA for signing service certificates | Full |
 | PKI_ROOT_CERTIFICATE | Public key for root CA for signing service certificates | Full |
 | RUNNER_DATA_DIR | Directory for data exchange with the runner (such as `/tmp/.data`) | Full |
+| REPO | GitHub repository name (e.g. `clofour/nordar`) | Demo |
+| CONTAINER_REGISTRY | Container registry URL (e.g. `ghcr.io/clofour`) | Full |
 
 ### Workflows
 
