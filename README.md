@@ -1,5 +1,5 @@
 # nordar
-Nordar is a research-backed galaxy-themed web application to help you set meaningful goals. It comes with three deployment modes: demo and partial (for demonstrations), as well as full (for production, with a HA setup).
+Nordar is a research-backed galaxy-themed web application to help you set meaningful goals. It comes with three deployment modes: demo and partial (for demonstrations), as well as full (for production, with a HA setup). A demo is available at [frontend.twilightzone.dev](https://frontend.twilightzone.dev).
 
 I created this project as I struggled with keeping up with my goals; I would usually give up after only a couple of weeks. Ironically enough, the time spent on this project ended up harming my ambitions. Regardless, I did learn a couple of tips from all the research I did.
 
