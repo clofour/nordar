@@ -1,10 +1,7 @@
 using backend.Viewmodels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using backend.Data;
 using backend.Models;
-using backend.Filters;
 using backend.Helpers;
 using Microsoft.EntityFrameworkCore;
 using backend.Services;
