@@ -1,5 +1,5 @@
 # nordar
-Nordar is a research-backed galaxy-themed web application to help you set meaningful goals. It comes with two deployment modes: demo (for demonstrations) and full (for production, with a HA setup).
+Nordar is a research-backed galaxy-themed web application to help you set meaningful goals. It comes with three deployment modes: demo and partial (for demonstrations), as well as full (for production, with a HA setup).
 
 I created this project as I struggled with keeping up with my goals; I would usually give up after only a couple of weeks. Ironically enough, the time spent on this project ended up harming my ambitions. Regardless, I did learn a couple of tips from all the research I did.
 
@@ -61,17 +61,25 @@ Nordar has a variety of features:
 
 ##### Demo
 
-Demo mode, as its name suggests, is meant for demonstrations. It uses DigitalOcean App Platform. It creates four components:
+Demo mode, as its name suggests, is meant for demonstrations. It uses Docker Compose to create four different containers using Docker Hardened Images:
+* frontend
+* backend
+* migrations
+* database
+
+##### Partial
+
+Partial mode, similarly to demo mode, is meant for more advanced demonstrations. It uses DigitalOcean App Platform. It creates four components:
 * An ingress, to route requests to the frontend and backend
 * A static site, for the frontend
 * A backend service
 * A database
 
-To use this mode, create a DigitalOcean Spaces bucket called `nordar-tfstate` in `fra1` for state and run the `terraform-deploy` workflow with the demo parameter. Updates will be deployed automatically.
+To use this mode, create a DigitalOcean Spaces bucket called `nordar-tfstate` in `fra1` for state and run the `terraform-deploy` workflow with the `partial` parameter. Updates will be deployed automatically.
 
 ```mermaid
 ---
-title: "Demo Mode (App Platform)"
+title: "Partial Mode (App Platform)"
 ---
 graph LR
     User["User"]
@@ -198,20 +206,20 @@ Deploying Nordar requires a set of credentials and variables in the `production`
 | Credential | Description | Deployment Mode |
 | --- | --- | ---
 | ANSIBLE_SSH_PRIVATE_KEY | Ansible SSH private key | Full |
-| DO_API_TOKEN | DigitalOcean API token | Demo, Full |
+| DO_API_TOKEN | DigitalOcean API token | Partial, Full |
 | PKI_ANSIBLE_PRIVATE_KEY | Private key for Ansible CA for signing service certificates | Full |
 | POSTGRESQL_APP_USER_PASSWORD | PostgreSQL password for app_user | Full |
 | POSTGRESQL_POSTGRES_PASSWORD | PostgreSQL password for postgres | Full |
 | POSTGRESQL_REPLICATION_USER_PASSWORD | PostgreSQL password for replication_user | Full |
 | POSTGRESQL_REWIND_USER_PASSWORD | PostgreSQL password for rewind_user | Full |
-| SPACES_ACCESS_ID | DigitalOcean Spaces access ID | Demo, Full |
-| SPACES_SECRET_KEY | DigitalOcean Spaces secret key | Demo, Full |
+| SPACES_ACCESS_ID | DigitalOcean Spaces access ID | Partial, Full |
+| SPACES_SECRET_KEY | DigitalOcean Spaces secret key | Partial, Full |
 
 | Variable | Description | Deployment Mode |
 | --- | --- | --- |
 | ANSIBLE_SSH_PUBLIC_KEY | Ansible SSH public key | Full |
 | DEV_SSH_PUBLIC_KEY | Developer SSH public key | Full |
-| DOMAIN | Domain to host Nordar on | Demo, Full |
+| DOMAIN | Domain to host Nordar on | Partial, Full |
 | PKI_ANSIBLE_CERTIFICATE | Public key for Ansible CA for signing service certificates | Full |
 | PKI_CHAIN_CERTIFICATE | Public key for Ansible CA for signing service certificates | Full |
 | PKI_ROOT_CERTIFICATE | Public key for root CA for signing service certificates | Full |

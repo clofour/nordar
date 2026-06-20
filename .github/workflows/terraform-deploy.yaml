@@ -4,10 +4,10 @@ on:
     inputs:
       mode:
         description: "Deployment mode"
-        default: demo
+        default: partial
         type: choice
         options:
-          - demo
+          - partial
           - full
 jobs:
   deploy:
