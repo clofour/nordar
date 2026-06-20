@@ -9,7 +9,7 @@
     owner: root
     group: "{{ service_cert.group }}"
     mode: "0640"
-  register: private_key
+  register: pki_runtime_private_key
   no_log: true
 
 - name: Create service CSR
@@ -24,35 +24,35 @@
     basic_constraints:
       - "CA:FALSE"
     basic_constraints_critical: true
-  register: csr
+  register: pki_runtime_csr
 
 - name: Get existing certificate contents
   ansible.builtin.slurp:
     src: "{{ pki_runtime_public_dir }}/{{ service_cert.name }}.crt"
-  register: service_crt_content
+  register: pki_runtime_service_crt_content
   failed_when: false
 
 - name: Sign service certificate with Ansible CA
   community.crypto.x509_certificate_pipe:
     content: >-
       {{
-        (service_crt_content.content | b64decode)
-        if (service_crt_content is defined and service_crt_content.content is defined and not (service_crt_content.content.failed | default(true)))
+        (pki_runtime_service_crt_content.content | b64decode)
+        if (pki_runtime_service_crt_content is defined and pki_runtime_service_crt_content.content is defined and not (pki_runtime_service_crt_content.content.failed | default(true)))
         else omit
       }}
-    csr_content: "{{ csr.csr }}"
+    csr_content: "{{ pki_runtime_csr.csr }}"
     provider: ownca
     ownca_path: "{{ pki_source_dir }}/{{ pki_runtime_ansible_crt_name }}.crt"
     ownca_privatekey_path: "{{ pki_source_dir }}/{{ pki_runtime_ansible_crt_name }}.key"
     ownca_not_before: "-1d"
     ownca_not_after: "+365d"
   delegate_to: localhost
-  register: signed_service_crt
+  register: pki_runtime_signed_service_crt
   no_log: true
 
 - name: Install service certificate
   ansible.builtin.copy:
-    content: "{{ signed_service_crt.certificate }}"
+    content: "{{ pki_runtime_signed_service_crt.certificate }}"
     dest: "{{ pki_runtime_public_dir }}/{{ service_cert.name }}.crt"
     owner: root
     group: root
@@ -65,15 +65,15 @@
     - "{{ pki_runtime_public_dir }}/{{ service_cert.name }}.crt"
     - "{{ pki_runtime_target_dir }}/{{ pki_runtime_ansible_crt_name }}.crt"
     - "{{ pki_runtime_private_dir }}/{{ service_cert.name }}.key"
-  register: pki_material
+  register: pki_runtime_material
   no_log: true
 
 - name: Create merged service PEM
   ansible.builtin.copy:
     content: |
-      {{ pki_material.results[0].content | b64decode | trim }}
-      {{ pki_material.results[1].content | b64decode | trim }}
-      {{ pki_material.results[2].content | b64decode | trim }}
+      {{ pki_runtime_material.results[0].content | b64decode | trim }}
+      {{ pki_runtime_material.results[1].content | b64decode | trim }}
+      {{ pki_runtime_material.results[2].content | b64decode | trim }}
     dest: "{{ pki_runtime_private_dir }}/{{ service_cert.name }}.pem"
     owner: root
     group: "{{ service_cert.group }}"
@@ -83,8 +83,8 @@
 - name: Install service fullchain certificate
   ansible.builtin.copy:
     content: |
-      {{ pki_material.results[0].content | b64decode | trim }}
-      {{ pki_material.results[1].content | b64decode | trim }}
+      {{ pki_runtime_material.results[0].content | b64decode | trim }}
+      {{ pki_runtime_material.results[1].content | b64decode | trim }}
     dest: "{{ pki_runtime_public_dir }}/{{ service_cert.name }}-{{ pki_runtime_chain_crt_name }}.crt"
     owner: root
     group: root
