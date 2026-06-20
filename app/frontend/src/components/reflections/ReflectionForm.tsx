@@ -95,7 +95,7 @@ export default function ReflectionForm({ close, initialValues }: ReflectionFormP
 	});
 
 	const onSuccess = () => {
-
+		close();
 	};
 	const onError = (error: number) => {
 		notify(NotificationType.Error, getErrorMessage(error));
