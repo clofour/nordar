@@ -12,7 +12,7 @@ export default function App() {
 	const navLinks = [
 		{ href: "/app/dashboard", label: "Home", icon: IconLayoutDashboard },
 		{ href: "/app/calendar", label: "Calendar", icon: IconCalendar },
-		{ href: "/app/goals", label: "Goals", icon: IconSparkles },
+		{ href: "/app/goals", label: "Stars", icon: IconSparkles },
 		{ href: "/app/reflections", label: "Reflections", icon: IconNotes },
 	];
 
