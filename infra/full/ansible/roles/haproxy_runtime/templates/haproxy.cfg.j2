@@ -18,7 +18,7 @@ listen database
     http-check expect status 200
 
 {% for host in groups["database"] | sort %}
-    server {{ host }} {{ hostvars[host].private_ip }}:{{ ports.postgres}} check port {{ ports.patroni_rest }} check-ssl verify required ca-file {{ pki_target_dir }}/{{ pki_root_crt_name }}.crt crt {{ pki_private_dir }}/haproxy.pem
+    server {{ host }} {{ hostvars[host].private_ip }}:{{ ports.postgres}} check port {{ ports.patroni_rest }} check-ssl verify required ca-file {{ pki_runtime_target_dir }}/{{ pki_runtime_root_crt_name }}.crt crt {{ pki_runtime_private_dir }}/haproxy.pem
 {% endfor %}
 
 listen database-write
@@ -29,7 +29,7 @@ listen database-write
     http-check expect status 200
 
 {% for host in groups["database"] | sort %}
-    server {{ host }} {{ hostvars[host].private_ip }}:{{ ports.postgres}} check port {{ ports.patroni_rest }} check-ssl verify required ca-file {{ pki_target_dir }}/{{ pki_root_crt_name }}.crt crt {{ pki_private_dir }}/haproxy.pem
+    server {{ host }} {{ hostvars[host].private_ip }}:{{ ports.postgres}} check port {{ ports.patroni_rest }} check-ssl verify required ca-file {{ pki_runtime_target_dir }}/{{ pki_runtime_root_crt_name }}.crt crt {{ pki_runtime_private_dir }}/haproxy.pem
 {% endfor %}
 
 listen database-read
@@ -42,7 +42,7 @@ listen database-read
     balance roundrobin
 
 {% for host in groups["database"] | sort %}
-    server {{ host }} {{ hostvars[host].private_ip }}:{{ ports.postgres}} check port {{ ports.patroni_rest }} check-ssl verify required ca-file {{ pki_target_dir }}/{{ pki_root_crt_name }}.crt crt {{ pki_private_dir }}/haproxy.pem
+    server {{ host }} {{ hostvars[host].private_ip }}:{{ ports.postgres}} check port {{ ports.patroni_rest }} check-ssl verify required ca-file {{ pki_runtime_target_dir }}/{{ pki_runtime_root_crt_name }}.crt crt {{ pki_runtime_private_dir }}/haproxy.pem
 {% endfor %}
 
 listen status

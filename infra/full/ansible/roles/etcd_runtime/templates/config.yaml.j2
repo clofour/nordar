@@ -3,15 +3,15 @@ name: {{ inventory_hostname }}
 data-dir: {{ etcd_runtime_data_dir }}
 
 client-transport-security:
-    cert-file: {{ pki_public_dir }}/etcd-{{ pki_chain_crt_name }}.crt
-    key-file: {{ pki_private_dir }}/etcd.key
+    cert-file: {{ pki_runtime_public_dir }}/etcd-{{ pki_runtime_chain_crt_name }}.crt
+    key-file: {{ pki_runtime_private_dir }}/etcd.key
     client-cert-auth: true
-    trusted-ca-file: {{ pki_target_dir }}/{{ pki_root_crt_name }}.crt
+    trusted-ca-file: {{ pki_runtime_target_dir }}/{{ pki_runtime_root_crt_name }}.crt
 peer-transport-security:
-    cert-file: {{ pki_public_dir }}/etcd-{{ pki_chain_crt_name }}.crt
-    key-file: {{ pki_private_dir }}/etcd.key
+    cert-file: {{ pki_runtime_public_dir }}/etcd-{{ pki_runtime_chain_crt_name }}.crt
+    key-file: {{ pki_runtime_private_dir }}/etcd.key
     client-cert-auth: true
-    trusted-ca-file: {{ pki_target_dir }}/{{ pki_root_crt_name }}.crt
+    trusted-ca-file: {{ pki_runtime_target_dir }}/{{ pki_runtime_root_crt_name }}.crt
 
 initial-advertise-peer-urls: https://{{ private_ip }}:{{ ports.etcd_peer }}
 listen-peer-urls: https://{{ private_ip }}:{{ ports.etcd_peer }}

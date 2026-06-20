@@ -4,9 +4,9 @@ name: {{ inventory_hostname }}
 restapi:
     listen: {{ private_ip }}:{{ ports.patroni_rest }}
     connect_address: {{ private_ip }}:{{ ports.patroni_rest }}
-    certfile: {{ pki_public_dir }}/patroni-{{ pki_chain_crt_name }}.crt
-    keyfile: {{ pki_private_dir }}/patroni.key
-    cafile: {{ pki_target_dir }}/{{ pki_root_crt_name }}.crt
+    certfile: {{ pki_runtime_public_dir }}/patroni-{{ pki_runtime_chain_crt_name }}.crt
+    keyfile: {{ pki_runtime_private_dir }}/patroni.key
+    cafile: {{ pki_runtime_target_dir }}/{{ pki_runtime_root_crt_name }}.crt
     verify_client: required
 
 etcd3:
@@ -15,9 +15,9 @@ etcd3:
         - {{ hostvars[host].private_ip }}:{{ ports.etcd_client }}
 {% endfor %}
     protocol: https
-    cert: {{ pki_public_dir }}/patroni-{{ pki_chain_crt_name }}.crt
-    key: {{ pki_private_dir }}/patroni.key
-    cacert: {{ pki_target_dir }}/{{ pki_root_crt_name }}.crt
+    cert: {{ pki_runtime_public_dir }}/patroni-{{ pki_runtime_chain_crt_name }}.crt
+    key: {{ pki_runtime_private_dir }}/patroni.key
+    cacert: {{ pki_runtime_target_dir }}/{{ pki_runtime_root_crt_name }}.crt
 
 bootstrap:
     dcs:
