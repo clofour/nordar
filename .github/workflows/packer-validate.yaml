@@ -27,4 +27,4 @@ jobs:
         run: packer init .
 
       - name: Run Packer Validate
-        run: packer validate .
+        run: packer validate -var "do_api_token=placeholder" .
