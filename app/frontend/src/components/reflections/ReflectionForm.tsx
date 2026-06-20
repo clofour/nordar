@@ -3,7 +3,7 @@ import { Box, Button, Group, Input, Stack, Text, Textarea, TextInput, UnstyledBu
 import { useForm, schemaResolver, type UseFormReturnType } from "@mantine/form";
 import type { ReflectionCreate } from "@/api/models";
 import { CreateReflectionBody } from "@/api/endpoints/reflection/reflection.zod";
-import { createReflection } from "@/api/endpoints/reflection/reflection";
+import { createReflection, useCreateReflection } from "@/api/endpoints/reflection/reflection";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { NotificationType, useNotification } from "@/helpers";
 import { getErrorMessage } from "@/data/error";
@@ -94,6 +94,18 @@ export default function ReflectionForm({ close, initialValues }: ReflectionFormP
 		validate: schemaResolver(CreateReflectionBody, { sync: true }),
 	});
 
+	const onSuccess = () => {
+
+	};
+	const onError = (error: number) => {
+		notify(NotificationType.Error, getErrorMessage(error));
+	};
+	const createMutation = useCreateReflection({
+		mutation: {
+			onSuccess: onSuccess,
+			onError: onError
+		}
+	});
 	const handleSubmit = async (values: typeof form.values) => {
 		const processableKeys = ["positive", "negative", "improvement"] as const;
 		const processedValues: Partial<typeof form.values> = {};
@@ -112,16 +124,10 @@ export default function ReflectionForm({ close, initialValues }: ReflectionFormP
 			processedValues[processableKey] = processedValue;
 		}
 
-		const response = await createReflection({
+		createMutation.mutate({data: {
 			...values,
 			...processedValues,
-		});
-
-		if (response.status === 200) {
-			close();
-		} else {
-			notify(NotificationType.Error, response.data ?? getErrorMessage(response.status));
-		}
+		}});
 	};
 
 	return (
