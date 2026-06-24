@@ -84,6 +84,7 @@ export default function Event({ event }: EventProps) {
 			eventState: newState,
 		};
 
+		setChecked(newCheckboxValue);
 		if (event.type == "onetime") {
 			onetimeMutation.mutate({ eventId: event.id, data: requestData });
 		} else if (event.type == "recurring" && "recurringEventId" in event && "recurrenceId" in event) {
