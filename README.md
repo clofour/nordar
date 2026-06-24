@@ -118,7 +118,7 @@ graph LR
     FrontendRule --> StaticSite
     BackendRule --> Backend1
     Backend1 -- "DATABASE_URL" --> PG
-    Migration -- "pre-deploy" --> PG
+    Migration -- "DATABASE_URL" --> PG
 ```
 
 ##### Full
@@ -136,7 +136,7 @@ To use this mode, create a DigitalOcean Spaces bucket called `nordar-tfstate` in
 
 ```mermaid
 ---
-title: "Nordar — Full Mode"
+title: "Full Mode (Cloud VMs)"
 ---
 graph LR
     User["User"]
