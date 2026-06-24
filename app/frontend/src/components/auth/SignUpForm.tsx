@@ -97,6 +97,7 @@ export default function SignUpForm({ setLoading, loading }: SignUpFormProps) {
 				<PasswordInput
 					withAsterisk
 					label="Password"
+					description=">16 alphanumeric characters"
 					placeholder="••••••••••••••••"
 					disabled={loading}
 					key={form.key("password")}
