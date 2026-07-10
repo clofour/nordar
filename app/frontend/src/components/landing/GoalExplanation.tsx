@@ -12,11 +12,11 @@ type GoalExplanationProps = {
 export function GoalExplanation({ type }: GoalExplanationProps) {
 	const descriptions = {
 		[GoalType.NorthStar]: {
-			text: "Your highest ambitions. Set it once, and work on it for years.",
+			text: "Highest ambitions.",
 			color: "var(--landing-color-gold-dark)",
 		},
 		[GoalType.Bearing]: {
-			text: "A few directions to pull you towards your North Stars.",
+			text: "Directions to pull you towards your North Stars.",
 			color: "var(--landing-color-blue)",
 		},
 		[GoalType.Movement]: {

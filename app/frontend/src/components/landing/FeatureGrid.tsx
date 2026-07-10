@@ -12,14 +12,14 @@ export default function FeatureGrid() {
 		{
 			name: "Goals",
 			description:
-				"Set your North Stars, define the bearings that pull you toward them, and break each one into movements small enough to actually take on. All your ambitions, in one hierarchy.",
+				"Set your North Stars, define the bearings that pull you toward them, and break each one into movements small enough to actually take on.",
 			Icon: IconTarget,
 			color: "var(--landing-color-gold-light)",
 			span: 9,
 		},
 		{
 			name: "Calendar",
-			description: "Schedule your movements directly on your week.",
+			description: "Schedule movements and events visually.",
 			Icon: IconCalendar,
 			color: "var(--landing-color-periwinkle)",
 			span: 3,
@@ -27,14 +27,14 @@ export default function FeatureGrid() {
 		{
 			name: "Reflections",
 			description:
-				"A random check-in to figure out what moved you forward, and what knocked you off course — so you can adjust before drifting off-course.",
+				"Random check-ins to figure out what went well, what went wrong and what could have been even better.",
 			Icon: IconNotebook,
 			color: "var(--landing-color-mint)",
 			span: 6,
 		},
 		{
 			name: "Analytics",
-			description: "Track your progress and learn about yourself, by seeing what makes you thrive and what makes you struggle.",
+			description: "Track your progress and learn about yourself. Understand your strengths and weaknesses.",
 			Icon: IconChartBar,
 			color: "var(--landing-color-lavender)",
 			span: 6,
